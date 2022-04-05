@@ -303,21 +303,17 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[sisters_repentia_mistress]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4250106]] -- - Heavy Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4250107]] -- - Leader Unit effective at close combat and boosting squad morale.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4250108]] -- - Effective against most unit types in close combat.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/squad_leader_repentia]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4250105]] -- Mistress

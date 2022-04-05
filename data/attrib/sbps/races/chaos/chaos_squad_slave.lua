@@ -21,7 +21,7 @@ GameData["squad_morale_ext"] = Reference([[sbpextensions\squad_morale_ext.lua]])
 GameData["squad_morale_ext"]["broken_min_morale"] = 100
 GameData["squad_morale_ext"]["broken_min_time"] = 15
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_01"]["value"] = 1.5
-GameData["squad_morale_ext"]["broken_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_morale_ext"]["default"] = 150
 GameData["squad_morale_ext"]["max"] = 150
 GameData["squad_morale_ext"]["morale_armour"] = 1
@@ -47,12 +47,7 @@ GameData["squad_ui_ext"]["multi_select_priority"] = 13
 GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$97371]] -- 
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011069]] -- - Builder unit. ~~~ Can construct buildings at a fast rate when overworked.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18011070]] -- - Durability: Weak | Strength: No Attack | Morale: Basic | Upgrades: None | Squad Size: Single | Movement Speed: Standard | Sight: Standard |  Keen sight: 2m | Abilities: Below Average | Weapon Range: Melee | Capture Points: No.
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/slave_icon]]
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$18011068]] -- Heretic
 GameData["squad_ui_ext"]["ui_info"]["no_button"] = nil

@@ -138,8 +138,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -147,15 +146,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Dark_Eldar/Reaver_Jetbike]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[dark_eldar_reaver]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4050160]] -- - Daredevil Reaver pilot with lightning reflexes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4050161]] -- - Flies in a custom Reaver equipped with extra armor plating.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4050162]] -- - Effective against Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[dark_eldar_icons/HG_reaver_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4050159]] -- Elite Reaver Jetbike

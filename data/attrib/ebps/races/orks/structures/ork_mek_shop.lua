@@ -87,7 +87,7 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -101,12 +101,7 @@ GameData["ui_ext"]["ui_index_hint"] = 5
 GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$94451]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18112334]] -- - Produces: Wartraks, Wartrukks, Killa Kans, Gun Wagons, Deff Dreads, Battle Wagon, Looted Leman Russ, Kill Krusha, Kill Bursta, Squiggoth, and Battlefortresses.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18112337]] -- - Contains a grot gunner on top that provides a moderate short ranged defensive turret and over time repair. Turns slowly.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[ork_icons/mek_shop_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94450]] -- Da Mek Shop

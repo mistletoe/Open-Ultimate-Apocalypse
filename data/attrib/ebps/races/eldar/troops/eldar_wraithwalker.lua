@@ -153,11 +153,11 @@ GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["melee_leap_action_name"] = [[feral_leap]]
 GameData["melee_ext"]["melee_leap_curve_ratio"] = 0.25
 GameData["melee_ext"]["melee_leap_damage"] = 200
@@ -183,8 +183,7 @@ GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -196,11 +195,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$97881]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012295]] -- - Elite siege/melee walker. ~~~ Can vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012296]] -- - Durability: Very Good | Strength: Very Good | Morale: Immune | Upgrades: Standard | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: None | Abilities: Below Average | Weapon range: Standard | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/eldar_wraithking_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012294]] -- Soul Walker

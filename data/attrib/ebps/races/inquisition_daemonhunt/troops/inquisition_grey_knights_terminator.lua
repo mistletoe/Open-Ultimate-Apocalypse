@@ -164,7 +164,7 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 20
 
@@ -315,7 +315,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -323,7 +323,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\inquisition_daemonhunt\gk_terminator]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16021155]] -- - (Deepstrike) Elite warriors of the Inquisition. ~~~ Can teleport.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010008]] -- - Effective versus: Vehicles
@@ -331,7 +331,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010007]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010012]] -- - Effective versus: Titans
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16021156]] -- - Durability: 7.5 | Strength: 7.5 | Morale: 9 | Squad Size: Below standard | Movement Speed: Slow | Sight: Standard | Ability Strength: 0 | Weapon range: Standard | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$16021157]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/gk_terminator_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021154]] -- Grey Knight Terminators

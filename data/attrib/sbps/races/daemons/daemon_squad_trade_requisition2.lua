@@ -25,24 +25,12 @@ GameData["squad_requirement_ext"]["requirements"]["required_10"]["structure_name
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
 GameData["squad_ui_ext"]["multi_select_priority"] = 13
-GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000228]] -- - Sacrifices 300 Daemonic Power in exchange for 100 Requisition.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16002345]] -- - This sacrifice is rather fast, with a mild resource ratio loss.
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/power_recycle_2_icon]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$16000223]] -- Infernal Trade: Requisition
 GameData["squad_ui_ext"]["completed_research_display"] = nil
 GameData["squad_ui_ext"]["completed_research_filter"] = nil

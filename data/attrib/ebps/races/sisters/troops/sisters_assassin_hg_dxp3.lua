@@ -230,22 +230,19 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Death_Cult_Assassin]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[sisters_assassin]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4250196]] -- - One of the most ancient sects of the Death-Cult, this assassin has undergone special arduous rituals with the Officio Assassinorum.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4250197]] -- - Hand-picked to serve directly under Canoness Agna herself.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4250198]] -- - Infilrated unit that can detect other infiltrated units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$4250125]] -- - Effective against Infantry, Heavy Infantry, and Commanders.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/HG_squad_assassin]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4250195]] -- Emperor's Blades Death-Cult Assassin

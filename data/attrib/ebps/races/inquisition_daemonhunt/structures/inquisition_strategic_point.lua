@@ -290,7 +290,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_environment"] = Reference([[type_environment\tp_strategic_point_struct.lua]])
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
@@ -308,16 +308,10 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16020151]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16020152]] -- - Can be fortified with Icons of Purification that further increases the requisition resource rates.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16020153]] -- - Greatly increases control radius, allowing structures to be built nearby.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16020154]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[environment_icons/strategic_point_icon]]
 GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$582900]] -- - Capture with Builder Scarabs by selecting your Scarabs, right-clicking on this point, and then waiting until the point is fully captured.
 GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$583001]] -- - Build Obelisks on Strategic Points to secure the point and gain a training time bonus on all Necron units and researches.
 GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$583002]] -- - If playing the Control Area win condition, the game can be won by capturing and holding over 66% of the Strategic Points on the map.
-GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16020149]] -- Emplaced Strategic Point

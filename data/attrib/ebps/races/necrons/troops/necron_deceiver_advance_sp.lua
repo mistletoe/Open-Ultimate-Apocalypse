@@ -166,7 +166,7 @@ GameData["possess_ext"]["possession_ui_type"] = [[]]
 GameData["possess_ext"]["show_possession_ui_button"] = false
 GameData["possess_ext"]["squad_replacement_name"] = [[necron_lord_squad_advance_sp]]
 GameData["possess_ext"]["transfer_health_percentage"] = true 
-GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 
 
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$0]]
@@ -182,7 +182,7 @@ GameData["special_attack_physics_ext"]["mass"] = 500
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -190,15 +190,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Night_Bringer]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[necron_deceiver]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450030]] -- - A manifestation of the Deceiver, one of the C'tan deities of the Necrons.  Cannot attack, but uses powerful special abilities to dominate the battlefield.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4450031]] -- - Uses a variety of powerful abilities to control the battlefield.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4450168]] -- - Attack does little damage, but wreaks chaos in the minds of enemy infantry, reducing their damage and giving them a chance to turn on their allies.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_deceiver_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4450029]] -- Essence of the Deceiver

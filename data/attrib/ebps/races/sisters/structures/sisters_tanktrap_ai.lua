@@ -52,8 +52,8 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -68,11 +68,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$94091]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18210472]] -- - Infiltrated Emplacement, blocks enemy movement and provides mild cover.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18210473]] -- - Cheap, small, and is effective at trapping tanks or confuse movement. Only dedicated detectors can detect Tank Traps.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18210470]] -- - Can be upgraded by addons to improve this fortification with a defensive turret and health bonus.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[npc/tanktrap2]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18210471]] -- Tank Trap

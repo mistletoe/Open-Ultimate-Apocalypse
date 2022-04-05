@@ -1,26 +1,8 @@
 GameData = Inherit([[]])
 GameData["squad_blueprint_ext"] = Reference([[sbpextensions\squad_blueprint_ext.lua]])
 GameData["squad_cap_ext"] = Reference([[sbpextensions\squad_cap_ext.lua]])
-GameData["squad_combat_stance_ext"] = Reference([[sbpextensions\squad_combat_stance_ext.lua]])
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_01"] = Reference([[type_armour\tp_vehicle_low.lua]])
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_01"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_02"] = Reference([[type_armour\tp_vehicle_med.lua]])
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_02"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_03"] = Reference([[type_armour\tp_vehicle_high.lua]])
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_03"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_04"] = Reference([[type_armour\tp_air_med.lua]])
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_04"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_05"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_06"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_07"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_08"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_09"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_10"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_11"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_12"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_13"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_14"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["squad_combat_stance_ext"]["attack_priorities"]["priority_15"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["squad_combat_stance_ext"] = Reference([[sbpextensions\squad_combat_stance_ext_DEFAULT.lua]])
+--INTENTIONAL SPACER
 GameData["squad_combat_stance_ext"]["no_stance_button"] = true 
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\tau_crisis_suits.lua]]
@@ -41,22 +23,11 @@ GameData["squad_transportable_ext"] = Reference([[sbpextensions\squad_transporta
 GameData["squad_transportable_ext"]["transport_type"] = Reference([[type_transportable\transport_terminator.lua]])
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$575754]] -- - Detects infiltrated units.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[- A deep-strikable turret armed with twin Burst Cannons.]]
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$575752]] -- - Effective against infantry units.
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/list_post_1_icon]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[Burst Cannon Drone Turret]]

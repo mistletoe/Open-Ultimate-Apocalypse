@@ -23,7 +23,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_02"]["weapon_table"]["weapon_01"
 GameData["combat_ext"]["hardpoints"]["hardpoint_02"]["weapon_table"]["weapon_01"]["weapon"] = [[weapon\eldar_knife_darkreaper.lua]]
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"] = Reference([[modifiers\enable_infiltration.lua]])
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
-GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["value"] = -1
 GameData["cost_ext"] = Reference([[ebpextensions\cost_ext.lua]])
 GameData["cost_ext"]["time_cost"]["cost"]["faith"] = 0
@@ -144,8 +144,8 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_med.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
@@ -158,9 +158,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011325]] -- - Durability: Basic | Strength: Average | Morale: Average | Upgrades: None | Squad Size: Below standard | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Abilities: Below Average | Weapon range: Long | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011326]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/dark_reaper_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011323]] -- Dark Reapers

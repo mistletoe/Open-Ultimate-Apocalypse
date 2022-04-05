@@ -209,9 +209,9 @@ GameData["special_attack_physics_ext"]["face_backwards_when_flying"] = false
 GameData["special_attack_physics_ext"]["get_up_time"] = 0
 GameData["special_attack_physics_ext"]["mass"] = 300
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_titan.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90103]] -- Commander
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_tank.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -219,15 +219,12 @@ GameData["ui_ext"]["minimap_enable"] = true
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Riptide]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012193]] -- - Super heavy walker/titan. ~~~ Can jump over impassable terrain; equipped with titanic shields that regenerate when idle; takes more damage when in melee combat.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012194]] -- - Durability: Very Excellent | Strength: Excellent | Squad Size: Single | Upgrades: None | Morale: Legendary | Movement Speed: Standard | Sight: Very Good | Keen Sight: None | Abilities: Excellent| Weapon range: Very Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012195]] -- - Riptide variant of Kauyon. Cheaper and more flexible when dealing with infantry and vehicles.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_riptide_suit_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012192]] -- XV101 Riptide Titan

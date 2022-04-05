@@ -107,7 +107,7 @@ GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["infiltration_ext"]["identification_range"] = 0
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 16
 
@@ -160,7 +160,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_motion_name
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500030]] -- TOUGHNESS 1
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -168,15 +168,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/rippers_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026011]] -- - Builder unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026012]] -- - Effective versus: Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026013]] -- - Durability: 2 | Strength: 2 | Morale: 2 | Upgrades: 0 | Squad Size: Standard | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Ability Strength: 0 | Weapon range: 0 | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026014]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026015]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/i_ripper]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026010]] --  Ripper Swarm 

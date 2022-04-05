@@ -185,7 +185,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90102]] -- Building
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -193,15 +193,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Basilisk;Speech/Races/Guard/Tanks]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_v]]
 GameData["ui_ext"]["ui_index_hint"] = 12
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012104]] -- - Mobile nuke launcher. ~~~ Can launch nuclear weapons.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012105]] -- - Durability: Average | Strength: No Attack | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: None | Abilities: Below Average0 | Weapon Range: Melee | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012106]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_deathstrike_launcher_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012103]] -- Deathstrike Missile Launcher

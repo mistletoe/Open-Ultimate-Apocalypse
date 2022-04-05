@@ -24,7 +24,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_02"]["vertical_aim_motion_variab
 GameData["combat_ext"]["hardpoints"]["hardpoint_02"]["weapon_table"]["weapon_01"]["name_for_this_weapon_choice"] = [[Ork_Power_Klaw]]
 GameData["combat_ext"]["hardpoints"]["hardpoint_02"]["weapon_table"]["weapon_01"]["weapon"] = [[weapon\ork_power_claw_armored_nob.lua]]
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"] = Reference([[modifiers\population_growth_rate_player_modifier.lua]])
-GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["value"] = 0.002000000095
 GameData["cost_ext"] = Reference([[ebpextensions\cost_ext.lua]])
 GameData["cost_ext"]["time_cost"]["cost"]["faith"] = 0
@@ -253,22 +253,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Orks/MegaArmoredNob]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[ork_armored_nob]]
 GameData["ui_ext"]["ui_index_hint"] = 8
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$694100]] -- - Elite Squad.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$694109]] -- - Detects infiltrated units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$694108]] -- - Heavy melee unit that can take incredible amounts of punishment.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$694107]] -- - Slow moving but have the ability to move quickly for short periods of time by surging their powered armor.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$694106]] -- - These short bursts of speed cause damage to the Mega Armored Nobz themselves, because of the shoddy electrical systems in their armor.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[ork_icons/mega_armor_nob]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$694104]] -- Mega Armored Nobz

@@ -153,7 +153,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90106]] -- Daemon
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -161,15 +161,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Chaos_Marines/Horror]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
 GameData["ui_ext"]["ui_index_hint"] = 3
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011124]] -- - (Deepstrike) Monstrous fast attack melee unit. ~~~ Can vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011125]] -- - Durability: Basic | Strength: Basic | Morale: Immune | Upgrades: None | Squad Size: Below standard | Movement Speed: Fast | Sight: Standard |  Keen sight: 2m | Abilities: Basic | Weapon Range: Melee | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011126]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/chaos_screamer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011123]] -- Screamers

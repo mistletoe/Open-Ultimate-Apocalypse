@@ -121,11 +121,11 @@ GameData["health_ext"]["stay_in_pathfinding_after_dead_time"] = 4
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
 GameData["modifier_apply_ext"]["modifiers"]["modifier_01"] = Reference([[modifiers\max_squad_cap_player_modifier.lua]])
@@ -391,7 +391,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -399,7 +399,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Eldar/Avatar]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[eldar_avatar]]
 GameData["ui_ext"]["ui_index_hint"] = 6
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97762]] -- - Daemon.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$97763]] -- - Avatar of the War God.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$670554]] -- - Craftworld Ulthwé's Avatar of Khaine.
@@ -407,7 +407,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$670558]] -- - Sa
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$670557]] -- - Inspires all infantry near him, making them immune to morale.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$670556]] -- - While alive, all Eldar units are produced faster.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$670555]] -- - Effective against all units.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/avatar_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$670553]] -- Ulthwé Avatar of Khaine

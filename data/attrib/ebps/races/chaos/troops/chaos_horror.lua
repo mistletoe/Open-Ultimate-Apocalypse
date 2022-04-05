@@ -140,7 +140,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
@@ -153,9 +153,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010008]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011121]] -- - Durability: Basic | Strength: Basic | Morale: Immune | Upgrades: None | Squad Size: Below standard | Movement Speed: Standard | Sight: Standard |  Keen sight: 2m | Abilities: None | Weapon range: Standard | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011122]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/horror_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011119]] -- Horrors

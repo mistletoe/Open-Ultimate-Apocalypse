@@ -206,8 +206,7 @@ GameData["special_attack_physics_ext"]["mass"] = 50
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -220,10 +219,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012361]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010003]] -- - Effective Versus: Aircraft.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012362]] -- - Durability: Very Good | Strength: Good | Morale: Good | Upgrades: None | Squad Size: Single | Movement Speed: Very Fast | Sight: Very Good | Keen Sight: None | Ability Strength: Average | Weapon range: Good | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/hornet_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012360]] -- Hornet

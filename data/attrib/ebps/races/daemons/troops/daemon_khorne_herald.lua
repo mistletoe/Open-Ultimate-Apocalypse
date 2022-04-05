@@ -196,22 +196,22 @@ GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["exclusive"] = true 
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["exclusive"] = true 
-GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["value"] = 1.5
 GameData["melee_ext"]["charge_modifiers"]["modifier_03"] = Reference([[modifiers\accuracy_moving_reduction_weapon_modifier.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_03"]["value"] = 2
 GameData["melee_ext"]["charge_modifiers"]["modifier_04"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_04"]["value"] = 0.5
 GameData["melee_ext"]["charge_modifiers"]["modifier_05"] = Reference([[modifiers\health_rangedamage_received_2_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_05"]["value"] = 0.5
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["value"] = 0.5
@@ -220,12 +220,12 @@ GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["value"] = 0.5
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["exclusive"] = true 
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["value"] = 1.25
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["exclusive"] = true 
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["value"] = 1.25
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_06"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
@@ -293,9 +293,9 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["dead_zombie_time"]
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerable_time"] = 3.700000048
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Reference([[type_synckillids\sk_none.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_commander.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$15022260]]
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -303,15 +303,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Daemons\\Khorne_Herald]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 14
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16003001]] -- - Daemon Commander (secondary) (detector).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16003002]] -- - Durability: 5 | Strength: 5 | Morale: 5 | Upgrades: 0 | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: 2m | Ability Strength: 1 | Weapon range: 0 | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_khorne_herald]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16003000]] -- Herald of Khorne

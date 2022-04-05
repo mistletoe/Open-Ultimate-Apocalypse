@@ -229,23 +229,19 @@ GameData["special_attack_physics_ext"]["mass"] = 1000
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Daemons\Hellspawn]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000155]] -- - Very long ranged favored/artillery relic unit (detector) (production). ~~~ Has a vast majority of auras which protect nearby allies and harm nearby enemy units; can direct spawn Furies; can teleport; can engage aircraft and strike them down with ease from long ranges.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16000156]] -- - Durability: 6 | Strength: 10 | Morale: Immune | Upgrades: 0 | Squad Size: Single | Movement Speed: Slow | Sight: Extreme | Keen Sight: 35m | Ability Strength: 19 | Weapon range: Artillery | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16000157]] -- - If killed, the Maledictum will be summoned from the Hell Spawn, ready to unleash the Hell Spawn once again!
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_09"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_hell_spawn_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000154]] -- Hell Spawn

@@ -173,7 +173,7 @@ GameData["health_ext"]["spawn_death_blossom"] = nil
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 20
 
@@ -281,8 +281,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -290,15 +289,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Veteran_Marine]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_s]]
 GameData["ui_ext"]["ui_index_hint"] = 6
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011775]] -- - Elite ranged unit. ~~~ Has various training in both melee and ranged (especially) combat.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011776]] -- - Durability: Good | Strength: Very Good | Morale: 7.5 | Upgrades: 14 | Squad Size: Small | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Abilities: Below Average | Weapon range: Long | Capture Points: Yes.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/sternguard_veteran_icon]]
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011774]] -- Sternguard Veterans
 GameData["ui_ext"]["ui_info"]["no_button"] = nil

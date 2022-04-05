@@ -338,7 +338,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -353,8 +353,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011818]] -- - Durability: Excellent | Strength: Very Good | Morale: Immune | Squad Size: Single | Upgrades: Few | Movement Speed: Standard | Sight: Good | Keen Sight: None | Abilities: None | Weapon range: Good | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/ven_dread_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011816]] -- Venerable Dreadnought

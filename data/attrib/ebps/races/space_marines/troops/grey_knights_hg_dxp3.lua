@@ -279,22 +279,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_05"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Space_Marines\GreyKnights]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[marine_grey_knights]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$672455]] -- - Space Marines from a secretive chapter serving the Emperor's Inquisition.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4450116]] -- - This special squad is composed entirely of the superior Justicar knights, all seasoned by countless battles serving in the Emperor's Inquisition.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4450117]] -- - Assigned to aid the Blood Ravens by fighting alongside Force Commander Boreale.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$672452]] -- - Elite infantry troops with Psyker abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$672453]] -- - Highly effective against Daemons.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/space_marine_icon_grey_knights]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4450115]] -- Grey Knight Justicar

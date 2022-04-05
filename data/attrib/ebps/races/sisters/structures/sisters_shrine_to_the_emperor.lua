@@ -116,7 +116,7 @@ GameData["squad_hold_ext"]["acceptable_type_01"] = Reference([[type_transportabl
 GameData["squad_hold_ext"]["holds_produced_squads"] = true 
 GameData["squad_hold_ext"]["load_event"] = [[Unit_Ability_FX/Eldar_Warp_Out]]
 GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"] = Reference([[modifiers\enable_abilities.lua]])
-GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"]["value"] = -1
 GameData["squad_hold_ext"]["unload_delay"] = 30
 GameData["squad_hold_ext"]["unload_event"] = [[Unit_Ability_FX/Eldar_Warp_In]]
@@ -129,8 +129,8 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -141,15 +141,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Buildings\Shrine_of_the_Emperor]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_j]]
 GameData["ui_ext"]["ui_index_hint"] = 15
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18112450]] -- - Statue of the God-Emperor with a concealed missile silo, a beacon of inspiration.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18112451]] -- - Increases the health and morale of all units throughout the globe.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111342]] -- - Very high tech structure used for launching nukes at enemy targets.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18111343]] -- - High priority target which is revealed to enemy radars when built.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18111339]] -- - Can be placed anywhere.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18111349]] -- - Will decrease in cost the more generators are built.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/sob_shrine_of_the_emperor]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18112449]] -- Sister's Shrine To The Emperor

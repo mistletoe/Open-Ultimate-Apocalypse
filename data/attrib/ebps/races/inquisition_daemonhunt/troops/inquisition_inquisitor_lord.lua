@@ -379,7 +379,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -393,9 +393,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010007]] -- - Effective versus: Daemons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16021011]] -- - Durability: 4.5 | Strength: 6 | Morale: 5 | Upgrades: 19 + Hero research | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: 25m | Ability Strength: 10 | Weapon range: Short | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16021012]] -- Elite Stormtroopers
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/inquisitor_lord_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021009]] -- Inquisitor Lord

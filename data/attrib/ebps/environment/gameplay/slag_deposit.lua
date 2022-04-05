@@ -10,7 +10,7 @@ GameData["sim_entity_ext"]["is_collide"] = true
 GameData["structure_ext"] = Reference([[ebpextensions\structure_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_environment"] = Reference([[type_environment\tp_slag.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = nil
 GameData["type_ext"]["reanimate"] = nil
@@ -25,12 +25,7 @@ GameData["ui_ext"]["minimap_enable"] = true
 GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$99031]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$99032]] -- - You can build a Thermo Plasma Generator (Bigga Generator for Orks) at this location.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$99033]] -- - Thermo Plasma Generators and Bigga Generators produce the Power Resource at a much higher rate than normal Generators.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$99030]] -- Slag Deposit
 GameData["ui_ext"]["ui_info"]["no_button"] = nil
 GameData["ui_ext"]["ui_info"]["override_help_text_list"] = nil

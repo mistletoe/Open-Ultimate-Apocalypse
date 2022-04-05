@@ -153,7 +153,7 @@ GameData["health_ext"]["stay_in_pathfinding_after_dead_time"] = 2
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 16
 
@@ -296,7 +296,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -304,15 +304,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/uberfex]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026203]] -- - Relic/daemon unit (detector). ~~~ Is affected by Carnifex research instead of bio titan research, unlike the Trygon.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026204]] -- - Effective versus: Infantry, heavy infantry, and vehicles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026205]] -- - Durability: 10 | Strength: 9 | Morale: Immune | Upgrades: 0 | Squad Size: Single | Movement Speed: Standard | Sight: Standard | Keen Sight: None | Ability Strength: 0 | Weapon range: Standard | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_uberfex]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026202]] --  Uberfex (Carnifex)

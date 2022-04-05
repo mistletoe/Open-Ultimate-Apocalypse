@@ -212,7 +212,7 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_max"] = 60
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_min"] = 10
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 160
@@ -279,78 +279,60 @@ GameData["relocatee_ext"] = Reference([[ebpextensions\relocatee_ext.lua]])
 GameData["relocatee_ext"]["dummy_structure_name"] = [[relocate_citadel_de]]
 GameData["relocatee_ext"]["dummy_structure_relocation_fx"] = [[structure_fx/relocate_de]]
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_01"] = Reference([[modifiers\enable_production.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_01"]["value"] = -1
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_02"] = Reference([[modifiers\relocation_event_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_02"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_03"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_04"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_05"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_06"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_07"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_08"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_09"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_10"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_11"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_12"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_13"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_14"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_15"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_16"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_17"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_18"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_19"]["shield_of_faith"] = false
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_20"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_21"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_22"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_23"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_24"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_25"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_26"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_26"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_27"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_27"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_28"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_28"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_29"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_29"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_30"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_30"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_31"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_31"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_32"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_32"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_33"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_33"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_34"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_34"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_35"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_35"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_36"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_36"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_37"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_37"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_38"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_38"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_39"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_39"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_40"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_40"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_41"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_41"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_42"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_42"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_43"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_43"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_44"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_44"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_modifiers"]["modifier_45"] = Reference([[modifiers\no_modifier.lua]])
-GameData["relocatee_ext"]["relocation_modifiers"]["modifier_45"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["relocatee_ext"]["relocation_recharge_time"] = 300
 GameData["relocatee_ext"]["relocation_time"] = 100
 GameData["relocatee_ext"]["requirements"]["required_1"] = Reference([[requirements\required_research.lua]])
@@ -393,7 +375,7 @@ GameData["structure_ext"]["control_structure_radius"] = 60
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -404,15 +386,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Dark_Eldar\Buildings\citadel]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_i]]
 GameData["ui_ext"]["ui_index_hint"] = 8
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18111377]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18111378]] -- - Very high tech structure used for unleashing barrages of dark matter projectiles at global range supported by devastating abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111379]] -- - High priority target which gets revealed to enemy radar when built.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18111380]] -- - Does NOT contain nuclear weapons. Only the Soul Cataclysm (win button) has a massive impact.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18111339]] -- - Can be placed anywhere.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18111349]] -- - Will decrease in cost the more generators are built.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[dark_eldar_icons/de_great_cabal_citadel]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18111376]] -- Great Kabal Citadel

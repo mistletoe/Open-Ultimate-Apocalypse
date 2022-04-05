@@ -129,11 +129,11 @@ GameData["health_ext"]["stay_in_pathfinding_after_dead_time"] = 2
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 
 GameData["modifier_ext"] = Reference([[ebpextensions\modifier_ext.lua]])
 GameData["moving_ext"] = Reference([[ebpextensions\moving_ext.lua]])
@@ -159,9 +159,9 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_02"]["synckill_id"] = Re
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["chance"] = 0
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Reference([[type_synckillids\sk_none.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_vehicle_med.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90104]] -- Infantry
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -169,15 +169,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/biovore]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026121]] -- - Artillery support unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026122]] -- - Effective versus: Infantry and swarms of enemy targets.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026123]] -- - Durability: 3 | Strength: 5 | Morale: Immune | Upgrades: 1 | Squad Size: Below standard | Movement Speed: Standard | Sight: Good | Keen Sight: 2m | Ability Strength: 0 | Weapon range: Artillery | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026124]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026125]] --  
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/i_biovore]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026120]] --  Biovores

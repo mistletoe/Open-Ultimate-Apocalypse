@@ -163,22 +163,18 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/lictor_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026066]] -- - Lurker unit (Infiltrator) (detector). ~~~ Can leap at enemy targets; can make burrowing points, allowing Tyranids to travel underground.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026067]] -- - Effective versus: Infantry, heavy infantry, and commanders.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026068]] -- - Durability: 3.5 | Strength: 3 | Morale: Immune | Upgrades: 0 | Squad Size: Single | Movement Speed: Fast | Sight: Excellent | Keen Sight: 25m | Ability Strength: 3 | Weapon range: 0 | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/i_lictor]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026065]] -- Lictor

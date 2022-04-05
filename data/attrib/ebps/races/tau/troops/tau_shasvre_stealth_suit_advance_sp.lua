@@ -148,7 +148,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -156,15 +156,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Shasvre_Stealth_Suit]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_stealth_warrior]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450097]] -- - Advanced stealth and recon unit assigned to Or'es'Ka's Honor Guard.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$669653]] -- - Stealth generators allow XV25s to attack enemies of the Greater Good from hiding.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$669654]] -- - Equipped with powerful fusion blaster and jetpack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$665854]] -- - Leadership ability increases the health of all squad members
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_stealth_shasvre_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$669650]] -- Veteran Stealth Team

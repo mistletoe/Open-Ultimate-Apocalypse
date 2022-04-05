@@ -125,7 +125,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -136,7 +136,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/capillarytower]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_k]]
 GameData["ui_ext"]["ui_index_hint"] = 16
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025042]] -- - Unleashes tyranid weapons of mass destruction, increases the requisition resource rate by 10%, and detects infiltrated units within a 250m radius.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025043]] -- - Projects an extremely large Control Area allowing structures to be built across the map.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[]]
@@ -144,7 +144,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16025045]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[]]
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18111339]] -- - Can be placed anywhere.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$18111349]] -- - Will decrease in cost the more generators are built.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_capillary_tower]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025040]] --  Capillary Tower

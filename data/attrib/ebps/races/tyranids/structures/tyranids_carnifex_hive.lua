@@ -71,7 +71,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -82,15 +82,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/heavyhive]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[- Spawns all Carnifexes.]]
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025114]] -- - Provides Carnifex research.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16025115]] -- - Exudes toxic miasma and synapse.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18210739]] -- - Unlocks the Perfect Link (Add-On).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16025117]] --   
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16025117]] --   
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_spawning_chamb]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025110]] --  Carnifex Chamber

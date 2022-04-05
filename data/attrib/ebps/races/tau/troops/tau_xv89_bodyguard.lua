@@ -188,7 +188,7 @@ GameData["special_attack_physics_ext"]["mass"] = 50
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -196,15 +196,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Commander]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_u]]
 GameData["ui_ext"]["ui_index_hint"] = 15
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012153]] -- - Elite commander bodyguards. ~~~ Able to jump over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18012154]] -- - Durability: Good | Strength: Good | Squad Size: Below Standard | Upgrades: Few | Morale: Average | Movement Speed: Slow | Sight: Good | Keen Sight: 2m | Abilities: Below Average | Weapon range: Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_xv89_bodyguards_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012152]] -- XV89 Bodyguards

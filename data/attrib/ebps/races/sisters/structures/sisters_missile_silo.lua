@@ -117,37 +117,37 @@ GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_collide"] = true 
 GameData["squad_hold_ext"] = Reference([[ebpextensions\squad_hold_ext.lua]])
 GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"] = Reference([[modifiers\enable_general_combat.lua]])
-GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_no_squads"]["modifier_01"]["value"] = -1
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"]["value"] = 1.100000024
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"]["value"] = 1.100000024
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"]["value"] = 1.100000024
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"]["value"] = 1.200000048
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"]["value"] = 1.200000048
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"]["value"] = 1.200000048
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"]["value"] = 1.299999952
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"]["value"] = 1.299999952
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["value"] = 1.299999952
 GameData["squad_hold_ext"]["nr_available_spots"] = 6
 GameData["structure_buildable_ext"] = Reference([[ebpextensions\structure_buildable_ext.lua]])
@@ -159,8 +159,8 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -171,15 +171,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Buildings/nuclear_center]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_i]]
 GameData["ui_ext"]["ui_index_hint"] = 8
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18112424]] -- - Conceals a missile within the bunker ready to annihilate the enemies of the Ecclesiarchy
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18111343]] -- - High priority target which is revealed to enemy radars when built.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111339]] -- - Can be placed anywhere.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/building_missile_silo_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18112423]] -- Missile Silo

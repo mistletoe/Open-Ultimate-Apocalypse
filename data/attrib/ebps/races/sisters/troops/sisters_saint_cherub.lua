@@ -117,11 +117,11 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
 GameData["modifier_apply_ext"]["modifiers"]["modifier_01"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
@@ -143,23 +143,20 @@ GameData["special_attack_physics_ext"]["mass"] = 100
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_titan.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Cherubim]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_ext"]["ui_index_hint"] = 9
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012099]] -- - Faithful cherub (infiltrator) (detector). ~~~ Provides movement speed bonuses to attached squads; can vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012100]] -- - Durability: Weak | Strength: Basic | Squad Size: Single | Upgrades: None | Morale: Immune | Movement Speed: Very Fast | Sight: Good | Keen Sight: 2m | Abilities: Below Average | Weapon Range: Melee | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012101]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/sisters_squad_pixi]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012098]] -- Cherubim

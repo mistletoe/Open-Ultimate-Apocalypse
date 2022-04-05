@@ -123,7 +123,7 @@ GameData["special_attack_physics_ext"]["mass"] = 12
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -131,15 +131,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/gargoyles_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026223]] -- - Support ranged air unit. ~~~ Can jump to any location on the map.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026224]] -- - Effective versus: Infantry and light armored structures.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026225]] -- - Durability: 2 | Strength: 2 | Morale: Immune | Upgrades: 0 | Squad Size: Large | Movement Speed: Fast | Sight: Good | Keen Sight: 2m | Ability Strength: 0 | Weapon range: Standard | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026226]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/tyranids_gargoyle_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026222]] -- Gargoyles

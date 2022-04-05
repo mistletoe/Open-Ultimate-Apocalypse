@@ -163,8 +163,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -172,15 +171,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/witch_hunters/witch_hunters_incarcerator]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
 GameData["ui_ext"]["ui_index_hint"] = 8
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012450]] -- - Elite vehicle unit. ~~~ Can harness the strength of the contained daemon to descrease the reload speed of it's weapons.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010015]] -- - Effective versus: Morale
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18012451]] -- - Durability: High | Strength: High | Squad Size: single | Upgrades: None | Morale: n/a | Movement Speed: Standard | Sight: Average | Keen Sight: 0m | Abilities: Below Average | Weapon range: Average | Capture Points: None.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[- Joe (donator of $5) ~~~ Oh this unit is awesome.]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/sisters_incarcerator_tank]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012449]] -- Incarcerator

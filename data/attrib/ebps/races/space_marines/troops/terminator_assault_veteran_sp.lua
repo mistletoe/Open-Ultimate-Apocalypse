@@ -115,11 +115,11 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["value"] = 0.8999999762
 
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
@@ -147,7 +147,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -155,15 +155,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Terminator]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[marine_assault_terminator]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$666851]] -- - Veteran Assault Terminator from the Blood Ravens First Company.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$666852]] -- - First Company Terminators are drawn from the deadliest, most devout warriors in the chapter.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$666853]] -- - Vested in sacred Terminator armor, which carries a small piece of the Emperor's own power armor.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$4450094]] -- - Sent to the Kaurava System by the Chapter Master to aid Force-Commander Boreale's mission.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$666855]] -- - Foregoes ranged weaponry for additional close combat damage and defense.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$666854]] -- - Effective against most unit types in close combat.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/terminator_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$666850]] -- Veteran Assault Terminator

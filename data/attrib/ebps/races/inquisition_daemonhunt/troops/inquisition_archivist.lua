@@ -115,9 +115,9 @@ GameData["special_attack_physics_ext"]["get_up_time"] = 0
 GameData["special_attack_physics_ext"]["mass"] = 12
 GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_infantry_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$4450037]] -- Aircraft
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -129,10 +129,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16021003]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010017]] -- - Effective versus: None
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16021004]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[- Can vault over terrain if the Motored Dais Tome was read.]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/archivist_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021002]] -- Archivist

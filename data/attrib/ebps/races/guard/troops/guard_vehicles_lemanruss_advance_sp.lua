@@ -254,7 +254,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -262,15 +262,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Leman_Russ;Speech/Races/Guard/Tanks]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_ext"]["ui_index_hint"] = 9
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$691051]] -- - Medium Tank.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$691052]] -- - Assault tank that can take heavy punishment.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18112456]] -- - Issues Emperor's Tears to the Cannonness and Nunciate Superior.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18112457]] -- - Grants immunity to morale and health damage and buffs the damage output of all weapons within the squad.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_squad_lemanruss]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$691050]] -- Leman Russ Battle Tank

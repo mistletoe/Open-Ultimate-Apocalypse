@@ -141,8 +141,8 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -153,7 +153,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Daemons/Buildings/Listening_Post]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_ext"]["ui_index_hint"] = 17
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000041]] -- - A vile structure, placed on Strategic Locations to solidify hold.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16000042]] -- - Increases the Requisition resource production rate. Also increases the relic resource production rate.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16000043]] -- - Strengthens the morale and tainted area of the Chaos Daemons race, the more it is upgraded.

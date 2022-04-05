@@ -120,7 +120,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500030]] -- TOUGHNESS 1
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -131,12 +131,7 @@ GameData["ui_ext"]["ui_index_hint"] = 9
 GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$97131]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011832]] -- - Sabotage unit (Infiltrator) (detector).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18011833]] -- - Durability: Weak | Strength: No Attack | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Fast | Sight: Excellent | Keen Sight: 25m | Abilities: Below Average | Weapon Range: Melee | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/skullprobe_leader_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011831]] -- Skull Probe

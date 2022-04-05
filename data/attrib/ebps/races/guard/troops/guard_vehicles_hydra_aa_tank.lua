@@ -180,15 +180,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Chimera;Speech/Races/Guard/Tanks]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011507]] -- - Long ranged anti air tank.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[- Devastates Aircraft!]]
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011508]] -- - Durability: Average | Strength: Average | Squad Size: Single | Upgrades: None | Morale: Immune | Movement Speed: Standard | Sight: Very Good | Keen Sight: None | Abilities: None | Weapon range: Very Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_hydra_AA_tank_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011506]] -- Hydra AA Tank

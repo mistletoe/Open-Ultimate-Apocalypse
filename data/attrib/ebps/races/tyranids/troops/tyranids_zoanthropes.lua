@@ -147,7 +147,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -155,15 +155,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/zoanthrope_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026111]] -- - Elite ranged anti armor unit (detector). ~~~ Contains an aura of toxic miasma; contains an aura of Tyranid infestation, increasing the ranged damage resistance of all nearby ally units, damaging enemies within a large radius reducing their keen sight detection.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026112]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026113]] -- - Durability: 7.5 | Strength: 9 | Morale: Immune | Upgrades: 0 | Squad Size: Single | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Ability Strength: 3 | Weapon range: Very Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026114]] -- - Has a weak melee attack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026115]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/i_zoanthrope]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026110]] --  Zoanthrope

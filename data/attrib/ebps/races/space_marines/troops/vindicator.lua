@@ -214,8 +214,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_artillery.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -224,15 +223,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Rhino;Speech/Races/Space_Marines/Tanks]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_d]]
 GameData["ui_ext"]["ui_index_hint"] = 7
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011798]] -- - Pre-elite vehicle. ~~~ Contains improved vehicle armor.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010014]] -- - Effective versus: Swarms of enemy targets
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011799]] -- - Durability: Very Good | Strength: Very Good | Squad Size: Single | Morale: Immune | Upgrades: None | Movement Speed: Standard | Sight: Good | Keen Sight: None | Abilities: Below Average | Weapon range: Standard | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/vindicator_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011797]] -- Vindicator

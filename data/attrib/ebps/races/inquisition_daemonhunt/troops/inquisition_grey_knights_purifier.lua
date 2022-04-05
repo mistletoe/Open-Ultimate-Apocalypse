@@ -309,7 +309,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90103]] -- Commander
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -317,15 +317,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\inquisition_daemonhunt\gk_knight]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16021151]] -- - (Deepstrike) (Detector) Battle brothers of the Inquisition - psychic squad. ~~~ Able to teleport over medium distances.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010006]] -- - Effective versus: Commanders
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010007]] -- - Effective versus: Daemons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16021152]] -- - Durability: 4 | Strength: 4 | Morale: 6 | Upgrades: 0 | Squad Size: Standard | Movement Speed: Standard | Sight: Standard | Keen Sight: 15m | Ability Strength: 6 | Weapon range: Standard | Capture Points: Yes.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/grey_knight_purifier_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021150]] -- Grey Knight Purifiers

@@ -159,8 +159,8 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["distance"] = 0
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -169,15 +169,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Daemons\Fury]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000204]] -- - Scout unit (detector) (infiltrator). ~~~ Can vault over impassable terrain; is the only unit that can capture Strategic Points; ruins armor every attack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010017]] -- - Effective versus: None
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16000205]] -- - Durability: 1.5 | Strength: 2 | Morale: 3.5 | Upgrades: 0 | Squad Size: Standard | Movement Speed: Very Fast | Sight: Good | Sight: 20m | Ability Strength: 2 | Weapon range: 0 | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16000206]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16000200]] -- - Can be killed very easily if not under the possession of the warp (depleted morale).
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_fury_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000203]] -- Furies

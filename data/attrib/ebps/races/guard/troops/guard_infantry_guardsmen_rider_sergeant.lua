@@ -175,22 +175,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_05"]["killer_motion_name
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/races/steel_legion/cavalary_rough_riders]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_l]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$690201]] -- - Infantry Commander.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$690202]] -- - Adds Hit Points to every squad member.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$690203]] -- - Adds Morale to the squad.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$690362]] -- - Effective against Infantry and Heavy Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_sargeant_rider_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$690200]] -- Sergeant

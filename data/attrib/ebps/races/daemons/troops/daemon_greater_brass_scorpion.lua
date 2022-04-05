@@ -375,8 +375,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_titan.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_tank.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 
@@ -385,16 +384,13 @@ GameData["ui_ext"]["minimap_enable"] = true
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Chaos_Marines/Brass_Scorpion]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000242]] -- - Titanic Daemon Engine. ~~~ Unleashes a great warp rift upon death; is very effective at either ranged (artillery purposes) or melee combat.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010012]] -- - Effective versus: Titans
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010006]] -- - Effective versus: Commanders
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010010]] -- - Effective versus: Super Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16000243]] -- - Durability: 18 | Strength: 18 | Morale: Immune | Upgrades: 0 | Squad Size: Single | Movement Speed: Slow | Sight: Good | Keen Sight: None | Ability Strength: 1 | Weapon range: Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_09"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_greater_brass_scorpion_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000241]] -- Greater Brass Scorpion

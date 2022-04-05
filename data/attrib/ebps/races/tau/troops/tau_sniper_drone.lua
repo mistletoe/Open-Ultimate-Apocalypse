@@ -137,8 +137,7 @@ GameData["special_attack_physics_ext"]["mass"] = 10
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_med.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -146,15 +145,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Attack_Drone]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011972]] -- - Light vehicle scout unit. ~~~ Can burrow.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010006]] -- - Effective versus: Commanders
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010015]] -- - Effective versus: Morale
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011973]] -- - Durability: Basic | Strength: Average | Squad Size: Below Standard | Upgrades: None | Morale: Immune | Movement Speed: Standard | Sight: Bad | Keen Sight: 2m | Abilities: Below Average | Weapon range: Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_sniper_drone_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011971]] -- Sniper Drones

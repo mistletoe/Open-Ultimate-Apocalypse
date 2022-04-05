@@ -160,8 +160,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$14000018]]
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -169,15 +168,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Pylon]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011044]] -- - (Deepstrike) Living Metal stationary anti air gun platform/minor relic unit. ~~~ Can teleport; immune to most superweapons.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011045]] -- - Durability: Very Good | Strength: Very Good | Morale: Immune | Upgrades: Few | Squad Size: Single | Movement Speed: (Teleportation) | Sight: Very Good |  Keen sight: None | Abilities: Basic | Weapon range: Very long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_sentry_pylon_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011043]] -- Sentry Pylon

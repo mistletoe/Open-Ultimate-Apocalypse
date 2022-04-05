@@ -88,7 +88,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -99,15 +99,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Orks/Buildings/Mine_field]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_h]]
 GameData["ui_ext"]["ui_index_hint"] = 14
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18210957]] -- - Infiltrated detonatable explosive.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18210958]] -- - Acts much like a level 8 commander bomb, only buildable, but more costly.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18210959]] -- - Can be detonated at any time, able to make a destructive dent to all nearby structures and most unit types.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18210960]] -- - WARNING: DO NOT put this bomb next to your base unless you have a plan of action.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/portable_nuke_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18210956]] -- Realllly Scary Bomm

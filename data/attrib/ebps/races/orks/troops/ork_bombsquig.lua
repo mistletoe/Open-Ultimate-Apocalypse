@@ -334,15 +334,15 @@ GameData["health_ext"]["regeneration_decrease_in_combat"] = 2222
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_05"] = Reference([[modifiers\health_rangedamage_received_2_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_05"]["value"] = 0.5
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\enable_death.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["value"] = 3
 
 GameData["modifier_ext"] = Reference([[ebpextensions\modifier_ext.lua]])
@@ -358,24 +358,20 @@ GameData["special_attack_physics_ext"]["get_up_time"] = 0
 GameData["special_attack_physics_ext"]["mass"] = 100
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_infantry_low.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_d]]
 GameData["ui_ext"]["ui_index_hint"] = 7
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012036]] -- - Suicide bombers. ~~~ Blows up when in melee range. 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012037]] -- - Durability: Weak | Strength: Very Good | Squad Size: Large | Upgrades: None | Morale: Basic | Movement Speed: Very Fast | Sight: Bad | Keen Sight: 2m | Abilities: None | Weapon Range: Melee | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012038]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_09"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[ork_icons/bomb_squig]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012035]] -- Bomb Squigs

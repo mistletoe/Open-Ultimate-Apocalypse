@@ -9,12 +9,7 @@ GameData["sim_entity_ext"]["no_rotate"] = true
 GameData["squad_hold_ext"] = Reference([[ebpextensions\squad_hold_ext.lua]])
 GameData["squad_hold_ext"]["acceptable_type_01"] = Reference([[type_transportable\transport_inquisition.lua]])
 GameData["squad_hold_ext"]["show_decorator"] = false
-GameData["squad_hold_ext"]["dark_eldar_raider"] = nil
-GameData["squad_hold_ext"]["modifiers_no_squads"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_01"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_02"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_03"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_04"] = nil
+--INTENTIONAL SPACER
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+

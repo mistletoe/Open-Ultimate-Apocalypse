@@ -23,22 +23,13 @@ GameData["squad_transportable_ext"] = Reference([[sbpextensions\squad_transporta
 GameData["squad_transportable_ext"]["transport_type"] = Reference([[type_transportable\transport_dreadnought.lua]])
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026182]] -- - Suicide unit.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026183]] -- - Effective versus: Most infantry, morale, and structures.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026184]] -- - Durability: 1 | Strength: 8 | Morale: Immune | Upgrades: 0 | Squad Size: Large | Movement Speed: Slow | Sight: Standard | Keen Sight: 2m | Ability Strength: 0 | Weapon range: 0 | Capture Points: No.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026185]] -- 
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026186]] -- 
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_spore_cluster]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$16026181]] -- 

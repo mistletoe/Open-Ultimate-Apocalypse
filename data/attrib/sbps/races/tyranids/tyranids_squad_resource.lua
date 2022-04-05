@@ -2,45 +2,20 @@ GameData = Inherit([[]])
 GameData["squad_blueprint_ext"] = Reference([[sbpextensions\squad_blueprint_ext.lua]])
 GameData["squad_cap_ext"] = Reference([[sbpextensions\squad_cap_ext.lua]])
 GameData["squad_cover_ext"] = Reference([[sbpextensions\squad_cover_ext.lua]])
-GameData["squad_cover_ext"]["cover_blocking"]["modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_blocking"]["modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_blocking"]["modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_blocking"]["modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_blocking"]["modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"]["value"] = 2
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_cover_ext"]["cover_heavy"]["priority"] = 10
 GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"]["value"] = 1.5
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_cover_ext"]["cover_light"]["priority"] = 5
-GameData["squad_cover_ext"]["cover_negative"]["modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_negative"]["modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_negative"]["modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_negative"]["modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_negative"]["modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_stealth"]["modifiers"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_stealth"]["modifiers"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_stealth"]["modifiers"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_stealth"]["modifiers"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_cover_ext"]["cover_stealth"]["modifiers"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\block.lua]]
 GameData["squad_infiltration_ext"] = Reference([[sbpextensions\squad_infiltration_ext.lua]])
-GameData["squad_infiltration_ext"]["modifiers_while_concealed"]["modifier_21"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_infiltration_ext"]["modifiers_while_concealed"]["modifier_22"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_infiltration_ext"]["modifiers_while_concealed"]["modifier_23"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_infiltration_ext"]["modifiers_while_concealed"]["modifier_24"] = Reference([[modifiers\no_modifier.lua]])
-GameData["squad_infiltration_ext"]["modifiers_while_concealed"]["modifier_25"] = Reference([[modifiers\no_modifier.lua]])
+--INTENTIONAL SPACER
 GameData["squad_leader_ext"] = Reference([[sbpextensions\squad_leader_ext.lua]])
 GameData["squad_leader_ext"]["leader_1"]["add_while_moving"] = true 
 GameData["squad_leader_ext"]["leader_1"]["cost_time"]["cost"]["power"] = 40
@@ -77,24 +52,12 @@ GameData["squad_transportable_ext"] = Reference([[sbpextensions\squad_transporta
 GameData["squad_transportable_ext"]["transport_type"] = Reference([[type_transportable\transport_greater_daemons.lua]])
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025445]] -- 	 
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025438]] --  - Left-click to contact the Hivefleet. The Hivefleet can drop in Tyranid buildings and alter the ecosystem at the cost of Influence.
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_will_of_the_hive]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$16025435]] -- 	 Hivefleet in Orbit
 GameData["squad_ui_ext"]["ui_info"]["no_button"] = nil
 GameData["squad_ui_ext"]["ui_info"]["pseudo_leader"] = nil

@@ -224,15 +224,9 @@ GameData["possess_ext"]["recharge_time"] = 7
 GameData["possess_ext"]["squad_replacement_name"] = [[necron_siege_monolith_squad]]
 GameData["possess_ext"]["transfer_health_percentage"] = true 
 GameData["possess_ext"]["ui_hotkey_name"] = [[hotkey_p]]
-GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[- Land on the ground, able to produce units.]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[necron_icons/monolith_phalanx]]
 
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[Descend]]
@@ -256,23 +250,21 @@ GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["summon_teleport_building_check_override"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90107]] -- Vehicle
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Buildings\Monolith]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011047]] -- - (Deepstrike) 250 RELIC POINTS! Support Monolith, weaker variant compared to a Restored Monolith. ~~~ Can teleport; can direct spawn Necron Warriors; can ascend into the air; immune to most superweapons; allows Necron infantry to teleport to this unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011048]] -- - Durability: Very Good | Strength: Very Good | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Very slow | Sight: Very Good |  Keen sight: None | Abilities: Basic | Weapon range:  Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011039]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/monolith_phalanx]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011046]] -- Siege Monolith

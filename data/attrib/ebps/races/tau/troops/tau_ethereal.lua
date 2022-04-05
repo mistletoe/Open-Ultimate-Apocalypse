@@ -234,22 +234,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Ethereal]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_y]]
 GameData["ui_ext"]["ui_index_hint"] = 14
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011909]] -- - Support commander unit (detector). ~~~ Inspires all units around the globe by increasing their health by 200hp when kept alive; grants bonuses to the Manta when garrissoned inside.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18011911]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011910]] -- - Durability: Average | Strength: Basic | Squad Size: Single | Upgrades: None | Morale: Average | Movement Speed: Standard | Sight: Very Good | Keen Sight: 30m | Abilities: Good| Weapon Range: Melee | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_ethereal_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011908]] -- Great Ethereal

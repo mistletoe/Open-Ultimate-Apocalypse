@@ -188,7 +188,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -196,15 +196,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/warrior_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
 GameData["ui_ext"]["ui_index_hint"] = 3
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026071]] -- - Ranged/melee unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026072]] -- - Effective versus: Infantry, heavy infantry, and light vehicles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026073]] -- - Durability: 5 | Strength: 5 | Morale: Immune | Upgrades: 6 | Squad Size: Standard | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Ability Strength: 0 | Weapon range: Good | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026074]] -- - Provides +2 requisition per unit in the squad while alive.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026075]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16026076]] --   
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_warrior]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026070]] --  Warrior   

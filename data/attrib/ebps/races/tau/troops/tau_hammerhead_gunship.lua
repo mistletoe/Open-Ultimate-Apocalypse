@@ -213,15 +213,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Hammer_Head_Gunship]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012007]] -- - Elite vehicle unit. ~~~ Can vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012008]] -- - Durability: Average | Strength: Very Good | Squad Size: Single | Upgrades: A lot | Morale: Immune | Movement Speed: Fast | Sight: Good | Keen Sight: None | Abilities: Basic | Weapon range: Very Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_hammerhead_hunter_killer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012006]] -- Hammerhead Gunship

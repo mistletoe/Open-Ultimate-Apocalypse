@@ -150,7 +150,7 @@ GameData["health_ext"]["stay_in_pathfinding_after_dead_time"] = 2
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 16
 
@@ -170,24 +170,23 @@ GameData["special_attack_physics_ext"]["face_backwards_when_flying"] = false
 GameData["special_attack_physics_ext"]["get_up_time"] = 0
 GameData["special_attack_physics_ext"]["mass"] = 50
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_vehicle_med.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90106]] -- Daemon
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/carnifex_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
 GameData["ui_ext"]["ui_index_hint"] = 3
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026151]] -- - Armoured melee vehicle.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026152]] -- - Effective versus: Infantry, heavy infantry, and vehicles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026153]] -- - Durability: 5 | Strength: 5 | Morale: Immune | Upgrades: 2 | Squad Size: Single | Movement Speed: Standard | Sight: Standard | Keen Sight: None | Ability Strength: 0 | Weapon range: Standard | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026154]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026155]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16026156]] --  
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_hellfex]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026150]] --  Hellfex (Carnifex)

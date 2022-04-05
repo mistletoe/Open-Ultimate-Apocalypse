@@ -207,7 +207,7 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.25
 GameData["melee_ext"]["charge_range"] = 25
 
@@ -292,23 +292,9 @@ GameData["possess_ext"]["research_to_revert"] = [[chaos_bloodthirster_research_k
 GameData["possess_ext"]["squad_replacement_name"] = [[chaos_squad_bloodthirster]]
 GameData["possess_ext"]["ui_hotkey_name"] = [[possess]]
 GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$697109]] -- Left-click to possess this unit with the Bloodthirster. This unit will transform into the Bloodthirster.
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[command_icons/possess]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$697108]] -- Summon Bloodthirster
 GameData["requirement_ext"] = Reference([[ebpextensions\requirement_ext.lua]])
 GameData["requirement_ext"]["requirements"]["required_1"] = Reference([[requirements\required_cap.lua]])
@@ -479,7 +465,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -487,15 +473,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Chaos_Marines/Lord_Khorne]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_y]]
 GameData["ui_ext"]["ui_index_hint"] = 14
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012214]] -- - Secondary commander unit. ~~~ Can ascend into the Bloodthirster.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012215]] -- - Durability: Good | Strength: Good | Morale: Plenty | Upgrades: None | Squad Size: Single | Movement Speed: Fast | Sight: Good |  Keen sight: 2m | Abilities: Below Average | Weapon range: Standard | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/chaos_lord_khorne]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012213]] -- Champion of Khorne

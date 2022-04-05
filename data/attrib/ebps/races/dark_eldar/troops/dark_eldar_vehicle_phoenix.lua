@@ -247,8 +247,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_air_med.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -256,15 +255,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Titans/Void_Dragon_Phoenix]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011403]] -- - Titanic air unit. ~~~ Can jump to any location on the map; equipped with titanic like shields, recovered when idle or disabled; regenerates health; can direct spawn Nightwing Fighters.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4600010]] -- - Effective against Aircraft and Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011404]] -- - Durability: Very Excellent | Strength: Excellent | Morale: Plenty | Upgrades: None | Squad Size: Single | Movement Speed: Very fast | Sight: Excellent | Keen Sight: None | Abilities: Excellent| Weapon range: Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011204]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[dark_eldar_icons/de_void_dragon_phoenix]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011730]] -- Void Dragon Phoenix

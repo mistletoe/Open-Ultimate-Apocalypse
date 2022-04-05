@@ -110,15 +110,15 @@ GameData["entrench_ext"]["action_time_setup"] = 2
 GameData["entrench_ext"]["entrenched_default_action_tree_name"] = [[deployed_default]]
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_02"] = Reference([[modifiers\accuracy_weapon_modifier.lua]])
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["entrench_ext"]["entrenched_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_02"]["value"] = 100
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_03"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
-GameData["entrench_ext"]["entrenched_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_03"]["value"] = 0.8000000119
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_05"] = Reference([[modifiers\min_range_weapon_modifier.lua]])
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["entrench_ext"]["entrenched_modifiers"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_05"]["value"] = 0
 GameData["entrench_ext"]["entrenched_modifiers"]["modifier_04"] = nil
 GameData["entrench_ext"]["icon_entrench"] = [[tau_icons/tau_entrench_icon_off]]
@@ -221,7 +221,7 @@ GameData["special_attack_physics_ext"]["mass"] = 50
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -229,15 +229,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Broadside_Battlesuit]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011949]] -- - Mobile artillery unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18011950]] -- - Durability: Average | Strength: Good | Squad Size: Below Standard | Upgrades: None | Morale: Average | Movement Speed: Slow | Sight: Below standard | Keen Sight: 2m | Abilities: None | Weapon range: Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011951]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_broadside_battlesuit_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011948]] -- XV88 Broadside Battlesuits

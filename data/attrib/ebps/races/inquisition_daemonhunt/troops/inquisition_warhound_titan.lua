@@ -56,7 +56,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_04"]["shoot_motion_variable_name
 GameData["combat_ext"]["hardpoints"]["hardpoint_04"]["vertical_aim_motion_variable_name"] = [[]]
 
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
-GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["value"] = 0.25
 
 GameData["cost_ext"] = Reference([[ebpextensions\cost_ext.lua]])
@@ -213,8 +213,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010004]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011203]] -- - Durability: Titanic | Strength: Excellent | Morale: Plenty | Upgrades: Few | Squad Size: Single | Movement Speed: Fast | Sight: Excellent |  Keen sight: None | Abilities: Good | Weapon range: Very long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011204]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/idh_warhound_purifier_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021122]] -- Warhound Purifier Titan

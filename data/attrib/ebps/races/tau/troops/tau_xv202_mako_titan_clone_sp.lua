@@ -46,7 +46,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_08"]["weapon_table"]["weapon_02"
 GameData["combat_ext"]["hardpoints"]["hardpoint_08"]["weapon_table"]["weapon_02"]["muzzle"]["z"] = 0
 GameData["combat_ext"]["hardpoints"]["hardpoint_08"]["weapon_table"]["weapon_02"]["origin"]["y"] = 0
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
-GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["value"] = 0.25
 
 GameData["cost_ext"] = Reference([[ebpextensions\cost_ext.lua]])
@@ -273,9 +273,9 @@ GameData["special_attack_physics_ext"]["mass"] = 1000
 GameData["suicide_ext"] = Reference([[ebpextensions\suicide_ext.lua]])
 GameData["suicide_ext"]["lifetime"] = 60
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_titan.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90103]] -- Commander
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_tank.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -284,15 +284,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Titan; Speech\Races\Tau\Commander]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
 GameData["ui_ext"]["ui_index_hint"] = 3
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011987]] -- - Titanic Walker. ~~~ Equipped with titanic shields that recover when idle or disabled.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18011988]] -- - Durability: Very Excellent | Strength: Deadly | Squad Size: Single | Upgrades: None | Morale: Legendary | Movement Speed: Very Fast | Sight: Excellent | Keen Sight: None | Abilities: Excellent| Weapon range: Very Long | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_XV202_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011986]] -- XV202 Mako Titan

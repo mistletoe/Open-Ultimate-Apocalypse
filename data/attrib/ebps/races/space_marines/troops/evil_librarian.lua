@@ -301,7 +301,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["single_player_only"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -313,11 +313,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$97071]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97077]] -- - Treacherous heretic who must be destroyed at all costs.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$672154]] -- - Detects infiltrated units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$672153]] -- - Psychic unit with many powerful abilities focused on weakening enemy resolve.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/librarian_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$97076]] -- Heretic Isador

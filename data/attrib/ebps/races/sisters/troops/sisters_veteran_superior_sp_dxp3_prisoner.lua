@@ -159,21 +159,19 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[sisters_veteran_superior]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4250087]] -- - Heavy Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$97777]] -- - Improves damage for all units in the squad.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4250089]] -- - Can be upgraded with powerful weapons (Pristine Sanctuary Building).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$4250092]] -- - Faithful. Generates a small amount of the Faith Resource while alive.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$4250093]] -- - Effective against Infantry and Heavy Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/squad_leader_battle_sisters]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4250086]] -- Veteran Superior

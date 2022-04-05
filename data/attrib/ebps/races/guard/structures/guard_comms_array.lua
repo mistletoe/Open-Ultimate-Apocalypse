@@ -106,7 +106,7 @@ GameData["cost_ext"]["time_cost"]["time_seconds"] = 38
 GameData["deep_strike_ext"] = Reference([[ebpextensions\deep_strike_ext.lua]])
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
@@ -247,7 +247,7 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -258,15 +258,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Buildings/Relay_Station]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18111164]] -- - Requisitions aircraft units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18111165]] -- - Produces: Marauder Bombers, Marauder Vigilants, Valkyrie Transports, Vulture Gunships, Kasrkin Airborn Veterans, and Air Doctrine specific units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111166]] -- - Can call in airstrikes to any location on the map.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18111167]] -- - Can deepstrike infantry into the front lines.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18111168]] -- - Increases squad and support cap by 3.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/comm_array]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18111163]] -- Communications Tower

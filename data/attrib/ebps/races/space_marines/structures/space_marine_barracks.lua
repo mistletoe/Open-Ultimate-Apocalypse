@@ -18,7 +18,7 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_max"] = 60
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_min"] = 10
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 160
@@ -117,7 +117,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -133,10 +133,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$94012]] -- - Req
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18112352]] -- - Produces: Tactical Marines, Assault Marines, Devastators, Vanguard Veterans, Sternguard Veterans, Terminators, Assault Terminators, Attack Bikes, Force Commander, Brother Captain, Gladiator Command Squad.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4450163]] -- - Allows Building: Heavy Bolter Turret, Monastery add-on (HQ upgrade).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18211594]] -- - Contains chapter choices that will determine the playstyle of the Space Marine race.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/barracks_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94010]] -- Chapel-Barracks

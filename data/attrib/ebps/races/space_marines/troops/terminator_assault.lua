@@ -143,12 +143,12 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["value"] = 0.8500000238
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["value"] = 0.8999999762
 
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
@@ -177,7 +177,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -193,7 +193,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18012051]] -- - Durability: Excellent | Strength: Excellent.5 | Morale: Plenty | Upgrades: None | Squad Size: Below standard | Movement Speed: Slow | Sight: Standard | Keen Sight: 2m | Abilities: Basic | Weapon range: Good | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$18012048]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/terminator_assault_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012049]] -- Assault Terminators

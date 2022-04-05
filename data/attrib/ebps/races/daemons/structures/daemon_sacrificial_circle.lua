@@ -27,7 +27,7 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_max"] = 60
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_min"] = 35
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 50
@@ -132,7 +132,7 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

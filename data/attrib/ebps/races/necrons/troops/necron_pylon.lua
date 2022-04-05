@@ -192,8 +192,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$14000018]]
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -201,7 +200,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Pylon]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_s]]
 GameData["ui_ext"]["ui_index_hint"] = 6
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011041]] -- - (Deepstrike) 750 RELIC POINTS! (Deepstrike) Living Metal anti titan stationary gun platform. ~~~ Can teleport; immune to most superweapons.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010012]] -- - Effective versus: Titans
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010010]] -- - Effective versus: Super Structures
@@ -209,7 +208,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010009]] -- - Effective versus: Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011042]] -- - Durability: Very Excellent | Strength: Legendary | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: (Teleportation) | Sight: Very Good |  Keen sight: None | Abilities: Below Average | Weapon range: Extreme | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$18011043]] -- Sentry Pylon
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/Necron_Pylon_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011040]] -- Gauss Pylon

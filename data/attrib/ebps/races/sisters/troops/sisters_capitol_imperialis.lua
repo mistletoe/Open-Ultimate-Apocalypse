@@ -254,8 +254,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_vehicle_med.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_tank.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -264,15 +263,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Land_Raider;Speech/Races/Space_Marines/Tanks]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_ext"]["ui_index_hint"] = 9
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012330]] -- - Armed mobile production unit. (Heavy Transport: 6) (faithful unit). ~~~ Contains void shields that can be recharged when idle | able to produce units faster than any structure (while doors deployed) | bulldozes structures within a set radius
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18012331]] -- - Durability: Very Excellent | Strength: Very Good | Morale: Very Good | Upgrades: None | Squad Size: Single | Movement Speed: Slow | Sight: Excellent | Keen Sight: None | Abilities: Below Average | Weapon Range: Artillery | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[- Masterofroflness (donator of $20) ~~~ Will you add Shrek?]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/squad_capitol_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012329]] -- Mobile Capitol Imperialis

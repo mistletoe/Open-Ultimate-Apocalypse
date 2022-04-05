@@ -374,7 +374,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["single_player_only"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -382,15 +382,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Chaos_Marines/Lord]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[chaos_lord]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450134]] -- - Commander of the Alpha Legion in Kaurava
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$671603]] -- - Black Apostle of Chaos Undivided
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$671601]] -- - Boosts morale recovery when attached to squads.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$97306]] -- - Effective against Infantry and Heavy Infantry. Excels at close combat.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/lord_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4450135]] -- Firaeveus Carron

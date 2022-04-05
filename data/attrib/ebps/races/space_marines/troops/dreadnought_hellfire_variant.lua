@@ -191,8 +191,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -206,9 +205,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010014]] -- - Effective versus: Swarms of enemy targets
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011811]] -- - Durability: Very Good | Strength: Good | Morale: Immune | Upgrades: A lot | Squad Size: Single | Movement Speed: Standard | Sight: Standard | Keen Sight: None | Abilities: None | Weapon range: Good | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/dreadnought_hellfire_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011809]] -- Hellfire Dreadnought

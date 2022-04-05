@@ -20,14 +20,7 @@ GameData["squad_modifier_ext"] = Reference([[sbpextensions\squad_modifier_ext.lu
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
 GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$97951]] -- 
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[citizen_icons/citizens_icon_1]]
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$97950]] -- Imperial Citizen
 GameData["squad_ui_ext"]["ui_info"]["no_button"] = nil

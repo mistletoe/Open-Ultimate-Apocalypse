@@ -104,7 +104,7 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -114,15 +114,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Necron/Buildings/Beacon]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_d]]
 GameData["ui_ext"]["ui_index_hint"] = 11
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$575951]] -- - Ancient structure radiating loathsome Necron energies
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18111200]] -- - Support structure.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111201]] -- - This ancient structure can be upgraded to possess dangerous local and global abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18111202]] -- - Applies health, health regeneration, armor, and leader maximum modifiers to the Death Lord.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18211250]] -- - Limit of 2 per HQ.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18211945]] -- - Increases the support cap.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons\energy_beacon_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18111199]] -- Energy Beacon

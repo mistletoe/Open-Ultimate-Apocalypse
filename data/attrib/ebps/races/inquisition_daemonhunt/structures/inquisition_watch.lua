@@ -11,7 +11,7 @@ GameData["deep_strike_ext"] = Reference([[ebpextensions\deep_strike_ext.lua]])
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
@@ -129,7 +129,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -145,10 +145,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16020042]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16020043]] -- - Produces Infantry: Elite Stormtroopers, Scholars, Grenaiders, Weapon Servitors, Maintenance Servitors, and the Inquisitor Lord.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16020044]] -- - Produces Vehicles: Chimera Transport, Rhino Transport, Razorback Transport, Damocles, Predator Tank, Whirlwind Hyperios, Land Raider Phobos, Land Raider Redeemer, Land Raider Crusader, and the Inquisitor Lord's Personal Land Raider (LR Daemon Hunter).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16020045]] -- - Can deepstrike Land Raiders.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/watch_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16020041]] -- Inquisition Watch

@@ -115,7 +115,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -126,15 +126,11 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Buildings\Shrine_of_the_Emperor]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_u]]
 GameData["ui_ext"]["ui_index_hint"] = 7
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16020144]] -- - Statue of the God-Emperor, a beacon of inspiration.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16020145]] -- - Doubles the health and morale of all units throughout the globe which also allows the "Absolute Purification" research.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16020146]] -- - Also contains the blessing of the god emperor, revealing all greater daemons and Eye of Madness structures throughout the globe!
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/idh_shrine_to_the_emperor_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16020143]] -- Shrine To The Emperor

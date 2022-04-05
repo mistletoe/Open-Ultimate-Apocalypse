@@ -149,7 +149,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -160,15 +160,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/advmagmavent]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_c]]
 GameData["ui_ext"]["ui_index_hint"] = 19
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025062]] -- - Generates a large amount of Power.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025063]] -- - Can only be built on Slag Deposits.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16025064]] -- - Magma Vents are volatile and will damage anything nearby when they are destroyed.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18211248]] -- - Contains abilities that will greatly fortify your economy and amplify the strength of your end game titans and super structures.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_magma_vent]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025060]] --  Magma Vent

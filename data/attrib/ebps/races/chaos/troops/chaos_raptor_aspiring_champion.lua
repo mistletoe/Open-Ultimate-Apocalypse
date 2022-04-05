@@ -154,7 +154,7 @@ GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["exclusive"] = true 
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["modifier_class_name"] = Reference([[type_modifier\tp_modifier_movement_melee_1.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.25
 GameData["melee_ext"]["charge_range"] = 25
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["value"] = 0.25
@@ -164,13 +164,13 @@ GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"] = Reference([[modifie
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["exclusive"] = true 
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["modifier_class_name"] = Reference([[type_modifier\tp_modifier_movement_melee_1.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_04"]["value"] = 1.25
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["exclusive"] = true 
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["modifier_class_name"] = Reference([[type_modifier\tp_modifier_movement_melee_2.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_05"]["value"] = 1.25
 GameData["melee_ext"]["melee_leap_action_name"] = [[feral_leap]]
 GameData["melee_ext"]["melee_leap_curve_ratio"] = 0.3000000119
@@ -322,8 +322,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -335,10 +334,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97402]] -- - Hea
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$97403]] -- - Leader Unit effective at close combat and boosting squad morale.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$97404]] -- - Can be upgraded with powerful close combat weapons (Chaos Armory).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$697106]] -- - Effective against Infantry and Heavy Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/Aspiring_Raptor_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$97400]] -- Raptor Aspiring Champion

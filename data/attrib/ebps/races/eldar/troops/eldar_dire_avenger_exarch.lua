@@ -186,24 +186,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["chance"] = 0
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["distance"] = 1
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_motion_name"] = [[]]
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_infantry_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_med.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS5.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500034]] -- TOUGHNESS 5
+--INTENTIONAL SPACER
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Eldar/dire_avengers]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97893]] -- - Powerful leader unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18012493]] -- - Grants the squad increased damage.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$97896]] -- - Effective against Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/dire_avenger_exarch_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012492]] -- Dire Avenger Exarch

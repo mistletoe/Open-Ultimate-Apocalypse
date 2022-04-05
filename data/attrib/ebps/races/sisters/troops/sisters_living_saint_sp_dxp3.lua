@@ -116,11 +116,11 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\no_modifier.lua]])
-GameData["melee_ext"]["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 
 GameData["miraculous_intervention_ext"] = Reference([[ebpextensions\miraculous_intervention_ext.lua]])
 GameData["miraculous_intervention_ext"]["recharge_time"] = 600
@@ -347,21 +347,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Living_Saint]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[sisters_living_saint]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4250127]] -- - Unstoppable juggernaut of Holy wrath.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4250128]] -- - Has a variety of powerful abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4250129]] -- - Can use her wings to vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$4250130]] -- - Faithful. Generates large amounts of the Faith Resource while alive.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$4250131]] -- - Effective against all units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$3950254]] -- - WARNING:  The Living Saint and all nearby allies are invulnerable while the Shrines of the Living Saint still stand!
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/squad_living_saint]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$3950253]] -- Living Saint Anais

@@ -55,7 +55,7 @@ GameData["structure_ext"]["extra_no_build_buffer"] = 1
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -66,15 +66,10 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Buildings\Shrine_Of_Purpose]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_shrine_of_purpose]]
 GameData["ui_ext"]["ui_index_hint"] = 11
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$665402]] -- - Coalition Center sanctifies the Tau castes working together for the Greater Good
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$665403]] -- - Produces the Ethereal, a powerful unit with special abilities
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_shrine_of_purpose_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$665401]] -- Coalition Center

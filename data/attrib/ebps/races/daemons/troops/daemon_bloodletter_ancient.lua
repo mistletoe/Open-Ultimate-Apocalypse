@@ -149,13 +149,13 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Daemons/Bloodletter]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16003661]] -- - Favoured Bloodletter Champion, a Lesser Daemon that has survived many infernal battles now past.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16003662]] -- - Very strong and durable close combat unit, equipped with legendary Hellblades.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16003663]] -- - Can be deepstriked, can use Blood Frenzy to tear apart foes quickly, regenerates when in combat, leeches small amounts of health with each strike.

@@ -126,7 +126,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_05"]["weapon_table"]["weapon_01"
 GameData["combat_ext"]["hardpoints"]["hardpoint_05"]["weapon_table"]["weapon_01"]["weapon"] = [[weapon\npc_missile_launcher_warlord.lua]]
 
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
-GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["combat_ext"]["in_combat_modifiers"]["modifier_01"]["value"] = 0.25
 
 GameData["cost_ext"] = Reference([[ebpextensions\cost_ext.lua]])
@@ -269,8 +269,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90107]] -- Vehicle
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_tank.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -283,11 +282,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$97031]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011547]] -- - Heavy class battle titan.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18011548]] -- - Durability: 50 | Strength: Legendary | Morale: Legendary | Upgrades: Few | Squad Size: Single | Movement Speed: Slow | Sight: Extreme | Keen Sight: None | Abilities: Good | Weapon range: Extreme | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[npc\warlord_titan_variant_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011546]] -- Imperial Warlord Titan

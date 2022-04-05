@@ -207,24 +207,11 @@ GameData["possess_ext"]["possession_ui_type"] = [[]]
 GameData["possess_ext"]["recharge_time"] = 60
 GameData["possess_ext"]["squad_replacement_name"] = [[necron_lord_squad]]
 GameData["possess_ext"]["transfer_health_percentage"] = true 
-GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18112071]] -- - The Night Bringer will revert back to the form of the Necron Lord.
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_lord_icon]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$18112070]] -- Revert
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
 GameData["sight_ext"]["keen_sight_radius"] = 4
@@ -394,24 +381,23 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_02"]["synckill_id"] = Re
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["chance"] = 0
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Reference([[type_synckillids\sk_none.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_monster_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90103]] -- Commander
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Night_Bringer]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011061]] -- - C'tan God melee unit. ~~~ Can revert back into the Necron Lord form.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010006]] -- - Effective versus: Commanders
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010007]] -- - Effective versus: Daemons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011062]] -- - Durability: Excellent | Strength: Excellent | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Standard | Sight: Standard |  Keen sight: 2m | Abilities: Basic | Weapon range: Short | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_nightbringer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011060]] -- The Nightbringer

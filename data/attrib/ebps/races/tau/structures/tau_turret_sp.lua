@@ -94,8 +94,8 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -106,15 +106,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Tau/Buildings/Turret]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_g]]
 GameData["ui_ext"]["ui_index_hint"] = 13
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18211270]] -- - Disruption defense structure.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18211271]] -- - Equipped with an anti magnetic shock pulse, the energies created by the technologies of Tau will pulse out in a large 50m radius, stunning and throwing aside most enemy infantry that get close to the structure.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18211272]] -- - If nearby an enemy structure or vehicle, the technological pulses will disable production, abilities, sabotage movement speed, and may wreck through most void shields.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18211273]] -- - Is equipped with better vision and scanners to detect infiltrated units better than turrets.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18211274]] -- - Is equipped with a secondary defense for dealing with infantry, resistant to the shockwave.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_ark_turret_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18211269]] -- Ark Defense Turret

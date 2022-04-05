@@ -129,7 +129,7 @@ GameData["special_attack_physics_ext"]["mass"] = 10
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -137,15 +137,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Clones]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_drone_squad]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$707001]] -- - Ambush Unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$707002]] -- - Can burrow into the ground and ambush passing units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$707003]] -- - Has a short-ranged attack that is effective against infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$707004]] -- - Explodes violently when low on health.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_drone_squad_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$707000]] -- Drone Squad

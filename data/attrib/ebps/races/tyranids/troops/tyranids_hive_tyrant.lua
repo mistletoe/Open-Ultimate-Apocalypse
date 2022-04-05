@@ -362,22 +362,21 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/hivetyrant_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 13
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026141]] -- - Primary commander unit. ~~~ Can vault over impassable terrain.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026142]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026143]] -- - Durability: 6 | Strength: 6 | Morale: 6 | Upgrades: 14 + Hero Upgrades | Squad Size: Single | Movement Speed: Slow | Sight: Good | Keen Sight: 4m | Ability Strength: 4 | Weapon range: Standard | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026144]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026145]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16026146]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[Tyranids_icons/i_hivetyrant]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026140]] --  Hive Tyrant

@@ -233,23 +233,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_commander.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90103]] -- Commander
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Nunciate]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_y]]
 GameData["ui_ext"]["ui_index_hint"] = 14
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011474]] -- - Ranged support Lieutenant/commander(production) . ~~~ Can spawn Techpriest Enginseers; provides garrisson bonuses while in the Lieutenant's Command Tank, increasing its damage output.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011475]] -- - Durability: Basic | Strength: Average | Morale: Average | Upgrades: 5 + Hero Research | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: 2m | Abilities: Average | Weapon range: Standard | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011422]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011423]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_lieutenant_support_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011473]] -- Fire Support Lieutenant

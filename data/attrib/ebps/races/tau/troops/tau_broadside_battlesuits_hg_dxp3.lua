@@ -156,7 +156,7 @@ GameData["special_attack_physics_ext"]["mass"] = 50
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -164,15 +164,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Broadside_Battlesuit]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_broadside_battlesuit]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450111]] -- - Old comrade of Commander Or'es'Ka who has earned the prestigue of piloting a XV88 Broadside Battlesuit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4450112]] -- - Entrenches to become a powerful weapons platform, effective against all units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$4450113]] -- - Effective against vehicles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$]]
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_broadside_battlesuit_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4450110]] -- Veteran Broadside Battlesuit

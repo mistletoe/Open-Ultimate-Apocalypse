@@ -71,7 +71,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -82,15 +82,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/relichive]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_i]]
 GameData["ui_ext"]["ui_index_hint"] = 8
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025401]] -- - Contains research that will vastly improve the effectiveness of Hierophant Bio-Titans and allow apocalyptic scale abilities..
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025402]] -- - Exudes toxic miasma and synapse.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16025403]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16025404]] -- Growth Chamber II
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_titan_chamber]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025400]] -- Assimilation Chamber

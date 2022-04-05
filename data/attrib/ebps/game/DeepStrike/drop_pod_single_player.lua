@@ -11,15 +11,10 @@ GameData["squad_hold_ext"]["acceptable_type_02"] = Reference([[type_transportabl
 GameData["squad_hold_ext"]["acceptable_type_03"] = Reference([[type_transportable\transport_dreadnought.lua]])
 GameData["squad_hold_ext"]["nr_available_spots"] = 20
 GameData["squad_hold_ext"]["show_decorator"] = false
-GameData["squad_hold_ext"]["dark_eldar_raider"] = nil
-GameData["squad_hold_ext"]["modifiers_no_squads"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_01"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_02"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_03"] = nil
-GameData["squad_hold_ext"]["modifiers_squad_04"] = nil
+--INTENTIONAL SPACER
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["can_be_possessed_by_enemy"] = nil
 GameData["type_ext"]["reanimate"] = nil
 GameData["type_ext"]["summon_teleport_building_check_override"] = nil

@@ -35,7 +35,7 @@ GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["area_type
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
@@ -144,8 +144,8 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -156,7 +156,7 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/sporechimney]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_ext"]["ui_index_hint"] = 17
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025032]] -- - Solidifies your hold on a strategic location by placing a building on it.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025033]] -- - Generates the requisition resource.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16025034]] -- - Increases population (relic resource) growth rate by +10, allowing more units and structures to be available faster.
@@ -164,7 +164,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16025035]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16025036]] -- - Exudes toxic miasma and synapse.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16025037]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$16025038]] --  
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_spore_chimney]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025030]] --  Spore Chimney 

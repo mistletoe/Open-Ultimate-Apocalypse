@@ -72,7 +72,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -83,15 +83,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/buildings/relichive]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_u]]
 GameData["ui_ext"]["ui_index_hint"] = 7
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025392]] -- - Produces very dangerous creatures of the Tyranids.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025393]] -- - Produces: Trygon and Uberfex.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16025394]] -- - Exudes toxic miasma and synapse with also another capability of holding units inside, shared around the globe.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16025395]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_tunnel_warrens]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025390]] -- Tunnel Warrens

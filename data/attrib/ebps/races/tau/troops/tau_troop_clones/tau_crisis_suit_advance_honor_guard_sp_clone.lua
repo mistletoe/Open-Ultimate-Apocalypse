@@ -131,21 +131,17 @@ GameData["special_attack_physics_ext"]["mass"] = 10
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Clones]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_crisis_suit]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$673250]] -- - Part of the Honor Guard summoned by the Ethereal
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$673251]] -- - Can jetpack quickly around, and over, the battlefield.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$673252]] -- - Weapons can be customized to deal with different opponents.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$0]]

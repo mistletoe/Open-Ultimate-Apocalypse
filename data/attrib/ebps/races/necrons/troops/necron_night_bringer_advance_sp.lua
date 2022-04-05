@@ -172,7 +172,7 @@ GameData["possess_ext"]["possession_ui_type"] = [[]]
 GameData["possess_ext"]["show_possession_ui_button"] = false
 GameData["possess_ext"]["squad_replacement_name"] = [[necron_lord_squad_advance_sp]]
 GameData["possess_ext"]["transfer_health_percentage"] = true 
-GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 
 
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$0]]
@@ -344,21 +344,17 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Night_Bringer]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$671552]] -- - A manifestation of the Nightbringer, one of the C'tan deities of the Necrons.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$705757]] -- - Damage inflicted by the Nightbringer is transferred as health to the Necron Lord.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$671554]] -- - Effective against all units.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_nightbringer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$671551]] -- Essence of the Nightbringer

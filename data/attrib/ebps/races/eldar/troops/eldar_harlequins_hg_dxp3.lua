@@ -118,16 +118,16 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["value"] = 0.773999989
 GameData["melee_ext"]["charge_modifiers"]["modifier_03"] = Reference([[modifiers\morale_rangeddamage_received_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_03"]["value"] = 0.1000000015
 GameData["melee_ext"]["charge_modifiers"]["modifier_04"] = Reference([[modifiers\health_rangedamage_received_2_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_04"]["value"] = 0.773999989
 GameData["melee_ext"]["charge_range"] = 12
 GameData["melee_ext"]["melee_leap_action_name"] = [[feral_leap]]
@@ -169,23 +169,21 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["killer_motion_name
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Reference([[type_synckillids\sk_id_04.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_infantry_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90103]] -- Commander
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS5.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500034]] -- TOUGHNESS 5
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Eldar\Harlequin]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_e]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97893]] -- - Powerful leader unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18012493]] -- - Grants the squad increased damage.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010006]] -- - Effective versus: Commanders
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/harlequin_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012496]] -- Harlequin Troupe Master

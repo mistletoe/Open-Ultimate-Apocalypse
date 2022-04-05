@@ -173,7 +173,7 @@ GameData["special_attack_physics_ext"]["mass"] = 8
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["can_be_possessed_by_enemy"] = nil
 GameData["type_ext"]["reanimate"] = nil
 GameData["type_ext"]["summon_teleport_building_check_override"] = nil
@@ -189,10 +189,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16002391]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16002392]] -- - Durability: 1.5 | Strength: 2.5 | Morale: 4 | Upgrades: 0 | Squad Size: Large | Movement Speed: Standard | Sight: Standard | Keen Sight: 2m | Ability Strength: 1 | Weapon range: 0 | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16002393]] -- - Can be killed very easily if not under the possession of the warp (depleted morale).
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_nurglings_icon]]
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16002390]] -- Nurglings
 GameData["ui_ext"]["ui_info"]["no_button"] = nil

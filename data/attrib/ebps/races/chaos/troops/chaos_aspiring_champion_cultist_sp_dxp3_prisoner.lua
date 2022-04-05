@@ -149,8 +149,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -164,8 +163,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$575704]] -- - Ca
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$575703]] -- - Can use Berserk Fury ability to boost attack damage and morale.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$575702]] -- - Can be possessed by the Bloodthirster.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$575701]] -- - Effective against Infantry and Heavy Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/aspiring_champion_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$97390]] -- Aspiring Champion

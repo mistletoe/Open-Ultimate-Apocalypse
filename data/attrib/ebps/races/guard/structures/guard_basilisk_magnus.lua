@@ -154,7 +154,7 @@ GameData["squad_hold_ext"]["nr_available_spots"] = 10
 GameData["squad_hold_ext"]["underground_icon"] = [[npc/launchpad_icon]]
 GameData["squad_hold_ext"]["underground_time"] = 3
 GameData["squad_hold_ext"]["underground_tunnel"] = true 
-GameData["squad_hold_ext"]["modifiers_squad_04"] = nil
+--INTENTIONAL SPACER
 GameData["structure_buildable_ext"] = Reference([[ebpextensions\structure_buildable_ext.lua]])
 GameData["structure_buildable_ext"]["build_menu_priority"] = 1
 GameData["structure_buildable_ext"]["return_power_percent"] = 0.1000000015
@@ -166,7 +166,7 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -177,15 +177,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Buildings/Basilisk_Magnus]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_k]]
 GameData["ui_ext"]["ui_index_hint"] = 16
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18111324]] -- - Global range artillery support structure that devastates armies and bases. Is revealed on enemy radar.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18111325]] -- - Can be placed anywhere, but is extremely expensive and takes a very long time to build. No limit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18111326]] -- - Can be garrissoned by various amounts of units, and can be upgraded by many addon types to fit a specific role in the battlefield.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18111339]] -- - Can be placed anywhere.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18111349]] -- - Will decrease in cost the more generators are built.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_basilisk_magnus_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18111323]] -- Basilisk Magnus

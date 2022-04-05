@@ -169,880 +169,880 @@ GameData["sim_entity_ext"]["is_collide"] = true
 GameData["squad_hold_ext"] = Reference([[ebpextensions\squad_hold_ext.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_04"]["value"] = 0.1800000072
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_05"]["value"] = 0.1800000072
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x03A368C5"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x03A368C5"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0x142F26C7"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_01"]["value"] = 6500
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_02"]["value"] = 156
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_04"]["value"] = 0.1800000072
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_05"]["value"] = 0.1800000072
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x142F26C7"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x142F26C7"]["modifier_08"]["value"] = 4
 GameData["squad_hold_ext"]["0x21430B37"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x21430B37"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x21430B37"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0x382F1D7E"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x382F1D7E"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0x987BD056"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0x987BD056"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0x987BD056"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0xBB2B8740"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_04"]["value"] = 0.25
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_05"]["value"] = 0.25
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xBB2B8740"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0xD20676C7"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xD20676C7"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xD20676C7"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0xE0157F2F"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE0157F2F"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0xE3027A60"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xE3027A60"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xE3027A60"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["0xF2BC7625"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_01"]["value"] = 7000
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_02"]["value"] = 168
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_04"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_05"]["value"] = 0.200000003
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_06"]["value"] = 15
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_07"]["value"] = 15
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["0xF2BC7625"]["modifier_08"]["value"] = 5
 GameData["squad_hold_ext"]["acceptable_type_01"] = Reference([[type_transportable\transport_greater_daemons.lua]])
 GameData["squad_hold_ext"]["holds_produced_squads"] = true 
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_01"]["value"] = 500
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_02"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_06"]["value"] = 1
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_01"]["modifier_07"]["value"] = 1
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_01"]["value"] = 500
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_02"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_04"] = Reference([[modifiers\resource_per_tick_requisition_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_04"]["value"] = 0.01999999955
 
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_06"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_02"]["modifier_07"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_01"]["value"] = 1500
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_02"]["value"] = 36
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_03"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_04"] = Reference([[modifiers\resource_per_tick_requisition_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_04"]["value"] = 0.02999999933
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_06"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_07"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["value"] = 1500
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_02"]["value"] = 36
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_03"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_04"]["value"] = 0.03999999911
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_05"]["value"] = 0.03999999911
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_06"]["value"] = 4
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_07"]["value"] = 4
 GameData["squad_hold_ext"]["modifiers_squad_05"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["value"] = 2500
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_02"]["value"] = 60
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_03"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_04"]["value"] = 0.05000000075
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_05"]["value"] = 0.05000000075
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_06"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_07"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_06"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_01"]["value"] = 2500
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_02"]["value"] = 60
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_03"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_04"]["value"] = 0.05999999866
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_05"]["value"] = 0.05999999866
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_06"]["value"] = 6
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_06"]["modifier_07"]["value"] = 6
 GameData["squad_hold_ext"]["modifiers_squad_07"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_01"]["value"] = 3500
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_02"]["value"] = 84
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_03"]["value"] = 4
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_04"]["value"] = 0.0700000003
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_05"]["value"] = 0.0700000003
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_06"]["value"] = 7
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_07"]["modifier_07"]["value"] = 7
 GameData["squad_hold_ext"]["modifiers_squad_08"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_01"]["value"] = 3500
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_02"]["value"] = 84
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_03"]["value"] = 4
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_04"]["value"] = 0.07999999821
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_05"]["value"] = 0.07999999821
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_06"]["value"] = 8
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_08"]["modifier_07"]["value"] = 8
 GameData["squad_hold_ext"]["modifiers_squad_09"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_01"]["value"] = 4500
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_02"]["value"] = 108
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_04"]["value"] = 0.09000000358
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_05"]["value"] = 0.09000000358
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_06"]["value"] = 9
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_09"]["modifier_07"]["value"] = 9
 GameData["squad_hold_ext"]["modifiers_squad_10"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_01"]["value"] = 4500
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_02"]["value"] = 108
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_04"]["value"] = 0.1000000015
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_05"]["value"] = 0.1000000015
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_06"]["value"] = 10
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_10"]["modifier_07"]["value"] = 10
 GameData["squad_hold_ext"]["modifiers_squad_11"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_01"]["value"] = 5000
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_02"]["value"] = 120
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_04"]["value"] = 0.1099999994
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_05"]["value"] = 0.1099999994
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_06"]["value"] = 11
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_07"]["value"] = 11
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_11"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_01"]["value"] = 5000
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_02"]["value"] = 120
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_04"]["value"] = 0.1199999973
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_05"]["value"] = 0.1199999973
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_06"]["value"] = 11
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_07"]["value"] = 11
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_12"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_01"]["value"] = 5500
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_02"]["value"] = 132
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_04"]["value"] = 0.1299999952
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_05"]["value"] = 0.1299999952
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_06"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_07"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_13"]["modifier_08"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_14"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_01"]["value"] = 5500
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_02"]["value"] = 132
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_04"]["value"] = 0.1400000006
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_05"]["value"] = 0.1400000006
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_06"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_07"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_14"]["modifier_08"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_15"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_01"]["value"] = 5500
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_02"]["value"] = 132
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_04"]["value"] = 0.150000006
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_05"]["value"] = 0.150000006
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_06"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_07"]["value"] = 12
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_15"]["modifier_08"]["value"] = 2
 GameData["squad_hold_ext"]["modifiers_squad_16"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_01"]["value"] = 6000
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_02"]["value"] = 144
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_04"]["value"] = 0.1550000012
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_05"]["value"] = 0.1550000012
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_06"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_07"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_16"]["modifier_08"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_17"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_01"]["value"] = 6000
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_02"]["value"] = 144
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_04"]["value"] = 0.1599999964
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_05"]["value"] = 0.1599999964
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_06"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_07"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_17"]["modifier_08"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_18"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_01"]["value"] = 6000
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_02"]["value"] = 144
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_04"]["value"] = 0.1650000066
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_05"]["value"] = 0.1650000066
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_06"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_07"]["value"] = 13
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_18"]["modifier_08"]["value"] = 3
 GameData["squad_hold_ext"]["modifiers_squad_19"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_01"]["value"] = 6500
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_02"]["value"] = 156
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_04"]["value"] = 0.1700000018
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_05"]["value"] = 0.1700000018
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_06"]["value"] = 14
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_07"]["value"] = 14
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_19"]["modifier_08"]["value"] = 4
 GameData["squad_hold_ext"]["modifiers_squad_20"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_01"]["value"] = 6500
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_02"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_02"]["value"] = 156
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_03"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_03"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_03"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_04"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_04"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_04"]["value"] = 0.174999997
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_05"] = Reference([[modifiers\income_power_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_05"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_percentage.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_05"]["value"] = 0.174999997
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_06"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_06"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_06"]["value"] = 14
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_07"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_07"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_07"]["value"] = 14
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_08"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_08"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_20"]["modifier_08"]["value"] = 4
 GameData["squad_hold_ext"]["nr_available_spots"] = 30
 GameData["squad_hold_ext"]["show_decorator"] = false
@@ -1057,8 +1057,8 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -1069,15 +1069,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/inquisition_daemonhunt/Buildings/skyscraper]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_c]]
 GameData["ui_ext"]["ui_index_hint"] = 19
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16020137]] -- - KEY STRUCTURE!!!! Economic/army cap/support structure.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16020138]] -- - Produces: Worker addons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16020139]] -- - Allows the Inquisition to build up its squad/support caps and economy by continuously producing workers.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16020140]] -- - Increases squad cap by 6, with an additional support cap increase by 6.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16020141]] -- - Limit of 2 per listening post.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/urban_territory_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16020136]] -- Urban Territory

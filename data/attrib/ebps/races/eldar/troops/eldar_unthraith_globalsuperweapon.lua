@@ -963,22 +963,19 @@ GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$15043197]] -- - Ultimate guidable Eldritch weapon.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$15043198]] -- - Destroys most everything in its path while flinging infantry up in the air, killing them slowly within a 60m radius
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$15043199]] -- - Health is drained over time, the Cataclysm must be engaged with enemy or ally forces.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$15043200]] -- - Provides massive sight and keen sight and automatically moves to any enemy within a 200m range.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/eldar_cataclysm]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$15043196]] -- Superweapon: Eldritch Cataclysm

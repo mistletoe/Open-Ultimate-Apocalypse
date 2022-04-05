@@ -217,8 +217,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90107]] -- Vehicle
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_titan.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -226,15 +225,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Aeonic_Orb]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_r]]
 GameData["ui_ext"]["ui_index_hint"] = 4
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011053]] -- - (Deepstrike) 1000 RELIC POINTS! Fragile Living Metal titan like unit. ~~~ Can teleport; mobile superweapon that can one shot titans; fragile and explodes upon death; immune to most superweapons; consumes a fraction of your power income.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010012]] -- - Effective versus: Titans
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010010]] -- - Effective versus: Super Structures
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18011054]] -- - Durability: Very Good | Strength: Legendary | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Standard | Sight: Very Good |  Keen sight: None | Abilities: Average | Weapon range: Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011055]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_aeonic_orb_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011052]] -- Æonic Orb

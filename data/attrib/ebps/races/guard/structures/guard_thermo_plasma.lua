@@ -131,7 +131,7 @@ GameData["structure_ext"]["control_structure_radius"] = 30
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -142,15 +142,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Guard/Buildings/ThermoPlasma]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_c]]
 GameData["ui_ext"]["ui_index_hint"] = 19
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$691551]] -- - Generates the Power resource at a higher rate than Plasma Generators.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$691552]] -- - Can only be built on top of Slag Deposits.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$691553]] -- - Thermo Plasma Generators are volatile and will damage anything nearby when they are destroyed.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$691554]] -- - Projects a Control Area around itself, allowing other buildings to be built nearby.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18211248]] -- - Contains abilities that will greatly fortify your economy and amplify the strength of your end game titans and super structures.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18211770]] -- - Increases production rates of all structures and requisition income of listening posts in the adjacent area
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[guard_icons/guard_thermo_plasma]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$691550]] -- Thermo Plasma Generator

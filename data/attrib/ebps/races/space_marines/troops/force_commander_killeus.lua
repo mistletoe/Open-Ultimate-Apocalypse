@@ -207,7 +207,7 @@ GameData["health_ext"]["spawn_death_blossom"] = [[ebps\environment\gameplay\dark
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["melee_ext"]["charge_range"] = 20
 
@@ -300,24 +300,15 @@ GameData["possess_ext"]["show_possession_ui_button"] = false
 GameData["possess_ext"]["squad_replacement_name"] = [[space_marine_squad_force_commander_terminator]]
 GameData["possess_ext"]["transfer_health_percentage"] = true 
 GameData["possess_ext"]["ui_hotkey_name"] = [[marine_assault_terminator]]
-GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97162]] -- - Heavy Infantry.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$97163]] -- - Very tough advanced combat unit. Slow moving. Excels at close combat.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$97164]] -- - Can be teleported to any visible location from this structure.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$97165]] -- - Foregoes ranged weaponry for additional close combat damage and defense.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$97166]] -- - Effective against most unit types in close combat.
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/terminator_assault_icon]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[Assault Terminator]]
 GameData["requirement_ext"] = Reference([[ebpextensions\requirement_ext.lua]])
 GameData["requirement_ext"]["requirements"]["required_1"] = Reference([[requirements\required_cap.lua]])
@@ -495,7 +486,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["killer_motion_name
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -509,9 +500,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010007]] -- - Effective versus: Daemons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18011740]] -- - Durability: Excellent | Strength: Very Good | Morale: Plenty | Upgrades: Promotion, Hero Wargear | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: 2m | Abilities: Good | Weapon range: Short | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/forcecommander_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011738]] -- Force Commander

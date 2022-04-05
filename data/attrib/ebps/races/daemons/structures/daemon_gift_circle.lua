@@ -98,7 +98,7 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -118,7 +118,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16000095]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16000096]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$16000097]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$16000120]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_09"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_gift_circle_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000090]] -- Dark Circle

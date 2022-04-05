@@ -118,22 +118,20 @@ GameData["special_attack_physics_ext"]["mass"] = 10
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500030]] -- TOUGHNESS 1
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Builder_Scarab]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[necron_builder_scarab]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$705800]] -- - Builder Unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$705808]] -- - Detects infiltrated units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$705807]] -- - Constructs all Necron buildings.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$705806]] -- - Can reinforce.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$705805]] -- - Only Necron unit that can capture Strategic Points.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_builder_scarab_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$705809]] -- Builder Scarabs

@@ -464,10 +464,9 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_07"]["distance"] = 6
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_07"]["killer_invulnerable_time"] = 5.699999809
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_07"]["killer_motion_name"] = [[Synckill_7]]
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_monster_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$15904180]]
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_monster_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90106]] -- Daemon
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -479,11 +478,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$97761]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012310]] -- - Relic Commander unit (detector). ~~~ Greatly increases movement speed of all nearby units; boosts the relic resource income and maximum cap by 25%.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18012311]] -- - Durability: Very Good | Strength: Deadly | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Very Fast (in combat and abilities) | Sight: Excellent | Keen Sight: 35m | Abilities: Average | Weapon Range: Standard | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/laughing_god_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012309]] -- The Laughing God

@@ -84,7 +84,7 @@ GameData["structure_ext"]["control_structure_use"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -99,11 +99,7 @@ GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$94201]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450154]] -- - Allows building:  Heavy bolter turret. Desecrated Fortress add-on (HQ upgrade).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$94203]] -- - Contains research to improve infantry squads and Aspiring Champions.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$94204]] -- - Projects an aura that increases your units' regeneration rate, and hurts enemy morale regeneration.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/armoury_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94200]] -- Chaos Armory

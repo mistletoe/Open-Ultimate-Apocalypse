@@ -451,9 +451,9 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["distance"] = 1
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_motion_name"] = [[]]
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Reference([[type_synckillids\sk_none.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_monster_high.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -462,15 +462,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Daemons\Primarch_Angron]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 13
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16000279]] -- - Daemon Primarch of Khorne. ~~~ Costs an extreme amounts of resource and time to build, sacrifice your minions for the production of Angron faster; can vault over impassable terrain; regenerates extremely rapidly if his morale is intact; summons a legion of 10 Bloodthirsters to his aid.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010016]] -- - Effective versus: All
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16000280]] -- - Durability: 100 | Strength: 40 | Morale: 30 | Upgrades: 5 | Squad Size: Large | Movement Speed: Fast | Sight: Excellent | Keen Sight: None | Ability Strength: 35 | Weapon range: 0 | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16000281]] -- - WARNING! Upon death, all summoned daemonic minions, engines, and commanders will be lost to the warp (killed in action).
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_primarch_angron_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000278]] -- Daemon Primarch Angron

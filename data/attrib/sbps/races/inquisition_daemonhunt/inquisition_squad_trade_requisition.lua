@@ -22,24 +22,12 @@ GameData["squad_requirement_ext"]["requirements"]["required_1"]["addon_name"] = 
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]
 GameData["squad_ui_ext"]["multi_select_priority"] = 13
-GameData["squad_ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16021286]] -- - Donates 200 power in exchange for 100 requisition.
 GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16021287]] -- - WARNING!!! This trade is instantanious! Placing the trade on overwatch will result in almost complete loss of a resource.
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/idh_trade_requisition_icon]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["squad_ui_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["squad_ui_ext"]["ui_info"]["screen_name_id"] = [[$16021285]] -- Resource Trade: Requisition
 GameData["squad_ui_ext"]["completed_research_display"] = nil
 GameData["squad_ui_ext"]["completed_research_filter"] = nil

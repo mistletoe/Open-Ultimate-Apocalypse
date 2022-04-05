@@ -332,7 +332,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["single_player_only"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -340,15 +340,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Commander]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_commander]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450151]] -- - Military commander of the Tau forces in the Kaurava System.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$671852]] -- - Serves at the side of Aun'el Shi'ores
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$671853]] -- - Pilots an experimental XV22 Battlesuit that can receive powerful wargear upgrades.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$706718]] -- - Has no melee attack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$706717]] -- - Plants Snare Traps, which slows enemy movement and attack speed.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$706716]] -- - Effective against all unit types.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_commander_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$4450150]] -- Commander Or'es'Ka

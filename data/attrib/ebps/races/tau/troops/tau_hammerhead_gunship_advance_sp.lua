@@ -172,15 +172,12 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Hammer_Head_Gunship]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_hammerhead]]
 GameData["ui_ext"]["ui_index_hint"] = 6
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$707101]] -- - Heavy Tank.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$707102]] -- - Heavily armed and armored weapon platform.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$707108]] -- - Carries more firepower than other heavy vehicles but cannot withstand the same amount of punishment.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$4600012]] -- - Effective against Aircraft and Vehicles.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_hammerhead_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$707100]] -- Hammerhead Gunship

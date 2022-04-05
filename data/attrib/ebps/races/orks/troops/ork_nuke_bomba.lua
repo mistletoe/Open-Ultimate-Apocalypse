@@ -161,8 +161,7 @@ GameData["special_attack_physics_ext"]["mass"] = 500
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS5.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500034]] -- TOUGHNESS 5
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -170,15 +169,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Orks/FightaBomma]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18012247]] -- - Nuk' aircraft. ~~~ Can jump to any location on the map; has a Nuke ability; nukklear bombs requires some time to fire without moving.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010014]] -- - Effective versus: Swarms of enemy targets
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010009]] -- - Effective versus: Structures
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18012249]] -- - Takes an extremely long time to build.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18012248]] -- - Durability: Good | Strength: Excellent | Morale: Immune | Upgrades: None | Squad Size: Single | Movement Speed: Very Fast | Sight: Excellent | Keen Sight: None | Abilities: Below Average | Weapon range: Artillery | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[ork_icons/nukklear_bomma_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18012246]] -- Nukklear Bomma

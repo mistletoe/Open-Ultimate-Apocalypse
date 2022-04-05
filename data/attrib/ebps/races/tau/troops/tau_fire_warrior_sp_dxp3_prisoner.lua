@@ -130,22 +130,19 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Fire_Warrior]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_fire_warrior]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$706401]] -- - Heavy Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$706402]] -- - General combat unit with a powerful ranged attack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$706403]] -- - Has weak melee attack.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$706404]] -- - Has an incredibly long range but requires spotter units to sight the enemy.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$706405]] -- - Effective against Infantry and Heavy Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_fire_warrior_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$706400]] -- Fire Warrior

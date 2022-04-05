@@ -318,7 +318,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -326,15 +326,13 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Eldar/Farseer]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[eldar_farseer]]
 GameData["ui_ext"]["ui_index_hint"] = 5
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97812]] -- - Commander Unit (Primary).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$670651]] -- - Leader of the Ulthwé Craftworld.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$97814]] -- - Powerful psychic unit with many attack abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$97815]] -- - Can be upgraded with abilities to enhance friendly units.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$97816]] -- - Effective against all unit types.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/farseer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$670650]] -- Farseer Taldeer

@@ -122,7 +122,7 @@ GameData["structure_ext"]["control_structure_radius"] = 30
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -141,7 +141,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$94445]] -- - Pro
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$94204]] -- - Projects an aura that increases your units' regeneration rate, and hurts enemy morale regeneration.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18211248]] -- - Contains abilities that will greatly fortify your economy and amplify the strength of your end game titans and super structures.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$18211770]] -- - Increases production rates of all structures and requisition income of listening posts in the adjacent area
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[chaos_icons/thermo_plasma_gen_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94280]] -- Thermo Plasma Generator

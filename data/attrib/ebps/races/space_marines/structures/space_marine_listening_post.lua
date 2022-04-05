@@ -104,8 +104,8 @@ GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -122,9 +122,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$94003]] -- - Inc
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$94004]] -- - Solidifies your hold on a strategic location by placing a building on it.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$94005]] -- - Can be upgraded with weapons and to produce more Requisition.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$94006]] -- - Projects a Control Area around itself, allowing other buildings to be built near it.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/listeningpost_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94000]] -- Listening Post

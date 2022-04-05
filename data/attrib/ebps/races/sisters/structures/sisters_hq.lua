@@ -177,12 +177,12 @@ GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_04"] = Reference([[mo
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_05"] = Reference([[modifiers\enable_hardpoint_15.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_03"]["modifier_05"]["value"] = -1
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"] = Reference([[modifiers\health_regeneration_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_04"]["modifier_01"]["value"] = 5
 GameData["squad_hold_ext"]["modifiers_squad_05"] = Reference([[tables\modifier_table.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"] = Reference([[modifiers\health_regeneration_modifier.lua]])
-GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["squad_hold_ext"]["modifiers_squad_05"]["modifier_01"]["value"] = 8
 GameData["squad_hold_ext"]["nr_available_spots"] = 5
@@ -200,7 +200,7 @@ GameData["structure_ext"]["extra_no_build_buffer"] = 1
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -210,15 +210,13 @@ GameData["ui_ext"]["minimap_enable"] = true
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Sisters\Buildings\Ecclesiarchal_Chapel]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_q]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4250001]] -- - Sisters of Battle Headquarters building.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18112340]] -- - Produces: Ecclesiarchal Servitors, Battle Sister Initiates, Missionaries, Almoness, and the Confessor.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18211924]] -- - Contains research that increases and squad & support cap and faith income speed.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18211925]] -- - Can tier the faction to the highest tier (tier 5) and upgrade the relic resource.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18211926]] -- - Increases the faith resource.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[sisters_icons/building_hq]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[Ecclesiarchal Chapel]]

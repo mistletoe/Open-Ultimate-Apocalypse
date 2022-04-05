@@ -125,21 +125,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tau\Clones]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[tau_ethereal]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$706801]] -- - Commander Unit (Secondary).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$706802]] -- - Inspires all Tau units on the map to fight with greater fervour.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$706806]] -- - All Tau gain a morale, health, and damage bonus while the Ethereal is alive.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$706809]] -- - Conversely, all Tau suffer a large (but temporary) morale, health, and damage penalty if the Ethereal dies.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$706815]] -- - Has many unique abilities.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$706661]] -- - Detects infiltrated units.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tau_icons/tau_ethereal_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$706800]] -- Ethereal

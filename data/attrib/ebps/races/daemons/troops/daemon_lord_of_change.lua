@@ -189,7 +189,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -205,7 +205,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16000261]] --
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16000262]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16000263]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$16000276]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_lord_of_change_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16000257]] -- 

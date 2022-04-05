@@ -187,8 +187,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90105]] -- Heavy Infantry
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -205,7 +204,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010007]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010008]] -- - Effective versus: Vehicles
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011400]] -- - Durability: Very Good | Strength: Excellent | Morale: Good | Upgrades: A lot | Squad Size: Single | Movement Speed: Fast | Sight: Very Good | Keen Sight: None | Abilities: Below Average | Weapon range: Long | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$18011401]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/scorpion_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011398]] -- Scorpion Super-heavy Tank

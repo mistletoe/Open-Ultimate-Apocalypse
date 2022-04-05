@@ -248,21 +248,9 @@ GameData["possess_ext"]["ui_hotkey_name"] = [[necron_possess_deceiver]]
 GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$705755]] -- - Left-click to possess this unit with the Essence of the Nightbringer. The Necron Lord will temporarily transform into the Nightbringer.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4450030]] -- - A manifestation of the Deceiver, one of the C'tan deities of the Necrons.  Cannot attack, but uses powerful special abilities to dominate the battlefield.
 GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4450031]] -- - Uses a variety of powerful abilities to control the battlefield.
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[command_icons/deceiver]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$4450029]] -- Essence of the Deceiver
 GameData["research_ext"] = Reference([[ebpextensions\research_ext.lua]])
 GameData["research_ext"]["research_table"]["0x068A9DA7"] = [[research\necron_lord_boost_8.lua]]
@@ -409,8 +397,8 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["reanimate"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_infantry_heavy_high.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -418,15 +406,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Necron\Lord_Destroyer]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_u]]
 GameData["ui_ext"]["ui_index_hint"] = 15
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$18011022]] -- - (Reassembles) Secondary commander unit (mounted vehicle) (infiltrator). ~~~ Can jump over impassable terrain; can ascend into the Deceiver.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$18010006]] -- - Effective versus: Commanders
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18010007]] -- - Effective versus: Daemons
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$18011023]] -- - Durability: Good | Strength: Average | Morale: Immune | Upgrades: Artifacts, Possession, Hero Wargear | Squad Size: Single | Movement Speed: Fast | Sight: Good |  Keen sight: 2m | Abilities: Excellent| Weapon range: Short | Capture Points: No.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[necron_icons/necron_lord_destroyer_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$18011021]] -- Destroyer Lord

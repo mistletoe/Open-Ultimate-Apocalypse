@@ -106,7 +106,7 @@ GameData["structure_ext"]["control_structure_radius"] = 20
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -123,9 +123,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18112304]] -- - 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$94673]] -- - A portal that can hold infantry units (right-click on this building while an infantry unit is selected).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$94674]] -- - Infantry units inside can be brought out from any Webway Gate after a short delay.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$94675]] -- - Provides several base-enhancing abilities.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[eldar_icons/webway_gate_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94670]] -- Webway Gate

@@ -144,7 +144,7 @@ GameData["health_ext"]["regeneration_rate"] = 3
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"] = Reference([[modifiers\special_attack_physics_mass.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_02"]["value"] = 60
 GameData["melee_ext"]["charge_range"] = 25
@@ -271,23 +271,9 @@ GameData["possess_ext"]["squad_replacement_name"] = [[daemon_squad_daemon_prince
 GameData["possess_ext"]["transfer_health_percentage"] = true 
 GameData["possess_ext"]["ui_hotkey_name"] = [[possess]]
 GameData["possess_ext"]["ui_info"]["help_text_id"] = [[$16003375]] -- - The Daemon Lord willingly offers his soul to Tzeentch, and transcends into a Daemon Prince of Tzeentch.
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_daemon_prince_possession_tzeentch_icon]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_01"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_02"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_03"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_04"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_05"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_06"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_07"] = [[$0]]
-GameData["possess_ext"]["ui_info"]["override_help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["possess_ext"]["ui_info"]["screen_name_id"] = [[$16002079]] -- Transcend
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
 GameData["sight_ext"]["keen_sight_radius"] = 15
@@ -432,7 +418,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -440,15 +426,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Daemons/Daemon_Lord_Stature]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_t]]
 GameData["ui_ext"]["ui_index_hint"] = 3
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16003371]] -- - Possessed Daemonic Lord favoured by Tzeentch, a towering very strong close combat unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16000141]] -- - Durability: 5 | Strength: 5 | Morale: Immune | Upgrades: 11 + Hero Wargear | Squad Size: Single | Movement Speed: Standard | Sight: Good | Keen Sight: 2m | Ability Strength: 3 | Weapon range: 0 | Capture Points: No.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16000142]] -- Daemon Lord (Stature)
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16003367]] -- - Can ascend into a Daemon Prince of Tzeentch, if a proper petition is made to the Chaos Gods (research).
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16000144]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16000145]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[daemons_icons/daemons_lord_stature_tzeentch_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16002340]] -- Daemon Lord (Stature)

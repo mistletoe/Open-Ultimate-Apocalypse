@@ -105,8 +105,8 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+--INTENTIONAL SPACER
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -123,9 +123,7 @@ GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$575800]] -- - Al
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$94474]] -- - Can upgrade its weapons to be stronger or make them effective against vehicles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$94475]] -- - KEY STRUCTURE! The more of these structures you have the faster you will gain Orks and progress up the tech tree.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$18211808]] -- - Also Increases support cap 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[ork_icons/waaagh_banner_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$94470]] -- Waaagh! Banner

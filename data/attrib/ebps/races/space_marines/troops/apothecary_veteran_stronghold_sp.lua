@@ -134,22 +134,20 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Apothecary]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[marine_apothecary]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$668351]] -- - Veteran Apothecary from the Blood Ravens First Company.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$4450132]] -- - Apothecary Borlan Arivalt has tended to wounded Blood Ravens on the battlefield in countless battles.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$668353]] -- - Healer unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$668352]] -- - Enhances regeneration rates of nearby infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$4450131]] -- - Attach this healer to infantry squads
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/apothecary_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$668350]] -- First Company Apothecary

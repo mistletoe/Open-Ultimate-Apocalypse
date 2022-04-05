@@ -123,22 +123,19 @@ GameData["special_attack_physics_ext"]["mass"] = 5
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500030]] -- TOUGHNESS 1
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/inquisition_daemonhunt/worker]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16021022]] -- - Inquisition worker unit.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$18010017]] -- - Effective versus: None
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16021023]] -- - While alive and within an Urban Structure, the worker will generate a small set of income over time and increase squad/support cap by a small amount.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16021024]] -- - When not garrissoned within an Urban Structure, the unit will be useless to be on the battlefield, but can be transferred over to another Urban Settlement.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[inquisition_icons/idh_civilian_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16021021]] -- Worker

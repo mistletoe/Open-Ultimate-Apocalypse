@@ -152,22 +152,19 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 
 GameData["ui_ext"]["speech_directory"] = [[Speech/Races/Space_Marines/Tactical]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[marine_space_marine]]
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$97142]] -- - Heavy Infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$97143]] -- - Resilient general combat unit strong at range and close combat.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$97144]] -- - Broad range of weapon upgrades. Can be upgraded to be strong against most unit types.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$97145]] -- - Effective against Infantry.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[space_marine_icons/tacticalmarine_icon]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$97140]] -- Space Marine Squad

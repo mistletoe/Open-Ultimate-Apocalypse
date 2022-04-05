@@ -127,7 +127,7 @@ GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["infiltration_ext"]["identification_range"] = 0
 GameData["melee_ext"] = Reference([[ebpextensions\melee_ext.lua]])
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--INTENTIONAL SPACER
 GameData["melee_ext"]["charge_modifiers"]["modifier_01"]["value"] = 1.333330035
 GameData["melee_ext"]["charge_range"] = 30
 
@@ -159,7 +159,7 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerabl
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
@@ -167,15 +167,14 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[speech/races/tyranids/ravener_2]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_w]]
 GameData["ui_ext"]["ui_index_hint"] = 2
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16026162]] -- - Melee ambush unit. ~~~ Can tunnel underground; can burrow underground and remain infiltrated; can make burrowing points, allowing Tyranids to travel underground.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16026163]] -- - Effective versus: Infantry and heavy infantry.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$16026164]] -- - Durability: 4 | Strength: 3.5 | Morale: 3 | Upgrades: 2 | Squad Size: Standard | Movement Speed: Fast | Sight: Standard | Keen Sight: 2m | Ability Strength: 2 | Weapon range: 0 | Capture Points: Yes.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$16026165]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$16026166]] -- 
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$16026167]] -- 
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_ravener]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16026160]] --  Ravener

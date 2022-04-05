@@ -41,7 +41,7 @@ GameData["mine_field_ext"]["area_effect"]["throw_data"]["direction_angle_random"
 GameData["mine_field_ext"]["area_effect"]["throw_data"]["force_max"] = 40
 GameData["mine_field_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 15
 GameData["mine_field_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 5
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--INTENTIONAL SPACER
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 990
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 600
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 50
@@ -72,7 +72,7 @@ GameData["structure_ext"] = Reference([[ebpextensions\structure_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$90100]] -- Armour
+
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
@@ -83,15 +83,10 @@ GameData["ui_ext"]["minimap_teamcolor"] = true
 GameData["ui_ext"]["speech_directory"] = [[Speech\Races\Tyranids\Spore]]
 GameData["ui_ext"]["ui_hotkey_name"] = [[hotkey_a]]
 GameData["ui_ext"]["ui_index_hint"] = 9
-GameData["ui_ext"]["ui_info"]["help_text_id"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$16025106]] -- - The tyranid spores have an iron hard shell which shatters when the mine explodes, sending shards of the shell in all directions. The mine can scythe down light infantry but can also cause lethal infections and sepsis.
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_02"] = [[$16025107]] -- - Effective versus: infantry and light vehicles.
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_03"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_04"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_06"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_07"] = [[$0]]
-GameData["ui_ext"]["ui_info"]["help_text_list"]["text_08"] = [[$0]]
+--INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["icon_name"] = [[tyranids_icons/i_spore_cluster]]
 
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$16025105]] -- Frag Spore Mines
