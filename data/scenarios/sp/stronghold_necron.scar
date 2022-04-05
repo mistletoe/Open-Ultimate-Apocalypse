@@ -1,0 +1,3882 @@
+-------------------------------------------------
+--[[ IMPORTS -- This is neccesary to use all the functions of SCAR]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[ GAME SETUP ]]
+-------------------------------------------------
+
+--[[ the OnGameSetup() function is mandatory! -- Here you should setup all your global variables, which can be used in any function.]]
+function OnGameSetup()
+
+--timers
+g_SecondsToUpgrade = 900 -- 900 seconds for monoliths to upgrade
+g_SpawnUnitsAtCenterBaseTimer = 200  -- spawns random units out of the center base every X seconds
+g_SpawnCritPointDefenseWarriorTimer = 300 -- spawns warriors out of the 4 monoliths every X seconds (only when critpoints are captured)
+g_GrantResearchTimer = 700 -- (900)  seconds between research upgrades
+g_UpperBaseAttackTimer = 335 -- (275) time between attacks from the upper base
+g_UpperBaseIncreaseSquads = 600 -- (500) time till the amount of squads that the upper base sends is increased
+g_UpperBaseTierUp = 350 -- (400) time till the tier of the upper base is increased
+g_LowerBaseAttackTimer = 280 --(240) time between attacks from the upper base
+g_LowerBaseIncreaseSquads = 520 -- (450) time till the amount of squads that the upper base sends is increased
+g_LowerBaseTierUp = 290 -- (370) time till the tier of the upper base is increased
+g_TakeBackSquadCoolDown = 60 -- time between squads of scarabs + other stuff is sent out to recapture critical points (CANNOT BE < 5)
+g_NWTBCooldown = 300 -- time between the takeback squads of necron warriors spawning
+g_InitialAttackRepeatTimer = 150 -- 150 keep attacking with necron warriors at the beginning
+g_SpawnMonolithPatrols = 170 -- 90 spawns guys out of the 4 monoliths to patrol around them
+g_TierUpPatrolsTimer = 300 -- 200 tiers up the guys spawning out of the 4 monoliths patroling
+g_LowerBaseTimer = 900 -- time to spawn in more units in the lower base
+g_UpperBaseTimer = 900 -- time to spawn in more units in the upper base
+g_NecronLordCoolDownTimer = 120 -- cooldown between necron lord spawns
+g_RemoveUpgradeTimer__Timer = 180 -- removes the "monolith complete" text after this many seconds of showing it to the player
+g_ScarabAttackTimer = 350 -- sends attack scarabs after air units every X seconds
+g_IncreaseScarabAttackTimer = 600 -- makes the scarabs send out an extra set
+g_ShutOffInitialAttackTimer = 800 -- 600 seconds until the initial attacks stop coming
+
+-- monolith upgrade timers
+g_CounterN = g_SecondsToUpgrade -- seconds until the necron monoliths upgrade
+g_CounterS = g_SecondsToUpgrade -- seconds until the necron monoliths upgrade
+g_CounterE = g_SecondsToUpgrade -- seconds until the necron monoliths upgrade
+g_CounterW = g_SecondsToUpgrade -- seconds until the necron monoliths upgrade
+
+--[[
+g_CounterN = 1000
+g_CounterS = 1000
+g_CounterE = 1000
+g_CounterW = 60
+]]
+
+-- fake population
+g_MaxWarriorPop = 9
+g_MaxWraithPop = 3
+g_MaxFlayedOnePop = 3
+g_MaxImmortalPop = 4
+g_MaxPariahPop = 3
+g_MaxTombSpiderPop = 3
+g_MaxDestroyerPop = 3
+g_MaxHeavyDestroyerPop = 2
+g_MaxLordDestroyerPop = 2
+g_MaxDeepStrikes = 3
+g_DefenseWarriors = 4 -- X number of warriors to defend the monoliths are kept on-hand
+g_MaxHarass = 3 -- initial attacks are only allowed this many warriors
+g_MaxScarabs = 1 -- builder scarabs
+g_MaxTakeBack = 1 -- warriors that teleport to critical points from bases
+g_MaxAttackScarab = 4 -- scarabs that come out of the  tomb spyders
+
+-- fake population for defensive attacks on critical points
+g_MaxNWarriorPop = 2 -- defensive attacks when critical points are taken
+g_MaxSWarriorPop = 2 -- defensive attacks when critical points are taken
+g_MaxEWarriorPop = 2 -- defensive attacks when critical points are taken
+g_MaxWWarriorPop = 2 -- defensive attacks when critical points are taken
+g_MaxNFlayedOnesPop = 1 -- defensive attacks when critical points are taken
+g_MaxSFlayedOnesPop = 1 -- defensive attacks when critical points are taken
+g_MaxEFlayedOnesPop = 1 -- defensive attacks when critical points are taken
+g_MaxWFlayedOnesPop = 1 -- defensive attacks when critical points are taken
+
+-- fake population for monolith patrols
+g_MaxWarriorPop_Patrol = 2
+g_MaxWraithPop_Patrol = 2
+g_MaxFlayedOnePop_Patrol = 1
+g_MaxImmortalPop_Patrol = 2
+g_MaxPariahPop_Patrol = 1
+g_MaxTombSpiderPop_Patrol = 1
+g_MaxDestroyerPop_Patrol = 1
+g_MaxHeavyDestroyerPop_Patrol = 1
+g_MaxLordDestroyerPop_Patrol = 1
+
+
+--debug stuff
+g_Debug = false -- turns debug mode off and on.  (turns on and off fog of war)
+
+-- other global variables (DO NOT MODIFY)
+g_TopBaseLevel = 0
+g_BottomBaseLevel = 0
+g_RightBaseLevel = 0
+g_LeftBaseLevel = 0
+g_PauseNTimer = false
+g_PauseSTimer = false
+g_PauseETimer = false
+g_PauseWTimer = false
+g_CanNecronTeleport = true
+g_CaptureScarabsExist = false
+g_WarriorCounter = 0
+g_WraithCounter = 0
+g_FlayedOneCounter = 0
+g_ImmortalCounter = 0
+g_PariahCounter = 0
+g_TombSpiderCounter = 0
+g_DestroyerCounter = 0
+g_HeavyDestroyerCounter = 0
+g_LordDestroyerCounter = 0
+g_DeepStrikeCounter = 0
+g_ResearchCounter = 0
+g_SCFlag = false
+g_FourBasesComplete = false
+g_CenterBaseComplete = false
+g_HarassCounter = 0
+g_MonolithCounter = 0
+g_TempSquadCounter = 0
+t_SentMonolith = {false, false, false, false}
+g_UpperBaseTier = 9
+g_SquadNumberFromUpperBase = 1
+g_LowerBaseTier = 9
+g_SquadNumberFromLowerBase = 1
+g_AttackHQCounter = 0
+g_TakeBackSquad = true
+g_TakeBackSquadCounter = 0
+g_TakeBackSquadCount = 0
+g_ScarabCounter = 1
+g_RetakePoint = "eg_SouthCriticalPoint"
+g_CritPointDefenseCounter = 0
+g_CritPointDefenseTier = 1
+g_CapturedPointBackFlag = false
+g_IE_MonolithsUpgraded = 1
+t_MonolithIEsPlayed = {false, false, false, false} -- first, second, third, fourth monoliths to lvl up
+t_MonolithIEsByLocation = {false, false, false, false} -- north, south, east, west / top, bottom, right, left
+g_RestoredMonolithIEFlag = true
+g_RestoredMonolithLaughterFlag = true
+g_RestoredMonolithIECounter = 0
+g_RestoredMonolithLaughterCounter = 0
+t_RestoredMonolithIEsPlayed = {false, false, false, false}
+g_LPAttackCounter = 0 
+g_NWarriorCounter = 0
+g_SWarriorCounter = 0
+g_EWarriorCounter = 0
+g_WWarriorCounter = 0
+g_NFlayedOnesCounter = 0
+g_SFlayedOnesCounter = 0
+g_EFlayedOnesCounter = 0
+g_WFlayedOnesCounter = 0
+g_PatrolTier = 5 -- goes up to 11
+g_PatrolCounterN = 0
+g_PatrolCounterS = 0
+g_PatrolCounterE = 0
+g_PatrolCounterW = 0
+t_MonolithUpgradeIEs = {false, false}
+g_WarriorCounterPatrol = 0
+g_WraithCounterPatrol = 0
+g_FlayedOneCounterPatrol = 0
+g_ImmortalCounterPatrol = 0
+g_PariahCounterPatrol = 0
+g_TombSpiderCounterPatrol = 0
+g_DestroyerCounterPatrol = 0
+g_HeavyDestroyerCounterPatrol = 0
+g_LordDestroyerCounterPatrol = 0
+g_NecronLordJumpFlag = false
+g_NecronLordCoolDown = false
+g_NecronLordCoolDownCounter = 0
+g_IdleNecronLordCounter = 0
+g_LowerBaseDefensiveTier = 0
+t_LowerBaseTierUnitsSpawned = {false, false, false}
+g_LowerBaseAttackCounter = 0 
+g_UpperBaseDefensiveTier = 0
+t_UpperBaseTierUnitsSpawned = {false, false, false}
+g_UpperBaseAttackCounter = 0
+t_NecronLordAttacks = {false, false, false, false, false}
+g_TopBaseDestroyed = false
+g_BottomBaseDestroyed = false
+g_LeftBaseDestroyed = false
+g_RightBaseDestroyed = false
+t_MonolithDefended = {false, false, false, false, false}
+g_DeepStrikeTimer = 3 -- seconds between deep strikes if youre trying to kill a monolith (doesnt matter anymore, only one defense is launched per monolith)
+g_DefenseWarriorTimer = 30 -- doesnt really matter anymore, the function this is tied to is commented out
+g_NecronLordHangOutMkr = "mkr_necronlord"
+g_PlayerSquadsNearCenterCounter = 0
+g_CenterAttackSent = false
+g_AttackScarabCounter = 0
+g_TempSquadCounter = 0
+g_RelicAttackSent = false
+g_PlayerSquadsNearRelicCounter = 0
+g_UpperLowerBaseIEFired = false
+g_IEForUpperAndLowerBases = false
+t_PlayerOwnsCritPointIEs = {false, false, false}
+g_DecieverIE = false
+g_PointCapturedForCaptureBackIE = ""
+g_AirTargetCounter = 0
+g_TempSquadCounter_ScarabAttack = 0
+g_ScarabCounter = 0
+g_MaxScarab = 3
+g_ScarabAttackNumber = 1
+g_InitialAttackLength = 0
+g_MonolithsDestroyed = 0
+g_DecieverMonolithBase = ""
+g_DecieverMonolithRestored = ""
+-- generator markers start at 0
+g_bonus_gen_counter = 0
+-- turrer markers start at 6
+g_bonus_turret_counter = 6
+g_GlobalAttackPos = 0
+g_PrimaryObjectives = 0
+g_SecondaryObjectives = 0
+g_SCIEFlag = false
+t_MonolithObjectivesAdded = {false, false, false, false}
+g_NWTB = true
+g_NWTBCount = 0
+g_CritPointObjN = false
+g_CritPointObjS = false
+g_CritPointObjE = false
+g_CritPointObjW = false
+
+--[[defining the name of the player's faction]]
+if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+	factionname = "$3950214"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+	factionname = "$3950219"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+	factionname = "$3950215"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+	factionname = "$3950213"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+	factionname = "$3950224"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+	factionname = "$3950217"
+	colorscheme = "default_5"
+elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+	factionname = "$3950223"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+	factionname = "$3950220"
+	colorscheme = "default_1"
+elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+	factionname = "$3900048"
+	colorscheme = "default_2"
+end
+g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 0)
+Misc_PlayerTeamColor(g_Player1, colorscheme)
+	
+--setting up the upgrades for the commander
+MetaMap_UpdatePlayerWargear(g_Player1)
+
+g_Player2 = Setup_Player(1, "$3950223", "necron_race", 1) -- units don't hit any move patrol points
+g_Player3 = Setup_Player(2, "$3950223", "necron_race", 1) -- units loop one way around the middle
+g_Player4 = Setup_Player(3, "$3950223", "necron_race", 1) -- units loop the other way around the middle
+g_Player5 = Setup_Player(4, "$3950223", "necron_race", 1) -- semi-ai controlled units, defends rec points
+g_Player6 = Setup_Player(5, "$3950223", "necron_race", 1) -- units that i send around the map that i dont want to get caught up in the middle
+g_Player7 = Setup_Player(6, "$3950223", "necron_race", 1)
+g_Player8 = Setup_Player(7, "$3950223", "necron_race", 1)
+Misc_PlayerTeamColor(g_Player2, "default_0")
+Misc_PlayerTeamColor(g_Player3, "default_0")
+Misc_PlayerTeamColor(g_Player4, "default_0")
+Misc_PlayerTeamColor(g_Player5, "default_0")
+Misc_PlayerTeamColor(g_Player6, "default_0")
+Misc_PlayerTeamColor(g_Player7, "default_0")
+Misc_PlayerTeamColor(g_Player8, "default_0")
+
+end
+
+--[[ the OnGameRestore() function is mandatory!, this will only get called after loading a game ]]
+function OnGameRestore()
+end
+
+--[[This function runs first, here you can setup anything you want to happen before the game starts.]]
+function OnInit()
+	Rule_AddOneShot(Rule_CreateNecronBases, 0)
+	
+	--NIS_Setup()
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Opening )
+	end
+
+	Rule_PresetAI()
+	
+	--[[ Start Gameplay]]
+	Rule_Add( Rule_GameStart )
+	
+	--[[
+	3950055	Destroy the necron Monolith!
+	3950056	Destroy the primary necron restored monolith!
+	3950057	Destroy the four necron monoliths!
+	3950058	Destroy the four necron monoliths before they become powered up to fully restored monoliths!
+	3950059	Destroy the west monolith!
+	3950060	Destroy this quickly before it powers up to a fully restored monolith!
+	3950061	Destroy the east monolith!
+	3950062	Destroy this quickly before it powers up to a fully restored monolith!
+	3950063	Destroy the north monolith!
+	3950064	Destroy this quickly before it powers up to a fully restored monolith!
+	3950065	Destroy the south monolith!
+	3950066	Destroy this quickly before it powers up to a fully restored monolith!
+	3950067	Destroy the summoning core!
+	3950068	The summoning core gives the necron the ability to teleport around their base, destroy it to disable their teleportation.
+	]]
+	-- objectives
+	Objective_SummoningCore = {title_id = 3950067, short_desc_id = 3950068 , help_tip_id =3950068}
+	Objective_SubWest = {title_id = 3950059, short_desc_id = 3950060 , help_tip_id =3950060}
+	Objective_SubEast = {title_id = 3950061, short_desc_id = 3950062 , help_tip_id =3950062}
+	Objective_SubSouth = {title_id = 3950065, short_desc_id = 3950066 , help_tip_id =3950066}
+	Objective_SubNorth = {title_id = 3950063, short_desc_id = 3950064 , help_tip_id =3950064}
+	Objective_SubCritPoints = {title_id = 3950264, short_desc_id = 3950265 , help_tip_id =3950265}
+	Objective_DestroyCenterBase = {title_id = 3950055, short_desc_id = 3950056 , help_tip_id =3950056}
+	Objective_DestroyFourBases = {title_id = 3950057, short_desc_id = 3950058 , help_tip_id =3950058}
+	
+	
+end
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+-------------------------------------------------
+--[[ PRESET AI ]]
+-------------------------------------------------
+
+function Rule_PresetAI()
+	
+	--[[This function is called from OnInit() and start or stop the AI.]]
+	Cpu_Enable(g_Player2, false)
+	Cpu_SetDifficulty(g_Player2,   AD_Standard)
+	Cpu_Enable(g_Player3, false)
+	Cpu_SetDifficulty(g_Player3,   AD_Standard)
+	Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4, AD_Standard)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5, AD_Standard)
+	Cpu_Enable(g_Player6, false)
+	Cpu_SetDifficulty(g_Player6, AD_Standard)
+	Cpu_Enable(g_Player7, false)
+	Cpu_SetDifficulty(g_Player7, AD_Standard)
+	Cpu_Enable(g_Player8, false)
+	Cpu_SetDifficulty(g_Player8, AD_Standard)
+	
+end
+
+-------------------------------------------------
+--[[ MUSIC -- Called from Rule_GameStart()]]
+-------------------------------------------------
+
+function Rule_Start_Music()
+	
+	--[[Starts the music]]
+	t_Necron_stronghold_music = {"MU_IG_STR_Necron_perc_str", "MU_IG_STR_Necron",
+	"MU_IG_STR_Necron_perc", "MU_IG_STR_Necron_perc_brass"}
+	
+	Playlist_Manager( PC_Music, t_Necron_stronghold_music, true, true , {2, 4})
+	
+	
+	--[[Set ambient sounds]]
+	t_Necron_stronghold_ambient = {"Ambience_Wasteland"}
+	
+	Playlist_Manager( PC_Ambient, t_Necron_stronghold_ambient, true, true , {5, 15})
+	
+end
+
+
+-------------------------------------------------
+--[[ START PLAY ]]
+-------------------------------------------------
+
+function Rule_GameStart()
+
+	if Event_IsAnyRunning() == false then
+		if g_Debug == true then
+			FOW_RevealAll()
+		end
+		
+		--[[ Set resources for both players ]]
+		Player_SetAllResources(g_Player1, 1000, 300, 20)
+		--Player_SetAllResources(g_Player3, 10000, 10000, 20)
+		-- Timer
+		Rule_UI_Game_Timer()
+		
+		-- Set Difficulty Level
+		DifficultyLevel()
+		
+		--Music
+		Rule_AddOneShot(Rule_Start_Music, 0)
+		
+		Rule_AddOneShot(Rule_CreatePlayerBases, 0)
+		
+		-- Objectives
+		
+		--Rule_AddInterval(Rule_Objective_DestroyCenterBase, 2)
+		
+		--IE's
+		Rule_AddInterval(IE_CritPointCaptured, 5)
+		Rule_AddInterval(IE_PartialMonolithRestore, 1)
+		Rule_AddInterval(RestoredMonolith,1)
+		Rule_AddInterval(RestoredMonolithCoolDowns,1)
+		
+		-- Gameplay Rules
+		Rule_AddOneShot(Rule_CreateLord, 5)
+		Rule_AddOneShot(Rule_Set_Counters, 5)
+		Rule_AddOneShot(InitialAttack, 15)
+		Rule_AddOneShot(IE_GameStart, 4)
+		Rule_AddOneShot(InitialPatrols, 3)
+		Rule_AddOneShot(SetupCenter,4)
+		Rule_AddOneShot(SetupRelic, 4)
+		--Rule_AddInterval(Rule_PatrolWaypoints, 20)
+		--Rule_AddInterval(DespawnOrMoveAttackUnits, 20)
+		Rule_AddInterval(CanNecronTeleport, 2)		
+		Rule_AddInterval(DefenseWarriorAllotment, 5)
+		Rule_AddInterval(SendMonolithsAtPlayer, 10)
+		Rule_AddInterval(SendMonolithsAtPlayer_NextToBase, 2)
+		Rule_AddInterval(AttackMovePlayerHQ, 1)
+		Rule_AddInterval(TakeBackSquadCoolDown, 1)
+		Rule_AddInterval(LPSkill, 1)
+		Rule_AddInterval(PatrolMonoliths, 5)
+		Rule_AddInterval(AddOtherMonolithObjectives, 1)
+		Rule_AddInterval(NecronLordCoolDown, 1)
+		Rule_AddInterval(NecronLordAttacks, 5)
+		--Rule_AddInterval(RestoreCenterBaseMonolith, 1)
+		Rule_AddInterval(LowerBaseResponse, 1)
+		Rule_AddInterval(UpperBaseResponse, 1)
+		Rule_AddInterval(Lord_Deciever, 1)
+		Rule_AddInterval(Lord_NecronLordHangOut, 3)
+		Rule_AddInterval(PatrolTakeBackWarriors, 20)
+		Rule_AddInterval(IE_CapturedPointBack, 4)
+		
+		Rule_AddInterval(Rule_DefendCritPoints, g_SpawnCritPointDefenseWarriorTimer)
+		Rule_AddInterval(Rule_TakeBackCritPoints, 1)
+		Rule_AddInterval(Rule_DeepStrikeForDefense, g_DeepStrikeTimer)
+		--Rule_AddInterval(AlwaysHaveDefenseWarriorsToProtectAndServe, g_DefenseWarriorTimer)
+		Rule_AddInterval(Rule_GrantResearch, g_GrantResearchTimer)
+		Rule_AddInterval(TierUpPatrols, g_TierUpPatrolsTimer)
+		Rule_AddInterval(ScarabAttack, g_ScarabAttackTimer)
+		Rule_AddInterval(IncreaseScarabAttack, g_IncreaseScarabAttackTimer)
+		LowerBaseDefenses()
+		UpperBaseDefenses()		
+		Rule_AddInterval(IntelligentlyMoveAttacks, 5)
+		Rule_AddInterval(Lose, 10)
+		Rule_AddInterval(ForceCapture, 2)
+		
+		-- CHECK FOR OBJECTIVE COMPLETION & SCENARIO VICTORY
+		Rule_AddInterval(CheckForVictory,2)
+		
+		--[[ Clean up -- Since we did Rule_Add(Rule_GameStart) it was attempting to run this function every frame, but now that it has finished running, we don't need it to run anymore.]]
+		Rule_Remove(Rule_GameStart)
+	end
+
+end
+
+-- Create and Initially Show the Game Timer
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates and shows the Game Timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--[[Drops down buildings at markers, to create the necron bases around the map]]
+function Rule_CreateNecronBases()
+
+	--[[CenterBase]]
+	--Entity_CreateBuildingMarker(g_Player3, "eg_CenterBase", "monolith", "mkr_centerbase_monolith", 1)
+	--Entity_CreateBuildingMarker(g_Player3, "eg_CenterBase", "monolith_sp_dxp3", "mkr_centerbase_monolith", 1)
+	--EGroup_ForceAddOn("eg_CenterBase", "addon_necron_hq_1")
+	--EGroup_ForceAddOn("eg_CenterBase", "addon_necron_hq_2")
+	Entity_CreateBuildingMarker(g_Player3, "eg_CenterBaseArchive", "necron_forbidden_archive", "mkr_center_archive", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_CenterBaseGSC", "necron_greater_summoning_core", "mkr_center_greatersummoningcore", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_CenterBaseEC", "necron_energy_core", "mkr_center_energycore", 1)
+	
+	--[[for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_CenterBase_Turrets"..i, "necron_turret", "mkr_center_turret"..i, 1)
+		EGroup_ForceAddOn("eg_CenterBase_Turrets"..i, "addon_necron_turret")
+	end]]
+	
+	--[[Bottom]]
+	Entity_CreateBuildingMarker(g_Player4, "eg_BottomBase", "monolith_sp_dxp3", "mkr_bottom_monolith", 1)
+	for i=1,8 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_BottomBase_Turrets"..i, "necron_turret", "mkr_bottom_turret"..i, 1)
+	end
+	
+	--[[Top]]
+	Entity_CreateBuildingMarker(g_Player4, "eg_TopBase", "monolith_sp_dxp3", "mkr_top_monolith", 1)
+	for i=1,8 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_TopBase_Turrets"..i, "necron_turret", "mkr_top_turret"..i, 1)
+	end
+	--[[Left]]
+	Entity_CreateBuildingMarker(g_Player4, "eg_LeftBase", "monolith_sp_dxp3", "mkr_left_monolith", 1)
+	for i=1,8 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_LeftBase_Turrets"..i, "necron_turret", "mkr_left_turret"..i, 1)
+	end
+	--[[Right]]
+	Entity_CreateBuildingMarker(g_Player4, "eg_RightBase", "monolith_sp_dxp3", "mkr_right_monolith", 1)
+	for i=1,8 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_RightBase_Turrets"..i, "necron_turret", "mkr_right_turret"..i, 1)
+	end
+	-- dead bodies so that the necron lord has something to summon~
+	DeadBodies()
+	
+	--[[Upper Base]]
+	Entity_CreateBuildingMarker(g_Player3, "eg_UpperBase", "monolith", "mkr_upperbase_monolith", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_UpperBaseArchive", "necron_forbidden_archive", "mkr_upperbase_archive", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_UpperBaseGSC", "necron_greater_summoning_core", "mkr_upperbase_greatersummoningcore", 1)
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_UpperBase_Turrets", "necron_turret", "mkr_upperbase_turret"..i, 1)
+	end
+	
+	for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_UpperBase_Powergen", "necron_plasma_generator", "mkr_upperbase_powergen"..i, 1)
+	end
+	
+	--[[Lower Base]]
+	Entity_CreateBuildingMarker(g_Player3, "eg_LowerBase", "monolith", "mkr_lowerbase_monolith", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_LowerBaseGSC", "necron_greater_summoning_core", "mkr_lowerbase_greatersummoningcore", 1)
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_LowerBase_Turrets", "necron_turret", "mkr_lowerbase_turret"..i, 1)
+	end
+	
+	for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_LowerBase_Powergens", "necron_plasma_generator", "mkr_lowerbase_powergen"..i, 1)
+	end
+	
+	--[[Summoning Core]]
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_SummoningCore_Turrets", "necron_turret", "mkr_summoningcore_turret"..i, 1)
+	end
+	
+	--[[Relic]]
+	for i=1,4 do
+		local flag = Entity_CreateBuildingMarker(g_Player3, "eg_Relic_Turrets"..i, "necron_turret", "mkr_relic_turret"..i, 1)
+		if flag == true then EGroup_ForceAddOn("eg_Relic_Turrets"..i, "addon_necron_turret") else --[[nada]] end
+	end
+	
+	--[[PowerGen in Playerbase]]
+	Entity_CreateBuildingMarker(g_Player3, "eg_PowergenInPlayerbase", "necron_plasma_generator", "mkr_playerbase_powergen", 1)
+	EGroup_SetPlayerOwner("eg_playerbase_lp", g_Player3)
+	
+	-- set crit points and relics to the computer player
+	EGroup_SetPlayerOwner("eg_SouthCriticalPoint", g_Player3)
+	EGroup_SetPlayerOwner("eg_NorthCriticalPoint", g_Player3)
+	EGroup_SetPlayerOwner("eg_EastCriticalPoint", g_Player3)
+	EGroup_SetPlayerOwner("eg_WestCriticalPoint", g_Player3)
+	
+	-- give the AI all of the strategic points, and put upgraded listening posts on them
+	
+	--[[Strategic Points]]
+	for i = 1,7 do
+		EGroup_Create("eg_ListeningPosts"..i)
+		EGroup_CreateIfNotFound("eg_AllLPs")
+		EGroup_SetPlayerOwner("eg_LP"..i, g_Player3)
+		Entity_CreateBuildingPosition(g_Player3, "eg_ListeningPosts"..i, "necron_listening_post", EGroup_GetPosition("eg_LP"..i), 1)
+		EGroup_ForceAddOn("eg_ListeningPosts"..i, "addon_necron_list_post_1")
+		EGroup_ForceAddOn("eg_ListeningPosts"..i, "addon_necron_list_post_2")
+		EGroup_AddGroup("eg_AllLPs", "eg_ListeningPosts"..i)
+		
+	end
+end
+
+function Rule_CreatePlayerBases()
+
+	local Race
+	local Player
+
+	Race = MetaMap_GetPlayerNRaceName(0)
+	Player = g_Player1
+
+	if Race == "chaos_marine_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "chaos_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "chaos_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"chaos_armoury",
+		"chaos_listening_post",
+		"chaos_mine_field",
+		"chaos_plasma_generator",
+		"chaos_thermo_plasma_generator",
+		"chaos_turret_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "guard_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "guard_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "guard_squad_enginseer", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"guard_listening_post",
+		"guard_mines",
+		"guard_plasma_generator",
+		"guard_tactica",
+		"guard_thermo_plasma",
+		"guard_turret_heavy_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "ork_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "ork_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "ork_squad_grot", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"ork_bigger_generator",
+		"ork_generator",
+		"ork_gork_totem",
+		"ork_mine_field",
+		"ork_pile_o_guns",
+		"ork_waagh_banner"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "space_marine_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "space_marine_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "space_marine_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"space_marine_armoury",
+		"space_marine_generator",
+		"space_marine_listening_post",
+		"space_marine_mine_field",
+		"space_marine_turret_bolter",
+		"space_marine_thermo_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "tau_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "tau_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "tau_builder_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"tau_listening_post",
+		"tau_research_building",
+		"tau_shrine_of_kauyon",
+		"tau_shrine_of_montka",
+		"tau_shrine_of_purpose",
+		"tau_thermoplasma_generator",
+		"tau_turret_sp",	
+		"tau_plasma_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "necron_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "monolith", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "necron_builder_scarab_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"necron_listening_post",
+		"necron_summoning_core",
+		"necron_plasma_generator",
+		"necron_energy_core",
+		"necron_greater_summoning_core",
+		"necron_forbidden_archive",
+		"necron_thermoplasma_generator",
+		"necron_turret"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "eldar_squad_bonesinger", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"eldar_advanced_warp_generator",
+		"eldar_listening_post",
+		"eldar_mine_field",
+		"eldar_soul_shrine",
+		"eldar_support_platform_scatterlaser",
+		"eldar_warp_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "dark_eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "dark_eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "dark_eldar_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"dark_eldar_haemonculus_laboratory",
+		"dark_eldar_listening_post",
+		"dark_eldar_plasma_generator",
+		"dark_eldar_slave_caravel",
+		"dark_eldar_soul_cage",
+		"dark_eldar_thermo_plasma"		
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "sisters_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "sisters_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "sisters_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"sisters_thermo_plasma",
+		"sisters_plasma_generator",
+		"sisters_turret_flamer",
+		"sisters_holy_reliquary",
+		"sisters_listening_post",
+		"sisters_mines",
+		"sisters_sanctuary"
+		}
+		
+		t_unit_exceptions = {}
+		
+	end
+	
+	t_blueprintbonus = {}
+	
+	MetaMap_GetRaceStartingSquadsList(MetaMap_GetPlayerNRaceName(0), t_blueprintbonus)	
+
+	for j = 1,  table.getn(t_blueprintbonus) do
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_Bonus"..j, t_blueprintbonus[j], "mkr_Player_Builder", 1)
+		
+	end
+	
+
+--[[TODO: Remove! DEBUG USE ONLY!]]
+	if g_Debug == true then
+		EGroup_SetHealthInvulnerable("eg_Player_HQ", true)
+	end
+	
+	ForwardBases()
+end
+
+function ForwardBases()
+
+	--determine race specific blueprints to be looked for when creating forward base
+	if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		
+		g_bonus_generator = "chaos_plasma_generator"
+		g_bonus_turret = "chaos_turret_bolter"
+		g_bonus_barracks = "chaos_temple"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "chaos_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+		
+		g_bonus_generator = "eldar_warp_generator"
+		g_bonus_turret = "eldar_support_platform_scatterlaser"
+		g_bonus_barracks = "eldar_aspect_portal"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "eldar_soul_shrine"
+		
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		
+		g_bonus_generator = "guard_plasma_generator"
+		g_bonus_turret = "guard_turret_heavy_bolter"
+		g_bonus_barracks = "guard_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "guard_tactica"
+		
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		
+		g_bonus_generator = "ork_generator"
+		g_bonus_turret = "ork_waagh_banner"
+		g_bonus_barracks = "ork_boy_hut"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "ork_pile_o_guns"
+		
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		
+		g_bonus_generator = "space_marine_generator"
+		g_bonus_turret = "space_marine_turret_bolter"
+		g_bonus_barracks = "space_marine_barracks"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "space_marine_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		
+		g_bonus_generator = "tau_plasma_generator"
+		g_bonus_turret = 0  --tau have no turrets, so zero is simply a filler value to establish the variable instead of writting cutom checks for tau later.  0 will never be a value fed in by code, so it simply allows the algorithm to function in a standadrd manner for all races.
+		g_bonus_barracks = "tau_barracks"
+		g_bonus_barracks2 = "tau_kroot_nest"
+		g_bonus_research = "tau_research_building"
+		
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		
+		g_bonus_generator = "sisters_plasma_generator"
+		g_bonus_turret = "sisters_turret_flamer"
+		g_bonus_barracks = "sisters_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "sisters_sanctuary"
+		
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		
+		g_bonus_generator = "dark_eldar_plasma_generator"
+		g_bonus_turret = "dark_eldar_slave_caravel"
+		g_bonus_barracks = "dark_eldar_hall_of_blood"
+		g_bonus_barracks2 = "dark_eldar_skimmer_shop"
+		g_bonus_research = "dark_eldar_haemonculus_laboratory"
+		
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		
+		g_bonus_generator = "necron_plasma_generator"
+		g_bonus_turret = "necron_turret"
+		g_bonus_barracks = "necron_summoning_core"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "necron_forbidden_archive"
+		
+	end
+
+	--Add in any bonus buildings made availible if the player has purchased them via owning Hyperion peaks province
+	t_blueprintEntitybonus = {}
+
+	
+	-- Always builds the building (prevents crashes and speeds things up)
+	function user_CreateBuilding(p_PlayerID, p_EGroupID, p_MarkerName, p_Blueprint)
+		l_EntityID = Entity_Create(p_Blueprint, p_PlayerID, Marker_GetPosition(Marker_FromName(p_MarkerName, "basic_marker" )))
+		EGroup_Add(EGroup_CreateIfNotFound(p_EGroupID), l_EntityID)
+		Entity_Spawn(l_EntityID)                        
+	end
+
+	MetaMap_GetAttackingRaceStartingEntitiesList(t_blueprintEntitybonus)
+
+	for j=1,table.getn(t_blueprintEntitybonus) do
+		
+		if t_blueprintEntitybonus[j] == g_bonus_generator then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_gen_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next generator will then spawn at the correct marker after this one
+			g_bonus_gen_counter = g_bonus_gen_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_turret then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_turret_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next turret will then spawn at the correct marker after this one
+			g_bonus_turret_counter = g_bonus_turret_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks then
+			--fixed marker spawn based on Phil's table.  Only one barracks is spawned, always at marker 10
+			--Necron intentionally spawn a summoning core in place of a barracks due to the monolith doubling as their barracks.
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement10", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_research then
+			--fixed marker spawn based on Phil's table.  Only one research building is spawned, always at marker 11
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement11", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks2 then
+			--This will only be used to spawn the kroot nest when the player is Tau, otherwise it will be passed over due to g_bonus_barracks2 being a dummy value.
+			--fixed marker spawn based on Phil's table.  Only one kroot nest is spawned, always at marker 13
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement13", t_blueprintEntitybonus[j])
+		end
+	end
+end
+
+function DifficultyLevel()
+	local StrongholdStrength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetDefendingTerritoryIndex())
+	
+	if StrongholdStrength == 10 or StrongholdStrength == 11 or StrongholdStrength == 12 then
+		g_Difficulty = 1
+	elseif StrongholdStrength == 13 or StrongholdStrength == 14 or StrongholdStrength == 15 then
+		g_Difficulty = 2
+	elseif  StrongholdStrength == 16 or StrongholdStrength == 17 then
+		g_Difficulty = 3
+	end
+end
+
+function PopCheck(Counter, SGroup, MaxPop)
+
+	local Pop = 0
+	
+	for i=0,Counter do
+			if SGroup_Exists(SGroup..i) and SGroup_Count(SGroup..i) > 0 then
+				
+				Pop = Pop + SGroup_Count(SGroup..i)
+				
+			end
+	end
+	
+	if Pop < math.floor(MaxPop) then
+		return true
+	else
+		return false
+	end
+
+end
+
+
+
+function Rule_Set_Counters()
+
+	--[[creating the counters
+	UI_ShowCountDXP("NorthUpgrade", g_Player1, 2691000, g_CounterN )
+	UI_ShowCountDXP("SouthUpgrade", g_Player1, 2691001, g_CounterS )
+	UI_ShowCountDXP("EastUpgrade", g_Player1, 2691002, g_CounterE )
+	UI_ShowCountDXP("WestUpgrade", g_Player1, 2691003, g_CounterW )]]
+	
+	WinWarning_Add( "NorthUpgrade", World_GetPlayerAt(0), "", "", "" )
+	WinWarning_Add( "SouthUpgrade", World_GetPlayerAt(0), "", "", "" )
+	WinWarning_Add( "EastUpgrade", World_GetPlayerAt(0), "", "", "" )
+	WinWarning_Add( "WestUpgrade", World_GetPlayerAt(0), "", "", "" )
+
+	Rule_AddInterval(Rule_CountdownAndUpgradeN, 1)
+	Rule_AddInterval(Rule_CountdownAndUpgradeS, 1)
+	Rule_AddInterval(Rule_CountdownAndUpgradeE, 1)
+	Rule_AddInterval(Rule_CountdownAndUpgradeW, 1)
+	Rule_AddInterval(Rule_Upgrade_Halt, 1)
+	
+end
+
+function RestoreCenterBaseMonolith()
+	if EGroup_Exists("eg_CenterBase") and EGroup_Count("eg_CenterBase") > 0 and EGroup_IsUnderAttack("eg_CenterBase", true) then
+		Command_EntityBuild( g_Player3, "eg_CenterBase", "necron_restored_monolith_squad_sp_dxp3")
+		Rule_Remove(RestoreCenterBaseMonolith)
+	end
+end
+
+function DeadBodies()
+	for i=1,6 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Deadbodies"..i, "necron_basic_warrior_squad_dxp3_sp", "mkr_right_deadbodies"..i, 3, World_GetRand(5,7))
+		SGroup_SelfDestroy("sg_Deadbodies"..i, true)
+	end
+end
+
+function Rule_CountdownAndUpgradeN()
+	if EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 then
+		if g_PauseNTimer == false then
+				
+				g_CounterN = g_CounterN - 1
+				if g_TopBaseLevel == 0 then
+					WinWarning_SetText( "NorthUpgrade", Loc_FormatText1( 2691000,  Loc_FormatTime(60409, g_CounterN)))
+					--UI_ShowCountUpdateDxp("NorthUpgrade", g_CounterN, 2691000)
+				elseif g_TopBaseLevel == 1 then
+					WinWarning_SetText( "NorthUpgrade", Loc_FormatText1( 2691004,  Loc_FormatTime(60409, g_CounterN)))
+					--UI_ShowCountUpdateDxp("NorthUpgrade", g_CounterN, 2691004)
+				elseif g_TopBaseLevel == 2 then
+					WinWarning_SetText( "NorthUpgrade", Loc_FormatText1( 2691008,  Loc_FormatTime(60409, g_CounterN)))
+					--UI_ShowCountUpdateDxp("NorthUpgrade", g_CounterN, 2691008)
+				end
+				
+				--once you hit 0 the upgrade happens
+				if g_CounterN == 0 then
+					g_TopBaseLevel = g_TopBaseLevel + 1
+					if g_TopBaseLevel == 1 then
+						EGroup_ForceAddOn("eg_TopBase", "addon_necron_hq_1")
+						for i=1,8 do
+							if EGroup_Exists("eg_TopBase_Turrets"..i) and EGroup_Count("eg_TopBase_Turrets"..i) > 0 then
+								EGroup_ForceAddOn("eg_TopBase_Turrets"..i, "addon_necron_turret")
+							end
+						end
+						g_CounterN = g_SecondsToUpgrade
+					elseif g_TopBaseLevel == 2 then
+						EGroup_ForceAddOn("eg_TopBase", "addon_necron_hq_2")
+						g_CounterN = g_SecondsToUpgrade
+					elseif g_TopBaseLevel == 3 then
+						Command_EntityBuild( g_Player3, "eg_TopBase", "necron_restored_monolith_squad_sp_dxp3")
+						for i=1,8 do
+							if EGroup_Exists("eg_TopBase_Turrets"..i) and EGroup_Count("eg_TopBase_Turrets"..i) > 0 then
+								EGroup_SelfDestroy("eg_TopBase_Turrets"..i, true)
+							end
+						end
+						
+						--shut down
+						Rule_Remove(Rule_CountdownAndUpgradeN)
+						WinWarning_Remove("NorthUpgrade")
+						UI_ShowCountDXP("NorthUpgradeComplete", g_Player1, 2691012, 0)
+						Rule_AddOneShot(RemoveUpgradeTimer_N, g_RemoveUpgradeTimer__Timer)
+					end
+					
+				end
+		end
+	else
+		
+		Rule_Remove(Rule_CountdownAndUpgradeN)
+		UI_HideCount( "NorthUpgrade" )
+		
+	end
+	
+end
+
+function Rule_CountdownAndUpgradeS()
+	
+	if EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 then
+		if g_PauseSTimer == false then
+				
+				--counting down from 30 to 0
+				g_CounterS = g_CounterS - 1
+				if g_BottomBaseLevel == 0 then
+					WinWarning_SetText( "SouthUpgrade", Loc_FormatText1( 2691001,  Loc_FormatTime(60409, g_CounterS)))
+				elseif g_BottomBaseLevel == 1 then
+					WinWarning_SetText( "SouthUpgrade", Loc_FormatText1( 2691005,  Loc_FormatTime(60409, g_CounterS)))
+				elseif g_BottomBaseLevel == 2 then
+					WinWarning_SetText( "SouthUpgrade", Loc_FormatText1( 2691009,  Loc_FormatTime(60409, g_CounterS)))
+				end
+				
+				--once you hit 0 the upgrade happens
+				if g_CounterS == 0 then
+					g_BottomBaseLevel = g_BottomBaseLevel + 1
+					if g_BottomBaseLevel == 1 then
+						for i=1,8 do
+							if EGroup_Exists("eg_BottomBase_Turrets"..i) and EGroup_Count("eg_BottomBase_Turrets"..i) > 0 then
+								EGroup_ForceAddOn("eg_BottomBase_Turrets"..i, "addon_necron_turret")
+							end
+						end
+						EGroup_ForceAddOn("eg_BottomBase", "addon_necron_hq_1")
+						g_CounterS = g_SecondsToUpgrade
+					elseif g_BottomBaseLevel == 2 then
+						EGroup_ForceAddOn("eg_BottomBase", "addon_necron_hq_2")
+						g_CounterS = g_SecondsToUpgrade
+					elseif g_BottomBaseLevel == 3 then
+						Command_EntityBuild( g_Player3, "eg_BottomBase", "necron_restored_monolith_squad_sp_dxp3")
+						for i=1,8 do
+							if EGroup_Exists("eg_BottomBase_Turrets"..i) and EGroup_Count("eg_BottomBase_Turrets"..i) > 0 then
+								EGroup_SelfDestroy("eg_BottomBase_Turrets"..i, true)
+							end
+						end
+						
+						--shut down
+						Rule_Remove(Rule_CountdownAndUpgradeS)
+						UI_HideCount( "SouthUpgrade" )
+						UI_ShowCountDXP("SouthUpgradeComplete", g_Player1, 2691013, 0)
+						Rule_AddOneShot(RemoveUpgradeTimer_S, g_RemoveUpgradeTimer__Timer)
+					end
+				end
+		end
+	else
+		
+		Rule_Remove(Rule_CountdownAndUpgradeS)
+		UI_HideCount( "SouthUpgrade" )
+		
+	end
+	
+end
+
+function Rule_CountdownAndUpgradeE()
+
+	if EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 then
+		if g_PauseETimer == false then
+				
+				--counting down from 30 to 0
+				g_CounterE = g_CounterE - 1
+				if g_RightBaseLevel == 0 then
+					WinWarning_SetText( "EastUpgrade", Loc_FormatText1( 2691002,  Loc_FormatTime(60409, g_CounterE)))
+					--UI_ShowCountUpdateDxp("EastUpgrade", g_CounterE, 2691002)
+				elseif g_RightBaseLevel == 1 then
+					WinWarning_SetText( "EastUpgrade", Loc_FormatText1( 2691006,  Loc_FormatTime(60409, g_CounterE)))
+					--UI_ShowCountUpdateDxp("EastUpgrade", g_CounterE, 2691006)
+				elseif g_RightBaseLevel == 2 then
+					WinWarning_SetText( "EastUpgrade", Loc_FormatText1( 2691010,  Loc_FormatTime(60409, g_CounterE)))
+					--UI_ShowCountUpdateDxp("EastUpgrade", g_CounterE, 2691010)
+				end
+				
+				--once you hit 0 the upgrade happens
+				if g_CounterE == 0 then
+					g_RightBaseLevel = g_RightBaseLevel + 1
+					if g_RightBaseLevel == 1 then
+						for i=1,8 do
+							if EGroup_Exists("eg_RightBase_Turrets"..i) and EGroup_Count("eg_RightBase_Turrets"..i) > 0 then
+								EGroup_ForceAddOn("eg_RightBase_Turrets"..i, "addon_necron_turret")
+							end
+						end
+						EGroup_ForceAddOn("eg_RightBase", "addon_necron_hq_1")
+						g_CounterE = g_SecondsToUpgrade
+					elseif g_RightBaseLevel == 2 then
+						EGroup_ForceAddOn("eg_RightBase", "addon_necron_hq_2")
+						g_CounterE = g_SecondsToUpgrade
+					elseif g_RightBaseLevel == 3 then
+						Command_EntityBuild( g_Player3, "eg_RightBase", "necron_restored_monolith_squad_sp_dxp3")
+						for i=1,8 do
+							if EGroup_Exists("eg_RightBase_Turrets"..i) and EGroup_Count("eg_RightBase_Turrets"..i) > 0 then
+								EGroup_SelfDestroy("eg_RightBase_Turrets"..i, true)
+							end
+						end
+						
+						--shut down
+						Rule_Remove(Rule_CountdownAndUpgradeE)
+						UI_HideCount( "EastUpgrade" )
+						UI_ShowCountDXP("EastUpgradeComplete", g_Player1, 2691014, 0)
+						Rule_AddOneShot(RemoveUpgradeTimer_E, g_RemoveUpgradeTimer__Timer)
+					end
+				end
+		end
+	else
+		
+		Rule_Remove(Rule_CountdownAndUpgradeE)
+		UI_HideCount( "EastUpgrade" )
+		
+	end
+	
+end
+
+function Rule_CountdownAndUpgradeW()
+
+	if EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 then
+		if g_PauseWTimer == false then
+				
+				--counting down from 30 to 0
+				g_CounterW = g_CounterW - 1
+				if g_LeftBaseLevel == 0 then
+					WinWarning_SetText( "WestUpgrade", Loc_FormatText1( 2691003,  Loc_FormatTime(60409, g_CounterW)))
+					--UI_ShowCountUpdateDxp("WestUpgrade", g_CounterW, 2691003)
+				elseif g_LeftBaseLevel == 1 then
+					WinWarning_SetText( "WestUpgrade", Loc_FormatText1( 2691007,  Loc_FormatTime(60409, g_CounterW)))
+					--UI_ShowCountUpdateDxp("WestUpgrade", g_CounterW, 2691007)
+				elseif g_LeftBaseLevel == 2 then
+					WinWarning_SetText( "WestUpgrade", Loc_FormatText1( 2691011,  Loc_FormatTime(60409, g_CounterW)))
+					--UI_ShowCountUpdateDxp("WestUpgrade", g_CounterW, 2691011)
+				end
+				
+				--once you hit 0 the upgrade happens
+				if g_CounterW == 0 then
+					g_LeftBaseLevel = g_LeftBaseLevel + 1
+					if g_LeftBaseLevel == 1 then
+						for i=1,8 do
+							if EGroup_Exists("eg_LeftBase_Turrets"..i) and EGroup_Count("eg_LeftBase_Turrets"..i) > 0 then
+								EGroup_ForceAddOn("eg_LeftBase_Turrets"..i, "addon_necron_turret")
+							end
+						end
+						EGroup_ForceAddOn("eg_LeftBase", "addon_necron_hq_1")
+						g_CounterW = g_SecondsToUpgrade
+					elseif g_LeftBaseLevel == 2 then
+						EGroup_ForceAddOn("eg_LeftBase", "addon_necron_hq_2")
+						g_CounterW = g_SecondsToUpgrade
+					elseif g_LeftBaseLevel == 3 then
+						Command_EntityBuild( g_Player3, "eg_LeftBase", "necron_restored_monolith_squad_sp_dxp3")
+						for i=1,8 do
+							if EGroup_Exists("eg_LeftBase_Turrets"..i) and EGroup_Count("eg_LeftBase_Turrets"..i) > 0 then
+								EGroup_SelfDestroy("eg_LeftBase_Turrets"..i, true)
+							end
+						end
+						
+						--shut down
+						Rule_Remove(Rule_CountdownAndUpgradeW)
+						UI_HideCount( "WestUpgrade" )
+						UI_ShowCountDXP("WestUpgradeComplete", g_Player1, 2691015, 0)
+						Rule_AddOneShot(RemoveUpgradeTimer_W, g_RemoveUpgradeTimer__Timer)
+					end
+				end
+		end
+	else
+		Rule_Remove(Rule_CountdownAndUpgradeW)
+		UI_HideCount( "WestUpgrade" )
+	end
+end
+
+
+function RemoveUpgradeTimer_N()
+	UI_HideCount("NorthUpgradeComplete")
+end
+function RemoveUpgradeTimer_S()
+	UI_HideCount("SouthUpgradeComplete")
+end
+function RemoveUpgradeTimer_E()
+	UI_HideCount("EastUpgradeComplete")
+end
+function RemoveUpgradeTimer_W()
+	UI_HideCount("WestUpgradeComplete")
+end
+
+function SendMonolithsAtPlayer()
+	local bptable = Util_MakeBlueprintTable("necron_restored_monolith_squad_sp_dxp3")
+	for i=1,4 do
+		if i==1 then
+			marker = "mkr_top_monolith"
+			sgroupname = "sg_TopRestoredMonolith"
+		elseif i==2 then
+			marker = "mkr_bottom_monolith"
+			sgroupname = "sg_BottomRestoredMonolith"
+		elseif i==3 then
+			marker = "mkr_left_monolith"
+			sgroupname = "sg_LeftRestoredMonolith"
+		elseif i==4 then
+			marker = "mkr_right_monolith"
+			sgroupname = "sg_RightRestoredMonolith"
+		end
+		
+		if Player_AreSquadsNearMarker(g_Player4, marker) and t_SentMonolith[i] == false then
+			Player_GetAllSquadsNearMarker(g_Player4, "sg_TempSquad"..i, marker)
+			Util_GetSquadsByBP("sg_TempSquad"..i, sgroupname, "necron_restored_monolith_squad_sp_dxp3")
+			if SGroup_ContainsBlueprints(sgroupname, bptable, false) then
+				Cmd_JumpToMarker(sgroupname, "mkr_monolith_jumpto"..i)
+				--Cmd_AttackMoveMarker(sgroupname, "mkr_Player_HQ")
+				FOW_TagSGroup(g_Player1, sgroupname)
+				t_SentMonolith[i] = true
+			end
+		end
+	end
+	
+	local Count = 0
+	for i=1,4 do
+		if t_SentMonolith[i] == true then
+			Count = Count + 1
+		end
+	end
+	if Count >= 4 then
+		Rule_Remove(SendMonolithsAtPlayer)
+	end
+end
+
+function SendMonolithsAtPlayer_NextToBase()
+	local bptable = Util_MakeBlueprintTable("necron_restored_monolith_squad_sp_dxp3")
+	
+	if Player_AreSquadsNearMarker(g_Player4, "mkr_movemonolith") then
+		SGroup_CreateIfNotFound("sg_MonolithsNextToPlayerBase")
+		SGroup_CreateIfNotFound("sg_TempMonolith")
+		SGroup_Clear("sg_MonolithsNextToPlayerBase")
+		SGroup_Clear("sg_TempMonolith")
+		Player_GetAllSquadsNearMarker(g_Player4, "sg_MonolithsNextToPlayerBase", "mkr_movemonolith")
+		Util_GetSquadsByBP("sg_TempMonolith", "sg_MonolithsNextToPlayerBase", "necron_restored_monolith_squad_sp_dxp3")
+		if SGroup_ContainsBlueprints("sg_MonolithsNextToPlayerBase", bptable, false) then
+			--Cmd_AttackMoveMarker("sg_MonolithsNextToPlayerBase", "mkr_Player_HQ")
+			Cmd_AttackMovePos("sg_MonolithsNextToPlayerBase", g_GlobalAttackPos)
+		end
+	end
+end
+
+function Rule_Upgrade_Halt()
+
+	if EGroup_IsCapturedByPlayer("eg_NorthCriticalPoint", g_Player1, false) and EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 then
+		g_PauseNTimer = true
+	else
+		g_PauseNTimer = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_SouthCriticalPoint", g_Player1, false) and EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 then
+		g_PauseSTimer = true
+	else
+		g_PauseSTimer = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_EastCriticalPoint", g_Player1, false) and EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 then
+		g_PauseETimer = true
+	else
+		g_PauseETimer = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_WestCriticalPoint", g_Player1, false) and EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 then
+		g_PauseWTimer = true
+	else
+		g_PauseWTimer = false
+	end
+	
+	
+	-- added all this stuff to fix a bug
+	if EGroup_IsCapturedByPlayer("eg_NorthCriticalPoint", g_Player1, false) then
+		g_CritPointObjN = true
+	else
+		g_CritPointObjN = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_SouthCriticalPoint", g_Player1, false) then
+		g_CritPointObjS = true
+	else
+		g_CritPointObjS = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_EastCriticalPoint", g_Player1, false) then
+		g_CritPointObjE = true
+	else
+		g_CritPointObjE = false
+	end
+	
+	if EGroup_IsCapturedByPlayer("eg_WestCriticalPoint", g_Player1, false) then
+		g_CritPointObjW = true
+	else
+		g_CritPointObjW = false
+	end
+	
+	-- if the objective exists and
+	if Objective_Exists(Objective_SubCritPoints.title_id) then
+		if Objective_GetState(Objective_SubCritPoints.title_id) == OS_Incomplete then
+			if g_CritPointObjN == true and g_CritPointObjS == true and g_CritPointObjE == true and g_CritPointObjW == true then
+				Objective_SetState(Objective_SubCritPoints.title_id,OS_Complete)
+			end
+		else
+			if g_CritPointObjN == true and g_CritPointObjS == true and g_CritPointObjE == true and g_CritPointObjW == true and Objective_GetState(Objective_SubCritPoints.title_id) == OS_Failed then
+				Objective_SetState(Objective_SubCritPoints.title_id,OS_Complete)
+			elseif (g_CritPointObjN == false or g_CritPointObjS == false or g_CritPointObjE == false or g_CritPointObjW == false) and Objective_GetState(Objective_SubCritPoints.title_id) == OS_Complete then
+				Objective_SetState(Objective_SubCritPoints.title_id,OS_Failed)
+			end
+		end
+	end
+	
+end
+
+function Rule_DefendCritPoints()
+	
+	if g_CanNecronTeleport == true then
+		-- SOUTH
+		if g_PauseSTimer == true and EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 and g_BottomBaseLevel ~= 3 then
+			-- send necron warriors
+			--[[if PopCheck(g_SWarriorCounter, "sg_SouthWarriors", g_MaxSWarriorPop) then
+				g_SWarriorCounter = g_SWarriorCounter + 1
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_SouthWarriors"..g_SWarriorCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_bottom_monolith", 1, World_GetRand(6, 8) )
+				if g_CanNecronTeleport == true then
+					Cmd_JumpToMarker("sg_SouthWarriors"..g_SWarriorCounter, "mkr_bottom_critpoint"..World_GetRand(1,8))
+					if g_SCFlag == false then
+						Rule_AddInterval(Rule_Objective_SummoningCore, 1)
+						g_SCFlag = true
+					end
+				else
+					Cmd_AttackMoveMarker("sg_SouthWarriors"..g_SWarriorCounter, "mkr_bottom_critpoint"..World_GetRand(1,8))
+				end
+			end]]
+			-- also deepstrike flayed ones
+			if PopCheck(g_SFlayedOnesCounter, "sg_SouthFlayedOnes", g_MaxSFlayedOnesPop) then
+				g_SFlayedOnesCounter = g_SFlayedOnesCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_SouthFlayedOnes"..g_SFlayedOnesCounter, "necron_flayed_one_squad", "mkr_bottom_monolith", 1, World_GetRand(6,8))
+				SGroup_DeSpawn("sg_SouthFlayedOnes"..g_SFlayedOnesCounter)
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_SouthFlayedOnes"..g_SFlayedOnesCounter), "monolith", Marker_GetPosition(Marker_FromName("mkr_bottom_critpoint"..World_GetRand(1,8), "basic_marker")))
+			end
+		end
+		
+		-- NORTH
+		if g_PauseNTimer == true and EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 and g_TopBaseLevel ~= 3 then
+			-- warriors
+			--[[if PopCheck(g_NWarriorCounter, "sg_NorthWarriors", g_MaxNWarriorPop) then
+				g_NWarriorCounter = g_NWarriorCounter + 1
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_NorthWarriors"..g_NWarriorCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_top_monolith", 1, World_GetRand(6, 8) )
+				if g_CanNecronTeleport == true then
+					Cmd_JumpToMarker("sg_NorthWarriors"..g_NWarriorCounter, "mkr_top_critpoint"..World_GetRand(1,8))
+					if g_SCFlag == false then
+						Rule_AddInterval(Rule_Objective_SummoningCore, 1)
+						g_SCFlag = true
+					end
+				else
+					Cmd_AttackMoveMarker("sg_NorthWarriors"..g_NWarriorCounter, "mkr_top_critpoint"..World_GetRand(1,8))
+				end
+			end]]
+			-- also deepstrike flayed ones
+			if PopCheck(g_NFlayedOnesCounter, "sg_NorthFlayedOnes", g_MaxNFlayedOnesPop) then
+				g_NFlayedOnesCounter = g_NFlayedOnesCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_NorthFlayedOnes"..g_NFlayedOnesCounter, "necron_flayed_one_squad", "mkr_top_monolith", 1, World_GetRand(6,8))
+				SGroup_DeSpawn("sg_NorthFlayedOnes"..g_NFlayedOnesCounter)
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_NorthFlayedOnes"..g_NFlayedOnesCounter), "monolith", Marker_GetPosition(Marker_FromName("mkr_top_critpoint"..World_GetRand(1,8), "basic_marker")))
+			end
+		end
+		
+		-- EAST
+		if g_PauseETimer == true and EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 and g_RightBaseLevel ~= 3 then
+			--warriors
+			--[[if PopCheck(g_EWarriorCounter, "sg_EastWarriors", g_MaxEWarriorPop) then
+				g_EWarriorCounter = g_EWarriorCounter + 1
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_EastWarriors"..g_EWarriorCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_right_monolith", 1, World_GetRand(6, 8) )
+				if g_CanNecronTeleport == true then
+					Cmd_JumpToMarker("sg_EastWarriors"..g_EWarriorCounter, "mkr_right_critpoint"..World_GetRand(1,8))
+					if g_SCFlag == false then
+						Rule_AddInterval(Rule_Objective_SummoningCore, 1)
+						g_SCFlag = true
+					end
+				else
+					Cmd_AttackMoveMarker("sg_EastWarriors"..g_EWarriorCounter, "mkr_right_critpoint"..World_GetRand(1,8))
+				end
+			end]]
+			-- also deepstrike flayed ones
+			if PopCheck(g_EFlayedOnesCounter, "sg_EastFlayedOnes", g_MaxEFlayedOnesPop) then
+				g_EFlayedOnesCounter = g_EFlayedOnesCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_EastFlayedOnes"..g_EFlayedOnesCounter, "necron_flayed_one_squad", "mkr_right_monolith", 1, World_GetRand(6,8))
+				SGroup_DeSpawn("sg_EastFlayedOnes"..g_EFlayedOnesCounter)
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_EastFlayedOnes"..g_EFlayedOnesCounter), "monolith", Marker_GetPosition(Marker_FromName("mkr_right_critpoint"..World_GetRand(1,8), "basic_marker")))
+			end
+		end
+		
+		--WEST
+		if g_PauseWTimer == true and EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 and g_LeftBaseLevel ~= 3 then
+			--[[if PopCheck(g_WWarriorCounter, "sg_WestWarriors", g_MaxWWarriorPop) then
+				g_WWarriorCounter = g_WWarriorCounter + 1
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_WestWarriors"..g_WWarriorCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_left_monolith", 1, World_GetRand(6, 8) )
+				if g_CanNecronTeleport == true then
+					Cmd_JumpToMarker("sg_WestWarriors"..g_WWarriorCounter, "mkr_left_critpoint"..World_GetRand(1,8))
+					if g_SCFlag == false then
+						Rule_AddInterval(Rule_Objective_SummoningCore, 1)
+						g_SCFlag = true
+					end
+				else
+					Cmd_AttackMoveMarker("sg_WestWarriors"..g_WWarriorCounter, "mkr_left_critpoint"..World_GetRand(1,8))
+				end
+			end]]
+			-- also deepstrike flayed ones
+			if PopCheck(g_WFlayedOnesCounter, "sg_WestFlayedOnes", g_MaxWFlayedOnesPop) then
+				g_WFlayedOnesCounter = g_WFlayedOnesCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_WestFlayedOnes"..g_WFlayedOnesCounter, "necron_flayed_one_squad", "mkr_left_monolith", 1, World_GetRand(6,8))
+				SGroup_DeSpawn("sg_WestFlayedOnes"..g_WFlayedOnesCounter)
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_WestFlayedOnes"..g_WFlayedOnesCounter), "monolith", Marker_GetPosition(Marker_FromName("mkr_left_critpoint"..World_GetRand(1,8), "basic_marker")))
+			end
+		end
+	else
+		Rule_Remove(Rule_DefendCritPoints)
+	end
+end
+
+
+function Rule_SpawnUnitsAtCenterBase()
+
+	local Pop = 0
+	local UnitType = World_GetRand(1, 15)
+	local SquadName
+	local SquadCounter
+	local SquadBluePrint
+	local NumberofSquads
+	local SquadCount
+	local MaxUnitType
+	
+	-- 1= necron warriors
+	if UnitType <= 7 then
+		SquadName = "sg_Warriors"
+		SquadCounter = g_WarriorCounter
+		SquadBluePrint = "necron_basic_warrior_squad_dxp3_sp"
+		NumberofSquads = 1
+		SquadCount = World_GetRand(3,8)
+		MaxUnitType = g_MaxWarriorPop	
+	-- 2 = wraith
+	elseif UnitType == 8 then
+		SquadName = "sg_Wraiths"
+		SquadCounter = g_WraithCounter
+		SquadBluePrint = "necron_wraith_squad"
+		NumberofSquads = 1
+		SquadCount = 1
+		MaxUnitType = g_MaxWraithPop 
+	-- 4 = flayed ones
+	elseif UnitType == 9 then
+		SquadName = "sg_FlayedOnes"
+		SquadCounter = g_FlayedOneCounter
+		SquadBluePrint = "necron_flayed_one_squad"
+		NumberofSquads = 1
+		SquadCount = World_GetRand(3,8)
+		MaxUnitType = g_MaxFlayedOnePop
+	-- 5 = immortals
+	elseif UnitType == 10 then
+		SquadName = "sg_Immortals"
+		SquadCounter = g_ImmortalCounter
+		SquadBluePrint = "necron_immortal_squad"
+		NumberofSquads = 1
+		SquadCount = World_GetRand(3,5)
+		MaxUnitType = g_MaxImmortalPop
+	-- 6 = paraiahs
+	elseif UnitType == 11 then
+		SquadName = "sg_Pariahs"
+		SquadCounter = g_PariahCounter
+		SquadBluePrint = "necron_pariah_squad"
+		NumberofSquads = 1
+		SquadCount = World_GetRand(3, 8)
+		MaxUnitType = g_MaxPariahPop 
+	-- 7 = tomb spider
+	elseif UnitType == 12 then
+		SquadName = "sg_TombSpiders"
+		SquadCounter = g_TombSpiderCounter
+		SquadBluePrint = "necron_tomb_spyder_squad"
+		NumberofSquads = 1
+		SquadCount = 1
+		MaxUnitType = g_MaxTombSpiderPop
+	-- 8 = destroyer
+	elseif UnitType == 13 then
+		SquadName = "sg_Destroyers"
+		SquadCounter = g_DestroyerCounter
+		SquadBluePrint = "necron_destroyer_squad"
+		NumberofSquads = 1
+		SquadCount = 1
+		MaxUnitType = g_MaxDestroyerPop
+	-- 9 = heavy destroyer
+	elseif UnitType == 14 then
+		SquadName = "sg_HeavyDestroyers"
+		SquadCounter = g_HeavyDestroyerCounter
+		SquadBluePrint = "necron_heavy_destroyer_squad"
+		NumberofSquads = 1
+		SquadCount = 1
+		MaxUnitType = g_MaxHeavyDestroyerPop
+	-- 10 = lord destroyer
+	elseif UnitType == 15 then
+		SquadName = "sg_LordDestroyers"
+		SquadCounter = g_LordDestroyerCounter
+		SquadBluePrint = "necron_lord_destroyer_squad"
+		NumberofSquads = 1
+		SquadCount = 1
+		MaxUnitType = g_MaxLordDestroyerPop
+	end
+	
+	for i=0, SquadCounter do
+		if SGroup_Exists(SquadName..i) and SGroup_Count(SquadName..i) > 0 then
+			
+			Pop = Pop + SGroup_Count(SquadName..i)
+			
+		end
+	end
+
+	if EGroup_Count("eg_CenterBase") > 0 and Pop < math.floor(MaxUnitType) then
+		if SquadBluePrint == "necron_basic_warrior_squad_dxp3_sp" then
+			g_WarriorCounter = g_WarriorCounter + 1
+		elseif SquadBluePrint == "necron_wraith_squad" then
+			g_WraithCounter = g_WraithCounter + 1
+		elseif SquadBluePrint == "necron_flayed_one_squad" then
+			g_FlayedOneCounter = g_FlayedOneCounter + 1
+		elseif SquadBluePrint == "necron_immortal_squad" then
+			g_ImmortalCounter = g_ImmortalCounter + 1
+		elseif SquadBluePrint == "necron_pariah_squad" then
+			g_PariahCounter = g_PariahCounter + 1
+		elseif SquadBluePrint == "necron_tomb_spyder_squad" then
+			g_TombSpiderCounter = g_TombSpiderCounter + 1
+		elseif SquadBluePrint == "necron_destroyer_squad" then
+			g_DestroyerCounter = g_DestroyerCounter + 1
+		elseif SquadBluePrint == "necron_heavy_destroyer_squad" then
+			g_HeavyDestroyerCounter = g_HeavyDestroyerCounter + 1
+		elseif SquadBluePrint == "necron_lord_destroyer_squad" then
+			g_LordDestroyerCounter = g_LordDestroyerCounter + 1
+		end
+		
+		-- Create Unit
+		Util_CreateSquadsAtMarkerEx( g_Player2, SquadName..SquadCounter, SquadBluePrint, "mkr_centerbase_monolith", NumberofSquads, SquadCount)
+		--Cmd_AttackMoveMarker(SquadName..SquadCounter, "mkr_top_critpoint")
+	end
+	
+end
+
+function Rule_DeepStrikeForDefense()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_right_monolith") and EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 and t_MonolithDefended[1] == false then
+		t_MonolithDefended[1] = true
+		for i=1,g_RightBaseLevel+1 do
+			Util_AttackMonolith("mkr_deepstrike_right")
+		end
+		if g_Difficulty == 1 then
+			Util_AttackMonolith("mkr_deepstrike_right")
+		elseif g_Difficulty == 2 then
+			Util_AttackMonolith("mkr_deepstrike_right")
+			Util_AttackMonolith("mkr_deepstrike_right")
+		elseif g_Difficulty == 3 then
+			Util_AttackMonolith("mkr_deepstrike_right")
+			Util_AttackMonolith("mkr_deepstrike_right")
+			Util_AttackMonolith("mkr_deepstrike_right")
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_left_monolith") and EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 and t_MonolithDefended[2] == false then
+		t_MonolithDefended[2] = true
+		for i=1,g_LeftBaseLevel+1 do
+			Util_AttackMonolith("mkr_deepstrike_left")
+		end
+		if g_Difficulty == 1 then
+			Util_AttackMonolith("mkr_deepstrike_left")
+		elseif g_Difficulty == 2 then
+			Util_AttackMonolith("mkr_deepstrike_left")
+			Util_AttackMonolith("mkr_deepstrike_left")
+		elseif g_Difficulty == 3 then
+			Util_AttackMonolith("mkr_deepstrike_left")
+			Util_AttackMonolith("mkr_deepstrike_left")
+			Util_AttackMonolith("mkr_deepstrike_left")
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_top_monolith") and EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 and t_MonolithDefended[3] == false then
+		t_MonolithDefended[3] = true
+		for i=1,g_TopBaseLevel+1 do
+			Util_AttackMonolith("mkr_deepstrike_top")
+		end
+		if g_Difficulty == 1 then
+			Util_AttackMonolith("mkr_deepstrike_top")
+		elseif g_Difficulty == 2 then
+			Util_AttackMonolith("mkr_deepstrike_top")
+			Util_AttackMonolith("mkr_deepstrike_top")
+		elseif g_Difficulty == 3 then
+			Util_AttackMonolith("mkr_deepstrike_top")
+			Util_AttackMonolith("mkr_deepstrike_top")
+			Util_AttackMonolith("mkr_deepstrike_top")
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_bottom_monolith") and EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 and t_MonolithDefended[4] == false then
+		t_MonolithDefended[4] = true
+		for i=1,g_BottomBaseLevel+1 do
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+		end
+		if g_Difficulty == 1 then
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+		elseif g_Difficulty == 2 then
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+		elseif g_Difficulty == 3 then
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+			Util_AttackMonolith("mkr_deepstrike_bottom")
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_summoningcore") and EGroup_Exists("eg_SummoningCore") and EGroup_Count("eg_SummoningCore") > 0 and t_MonolithDefended[5] == false then
+		t_MonolithDefended[5] = true
+		Util_AttackMonolith("mkr_deepstrike_summoningcore")
+		if g_Difficulty == 1 then
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+		elseif g_Difficulty == 2 then
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+		elseif g_Difficulty == 3 then
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+			Util_AttackMonolith("mkr_deepstrike_summoningcore")
+		end
+	end
+	
+	local Count = 0
+	for i=1,5 do
+		if t_MonolithDefended[i] == true then
+			Count = Count + 1
+		end
+	end
+	if Count == 5 then
+		Rule_Remove(Rule_DeepStrikeForDefense)
+	end
+end
+
+function Util_AttackMonolith(marker)
+
+	if g_CanNecronTeleport == true then
+		g_DeepStrikeCounter = g_DeepStrikeCounter + 1
+		-- flayed ones
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DeepStrike"..g_DeepStrikeCounter, "necron_flayed_one_squad", "mkr_hiddenspawn", 1, World_GetRand(6,8))
+		SGroup_DeSpawn("sg_DeepStrike"..g_DeepStrikeCounter)
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_DeepStrike"..g_DeepStrikeCounter - 0), "monolith", Marker_GetPosition(Marker_FromName(marker..World_GetRand(1,4), "basic_marker")))	
+		
+		-- necron warriors
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_NecronDefenseJumpers"..g_DeepStrikeCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, World_GetRand(5,8))
+		Cmd_JumpToMarker("sg_NecronDefenseJumpers"..g_DeepStrikeCounter, marker..World_GetRand(1,4))
+	end
+	
+end
+
+function Rule_CreateLord(pos)
+	
+	--Necron Lord
+	if pos then
+		Util_CreateSquadsAtPositionEx(g_Player2, "sg_NecronLord", "necron_lord_squad_sp", pos, 1, 1)
+	else
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_NecronLord", "necron_lord_squad_sp", g_NecronLordHangOutMkr, 1, 1)
+	end
+	
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_staff_of_light_gauss_flayer", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_staff_of_light_skinning_blades", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_staff_of_light_reaping_blades", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_ribcage", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_death_mask", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_under_shoulder", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_death_shroud", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord"), 1),"necron_lord_gauntlets", 1)
+	Player_GrantResearch(g_Player2, "necron_night_bringer_research")
+
+end
+
+function NecronLordCoolDown()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") == 0 and g_NecronLordCoolDown == false then
+		g_NecronLordCoolDownCounter = g_NecronLordCoolDownCounter + 1
+		if g_NecronLordCoolDownCounter >= g_NecronLordCoolDownTimer then
+			g_NecronLordCoolDown = true
+			g_NecronLordCoolDownCounter = 0
+		end
+	end
+end
+
+function NecronLordAttacks()
+	
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		-- north
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_top_monolith") and t_NecronLordAttacks[1] == false then
+			t_NecronLordAttacks[1] = true
+			Player_GrantResearch(g_Player2, "necron_chronometron_research")
+			if g_NecronLordJumpFlag == false then
+				g_NecronLordJumpFlag = true
+				Cmd_JumpToMarker("sg_NecronLord", "mkr_top_monolith")
+				Rule_AddOneShot(Lord_SlowTimeSkill, 4)
+			end
+		end
+		-- south
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_bottom_monolith") and t_NecronLordAttacks[2] == false then
+			t_NecronLordAttacks[2] = true
+			Player_GrantResearch(g_Player2, "necron_veil_of_darkness_research")
+			if g_NecronLordJumpFlag == false then
+				g_NecronLordJumpFlag = true
+				Cmd_JumpToMarker("sg_NecronLord", "mkr_bottom_monolith")
+				Rule_AddOneShot(Lord_StealthSkill, 200)
+			end
+		end
+		-- east
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_right_monolith") and t_NecronLordAttacks[3] == false then
+			t_NecronLordAttacks[3] = true
+			Player_GrantResearch(g_Player2, "necron_resurrection_orb_research")
+			if g_NecronLordJumpFlag == false then
+				g_NecronLordJumpFlag = true
+				Cmd_JumpToMarker("sg_NecronLord", "mkr_right_monolith")
+				Rule_AddOneShot(Lord_ResurrectionSkill, 10)
+			end
+		end
+		-- west
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_left_monolith") and t_NecronLordAttacks[4] == false then
+			t_NecronLordAttacks[4] = true
+			Player_GrantResearch(g_Player2, "necron_solar_pulse_research")
+			if g_NecronLordJumpFlag == false then
+				g_NecronLordJumpFlag = true
+				Cmd_JumpToMarker("sg_NecronLord", "mkr_left_monolith")
+				Rule_AddOneShot(Lord_SolarPulseSkill, 4)
+			end
+		end
+		
+		--summoningcore
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_summoningcore") and t_NecronLordAttacks[5] == false then
+			t_NecronLordAttacks[5] = true
+			if g_NecronLordJumpFlag == false then
+				g_NecronLordJumpFlag = true
+				Player_GetAllSquadsNearMarker(g_Player1, "sg_SquadsNearSC", "mkr_summoningcore")
+				Cmd_JumpToPos("sg_NecronLord", SGroup_GetPosition("sg_SquadsNearSC"))
+				Rule_AddOneShot(Lord_NightBringer, 2)
+			end			
+		end
+	elseif SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") == 0 then
+		if g_NecronLordCoolDown == true then
+			g_NecronLordCoolDown = false
+			Rule_CreateLord(Marker_GetPosition(Marker_FromName(g_NecronLordHangOutMkr, "basic_marker")))
+		end
+	end
+end
+
+function Lord_NecronLordHangOut()
+	if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 and Player_AreSquadsNearMarker(g_Player1, "mkr_lowerbase_area") == false then
+		g_NecronLordHangOutMkr = "mkr_lowerbase_monolith"
+	elseif EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 and Player_AreSquadsNearMarker(g_Player1, "mkr_upperbase_area") == false then
+		g_NecronLordHangOutMkr = "mkr_upperbase_monolith"
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_summoningcore") == false then
+		g_NecronLordHangOutMkr = "mkr_necronlord"
+	else
+		g_NecronLordHangOutMkr = "mkr_hiddenspawn"
+	end
+end
+
+function Lord_Deciever()
+	
+	--the deciever appears at the relic
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") then
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_NecronLord2", "necron_lord_squad_sp_deceiver", "mkr_hiddenspawn", 1, 1)
+		-- teleport the necron lord to relic
+		Cmd_JumpToMarker("sg_NecronLord2", "mkr_deciever_jumpto")
+		Rule_AddOneShot(Lord_Deciever_Possesion, 3)
+		Rule_Remove(Lord_Deciever)
+	end
+end
+
+function Lord_Deciever_Possesion()
+	if SGroup_Exists("sg_NecronLord2") and SGroup_CountSpawned("sg_NecronLord2") > 0 then
+		Cmd_Possesion("sg_NecronLord2")
+		if g_DecieverIE == false then
+			g_DecieverIE = true
+			Util_StartIntel(EVENTS.IE_Deciever)
+		end
+		Rule_AddOneShot(Lord_Deciever_Skill1, 12)
+	end	
+end
+
+function Lord_Deciever_Skill1()
+	-- grand illusion, makes a monolith appear next to the deciever
+	if SGroup_Exists("sg_NecronLord2") and SGroup_CountSpawned("sg_NecronLord2") >= 1 then
+		Squad_GrandIllusion(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord2"), 1), SGroup_GetPosition("sg_NecronLord2"))
+	end
+	Rule_AddOneShot(Lord_Deciever_Skill2, 3)
+end
+
+function Lord_Deciever_Skill2()
+	-- grand illusion, makes a monolith appear next to the deciever
+	if SGroup_Exists("sg_NecronLord2") and SGroup_CountSpawned("sg_NecronLord2") > 0 then
+		Squad_Deceive(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NecronLord2"), 1))
+	end
+end
+
+function Lord_NightBringer()
+	Cmd_Possesion("sg_NecronLord")
+	Rule_AddOneShot(Lord_NightBringerJumpBack, 80)
+end
+
+function Lord_NightBringerJumpBack()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		local pos = SGroup_GetPosition("sg_NecronLord")
+		SGroup_DeSpawn("sg_NecronLord")
+		SGroup_SelfDestroy("sg_NecronLord", false)
+		Rule_CreateLord(pos)
+	end
+	Rule_AddInterval(Lord_JumpBackHome, 1)
+end
+
+function Lord_SolarPulseSkill()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		Cmd_CastAbilitySelf("sg_NecronLord", "necron_solar_pulse")
+	end
+	Rule_AddInterval(Lord_JumpBackHome, 1)
+end
+
+function Lord_StealthSkill()
+	Rule_AddInterval(Lord_JumpBackHome, 1)
+end
+
+function Lord_SlowTimeSkill()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		Cmd_CastAbilitySelf("sg_NecronLord", "necron_chronometron")
+	end
+	Rule_AddInterval(Lord_JumpBackHome, 1)
+end
+
+function Lord_ResurrectionSkill()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		Cmd_CastAbilitySelf("sg_NecronLord", "necron_mass_resurrection")
+	end
+	Rule_AddInterval(Lord_JumpBackHome, 1)
+end
+
+function Lord_JumpBackHome()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 and SGroup_GetAvgHealth("sg_NecronLord") < .2 then
+		Cmd_JumpToMarker("sg_NecronLord", g_NecronLordHangOutMkr)
+		Rule_Remove(Lord_JumpBackHome)
+		Rule_AddOneShot(Lord_DespawnRespawn, 2)
+	elseif SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 and SGroup_IsUnderAttack("sg_NecronLord", true) == false then
+		g_IdleNecronLordCounter = g_IdleNecronLordCounter + 1
+		if g_IdleNecronLordCounter >= 45 then
+			Cmd_JumpToMarker("sg_NecronLord", g_NecronLordHangOutMkr)
+			Rule_Remove(Lord_JumpBackHome)
+			Rule_AddOneShot(Lord_DespawnRespawn, 2)
+		end
+	elseif SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") == 0 then
+		Rule_Remove(Lord_JumpBackHome)
+		Rule_AddOneShot(Lord_DespawnRespawn, 2)
+	end
+end
+
+function Lord_DespawnRespawn()
+	if SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") > 0 then
+		local pos = SGroup_GetPosition("sg_NecronLord")
+		SGroup_DeSpawn("sg_NecronLord")
+		SGroup_Destroy("sg_NecronLord")
+		Rule_CreateLord(pos)
+	elseif SGroup_Exists("sg_NecronLord") and SGroup_Count("sg_NecronLord") == 0 then
+		Rule_CreateLord()
+	end
+	g_IdleNecronLordCounter = 0
+	g_NecronLordJumpFlag = false
+end
+
+function AlwaysHaveDefenseWarriorsToProtectAndServe()
+
+	local spawnpos = World_GetRand(1, 9)
+	local spawnmarker
+	
+	if spawnpos == 1 or spawnpos == 2 or spawnpos ==3 then
+		spawnmarker = "mkr_centerbase_monolith"
+		basecheck = "eg_CenterBase"
+	elseif spawnpos == 4 or spawnpos == 5 or spawnpos ==6 then
+		spawnmarker = "mkr_upperbase_monolith"
+		basecheck = "eg_UpperBase"
+	elseif spawnpos == 7 or spawnpos == 8 or spawnpos ==9 then
+		spawnmarker = "mkr_lowerbase_monolith"
+		basecheck = "eg_LowerBase"
+	end
+	
+	if SGroup_Exists("sg_DefenseWarriors") and SGroup_Count("sg_DefenseWarriors") < g_DefenseWarriors then
+		if EGroup_Exists(basecheck) and EGroup_Count(basecheck) > 0 then
+			local SquadNum = World_GetRand(3,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_DefenseWarriors", "necron_basic_warrior_squad_dxp3_sp", spawnmarker, 1, SquadNum)
+			Cmd_AttackMoveMarker("sg_DefenseWarriors", "mkr_centerbase_monolith")
+		end
+	end
+	
+end
+
+function DefenseWarriorAllotment()
+	
+	local MonolithCount = 0
+	
+	if EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 then
+		MonolithCount = MonolithCount + 1
+	end
+	if EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 then
+		MonolithCount = MonolithCount + 1
+	end
+	if EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 then
+		MonolithCount = MonolithCount + 1
+	end
+	if EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 then
+		MonolithCount = MonolithCount + 1
+	end
+	
+	if MonolithCount == 1 then
+		g_DefenseWarriors = 1
+	elseif MonolithCount == 2 then
+		g_DefenseWarriors = 2
+	elseif MonolithCount == 3 then
+		g_DefenseWarriors = 3
+	elseif MonolithCount == 4 then
+		g_DefenseWarriors = 4
+	end	
+	
+end
+
+function Rule_GrantResearch()
+
+	g_ResearchCounter = g_ResearchCounter + 1
+	
+	if g_ResearchCounter == 1 then
+		Player_GrantResearch(g_Player3, "necron_warrior_boost")
+		Player_GrantResearch(g_Player4, "necron_warrior_boost")
+		Player_GrantResearch(g_Player5, "necron_warrior_boost")
+		Player_GrantResearch(g_Player6, "necron_warrior_boost")
+	elseif g_ResearchCounter ==2 then
+		Player_GrantResearch(g_Player3, "necron_wraith_boost")
+		Player_GrantResearch(g_Player4, "necron_wraith_boost")
+		Player_GrantResearch(g_Player5, "necron_wraith_boost")
+		Player_GrantResearch(g_Player6, "necron_wraith_boost")
+	elseif g_ResearchCounter ==7 then
+		Player_GrantResearch(g_Player3, "necron_warrior_boost_2")
+		Player_GrantResearch(g_Player4, "necron_warrior_boost_2")
+		Player_GrantResearch(g_Player5, "necron_warrior_boost_2")
+		Player_GrantResearch(g_Player6, "necron_warrior_boost_2")
+		g_CritPointDefenseTier = 2
+		g_MaxTakeBack = 2
+	elseif g_ResearchCounter >=8 then
+		Rule_Remove(Rule_GrantResearch)
+	end
+
+end
+
+function CanNecronTeleport()
+
+	if EGroup_Exists("eg_SummoningCore") and EGroup_Count("eg_SummoningCore") == 0 then
+		g_CanNecronTeleport = false
+		Rule_Remove(CanNecronTeleport)
+	end
+end
+
+function AddOtherMonolithObjectives()
+	
+	if t_MonolithObjectivesAdded[1] == false then
+		if (EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 and EGroup_IsUnderAttack("eg_TopBase", true)) or g_TopBaseLevel == 3 then
+			Rule_AddInterval(Rule_Objective_SubObjectiveN, 1)
+			t_MonolithObjectivesAdded[1] = true
+		end
+	end
+	if t_MonolithObjectivesAdded[2] == false then
+		if (EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 and EGroup_IsUnderAttack("eg_BottomBase", true)) or g_BottomBaseLevel == 3 then
+			Rule_AddInterval(Rule_Objective_SubObjectiveS, 1)
+			t_MonolithObjectivesAdded[2] = true
+		end
+	end
+	if t_MonolithObjectivesAdded[3] == false then
+		if (EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 and EGroup_IsUnderAttack("eg_RightBase", true)) or g_RightBaseLevel == 3 then
+			Rule_AddInterval(Rule_Objective_SubObjectiveE, 1)
+			t_MonolithObjectivesAdded[3] = true
+		end
+	end
+	if t_MonolithObjectivesAdded[4] == false then
+		if (EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 and EGroup_IsUnderAttack("eg_LeftBase", true)) or g_LeftBaseLevel == 3 then
+			Rule_AddInterval(Rule_Objective_SubObjectiveW, 1)
+			t_MonolithObjectivesAdded[4] = true
+		end
+	end
+	
+	local Count = 0
+	for i=1,4 do
+		if t_MonolithObjectivesAdded[i] == true then
+			Count = Count + 1
+		end
+	end
+	if Count == 4 then
+		Rule_Remove(AddOtherMonolithObjectives)
+	end	
+end
+
+
+function Rule_Objective_DestroyFourBases()
+
+	--[[ Objective Successfull ]]
+	
+	if Event_IsAnyRunning() == false and g_TopBaseDestroyed == true and g_BottomBaseDestroyed == true and g_LeftBaseDestroyed == true and g_RightBaseDestroyed == true then
+		
+		Util_ObjectiveComplete( Objective_DestroyFourBases.title_id )
+		Rule_Remove( Rule_Objective_DestroyFourBases)
+		Rule_Remove(RemovePings)
+		Objective_PingRemove(Objective_DestroyFourBases.title_id, g_ping_obj)
+		g_FourBasesComplete = true
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+			if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyFourBases.title_id) == false then
+				
+				--[[Utility function to add objectives]]
+				Util_ObjectiveCreate(Objective_DestroyFourBases, true)
+				g_ping_obj1 = Objective_PingMarker(Objective_DestroyFourBases.title_id, "mkr_top_monolith", true, "default")
+				g_ping_obj_mini1 = Ping_Marker("mkr_top_monolith", false, "default")
+				g_ping_obj2 = Objective_PingMarker(Objective_DestroyFourBases.title_id, "mkr_bottom_monolith", true, "default")
+				g_ping_obj_mini2 = Ping_Marker("mkr_bottom_monolith", false, "default")
+				g_ping_obj3 = Objective_PingMarker(Objective_DestroyFourBases.title_id, "mkr_right_monolith", true, "default")
+				g_ping_obj_mini3 = Ping_Marker("mkr_right_monolith", false, "default")
+				g_ping_obj4 = Objective_PingMarker(Objective_DestroyFourBases.title_id, "mkr_left_monolith", true, "default")
+				g_ping_obj_mini4 = Ping_Marker("mkr_left_monolith", false, "default")
+				Rule_AddInterval(Rule_Objective_CaptureCritPoints, 1)
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1
+				Rule_AddInterval(RemovePings, 1)
+			end
+		end
+end
+
+function Rule_Objective_CaptureCritPoints()
+	if Objective_Exists(Objective_DestroyFourBases.title_id) == true then
+		--[[ Objective Successfull ]]
+		if Event_IsAnyRunning() == false and g_FourBasesComplete == true then
+			
+			Util_ObjectiveComplete( Objective_SubCritPoints.title_id )
+			Rule_Remove( Rule_Objective_CaptureCritPoints)
+			Objective_PingRemove(Objective_SubCritPoints.title_id, g_ping_objcritpoint4)
+			Objective_PingRemove(Objective_SubCritPoints.title_id, g_ping_objcritpoint3)
+			Objective_PingRemove(Objective_SubCritPoints.title_id, g_ping_objcritpoint2)
+			Objective_PingRemove(Objective_SubCritPoints.title_id, g_ping_objcritpoint1)			
+			
+		--[[If the objective doesn't exist, we're going to create it ]]
+		else
+			if Event_IsAnyRunning() == false and Objective_Exists(Objective_SubCritPoints.title_id) == false then
+				
+				--[[Utility function to add objectives]]
+				Objective_SubAdd(Objective_SubCritPoints, Objective_DestroyFourBases.title_id)
+				g_ping_objcritpoint1 = Objective_PingMarker(Objective_SubCritPoints.title_id, "mkr_left_critpoint", true, "default")
+				g_ping_objcritpoint2 = Objective_PingMarker(Objective_SubCritPoints.title_id, "mkr_right_critpoint", true, "default")
+				g_ping_objcritpoint3 = Objective_PingMarker(Objective_SubCritPoints.title_id, "mkr_top_critpoint", true, "default")
+				g_ping_objcritpoint4 = Objective_PingMarker(Objective_SubCritPoints.title_id, "mkr_bottom_critpoint", true, "default")				
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1
+				if g_SCFlag == false then
+					Rule_AddInterval(Rule_Objective_SummoningCore, 1)
+					g_SCFlag = true
+				end
+			end
+		end	
+	end
+end
+
+function RemovePings()
+	if g_TopBaseDestroyed == true then
+		Objective_PingRemove(Objective_DestroyFourBases.title_id, g_ping_obj1)
+	end
+	if g_BottomBaseDestroyed == true then
+		Objective_PingRemove(Objective_DestroyFourBases.title_id, g_ping_obj2)
+	end
+	if g_RightBaseDestroyed == true then
+		Objective_PingRemove(Objective_DestroyFourBases.title_id, g_ping_obj3)
+	end
+	if g_LeftBaseDestroyed == true then
+		Objective_PingRemove(Objective_DestroyFourBases.title_id, g_ping_obj4)
+	end	
+end
+
+function Rule_Objective_SubObjectiveN()
+	if Objective_Exists(Objective_DestroyFourBases.title_id) == true then
+		--[[ Objective Successfull ]]
+		if Event_IsAnyRunning() == false and (EGroup_Count("eg_TopBase") == 0) or (SGroup_Exists("sg_TopRestoredMonolith") and SGroup_Count("sg_TopRestoredMonolith") == 0) then
+			
+			Util_ObjectiveComplete( Objective_SubNorth.title_id )
+			Rule_Remove( Rule_Objective_SubObjectiveN)
+			Objective_PingRemove(Objective_SubNorth.title_id, g_ping_obj)
+			g_TopBaseDestroyed = true
+			g_MonolithsDestroyed = g_MonolithsDestroyed + 1
+		--[[If the objective doesn't exist, we're going to create it ]]
+		else
+			if Objective_Exists(Objective_SubNorth.title_id) == false then
+				
+				--[[Utility function to add objectives]]
+				
+				Objective_SubAdd(Objective_SubNorth, Objective_DestroyFourBases.title_id)
+				g_ping_obj = Objective_PingMarker(Objective_SubNorth.title_id, "mkr_top_monolith", true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_top_monolith", false, "default")
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1
+			end
+		end	
+	end
+end
+
+function Rule_Objective_SubObjectiveS()
+	if Objective_Exists(Objective_DestroyFourBases.title_id) == true then
+		--[[ Objective Successfull ]]
+		if Event_IsAnyRunning() == false and (EGroup_Count("eg_BottomBase") == 0) or (SGroup_Exists("sg_BottomRestoredMonolith") and SGroup_Count("sg_BottomRestoredMonolith") == 0) then
+			
+			Util_ObjectiveComplete( Objective_SubSouth.title_id )
+			Rule_Remove( Rule_Objective_SubObjectiveS)
+			Objective_PingRemove(Objective_SubSouth.title_id, g_ping_obj)
+			g_BottomBaseDestroyed = true
+			g_MonolithsDestroyed = g_MonolithsDestroyed + 1
+		--[[If the objective doesn't exist, we're going to create it ]]
+		else
+			if Objective_Exists(Objective_SubSouth.title_id) == false then
+				
+				--[[Utility function to add objectives]]
+				
+				Objective_SubAdd(Objective_SubSouth, Objective_DestroyFourBases.title_id)
+				g_ping_obj = Objective_PingMarker(Objective_SubSouth.title_id, "mkr_bottom_monolith", true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_bottom_monolith", false, "default")
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1
+			end
+		end	
+	end
+end
+
+function Rule_Objective_SubObjectiveE()
+	if Objective_Exists(Objective_DestroyFourBases.title_id) == true then
+		--Objective Successfull
+		if Event_IsAnyRunning() == false then
+			if (EGroup_Count("eg_RightBase") == 0) or (SGroup_Exists("sg_RightRestoredMonolith") and SGroup_Count("sg_RightRestoredMonolith") == 0) then
+				Util_ObjectiveComplete( Objective_SubEast.title_id )
+				Rule_Remove( Rule_Objective_SubObjectiveE)
+				Objective_PingRemove(Objective_SubEast.title_id, g_ping_obj)
+				g_RightBaseDestroyed = true
+				g_MonolithsDestroyed = g_MonolithsDestroyed + 1
+			elseif Objective_Exists(Objective_SubEast.title_id) == false then
+				--Add Objective
+				Objective_SubAdd(Objective_SubEast, Objective_DestroyFourBases.title_id)
+				g_ping_obj = Objective_PingMarker(Objective_SubEast.title_id, "mkr_right_monolith", true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_right_monolith", false, "default")
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1
+			end
+		end	
+	end
+end
+
+
+function Rule_Objective_SubObjectiveW()
+	if Objective_Exists(Objective_DestroyFourBases.title_id) == true then
+		--[[ Objective Successfull ]]
+		if Event_IsAnyRunning() == false and (EGroup_Count("eg_LeftBase") == 0) or (SGroup_Exists("sg_LeftRestoredMonolith") and SGroup_Count("sg_LeftRestoredMonolith") == 0) then
+			
+			Util_ObjectiveComplete( Objective_SubWest.title_id )
+			Rule_Remove( Rule_Objective_SubObjectiveW)
+			Objective_PingRemove(Objective_SubWest.title_id, g_ping_obj)
+			g_LeftBaseDestroyed = true
+			g_MonolithsDestroyed = g_MonolithsDestroyed + 1
+		--[[If the objective doesn't exist, we're going to create it ]]
+		else
+			if Objective_Exists(Objective_SubWest.title_id) == false then
+				Objective_SubAdd(Objective_SubWest, Objective_DestroyFourBases.title_id)
+				g_ping_obj = Objective_PingMarker(Objective_SubWest.title_id, "mkr_left_monolith", true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_left_monolith", false, "default")
+				Objective_SetDefaultPrimary(g_PrimaryObjectives)
+				g_PrimaryObjectives = g_PrimaryObjectives + 1			
+				
+			end
+		end	
+	end
+end
+
+function Rule_Objective_SummoningCore()
+
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Exists("eg_SummoningCore") and EGroup_Count("eg_SummoningCore") == 0 then
+		
+		Util_ObjectiveComplete( Objective_SummoningCore.title_id )
+		Rule_Remove( Rule_Objective_SummoningCore)
+		Objective_PingRemove(Objective_SummoningCore.title_id, g_ping_obj)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_SummoningCore.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_SummoningCore, false)
+			g_ping_obj = Objective_PingMarker(Objective_SummoningCore.title_id, "mkr_summoningcore", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_summoningcore", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+		end
+	end
+	
+end	
+
+function CompleteScenario()
+	Rule_RemoveAll()
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Outro )
+	end
+	Rule_AddInterval(CompleteScenarioWin, 1)
+end
+
+function CompleteScenarioWin()
+	if Event_IsAnyRunning() == false then
+		World_SetGameOver() 	
+	end
+end
+
+-- Rule added in OnGameStart() by dave to track scenario completion & playing of outro NIS
+function CheckForVictory()
+	if g_FourBasesComplete == true then
+		Rule_AddInterval(CompleteScenario, 10)
+		Rule_Remove(CheckForVictory)	
+	end
+end
+
+function InitialAttack()
+	if g_Difficulty == 1 then
+		for i=1,2 do
+			if EGroup_Exists("eg_PowergenInPlayerbase") and EGroup_Count("eg_PowergenInPlayerbase") > 0 then
+				g_HarassCounter = g_HarassCounter + 1	
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, World_GetRand(3, 5) )
+				Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase_jumpto"..World_GetRand(1,4))
+			end
+		end
+	elseif g_Difficulty == 2 then
+		for i=1,2 do
+			if EGroup_Exists("eg_PowergenInPlayerbase") and EGroup_Count("eg_PowergenInPlayerbase") > 0 then
+				g_HarassCounter = g_HarassCounter + 1	
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, World_GetRand(6, 8) )
+				Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase_jumpto"..World_GetRand(1,4))
+			end
+		end
+	elseif g_Difficulty == 3 then
+		for i=1,2 do
+			if EGroup_Exists("eg_PowergenInPlayerbase") and EGroup_Count("eg_PowergenInPlayerbase") > 0 then
+				--1
+				g_HarassCounter = g_HarassCounter + 1	
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, World_GetRand(7, 8) )
+				Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase_jumpto"..World_GetRand(1,4))
+				--2
+				g_HarassCounter = g_HarassCounter + 1	
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, World_GetRand(7, 8) )
+				Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase_jumpto"..World_GetRand(1,4))
+			end
+		end
+	end
+	
+	
+	Rule_AddInterval(InitialAttackContinues, g_InitialAttackRepeatTimer)
+	Rule_AddInterval(ShutOffInitialAttack, 1)
+	Rule_AddInterval(UpperBaseTier,g_UpperBaseTierUp)
+	Rule_AddInterval(UpperBaseSquadsSent,g_UpperBaseIncreaseSquads)
+	Rule_AddInterval(AttackFromUpperBase,g_UpperBaseAttackTimer)
+	Rule_AddInterval(AttackFromLowerBase, g_LowerBaseAttackTimer)
+	Rule_AddInterval(LowerBaseSquadsSent, g_LowerBaseIncreaseSquads)
+	Rule_AddInterval(LowerBaseTier, g_LowerBaseTierUp)
+	Rule_AddInterval(UpperBaseDefenses, g_UpperBaseTimer)
+	Rule_AddInterval(LowerBaseDefenses, g_LowerBaseTimer)
+	Rule_Remove(InitialAttack)
+end
+
+function ShutOffInitialAttack()
+	g_InitialAttackLength = g_InitialAttackLength + 1
+	if g_InitialAttackLength >= g_ShutOffInitialAttackTimer then
+		Rule_Remove(ShutOffInitialAttack)
+		Rule_Remove(InitialAttackContinues)
+	end
+end
+
+function InitialAttackContinues()
+	if EGroup_Exists("eg_PowergenInPlayerbase") and EGroup_Count("eg_PowergenInPlayerbase") > 0 and PopCheck(g_HarassCounter, "sg_Harass", g_MaxHarass) then
+		g_HarassCounter = g_HarassCounter + 1	
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", g_Difficulty, World_GetRand(3, 4) )
+		Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase_jumpto"..World_GetRand(1,4))
+	elseif EGroup_Exists("eg_InitialAttack2") and EGroup_Count("eg_InitialAttack2") > 0 and PopCheck(g_HarassCounter, "sg_Harass", g_MaxHarass) then
+		if g_SCIEFlag == false then
+			g_SCIEFlag = true
+			Rule_AddOneShot(SummoningCoreObjAdded, 25)
+		end
+		g_HarassCounter = g_HarassCounter + 1	
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", g_Difficulty, World_GetRand(3, 6) )
+		Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase2_jumpto"..World_GetRand(1,4))
+	elseif EGroup_Exists("eg_InitialAttack3") and EGroup_Count("eg_InitialAttack3") > 0 and PopCheck(g_HarassCounter, "sg_Harass", g_MaxHarass) then
+		g_HarassCounter = g_HarassCounter + 1	
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", g_Difficulty, World_GetRand(5, 7) )
+		Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase3_jumpto"..World_GetRand(1,4))
+	elseif EGroup_Exists("eg_InitialAttack4") and EGroup_Count("eg_InitialAttack4") > 0 and PopCheck(g_HarassCounter, "sg_Harass", g_MaxHarass) then
+		g_HarassCounter = g_HarassCounter + 1	
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_Harass"..g_HarassCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", g_Difficulty, World_GetRand(5, 8) )
+		Cmd_JumpToMarker("sg_Harass"..g_HarassCounter, "mkr_playerbase4_jumpto"..World_GetRand(1,5))
+		if SGroup_Exists("sg_FlayedHarass") == false then
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_FlayedHarass", "necron_flayed_one_squad", "mkr_hiddenspawn", 1, World_GetRand(3,5))
+			SGroup_DeSpawn("sg_FlayedHarass")
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_FlayedHarass"), "monolith", Marker_GetPosition(Marker_FromName("mkr_playerbase4_jumpto"..World_GetRand(1,5), "basic_marker")))
+		elseif SGroup_Exists("sg_FlayedHarass") and SGroup_Count("sg_FlayedHarass") < 1 then
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_FlayedHarass", "necron_flayed_one_squad", "mkr_hiddenspawn", 1, World_GetRand(3,6))
+			SGroup_DeSpawn("sg_FlayedHarass")
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_FlayedHarass"), "monolith", Marker_GetPosition(Marker_FromName("mkr_playerbase4_jumpto"..World_GetRand(1,5), "basic_marker")))
+		end
+	else
+		if g_SCIEFlag == false then
+			g_SCIEFlag = true
+			Rule_AddOneShot(SummoningCoreObjAdded, 10)
+		end
+		Rule_Remove(InitialAttackContinues)
+		Rule_Remove(ShutOffInitialAttack)
+	end
+end
+
+function AttackFromUpperBase()
+	
+	local Pop = 0
+	local SquadName
+	local SquadCounter
+	local SquadBluePrint
+	local NumberofSquads
+	local SquadCount
+	local MaxUnitType
+	
+	for i=1, math.floor(g_SquadNumberFromUpperBase) do
+		-- the first X squads that come out should always be necron warriors
+		local UnitType = 0
+		
+		if i >= 1 and i <= 2 then
+			UnitType = 1
+		else
+			UnitType = World_GetRand(7, math.floor(g_UpperBaseTier))
+		end
+		
+		-- 1= necron warriors
+		if UnitType <= 7 then
+			SquadName = "sg_UpperWarriors"
+			SquadCounter = g_WarriorCounter
+			SquadBluePrint = "necron_basic_warrior_squad_dxp3_sp"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(5,8)
+			MaxUnitType = g_MaxWarriorPop	
+		-- 2 = wraith
+		elseif UnitType == 8 then
+			SquadName = "sg_UpperWraiths"
+			SquadCounter = g_WraithCounter
+			SquadBluePrint = "necron_wraith_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxWraithPop 
+		-- 4 = flayed ones
+		elseif UnitType == 9 then
+			SquadName = "sg_UpperFlayedOnes"
+			SquadCounter = g_FlayedOneCounter
+			SquadBluePrint = "necron_flayed_one_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(5,8)
+			MaxUnitType = g_MaxFlayedOnePop
+		-- 5 = immortals
+		elseif UnitType == 10 then
+			SquadName = "sg_UpperImmortals"
+			SquadCounter = g_ImmortalCounter
+			SquadBluePrint = "necron_immortal_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(4,5)
+			MaxUnitType = g_MaxImmortalPop
+		-- 6 = paraiahs
+		elseif UnitType == 11 then
+			SquadName = "sg_UpperPariahs"
+			SquadCounter = g_PariahCounter
+			SquadBluePrint = "necron_pariah_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(7, 8)
+			MaxUnitType = g_MaxPariahPop 
+		-- 7 = tomb spider
+		elseif UnitType == 12 then
+			SquadName = "sg_UpperTombSpiders"
+			SquadCounter = g_TombSpiderCounter
+			SquadBluePrint = "necron_tomb_spyder_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxTombSpiderPop
+		-- 8 = destroyer
+		elseif UnitType == 13 then
+			SquadName = "sg_UpperDestroyers"
+			SquadCounter = g_DestroyerCounter
+			SquadBluePrint = "necron_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxDestroyerPop
+		-- 9 = heavy destroyer
+		elseif UnitType == 14 then
+			SquadName = "sg_UpperHeavyDestroyers"
+			SquadCounter = g_HeavyDestroyerCounter
+			SquadBluePrint = "necron_heavy_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxHeavyDestroyerPop
+		-- 10 = lord destroyer
+		elseif UnitType == 15 then
+			SquadName = "sg_UpperLordDestroyers"
+			SquadCounter = g_LordDestroyerCounter
+			SquadBluePrint = "necron_lord_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxLordDestroyerPop
+		end
+		
+		if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 and PopCheck(SquadCounter, SquadName, MaxUnitType) == true then
+			if SquadBluePrint == "necron_basic_warrior_squad_dxp3_sp" then
+				g_WarriorCounter = g_WarriorCounter + 1
+			elseif SquadBluePrint == "necron_wraith_squad" then
+				g_WraithCounter = g_WraithCounter + 1
+			elseif SquadBluePrint == "necron_flayed_one_squad" then
+				g_FlayedOneCounter = g_FlayedOneCounter + 1
+			elseif SquadBluePrint == "necron_immortal_squad" then
+				g_ImmortalCounter = g_ImmortalCounter + 1
+			elseif SquadBluePrint == "necron_pariah_squad" then
+				g_PariahCounter = g_PariahCounter + 1
+			elseif SquadBluePrint == "necron_tomb_spyder_squad" then
+				g_TombSpiderCounter = g_TombSpiderCounter + 1
+			elseif SquadBluePrint == "necron_destroyer_squad" then
+				g_DestroyerCounter = g_DestroyerCounter + 1
+			elseif SquadBluePrint == "necron_heavy_destroyer_squad" then
+				g_HeavyDestroyerCounter = g_HeavyDestroyerCounter + 1
+			elseif SquadBluePrint == "necron_lord_destroyer_squad" then
+				g_LordDestroyerCounter = g_LordDestroyerCounter + 1
+			end
+			
+			-- Create Unit
+			Util_CreateSquadsAtMarkerEx( g_Player3, SquadName..SquadCounter, SquadBluePrint, "mkr_upperbase_monolith", NumberofSquads, SquadCount)
+			if World_GetRand(1,2) == 1 then
+				Cmd_AttackMoveMarker(SquadName..SquadCounter, "mkr_attackmove_Player_HQ1")
+			else
+				Cmd_AttackMoveMarker(SquadName..SquadCounter, "mkr_attackmove_Player_HQ2")
+			end
+			
+		elseif EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") == 0 then
+			Util_StartIntel(EVENTS.IE_Taunt3)
+			Rule_Remove(AttackFromUpperBase)
+			Rule_Remove(UpperBaseSquadsSent)
+			Rule_Remove(UpperBaseTier)
+			return false
+		end
+	end
+end
+
+function UpperBaseTier()
+	if g_UpperBaseTier < 15 then
+		g_UpperBaseTier = g_UpperBaseTier + 1
+	else
+		Rule_Remove(UpperBaseTier)
+	end
+end
+	
+function UpperBaseSquadsSent()
+	if g_SquadNumberFromUpperBase <= 3 then
+		g_SquadNumberFromUpperBase = g_SquadNumberFromUpperBase + 1
+	else
+		Rule_Remove(UpperBaseSquadsSent)
+	end
+end
+
+function AttackFromLowerBase()
+	
+	local Pop = 0
+	local SquadName
+	local SquadCounter
+	local SquadBluePrint
+	local NumberofSquads
+	local SquadCount
+	local MaxUnitType
+	
+	for i=1, math.floor(g_SquadNumberFromLowerBase) do
+		-- the first X squads that come out should always be necron warriors
+		local UnitType = 0
+		
+		if i >= 1 and i <= 2 then
+			UnitType = 1
+		else
+			UnitType = World_GetRand(7, math.floor(g_LowerBaseTier))
+		end
+		
+		-- 1= necron warriors
+		if UnitType <= 7 then
+			SquadName = "sg_LowerWarriors"
+			SquadCounter = g_WarriorCounter
+			SquadBluePrint = "necron_basic_warrior_squad_dxp3_sp"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(5,8)
+			MaxUnitType = g_MaxWarriorPop	
+		-- 2 = wraith
+		elseif UnitType == 8 then
+			SquadName = "sg_LowerWraiths"
+			SquadCounter = g_WraithCounter
+			SquadBluePrint = "necron_wraith_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxWraithPop 
+		-- 4 = flayed ones
+		elseif UnitType == 9 then
+			SquadName = "sg_LowerFlayedOnes"
+			SquadCounter = g_FlayedOneCounter
+			SquadBluePrint = "necron_flayed_one_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(5,8)
+			MaxUnitType = g_MaxFlayedOnePop
+		-- 5 = immortals
+		elseif UnitType == 10 then
+			SquadName = "sg_LowerImmortals"
+			SquadCounter = g_ImmortalCounter
+			SquadBluePrint = "necron_immortal_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(4,5)
+			MaxUnitType = g_MaxImmortalPop
+		-- 6 = paraiahs
+		elseif UnitType == 11 then
+			SquadName = "sg_LowerPariahs"
+			SquadCounter = g_PariahCounter
+			SquadBluePrint = "necron_pariah_squad"
+			NumberofSquads = 1
+			SquadCount = World_GetRand(7, 8)
+			MaxUnitType = g_MaxPariahPop 
+		-- 7 = tomb spider
+		elseif UnitType == 12 then
+			SquadName = "sg_LowerTombSpiders"
+			SquadCounter = g_TombSpiderCounter
+			SquadBluePrint = "necron_tomb_spyder_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxTombSpiderPop
+		-- 8 = destroyer
+		elseif UnitType == 13 then
+			SquadName = "sg_LowerDestroyers"
+			SquadCounter = g_DestroyerCounter
+			SquadBluePrint = "necron_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxDestroyerPop
+		-- 9 = heavy destroyer
+		elseif UnitType == 14 then
+			SquadName = "sg_LowerHeavyDestroyers"
+			SquadCounter = g_HeavyDestroyerCounter
+			SquadBluePrint = "necron_heavy_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxHeavyDestroyerPop
+		-- 10 = lord destroyer
+		elseif UnitType == 15 then
+			SquadName = "sg_LowerLordDestroyers"
+			SquadCounter = g_LordDestroyerCounter
+			SquadBluePrint = "necron_lord_destroyer_squad"
+			NumberofSquads = 1
+			SquadCount = 1
+			MaxUnitType = g_MaxLordDestroyerPop
+		end
+		
+		if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 and PopCheck(SquadCounter, SquadName, MaxUnitType) == true then
+			if SquadBluePrint == "necron_basic_warrior_squad_dxp3_sp" then
+				g_WarriorCounter = g_WarriorCounter + 1
+			elseif SquadBluePrint == "necron_wraith_squad" then
+				g_WraithCounter = g_WraithCounter + 1
+			elseif SquadBluePrint == "necron_flayed_one_squad" then
+				g_FlayedOneCounter = g_FlayedOneCounter + 1
+			elseif SquadBluePrint == "necron_immortal_squad" then
+				g_ImmortalCounter = g_ImmortalCounter + 1
+			elseif SquadBluePrint == "necron_pariah_squad" then
+				g_PariahCounter = g_PariahCounter + 1
+			elseif SquadBluePrint == "necron_tomb_spyder_squad" then
+				g_TombSpiderCounter = g_TombSpiderCounter + 1
+			elseif SquadBluePrint == "necron_destroyer_squad" then
+				g_DestroyerCounter = g_DestroyerCounter + 1
+			elseif SquadBluePrint == "necron_heavy_destroyer_squad" then
+				g_HeavyDestroyerCounter = g_HeavyDestroyerCounter + 1
+			elseif SquadBluePrint == "necron_lord_destroyer_squad" then
+				g_LordDestroyerCounter = g_LordDestroyerCounter + 1
+			end
+			
+			-- Create Unit
+			Util_CreateSquadsAtMarkerEx( g_Player3, SquadName..SquadCounter, SquadBluePrint, "mkr_lowerbase_monolith", NumberofSquads, SquadCount)
+			--Cmd_AttackMoveMarker(SquadName..SquadCounter, "mkr_Player_HQ")
+			Cmd_AttackMovePos(SquadName..SquadCounter, g_GlobalAttackPos)			
+			
+		elseif EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") == 0 then
+			Util_StartIntel(EVENTS.IE_Taunt2)
+			Rule_Remove(AttackFromLowerBase)
+			Rule_Remove(LowerBaseSquadsSent)
+			Rule_Remove(LowerBaseTier)
+			return false
+		end
+	end
+end
+
+function LowerBaseTier()
+	if g_LowerBaseTier < 15 then
+		g_LowerBaseTier = g_LowerBaseTier + 1
+	else
+		Rule_Remove(LowerBaseTier)
+	end
+end
+	
+function LowerBaseSquadsSent()
+	if g_SquadNumberFromLowerBase <= 3 then
+		g_SquadNumberFromLowerBase = g_SquadNumberFromLowerBase + 1
+	else
+		Rule_Remove(LowerBaseSquadsSent)
+	end
+end
+
+function AttackMovePlayerHQ()
+	for i=1,6 do
+		if Player_AreSquadsNearMarker(g_Player3, "mkr_attackmove_Player_HQ"..i) then
+			Player_GetAllSquadsNearMarker(g_Player3, "sg_AttackHQ"..g_AttackHQCounter, "mkr_attackmove_Player_HQ"..i)
+			--Cmd_AttackMoveMarker("sg_AttackHQ"..g_AttackHQCounter,"mkr_Player_HQ")
+			Cmd_AttackMovePos("sg_AttackHQ"..g_AttackHQCounter,g_GlobalAttackPos)
+			g_AttackHQCounter = g_AttackHQCounter + 1
+			if g_IEForUpperAndLowerBases == false and (i==1 or i==2) then
+				g_IEForUpperAndLowerBases = true
+				Rule_AddOneShot(IE_AttackFromUpperLowerBases, 15)
+			end
+		end
+	end
+end
+
+function Rule_TakeBackCritPoints()
+	if g_PauseSTimer == true or g_PauseNTimer == true or g_PauseETimer == true or g_PauseWTimer == true then
+		-- if we can, send a new squad of guys
+		if g_TakeBackSquad == true then
+			local flag = false
+			for i=0, g_ScarabCounter do
+				if SGroup_Exists("sg_Scarabs"..i) and SGroup_Count("sg_Scarabs"..i) > 0 and EGroup_IsCapturedByPlayer(g_RetakePoint, g_Player3, true) == false then
+					flag = true
+				end
+			end
+			if flag == false then
+				g_TakeBackSquad = false
+				Rule_AddOneShot(SendTakeBackSquad, 5)			
+			end
+		else
+			-- send any available guys + scarabs to the next point
+			if EGroup_IsCapturedByPlayer(g_RetakePoint, g_Player3, true) then
+				-- find a new point to retake
+				local t_Points = {}
+				local index = 0
+				if g_PauseSTimer == true then
+					index = index + 1
+					t_Points[index] = "eg_SouthCriticalPoint"
+				end
+				if g_PauseNTimer == true then
+					index = index + 1
+					t_Points[index] = "eg_NorthCriticalPoint"
+				end
+				if g_PauseETimer == true then
+					index = index + 1
+					t_Points[index] = "eg_EastCriticalPoint"
+				end
+				if g_PauseWTimer == true then
+					index = index + 1
+					t_Points[index] = "eg_WestCriticalPoint"
+				end
+				
+				if index > 0 then
+					g_RetakePoint = t_Points[World_GetRand(1,index)]
+				end
+				
+				-- find the living scarabs, and send them to another point
+				for i=0, g_ScarabCounter do
+					if SGroup_Exists("sg_Scarabs"..i) and SGroup_Count("sg_Scarabs"..i) > 0 then
+						Cmd_Capture("sg_Scarabs"..i, t_Points[World_GetRand(1,index)])
+						break
+					end
+				end
+				for i=0, g_TakeBackSquadCounter do
+					if SGroup_Exists("sg_TakeBackWarriors"..i) and SGroup_Count("sg_TakeBackWarriors"..i) > 0 then
+						if g_CanNecronTeleport == true then
+							Cmd_JumpToPos("sg_TakeBackWarriors"..i, EGroup_GetPosition(g_RetakePoint))
+						else
+							Cmd_AttackMovePos("sg_TakeBackWarriors"..i, EGroup_GetPosition(g_RetakePoint))
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function ForceCapture()
+	-- loop through all markers
+	for i=1,4 do
+		if i == 1 then
+			lp = "eg_SouthCriticalPoint"
+			mkr = "mkr_bottom_critpoint"
+		elseif i == 2 then
+			lp = "eg_NorthCriticalPoint"
+			mkr = "mkr_top_critpoint"
+		elseif i == 3 then
+			lp = "eg_EastCriticalPoint"
+			mkr = "mkr_right_critpoint"
+		elseif i == 4 then
+			lp = "eg_WestCriticalPoint"
+			mkr = "mkr_left_critpoint"
+		end		
+		-- loop through all capture guys
+		for j=0,g_ScarabCounter do
+			if SGroup_Exists("sg_Scarabs"..j) and SGroup_Count("sg_Scarabs"..j) > 0 then
+				if Prox_AnySquadNearMarker("sg_Scarabs"..j, mkr) and EGroup_IsCapturedByPlayer(lp, g_Player1, true) == true then
+					Cmd_Capture("sg_Scarabs"..j, lp)
+				end
+			end
+		end
+	end
+end
+
+function TakeBackSquadCoolDown()
+	if g_TakeBackSquad == false then
+		if g_TakeBackSquadCount < g_TakeBackSquadCoolDown then
+			g_TakeBackSquadCount = g_TakeBackSquadCount + 1
+		else
+			g_TakeBackSquad = true
+			g_TakeBackSquadCount = 0
+		end		
+	end
+	
+	-- necron warrior takeback cooldown
+	if g_NWTB == false then
+		if g_NWTBCount < g_NWTBCooldown then
+			g_NWTBCount = g_NWTBCount + 1
+		else
+			g_NWTB = true
+			g_NWTBCount = 0
+		end		
+	end
+end
+
+function SendTakeBackSquad()
+	local t_Points = {}
+	local index = 0
+	if g_PauseSTimer == true then
+		index = index + 1
+		t_Points[index] = "eg_SouthCriticalPoint"
+	end
+	if g_PauseNTimer == true then
+		index = index + 1
+		t_Points[index] = "eg_NorthCriticalPoint"
+	end
+	if g_PauseETimer == true then
+		index = index + 1
+		t_Points[index] = "eg_EastCriticalPoint"
+	end
+	if g_PauseWTimer == true then
+		index = index + 1
+		t_Points[index] = "eg_WestCriticalPoint"
+	end
+	
+	-- as long as there is still a point taken
+	if index > 0 then
+		g_RetakePoint = t_Points[World_GetRand(1,index)]
+		local BuiltScarabs = false
+		-- if there are room for more scarabs, build some
+		if PopCheck(g_ScarabCounter, "sg_Scarabs", g_MaxScarabs) == true then
+			-- find a place to spawn the scarabs from
+			local monolith = 0
+			for i=1,4 do
+				monolith = monolith + 1
+				if BuiltScarabs == false then
+					if monolith == 1 then
+						Building = "eg_TopBase"
+						Marker_Spawn = "mkr_top_monolith"
+						Level = g_TopBaseLevel
+						RestoredMonolithName = "sg_TopRestoredMonolith"
+					elseif monolith == 2 then
+						Building = "eg_BottomBase"
+						Marker_Spawn = "mkr_bottom_monolith"
+						Level = g_BottomBaseLevel
+						RestoredMonolithName = "sg_BottomRestoredMonolith"
+					elseif monolith == 3 then
+						Building = "eg_RightBase"
+						Marker_Spawn = "mkr_right_monolith"
+						Level = g_RightBaseLevel
+						RestoredMonolithName = "sg_RightRestoredMonolith"
+					elseif monolith == 4 then
+						Building = "eg_LeftBase"
+						Marker_Spawn = "mkr_left_monolith"
+						Level = g_LeftBaseLevel
+						RestoredMonolithName = "sg_LeftRestoredMonolith"
+					end
+					
+					-- if the monolith is top tier, spawn the scarabs from the restored group
+					if Level == 3 then
+						if SGroup_Exists(RestoredMonolithName) and SGroup_Count(RestoredMonolithName) > 0 then
+							g_ScarabCounter = g_ScarabCounter + 1
+							Util_CreateSquadsAtPositionEx( g_Player3, "sg_Scarabs"..g_ScarabCounter, "necron_builder_scarab_squad", SGroup_GetPosition(RestoredMonolithName), 1,  3 )
+							Cmd_Capture("sg_Scarabs"..g_ScarabCounter, g_RetakePoint)
+							BuiltScarabs = true
+						end
+					else
+						if EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+							-- else spawn them from the original building
+							g_ScarabCounter = g_ScarabCounter + 1
+							Util_CreateSquadsAtPositionEx( g_Player3, "sg_Scarabs"..g_ScarabCounter, "necron_builder_scarab_squad", EGroup_GetPosition(Building), 1,  World_GetRand(2,3) )
+							Cmd_Capture("sg_Scarabs"..g_ScarabCounter, g_RetakePoint)
+							BuiltScarabs = true
+						end
+					end
+				end
+			end
+		end
+		
+		-- find the living scarabs, and send them
+		if BuiltScarabs == false then
+			for i=0, g_ScarabCounter do
+				if SGroup_Exists("sg_Scarabs"..i) and SGroup_Count("sg_Scarabs"..i) > 0 then
+					Cmd_Capture("sg_Scarabs"..i, g_RetakePoint)
+					break
+				end
+			end
+		end
+		
+		for i=1,g_CritPointDefenseTier do
+			-- added a cooldown timer on these defense warriors
+			if g_NWTB == true then
+				-- if the upper base is alive, teleport a squad of necron warriors from there to the point
+				if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 and PopCheck(g_TakeBackSquadCounter, "sg_TakeBackWarriors", g_MaxTakeBack) then
+					g_TakeBackSquadCounter = g_TakeBackSquadCounter + 1
+					Util_CreateSquadsAtMarkerEx( g_Player3, "sg_TakeBackWarriors"..g_TakeBackSquadCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_upperbase_monolith", 1, World_GetRand(5, 8) )
+					g_NWTB = false
+				end
+				-- if the lower base is alive, teleport a squad of necron warriors from there to the point
+				if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 and PopCheck(g_TakeBackSquadCounter, "sg_TakeBackWarriors", g_MaxTakeBack) then
+					g_TakeBackSquadCounter = g_TakeBackSquadCounter + 1
+					Util_CreateSquadsAtMarkerEx( g_Player3, "sg_TakeBackWarriors"..g_TakeBackSquadCounter, "necron_basic_warrior_squad_dxp3_sp", "mkr_lowerbase_monolith", 1, World_GetRand(5, 8) )
+					g_NWTB = false
+				end
+			end
+			
+			for i=1,g_TakeBackSquadCounter do
+				if SGroup_Exists("sg_TakeBackWarriors"..i) and SGroup_Count("sg_TakeBackWarriors"..i) > 0 then
+					if g_CanNecronTeleport == true then
+						Cmd_JumpToPos("sg_TakeBackWarriors"..i, EGroup_GetPosition(g_RetakePoint))
+					else
+						Cmd_AttackMovePos("sg_TakeBackWarriors"..i, EGroup_GetPosition(g_RetakePoint))
+					end
+				end
+			end
+		end		
+	end	
+end
+
+function PatrolTakeBackWarriors()
+	for i=1,4 do
+		if i==1 then
+			Marker = "mkr_right_critpoint"
+			Goto = "mkr_left_critpoint"
+		elseif i == 2 then
+			Marker = "mkr_left_critpoint"
+			Goto = "mkr_right_critpoint"
+		elseif i == 3 then
+			Marker = "mkr_top_critpoint"
+			Goto = "mkr_bottom_critpoint"
+		elseif i == 4 then
+			Marker = "mkr_bottom_critpoint"
+			Goto = "mkr_top_critpoint"
+		end
+		for j = 1, g_TakeBackSquadCounter do
+			if Prox_AnySquadNearMarker("sg_TakeBackWarriors"..j, Marker) and SGroup_IsUnderAttack("sg_TakeBackWarriors"..j, false) == false then
+				Cmd_AttackMoveMarker("sg_TakeBackWarriors"..j, Goto)
+			end
+		end
+	end
+end
+
+function LPSkill()
+	for i=1,7 do
+		if EGroup_Exists("eg_ListeningPosts"..i) and EGroup_Count("eg_ListeningPosts"..i) > 0 then
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_LP"..i) then
+				Player_GetAllSquadsNearMarker(g_Player1, "sg_SquadsNearLP"..i.."Counter"..g_LPAttackCounter, "mkr_LP"..i)
+				Command_EntityAbilityPos(g_Player3, EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_ListeningPosts"..i), 1), "necron_listening_post", SGroup_GetPosition("sg_SquadsNearLP"..i.."Counter"..g_LPAttackCounter))
+				g_LPAttackCounter = g_LPAttackCounter + 1
+			end
+		end
+	end
+	if EGroup_Exists("eg_AllLPs") and EGroup_Count("eg_AllLPs") == 0 then
+		Rule_Remove(LPSkill)
+	end		
+end
+
+function TierUpPatrols()
+	if g_PatrolTier < 11 then
+		g_PatrolTier = g_PatrolTier + 1
+	else
+		Rule_Remove(TierUpPatrols)
+	end
+end
+
+function InitialPatrols()
+	SpawnMonolithPatrols()
+	SpawnMonolithPatrols()
+	Rule_AddInterval(SpawnMonolithPatrols, g_SpawnMonolithPatrols)
+end
+
+function SpawnMonolithPatrols()
+	
+	for monolith = 1,4 do
+		
+		if monolith == 1 then
+			Building = "eg_TopBase"
+			Append = "Top"
+			Marker_Spawn = "mkr_top_monolith"
+			Marker_Goto = "mkr_top_monolith_patrol3"
+			Level = g_TopBaseLevel
+			RestoredMonolithName = "sg_TopRestoredMonolith"
+		elseif monolith == 2 then
+			Building = "eg_BottomBase"
+			Append = "Bottom"
+			Marker_Spawn = "mkr_bottom_monolith"
+			Marker_Goto = "mkr_bottom_monolith_patrol3"
+			Level = g_BottomBaseLevel
+			RestoredMonolithName = "sg_BottomRestoredMonolith"
+		elseif monolith == 3 then
+			Building = "eg_RightBase"
+			Append = "Right"
+			Marker_Spawn = "mkr_right_monolith"
+			Marker_Goto = "mkr_right_monolith_patrol3"
+			Level = g_RightBaseLevel
+			RestoredMonolithName = "sg_RightRestoredMonolith"
+		elseif monolith == 4 then
+			Building = "eg_LeftBase"
+			Append = "Left"
+			Marker_Spawn = "mkr_left_monolith"
+			Marker_Goto = "mkr_left_monolith_patrol3"
+			Level = g_LeftBaseLevel
+			RestoredMonolithName = "sg_LeftRestoredMonolith"
+		end
+		
+		for i=1, 1 do
+			
+			local UnitType = World_GetRand(1,g_PatrolTier)
+			
+			-- make it so that at higher tiers, there is a greater chance that harder units spawn
+			if g_PatrolTier > 9 and UnitType <= 4 then
+				if World_GetRand(1,10) > 3 then
+					UnitType = UnitType + World_GetRand(2,6)
+				end
+			end
+			
+			-- 1= necron warriors
+			if UnitType <= 3 then
+				SquadName = "sg_Warriors"..Append
+				SquadCounter = g_WarriorCounterPatrol
+				SquadBluePrint = "necron_basic_warrior_squad_dxp3_sp"
+				NumberofSquads = 1
+				SquadCount = World_GetRand(5,8)
+				MaxUnitType = g_MaxWarriorPop_Patrol
+			-- 2 = wraith
+			elseif UnitType == 4 then
+				SquadName = "sg_Wraiths"..Append
+				SquadCounter = g_WraithCounterPatrol
+				SquadBluePrint = "necron_wraith_squad"
+				NumberofSquads = 1
+				SquadCount = 1
+				MaxUnitType = g_MaxWraithPop_Patrol 
+			-- 4 = flayed ones
+			elseif UnitType == 5 then
+				SquadName = "sg_FlayedOnes"..Append
+				SquadCounter = g_FlayedOneCounterPatrol
+				SquadBluePrint = "necron_flayed_one_squad"
+				NumberofSquads = 1
+				SquadCount = World_GetRand(5,8)
+				MaxUnitType = g_MaxFlayedOnePop_Patrol
+			-- 5 = immortals
+			elseif UnitType == 6 then
+				SquadName = "sg_Immortals"..Append
+				SquadCounter = g_ImmortalCounterPatrol
+				SquadBluePrint = "necron_immortal_squad"
+				NumberofSquads = 1
+				SquadCount = World_GetRand(4,5)
+				MaxUnitType = g_MaxImmortalPop_Patrol
+			-- 6 = destroyers
+			elseif UnitType == 7 then
+				SquadName = "sg_Destroyers"..Append
+				SquadCounter = g_DestroyerCounterPatrol
+				SquadBluePrint = "necron_destroyer_squad"
+				NumberofSquads = 1
+				SquadCount = 1
+				MaxUnitType = g_MaxDestroyerPop_Patrol
+			-- 7 = tomb spider
+			elseif UnitType == 8 then
+				SquadName = "sg_TombSpiders"..Append
+				SquadCounter = g_TombSpiderCounterPatrol
+				SquadBluePrint = "necron_tomb_spyder_squad"
+				NumberofSquads = 1
+				SquadCount = 1
+				MaxUnitType = g_MaxTombSpiderPop_Patrol
+			-- 8 = paraiahs
+			elseif UnitType == 9 then
+				SquadName = "sg_Pariahs"..Append
+				SquadCounter = g_PariahCounterPatrol
+				SquadBluePrint = "necron_pariah_squad"
+				NumberofSquads = 1
+				SquadCount = World_GetRand(7, 8)
+				MaxUnitType = g_MaxPariahPop_Patrol 
+			-- 9 = heavy destroyer
+			elseif UnitType == 10 then
+				SquadName = "sg_HeavyDestroyers"..Append
+				SquadCounter = g_HeavyDestroyerCounterPatrol
+				SquadBluePrint = "necron_heavy_destroyer_squad"
+				NumberofSquads = 1
+				SquadCount = 1
+				MaxUnitType = g_MaxHeavyDestroyerPop_Patrol
+			-- 10 = lord destroyer
+			elseif UnitType == 11 then
+				SquadName = "sg_LordDestroyers"..Append
+				SquadCounter = g_LordDestroyerCounterPatrol
+				SquadBluePrint = "necron_lord_destroyer_squad"
+				NumberofSquads = 1
+				SquadCount = 1
+				MaxUnitType = g_MaxLordDestroyerPop_Patrol
+			end
+			
+			if EGroup_Exists(Building) and EGroup_Count(Building) > 0 and PopCheck(SquadCounter, SquadName, MaxUnitType) == true then
+				if Level < 3 then
+					Util_CreateSquadsAtMarkerEx( g_Player5, SquadName..SquadCounter, SquadBluePrint, Marker_Spawn, NumberofSquads, SquadCount)
+					Cmd_AttackMoveMarker(SquadName..SquadCounter, Marker_Goto)
+				elseif Level == 3 and SGroup_Exists(RestoredMonolithName) and SGroup_Count(RestoredMonolithName) > 0 then
+					Util_CreateSquadsAtPositionEx( g_Player5, SquadName..SquadCounter, SquadBluePrint, SGroup_GetPosition(RestoredMonolithName), NumberofSquads, SquadCount)
+					--Cmd_AttackMoveMarker(SquadName..SquadCounter, "mkr_Player_HQ")
+					Cmd_AttackMovePos(SquadName..SquadCounter, g_GlobalAttackPos)
+				end
+				
+				if SquadBluePrint == "necron_basic_warrior_squad_dxp3_sp" then
+					g_WarriorCounterPatrol = g_WarriorCounterPatrol + 1
+				elseif SquadBluePrint == "necron_wraith_squad" then
+					g_WraithCounterPatrol = g_WraithCounterPatrol + 1
+				elseif SquadBluePrint == "necron_flayed_one_squad" then
+					g_FlayedOneCounterPatrol = g_FlayedOneCounterPatrol + 1
+				elseif SquadBluePrint == "necron_immortal_squad" then
+					g_ImmortalCounterPatrol = g_ImmortalCounterPatrol + 1
+				elseif SquadBluePrint == "necron_pariah_squad" then
+					g_PariahCounterPatrol = g_PariahCounterPatrol + 1
+				elseif SquadBluePrint == "necron_tomb_spyder_squad" then
+					g_TombSpiderCounterPatrol = g_TombSpiderCounterPatrol + 1
+				elseif SquadBluePrint == "necron_destroyer_squad" then
+					g_DestroyerCounterPatrol = g_DestroyerCounterPatrol + 1
+				elseif SquadBluePrint == "necron_heavy_destroyer_squad" then
+					g_HeavyDestroyerCounterPatrol = g_HeavyDestroyerCounterPatrol + 1
+				elseif SquadBluePrint == "necron_lord_destroyer_squad" then
+					g_LordDestroyerCounterPatrol = g_LordDestroyerCounterPatrol + 1
+				end
+			end
+		end
+	end
+end
+
+function PatrolMonoliths()
+	for monolith=1,4 do
+		if monolith == 1 then
+			marker = "mkr_top_monolith_patrol"
+			patrolcounter = g_PatrolCounterN
+			squadname = "sg_PatrolNorth"
+		elseif monolith == 2 then
+			marker = "mkr_bottom_monolith_patrol"
+			patrolcounter = g_PatrolCounterS
+			squadname = "sg_PatrolSouth"
+		elseif monolith == 3 then
+			marker = "mkr_right_monolith_patrol"
+			patrolcounter = g_PatrolCounterE
+			squadname = "sg_PatrolEast"
+		elseif monolith == 4 then
+			marker = "mkr_left_monolith_patrol"
+			patrolcounter = g_PatrolCounterW
+			squadname = "sg_PatrolWest"
+		end
+		for i=1,3 do
+			if Player_AreSquadsNearMarker(g_Player5, marker..i) then
+				Player_GetAllSquadsNearMarker(g_Player5, squadname..i.."counter"..patrolcounter, marker..i)
+				if i==3 then
+					Cmd_AttackMoveMarker(squadname..i.."counter"..patrolcounter, marker.."1")
+				elseif i==1 or i==2 then
+					Cmd_AttackMoveMarker(squadname..i.."counter"..patrolcounter, marker..i + 1)
+				end
+				if monolith == 1 then
+					g_PatrolCounterN = g_PatrolCounterN + 1
+				elseif monolith == 2 then
+					g_PatrolCounterS = g_PatrolCounterS + 1
+				elseif monolith == 3 then
+					g_PatrolCounterE = g_PatrolCounterE + 1
+				elseif monolith == 4 then
+					g_PatrolCounterW = g_PatrolCounterW + 1
+				end
+			end
+		end
+	end
+end
+
+function LowerBaseResponse()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_lowerbase_area") then
+		g_LowerBaseAttackCounter = g_LowerBaseAttackCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_LowerBaseAttack"..g_LowerBaseAttackCounter, "mkr_lowerbase_area")
+		if SGroup_Exists("sg_LowerBaseAttack"..g_LowerBaseAttackCounter) and SGroup_Count("sg_LowerBaseAttack"..g_LowerBaseAttackCounter) >= 2 then
+			if g_UpperLowerBaseIEFired == false then
+				g_UpperLowerBaseIEFired = true
+				Util_StartIntel(EVENTS.IE_EnterBase2)
+			end
+			if SGroup_Exists("sg_LowerBaseDefense") and SGroup_Count("sg_LowerBaseDefense") > 0 then
+				Cmd_AttackSGroup("sg_LowerBaseDefense", "sg_LowerBaseAttack"..g_LowerBaseAttackCounter)
+			end
+			-- jump in necron warriors, and deep strike flayed ones
+			-- flayed ones
+			--[[Util_CreateSquadsAtMarkerEx(g_Player3, "sg_LowerBaseDS1", "necron_flayed_one_squad", "mkr_hiddenspawn", 1, 8)
+			SGroup_DeSpawn("sg_LowerBaseDS1")
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_LowerBaseDS1"), "monolith", Marker_GetPosition(Marker_FromName("mkr_1_deepstrikeflayedones1", "basic_marker")))
+			if g_CanNecronTeleport == true then
+				-- necron warriors
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_LowerBaseTeleportWarriors1", "necron_basic_warrior_squad_dxp3_sp", "mkr_hiddenspawn", 1, 8)
+				Cmd_JumpToMarker("sg_LowerBaseTeleportWarriors1", "mkr_1_warriorsteleport1")
+			end]]
+			
+			if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 then
+				-- flayed ones
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_LowerBaseDS2", "necron_flayed_one_squad", "mkr_upperbase_monolith", 1, 8)
+				SGroup_DeSpawn("sg_LowerBaseDS2")
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_LowerBaseDS2"), "monolith", Marker_GetPosition(Marker_FromName("mkr_1_deepstrikeflayedones2", "basic_marker")))
+				if g_CanNecronTeleport == true then
+					-- necron warriors
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_LowerBaseTeleportWarriors2", "necron_basic_warrior_squad_dxp3_sp", "mkr_upperbase_monolith", 1, 8)
+					Cmd_JumpToMarker("sg_LowerBaseTeleportWarriors2", "mkr_1_warriorsteleport2")
+				end
+			end
+			Rule_Remove(LowerBaseResponse)
+		end
+	end
+
+end
+
+function LowerBaseDefenses()
+	if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 then
+		g_LowerBaseDefensiveTier = g_LowerBaseDefensiveTier + 1
+		if g_LowerBaseDefensiveTier == 1 and t_LowerBaseTierUnitsSpawned[1] == false then
+			SGroup_CreateIfNotFound("sg_LowerBaseDefense")
+			t_LowerBaseTierUnitsSpawned[1] = true
+			-- spawn all the lower tier units
+			for i=1,2 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseWarriors"..i, "necron_basic_warrior_squad_dxp3_sp", "mkr_1_warriors"..i, 1, 8)
+				SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseWarriors"..i)
+			end
+			for i=1,2 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseWraiths"..i, "necron_wraith_squad", "mkr_1_wraiths"..i, 1, 1)
+				SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseWraiths"..i)
+			end
+		elseif g_LowerBaseDefensiveTier == 2 and t_LowerBaseTierUnitsSpawned[2] == false then
+			t_LowerBaseTierUnitsSpawned[2] = true
+			-- spawn mid tier units
+			for i=1,2 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseImmortals"..i, "necron_immortal_squad", "mkr_lowerbase_monolith", 1, 5)
+				Cmd_AttackMoveMarker("sg_LowerDefenseImmortals"..i, "mkr_1_immortals"..i)
+				SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseImmortals"..i)
+			end
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseDestroyer", "necron_destroyer_squad", "mkr_lowerbase_monolith", 1, 1)
+			Cmd_AttackMoveMarker("sg_LowerDefenseDestroyer", "mkr_1_destroyer1")
+			SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseDestroyer")
+			
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseHeavyDestroyer", "necron_heavy_destroyer_squad", "mkr_lowerbase_monolith", 1, 1)
+			Cmd_AttackMoveMarker("sg_LowerDefenseHeavyDestroyer","mkr_1_heavydestroyer1")
+			SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseHeavyDestroyer")
+			
+		elseif g_LowerBaseDefensiveTier == 3 and t_LowerBaseTierUnitsSpawned[3] == false then
+			t_LowerBaseTierUnitsSpawned[3] = true
+			-- spawn high tier units
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefensePariah", "necron_pariah_squad", "mkr_lowerbase_monolith", 1, 8)
+			Cmd_AttackMoveMarker("sg_LowerDefensePariah", "mkr_1_paraiahs1")
+			SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefensePariah")
+			
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_LowerDefenseLordDestroyer", "necron_lord_destroyer_squad", "mkr_lowerbase_monolith", 1, 1)
+			Cmd_AttackMoveMarker("sg_LowerDefenseLordDestroyer", "mkr_1_lorddestroyer1")
+			SGroup_AddGroup("sg_LowerBaseDefense", "sg_LowerDefenseLordDestroyer")
+		elseif g_LowerBaseDefensiveTier > 3 then
+			Rule_Remove(LowerBaseDefenses)
+		end
+	end
+end
+
+function UpperBaseResponse()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_upperbase_area") then
+		g_UpperBaseAttackCounter = g_UpperBaseAttackCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_UpperBaseAttack"..g_UpperBaseAttackCounter, "mkr_upperbase_area")
+		if SGroup_Exists("sg_UpperBaseAttack"..g_UpperBaseAttackCounter) and SGroup_Count("sg_UpperBaseAttack"..g_UpperBaseAttackCounter) >= 2 then
+			if g_UpperLowerBaseIEFired == false then
+				g_UpperLowerBaseIEFired = true
+				Util_StartIntel(EVENTS.IE_EnterBase2)
+			end
+			if SGroup_Exists("sg_UpperBaseDefense") and SGroup_Count("sg_UpperBaseDefense") > 0 then
+				Cmd_AttackSGroup("sg_UpperBaseDefense", "sg_UpperBaseAttack"..g_UpperBaseAttackCounter)
+			end
+			-- jump in necron warriors, and deep strike flayed ones
+			if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 then
+				-- flayed ones
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_UpperBaseDS2", "necron_flayed_one_squad", "mkr_lowerbase_monolith", 1, 8)
+				SGroup_DeSpawn("sg_UpperBaseDS2")
+				Squad_DeepStrikeToPos(SGroup_FromName("sg_UpperBaseDS2"), "monolith", Marker_GetPosition(Marker_FromName("mkr_2_deepstrikeflayedones2", "basic_marker")))
+				if g_CanNecronTeleport == true then
+					-- necron warriors
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_UpperBaseTeleportWarriors2", "necron_basic_warrior_squad_dxp3_sp", "mkr_lowerbase_monolith", 1, 8)
+					Cmd_JumpToMarker("sg_UpperBaseTeleportWarriors2", "mkr_2_warriorsteleport2")
+				end
+			end
+			Rule_Remove(UpperBaseResponse)
+		end
+	end
+end
+
+function UpperBaseDefenses()
+	if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 then
+		g_UpperBaseDefensiveTier = g_UpperBaseDefensiveTier + 1
+		if g_UpperBaseDefensiveTier == 1 and t_UpperBaseTierUnitsSpawned[1] == false then
+			SGroup_CreateIfNotFound("sg_UpperBaseDefense")
+			t_UpperBaseTierUnitsSpawned[1] = true
+			-- spawn in low tier units
+			for i=1,1 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseWarriors"..i, "necron_basic_warrior_squad_dxp3_sp", "mkr_2_warriors"..i, 1, 8)
+				SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseWarriors"..i)
+			end
+			for i=1,2 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseWraiths"..i, "necron_wraith_squad", "mkr_2_wraiths"..i, 1, 1)
+				SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseWraiths"..i)
+			end
+		elseif g_UpperBaseDefensiveTier == 2 and t_UpperBaseTierUnitsSpawned[2] == false then
+			t_UpperBaseTierUnitsSpawned[2] = true
+			-- spawn mid tier units
+			for i=1,1 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseImmortals"..i, "necron_immortal_squad", "mkr_upperbase_monolith", 1, 5)
+				Cmd_AttackMoveMarker("sg_UpperDefenseImmortals"..i, "mkr_2_immortals"..i)
+				SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseImmortals"..i)
+			end
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseDestroyer", "necron_destroyer_squad", "mkr_upperbase_monolith", 1, 1)
+			Cmd_AttackMoveMarker("sg_UpperDefenseDestroyer", "mkr_2_heavydestroyer1")
+			SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseDestroyer")
+			for i=1,1 do
+				Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseTombSpyder"..i, "necron_tomb_spyder_squad", "mkr_upperbase_monolith", 1, 1)
+				Cmd_AttackMoveMarker("sg_UpperDefenseTombSpyder"..i,"mkr_2_tombspyder"..i)
+				SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseTombSpyder"..i)
+			end
+		elseif g_UpperBaseDefensiveTier == 3 and t_UpperBaseTierUnitsSpawned[3] == false then
+			t_UpperBaseTierUnitsSpawned[3] = true
+			-- spawn high tier units
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefensePariah", "necron_pariah_squad", "mkr_upperbase_monolith", 1, 8)
+			Cmd_AttackMoveMarker("sg_UpperDefensePariah", "mkr_2_paraiahs1")
+			SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefensePariah")
+			
+			Util_CreateSquadsAtMarkerEx( g_Player3, "sg_UpperDefenseLordDestroyer", "necron_lord_destroyer_squad", "mkr_upperbase_monolith", 1, 1)
+			Cmd_AttackMoveMarker("sg_UpperDefenseLordDestroyer", "mkr_2_lorddestroyer1")
+			SGroup_AddGroup("sg_UpperBaseDefense", "sg_UpperDefenseLordDestroyer")
+		elseif g_UpperBaseDefensiveTier > 3 then
+			Rule_Remove(UpperBaseDefenses)
+		end
+	end
+end
+
+function SetupCenter()
+	SGroup_CreateIfNotFound("sg_CenterDefense")
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseLordDestroyer1", "necron_lord_destroyer_squad", "mkr_center_lorddestroyer1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseLordDestroyer2", "necron_lord_destroyer_squad", "mkr_center_lorddestroyer2", 1, 1)
+	for i=1,2 do
+		SGroup_AddGroup("sg_CenterDefense", "sg_CenterDefenseLordDestroyer"..i)
+	end
+
+	--, ability is the advance_sp version
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseWraith1", "necron_wraith_squad_sp_dxp3", "mkr_center_wraith1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseWraith2", "necron_wraith_squad_sp_dxp3", "mkr_center_wraith2", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseWraith3", "necron_wraith_squad_sp_dxp3", "mkr_center_wraith3", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseWraith4", "necron_wraith_squad_sp_dxp3", "mkr_center_wraith4", 1, 1)
+	for i=1,4 do
+		SGroup_AddGroup("sg_CenterDefense", "sg_CenterDefenseWraith"..i)
+	end
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseTombSpyder1", "necron_tomb_spyder_squad", "mkr_center_tombspyder1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseTombSpyder2", "necron_tomb_spyder_squad", "mkr_center_tombspyder2", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefenseTombSpyder3", "necron_tomb_spyder_squad", "mkr_center_tombspyder3", 1, 1)
+	for i=1,3 do
+		SGroup_AddGroup("sg_CenterDefense", "sg_CenterDefenseTombSpyder"..i)
+	end
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_immortal_squad", "mkr_center_immortal1", 1, World_GetRand(4,5))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_immortal_squad", "mkr_center_immortal2", 1, World_GetRand(4,5))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_immortal_squad", "mkr_center_immortal3", 1, World_GetRand(4,5))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_pariah_squad", "mkr_center_paraiah1", 1, World_GetRand(6,8))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_pariah_squad", "mkr_center_paraiah2", 1, World_GetRand(6,8))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_destroyer_squad", "mkr_center_destroyer1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_destroyer_squad", "mkr_center_destroyer2", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_heavy_destroyer_squad", "mkr_center_heavydestroyer1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_CenterDefense", "necron_heavy_destroyer_squad", "mkr_center_heavydestroyer2", 1, 1)
+	
+	Rule_AddInterval(CenterAttack, 3)
+	
+	-- skillz
+	Rule_AddInterval(UseWraithSkill,1)
+	--Rule_AddInterval(UseLordDestroyerSkill,2)
+	Rule_AddInterval(UseTombSpyderSkill,3)
+end
+
+function CenterAttack()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_center_area") and SGroup_Exists("sg_CenterDefense") and SGroup_Count("sg_CenterDefense") > 0 then
+		g_PlayerSquadsNearCenterCounter = g_PlayerSquadsNearCenterCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter, "mkr_center_area")
+		if SGroup_Exists("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter) and SGroup_Count("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter) >= 3 then
+			Cmd_AttackSGroup("sg_CenterDefense", "sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter)
+			if g_CenterAttackSent == false then
+				g_CenterAttackSent = true
+				Util_StartIntel(EVENTS.IE_EnterBase1)
+				if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 then
+					-- flayed ones
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_CenterDeepStrike1", "necron_flayed_one_squad", "mkr_lowerbase_monolith", 1, 8)
+					SGroup_DeSpawn("sg_CenterDeepStrike1")
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_CenterDeepStrike1"), "monolith", SGroup_GetPosition("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter))
+					if g_CanNecronTeleport == true then
+						-- necron warriors
+						Util_CreateSquadsAtMarkerEx(g_Player3, "sg_CenterTeleportWarriors1", "necron_basic_warrior_squad_dxp3_sp", "mkr_lowerbase_monolith", 1, 8)
+						Cmd_JumpToPos("sg_CenterTeleportWarriors1", SGroup_GetPosition("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter))
+					end
+				end
+				if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 then
+					-- flayed ones
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_CenterDeepStrike2", "necron_flayed_one_squad", "mkr_upperbase_monolith", 1, 8)
+					SGroup_DeSpawn("sg_CenterDeepStrike2")
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_CenterDeepStrike2"), "monolith", SGroup_GetPosition("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter))
+					if g_CanNecronTeleport == true then
+						-- necron warriors
+						Util_CreateSquadsAtMarkerEx(g_Player3, "sg_CenterTeleportWarriors2", "necron_basic_warrior_squad_dxp3_sp", "mkr_upperbase_monolith", 1, 8)
+						Cmd_JumpToPos("sg_CenterTeleportWarriors2", SGroup_GetPosition("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter))
+					end
+				end
+			end
+		end
+	elseif SGroup_Exists("sg_CenterDefense") and SGroup_Count("sg_CenterDefense") == 0 then
+		Rule_Remove(CenterAttack)
+	end
+end
+
+function UseLordDestroyerSkill()
+	-- both of the necron lord destroyer skills are extensions, and thus i'd need programming time to get them to work.  this function is currently unused, but would work if you replaced the cmd_castability with a working new command
+	local Count = 0
+	local FindVehicle = function( sgroupid, itemindex, squadID )
+		g_TempSquadCounter = g_TempSquadCounter + 1
+		SGroup_Create("temp"..g_TempSquadCounter)
+		SGroup_Add("temp"..g_TempSquadCounter, SGroup_GetSpawnedSquadAt(sgroupid,itemindex))
+		local flag = SGroup_IsVehicle("temp"..g_TempSquadCounter)
+		if flag == true then
+			SGroup_CreateIfNotFound("sg_LordDestroyerTarget")
+			SGroup_AddGroup("sg_LordDestroyerTarget", "temp"..g_TempSquadCounter)
+			return true
+		else
+			return false
+		end
+    end
+	
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_center_area") then
+		g_PlayerSquadsNearCenterCounter = g_PlayerSquadsNearCenterCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter, "mkr_center_area")
+		SGroup_ForEach("sg_PlayerSquadsNearCenter"..g_PlayerSquadsNearCenterCounter, FindVehicle)
+		if SGroup_Exists("sg_LordDestroyerTarget") and SGroup_Count("sg_LordDestroyerTarget") > 0 then
+			for i=1,2 do
+				if SGroup_Exists("sg_CenterDefenseLordDestroyer"..i) and SGroup_Count("sg_CenterDefenseLordDestroyer"..i) > 0 then
+					Cmd_CastAbilityPos("sg_CenterDefenseLordDestroyer"..i, "necron_stun", SGroup_GetPosition("sg_LordDestroyerTarget"))
+				end
+			end
+		end
+	end	
+	
+	for i=1,2 do
+		if SGroup_Exists("sg_CenterDefenseLordDestroyer"..i) and SGroup_Count("sg_CenterDefenseLordDestroyer"..i) == 0 then
+			Count = Count + 1
+		end
+	end	
+	if Count == 2 then
+		Rule_Remove(UseLordDestroyerSkill)
+	end
+end
+
+function UseWraithSkill()
+	local Count = 0
+	for i=1,4 do
+		if SGroup_Exists("sg_CenterDefenseWraith"..i) and SGroup_Count("sg_CenterDefenseWraith"..i) > 0 and SGroup_IsUnderAttack("sg_CenterDefenseWraith"..i, false) then
+			Cmd_CastAbilitySelf("sg_CenterDefenseWraith"..i, "necron_wraith_phase_shift_advance_sp")
+		elseif SGroup_Exists("sg_CenterDefenseWraith"..i) and SGroup_Count("sg_CenterDefenseWraith"..i) == 0 then
+			Count = Count + 1
+		end
+	end
+	
+	if Count == 4 then
+		Rule_Remove(UseWraithSkill)
+	end
+end
+
+function UseTombSpyderSkill()
+	local Count = 0
+	for i=1,3 do
+		if SGroup_Exists("sg_CenterDefenseTombSpyder"..i) and SGroup_Count("sg_CenterDefenseTombSpyder"..i) > 0 and SGroup_IsUnderAttack("sg_CenterDefenseTombSpyder"..i, false) and PopCheck(g_AttackScarabCounter, "sg_AttackScarab", g_MaxAttackScarab) then
+			Util_CreateSquadsAtPositionEx(g_Player3, "sg_AttackScarab"..g_AttackScarabCounter, "necron_scarab_squad", SGroup_GetPosition("sg_CenterDefenseTombSpyder"..i), 1, 1)
+			g_AttackScarabCounter = g_AttackScarabCounter + 1
+		elseif SGroup_Exists("sg_CenterDefenseTombSpyder"..i) and SGroup_Count("sg_CenterDefenseTombSpyder"..i) == 0 then
+			Count = Count + 1
+		end
+	end
+	
+	if Count == 3 then
+		Rule_Remove(UseTombSpyderSkill)
+	end
+end
+
+function SetupRelic()
+	SGroup_CreateIfNotFound("sg_RelicDefense")
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_destroyer_squad", "mkr_relic_destroyer1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_heavy_destroyer_squad", "mkr_relic_destroyer2", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_lord_destroyer_squad", "mkr_relic_destroyer3", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_pariah_squad", "mkr_relic_paraiah1", 1, World_GetRand(6,8))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefenseWraith1", "necron_wraith_squad", "mkr_relic_wraith1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefenseWraith2", "necron_wraith_squad", "mkr_relic_wraith2", 1, 1)
+	for i=1,2 do
+		SGroup_AddGroup("sg_RelicDefense", "sg_RelicDefenseWraith"..i)
+	end
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_immortal_squad", "mkr_relic_immortal1", 1, World_GetRand(4,5))
+	Util_CreateSquadsAtMarkerEx( g_Player3, "sg_RelicDefense", "necron_immortal_squad", "mkr_relic_immortal2", 1, World_GetRand(4,5))
+	
+	Rule_AddInterval(RelicAttack, 3)
+end
+
+function RelicAttack()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") and SGroup_Exists("sg_RelicDefense") and SGroup_Count("sg_RelicDefense") > 0 then
+		g_PlayerSquadsNearRelicCounter = g_PlayerSquadsNearRelicCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter, "mkr_relicarea")
+		if SGroup_Exists("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter) and SGroup_Count("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter) >= 2 then
+			Cmd_AttackSGroup("sg_RelicDefense", "sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter)
+			if g_RelicAttackSent == false then
+				Util_StartIntel(EVENTS.IE_DefendTheRelic)
+				g_RelicAttackSent = true
+				if EGroup_Exists("eg_LowerBase") and EGroup_Count("eg_LowerBase") > 0 then
+					-- flayed ones
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_RelicDeepStrike1", "necron_flayed_one_squad", "mkr_lowerbase_monolith", 1, 8)
+					SGroup_DeSpawn("sg_RelicDeepStrike1")
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_RelicDeepStrike1"), "monolith", SGroup_GetPosition("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter))
+					if g_CanNecronTeleport == true then
+						-- necron warriors
+						Util_CreateSquadsAtMarkerEx(g_Player3, "sg_RelicTeleportWarriors1", "necron_basic_warrior_squad_dxp3_sp", "mkr_lowerbase_monolith", 1, 8)
+						Cmd_JumpToPos("sg_RelicTeleportWarriors1", SGroup_GetPosition("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter))
+					end
+				end
+				if EGroup_Exists("eg_UpperBase") and EGroup_Count("eg_UpperBase") > 0 then
+					-- flayed ones
+					Util_CreateSquadsAtMarkerEx(g_Player3, "sg_RelicDeepStrike2", "necron_flayed_one_squad", "mkr_upperbase_monolith", 1, 8)
+					SGroup_DeSpawn("sg_RelicDeepStrike2")
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_RelicDeepStrike2"), "monolith", SGroup_GetPosition("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter))
+					if g_CanNecronTeleport == true then
+						-- necron warriors
+						Util_CreateSquadsAtMarkerEx(g_Player3, "sg_RelicTeleportWarriors2", "necron_basic_warrior_squad_dxp3_sp", "mkr_upperbase_monolith", 1, 8)
+						Cmd_JumpToPos("sg_RelicTeleportWarriors2", SGroup_GetPosition("sg_PlayerSquadsNearRelic"..g_PlayerSquadsNearRelicCounter))
+					end
+				end
+			end
+		end
+	elseif SGroup_Exists("sg_RelicDefense") and SGroup_Count("sg_RelicDefense") == 0 then
+		Rule_Remove(RelicAttack)
+	end
+end
+
+function ScarabAttack()
+	local Count = 0
+	Player_GetSquads(g_Player1)
+	local bpTable = Util_MakeBlueprintTable("chaos_squad_hell_talon", "dark_eldar_squad_raven", "eldar_squad_nightwing", "guard_squad_marauder", 
+	"necron_scarab_squad", "necron_builder_scarab_squad", "necron_builder_scarab_squad_advance_sp", "ork_squad_fighta_bomba", "space_marine_squad_tempest", "tau_barracuda_squad", "sisters_squad_lightning")
+	
+	local FindAir = function( sgroupid, itemindex, squadID )
+		g_TempSquadCounter_ScarabAttack = g_TempSquadCounter_ScarabAttack + 1
+		SGroup_Create("temp"..g_TempSquadCounter_ScarabAttack)
+		SGroup_Add("temp"..g_TempSquadCounter_ScarabAttack, SGroup_GetSpawnedSquadAt(sgroupid,itemindex))
+		local flag = SGroup_ContainsBlueprints("temp"..g_TempSquadCounter_ScarabAttack,bpTable,false)
+		if flag == true then
+			g_AirTargetCounter = g_AirTargetCounter + 1
+			SGroup_CreateIfNotFound("sg_AirTarget"..g_AirTargetCounter)
+			SGroup_AddGroup("sg_AirTarget"..g_AirTargetCounter, "temp"..g_TempSquadCounter_ScarabAttack)
+			return true
+		else
+			return false
+		end
+    end
+	
+	
+	SGroup_ForEach( SGroup_FromName("__Player1000Squads"), FindAir )
+	if SGroup_Exists("sg_AirTarget"..g_AirTargetCounter) and SGroup_Count("sg_AirTarget"..g_AirTargetCounter) > 0 then
+		-- check if we have pop for scarabs, spawn it, and tell ALL other scarabs to take out this plane
+		for i=1,g_ScarabAttackNumber do
+			if EGroup_Exists("eg_BottomBase") and EGroup_Count("eg_BottomBase") > 0 then
+				Monolith = "eg_BottomBase"
+			elseif EGroup_Exists("eg_TopBase") and EGroup_Count("eg_TopBase") > 0 then
+				Monolith = "eg_TopBase"
+			elseif EGroup_Exists("eg_LeftBase") and EGroup_Count("eg_LeftBase") > 0 then
+				Monolith = "eg_LeftBase"
+			elseif EGroup_Exists("eg_RightBase") and EGroup_Count("eg_RightBase") > 0 then
+				Monolith = "eg_RightBase"
+			end
+			if PopCheck(g_ScarabCounter, "sg_AttackScarab", g_MaxScarab) then
+				Util_CreateSquadsAtPositionEx(g_Player3, "sg_AttackScarab"..g_ScarabCounter, "necron_scarab_squad", EGroup_GetPosition(Monolith), 1,World_GetRand(10,14))
+			end
+			for i=0,g_ScarabCounter do
+				if SGroup_Exists("sg_AttackScarab"..i) and SGroup_Count("sg_AttackScarab"..i) > 0 then
+					Cmd_AttackSGroup("sg_AttackScarab"..i, "sg_AirTarget"..g_AirTargetCounter)
+				end
+			end
+		end
+	end
+end
+
+function IncreaseScarabAttack()
+	if g_ScarabAttackNumber < 2 then
+		g_ScarabAttackNumber = g_ScarabAttackNumber + 1
+	else
+		Rule_Remove(IncreaseScarabAttack)
+	end
+end
+
+
+function IntelligentlyMoveAttacks()
+	if EGroup_Exists("eg_Player_HQ") and EGroup_Count("eg_Player_HQ") == 0 then
+		-- find the next HQ to attack
+		Race = MetaMap_GetPlayerNRaceName(0)
+		if Race == "chaos_marine_race" then
+			hqbp = "chaos_hq"
+		elseif Race == "guard_race" then
+			hqbp = "guard_hq"
+		elseif Race == "ork_race" then	
+			hqbp = "ork_hq"
+		elseif Race == "space_marine_race" then
+			hqbp = "space_marine_hq"
+		elseif Race == "tau_race" then
+			hqbp = "tau_hq"
+		elseif Race == "necron_race" then
+			hqbp = "monolith"
+		elseif Race == "eldar_race" then
+			hqbp = "eldar_hq"
+		elseif Race == "dark_eldar_race" then
+			hqbp = "dark_eldar_hq"
+		elseif Race == "sisters_race" then
+			hqbp = "sisters_hq"
+		end
+		Player_GetEntities( g_Player1 )
+		if EGroup_Exists("__Player1000Entities") and EGroup_CountSpawned("__Player1000Entities") > 0 then
+			EGroup_CreateIfNotFound("eg_targettemp")
+			EGroup_CreateIfNotFound("eg_GlobalAttackTarget")
+			EGroup_Clear("eg_targettemp")
+			EGroup_Clear("eg_GlobalAttackTarget")
+			Util_GetEntitiesByBP( "__Player1000Entities", "eg_targettemp", hqbp )
+			if EGroup_Exists("eg_targettemp") and EGroup_Count("eg_targettemp") > 0 then
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_targettemp"), 1))
+			end
+			if EGroup_Exists("eg_GlobalAttackTarget") and EGroup_Count("eg_GlobalAttackTarget") > 0 then
+				-- pick the first item in the egroup to attack 
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			else
+				-- search for another building to attack
+				EGroup_Clear("eg_GlobalAttackTarget")
+				local Rand = World_GetRand(1,EGroup_CountSpawned("__Player1000Entities"))
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("__Player1000Entities"), Rand))
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			end
+		else
+			-- the player should lose if they have no entities left
+			Lose()
+		end
+	else
+		g_GlobalAttackPos = EGroup_GetPosition("eg_Player_HQ")
+	end
+end
+
+function Lose()
+	if Player_HasBuildingsExcept(g_Player1, t_building_exceptions) == false then
+		if Player_HasSquadsExcept(g_Player1, t_unit_exceptions ) == false then
+			Rule_RemoveAll()
+			Fade_Start(4, false)
+			World_SetTeamWin( g_Player2, "" )
+			Rule_AddIntervalEx( GameOver,5,1 )
+		end
+	end
+end
+
+function GameOver()
+	World_SetGameOver()
+end
+
+---------------------------------------------
+--[[--------------IEs-------------]]
+---------------------------------------------
+
+function IE_GameStart()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_GameIntro)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_GameIntro)
+	end
+	Rule_AddInterval(Rule_Objective_DestroyFourBases, 1)
+	Rule_AddOneShot(IE_TellPlayerHowToStopPower, 150)
+	Rule_AddOneShot(IE_Taunt1, 900)
+end
+
+function IE_TellPlayerHowToStopPower()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_TellPlayerHowToStopPower)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_TellPlayerHowToStopPower)
+	end
+end
+
+function IE_AttackFromUpperLowerBases()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_UpperLowerBasesAttack)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_UpperLowerBasesAttack)
+	end
+end
+
+function IE_Taunt1()
+	Util_StartIntel(EVENTS.IE_Taunt1)
+end
+
+function IE_CritPointCaptured()
+	-- first crit point captured will fire this
+	if (g_PauseSTimer == true or g_PauseNTimer == true or g_PauseETimer == true or g_PauseWTimer == true) and t_PlayerOwnsCritPointIEs[1] == false then
+		t_PlayerOwnsCritPointIEs[1] = true
+		Util_StartIntel(EVENTS.IE_FirstCritPointTaken)		
+	end
+	
+	-- figure out how many crit points are currently held
+	local Count = 0
+	if g_PauseSTimer == true then 
+		Count = Count + 1
+	end
+	if g_PauseNTimer == true then
+		Count = Count + 1
+	end
+	if g_PauseETimer == true then
+		Count = Count + 1
+	end
+	if g_PauseWTimer == true then
+		Count = Count + 1
+	end
+	
+	-- player has 2 crit points captured
+	if Count == 2 and t_PlayerOwnsCritPointIEs[2] == false then
+		Util_StartIntel(EVENTS.IE_PlayerTakes2Points)
+		t_PlayerOwnsCritPointIEs[2] = true
+	end
+	-- player has 3 crit points captured
+	if Count == 3 and t_PlayerOwnsCritPointIEs[3] == false then
+		Util_StartIntel(EVENTS.IE_PlayerTakes3Points)
+		t_PlayerOwnsCritPointIEs[3] = true
+	end
+	
+	local Remove = 0
+	for i=1,3 do
+		if t_PlayerOwnsCritPointIEs[i] == true then
+			Remove = Remove + 1
+		end
+	end
+	if Remove == 3 then
+		Rule_Remove(IE_CritPointCaptured)
+	end
+end
+
+function IE_CapturedPointBack()
+	if g_PauseSTimer == true and g_CapturedPointBackFlag == false then
+		g_CapturedPointBackFlag = true
+		g_PointCapturedForCaptureBackIE = "South"
+	end
+	if g_PauseNTimer == true and g_CapturedPointBackFlag == false then
+		g_CapturedPointBackFlag = true
+		g_PointCapturedForCaptureBackIE = "North"
+	end
+	if g_PauseETimer == true and g_CapturedPointBackFlag == false then
+		g_CapturedPointBackFlag = true
+		g_PointCapturedForCaptureBackIE = "East"
+	end
+	if g_PauseWTimer == true and g_CapturedPointBackFlag == false then
+		g_CapturedPointBackFlag = true
+		g_PointCapturedForCaptureBackIE = "West"
+	end	
+	
+	if g_CapturedPointBackFlag == true then
+		if g_PointCapturedForCaptureBackIE == "South" then
+			if EGroup_IsCapturedByPlayer("eg_SouthCriticalPoint", g_Player3, false) then
+				Util_StartIntel(EVENTS.IE_CritPointTakenBack)
+				Rule_Remove(IE_CapturedPointBack)
+				return
+			end
+		elseif g_PointCapturedForCaptureBackIE == "North" then
+			if EGroup_IsCapturedByPlayer("eg_NorthCriticalPoint", g_Player3, false) then
+				Util_StartIntel(EVENTS.IE_CritPointTakenBack)
+				Rule_Remove(IE_CapturedPointBack)
+				return
+			end
+		elseif g_PointCapturedForCaptureBackIE == "East" then	
+			if EGroup_IsCapturedByPlayer("eg_EastCriticalPoint", g_Player3, false) then
+				Util_StartIntel(EVENTS.IE_CritPointTakenBack)
+				Rule_Remove(IE_CapturedPointBack)
+				return
+			end
+		elseif g_PointCapturedForCaptureBackIE == "West" then
+			if EGroup_IsCapturedByPlayer("eg_WestCriticalPoint", g_Player3, false) then
+				Util_StartIntel(EVENTS.IE_CritPointTakenBack)
+				Rule_Remove(IE_CapturedPointBack)
+				return
+			end
+		end
+	end
+end
+
+function IE_PartialMonolithRestore()
+	if (g_RightBaseLevel == 1 or g_LeftBaseLevel == 1 or g_TopBaseLevel == 1 or g_BottomBaseLevel == 1) and t_MonolithUpgradeIEs[1] == false then
+		-- play ie
+		t_MonolithUpgradeIEs[1] = true
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+			Util_StartIntel(EVENTS.IE_Chaos_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+			Util_StartIntel(EVENTS.IE_SM_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_OneMonolithPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_OneMonolithPartiallyCharged)
+		end		
+	elseif (g_RightBaseLevel == 2 or g_LeftBaseLevel == 2 or g_TopBaseLevel == 2 or g_BottomBaseLevel == 2) and t_MonolithUpgradeIEs[2] == false then
+		-- play other ie
+		t_MonolithUpgradeIEs[2] = true
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+			Util_StartIntel(EVENTS.IE_Chaos_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+			Util_StartIntel(EVENTS.IE_SM_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_TwoMonolithsPartiallyCharged)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_TwoMonolithsPartiallyCharged)
+		end
+	end
+	
+	if t_MonolithUpgradeIEs[1] == true and t_MonolithUpgradeIEs[2] == true then
+		Rule_Remove(IE_PartialMonolithRestore)
+	end
+end
+
+function SummoningCoreObjAdded()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_DisableSummoningCoreObj)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_DisableSummoningCoreObj)
+	end
+end
+
+function RestoredMonolith()
+	if g_TopBaseLevel == 3 and t_RestoredMonolithIEsPlayed[1] == false then
+		if g_RestoredMonolithIEFlag == true then
+			g_RestoredMonolithIEFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithRandom4)
+		elseif g_RestoredMonolithLaughterFlag == true then
+			g_RestoredMonolithLaughterFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithLaughter)
+		end
+		t_RestoredMonolithIEsPlayed[1] = true
+	end
+	if g_BottomBaseLevel == 3 and t_RestoredMonolithIEsPlayed[2] == false then
+		if g_RestoredMonolithIEFlag == true then
+			g_RestoredMonolithIEFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithRandom2)
+		elseif g_RestoredMonolithLaughterFlag == true then
+			g_RestoredMonolithLaughterFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithLaughter)
+		end
+		t_RestoredMonolithIEsPlayed[2] = true
+	end
+	if g_LeftBaseLevel == 3 and t_RestoredMonolithIEsPlayed[3] == false then
+		if g_RestoredMonolithIEFlag == true then
+			g_RestoredMonolithIEFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithRandom1)
+		elseif g_RestoredMonolithLaughterFlag == true then
+			g_RestoredMonolithLaughterFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithLaughter)
+		end
+		t_RestoredMonolithIEsPlayed[3] = true
+	end
+	if g_RightBaseLevel == 3 and t_RestoredMonolithIEsPlayed[4] == false then
+		if g_RestoredMonolithIEFlag == true then
+			g_RestoredMonolithIEFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithRandom3)
+		elseif g_RestoredMonolithLaughterFlag == true then
+			g_RestoredMonolithLaughterFlag = false
+			Util_StartIntel(EVENTS.IE_RestoredMonolithLaughter)
+		end
+		t_RestoredMonolithIEsPlayed[4] = true
+	end
+	
+	local removerule = 0
+	for i=1,4 do
+		if t_RestoredMonolithIEsPlayed[i] == true then
+			removerule = removerule + 1
+		end
+	end
+	if removerule >= 4 then
+		Rule_Remove(RestoredMonolith)
+		Rule_Remove(RestoredMonolithCoolDowns)
+	end
+	
+end
+
+function RestoredMonolithCoolDowns()
+	-- cooldown for the restored monolith ie's
+	if g_RestoredMonolithIEFlag == false then
+		g_RestoredMonolithIECounter = g_RestoredMonolithIECounter + 1
+		if g_RestoredMonolithIECounter >= 40 then
+			g_RestoredMonolithIECounter = 0
+			g_RestoredMonolithIEFlag = true
+		end
+	end
+	
+	-- cooldown for the restored monolith laugh track
+	if g_RestoredMonolithLaughterFlag == false then
+		g_RestoredMonolithLaughterCounter = g_RestoredMonolithLaughterCounter + 1
+		if g_RestoredMonolithLaughterCounter >= 20 then
+			g_RestoredMonolithLaughterCounter = 0
+			g_RestoredMonolithLaughterFlag = true
+		end
+	end
+end

@@ -1,0 +1,117 @@
+----------------------------------------------------------------------------------------------------------------
+-- Wrapper objects for entity groups and squad groups.
+-- (c) 2003 Relic Entertainment Inc.
+
+-- Caller object for squad groups.  This should have the same functions as EGroupCaller
+
+SGroupCaller = {
+	GetCount = function( id ) 									return SGroup_Count( id ) end,
+	GetDeSpawnedCount = function( id ) 									return SGroup_CountDeSpawned( id ) end,
+	GetPosition = function( id ) 									return SGroup_GetPosition( id ) end,
+	Create = function( name )									return SGroup_Create( name ) end,
+	CreateIfNotFound = function( name )						return SGroup_CreateIfNotFound( name ) end,
+	FromName = function( name )								return SGroup_FromName( name ) end,
+	Exists = function( name )										return SGroup_Exists( name ) end,
+	GetDistanceToPoint = function( id, point, closest ) 	return World_DistanceSGroupToPoint( id, point, closest ) end,
+	
+	GetItemPosition = function( itemid ) 						return Squad_GetPosition( itemid ) end,
+	GetItemPlayer = function( itemid )							return Squad_GetPlayerOwner( itemid ) end,
+	GetItemActiveCommand = function( itemid )				return Squad_GetActiveCommand( itemid ) end,
+	
+	IsItemInCover = function( itemid, all )						return Squad_IsInCover( itemid, all ) end,
+	IsItemUnderAttack = function( itemid )					return Squad_IsUnderAttack( itemid ) end,
+	IsItemUnderAttackByPlayer = function( itemid, player )				return Squad_IsUnderAttackByPlayer( itemid, player ) end,
+	CanItemSeeEntity = function( itemid, entity )			return Squad_CanSeeEntity( itemid, entity ) end,
+	CanItemSeeSquad = function( itemid, squad )			return Squad_CanSeeSquad( itemid, squad ) end,
+	
+	ForEachAllOrAny = function( groupId, all, func ) 		return SGroup_ForEachAllOrAny( groupId, all, func ) end,
+	ForEach = function( groupId, func ) 						return SGroup_ForEach( groupId, func ) end,
+	ForEachAllOrAnyEx = function( groupId, all, func, spawned, despawned ) 		return SGroup_ForEachAllOrAnyEx( groupId, all, func, spawned, despawned ) end,
+	ForEachEx = function( groupId, func, spawned, despawned ) 						return SGroup_ForEachEx( groupId, func, spawned, despawned ) end,
+	ForEachExPosition = function( groupid, func, spawned, despawned, position )	return SGroup_ForEachExPosition( groupid, func, position, spawned, despawned ) end,
+	
+	AddItem = function( id, item )								SGroup_Add( id, item ) end,
+	RemoveItem = function( id, item )								SGroup_Remove( id, item ) end,
+	
+	GetItemHealth = function ( itemid )						return Squad_GetHealth( itemid ) end,
+	GetItemHealthMax = function ( itemid )					return Squad_GetHealthMax( itemid ) end,
+	SetItemHealth= function ( itemid, percent )				return Squad_SetHealth( itemid, percent ) end,
+	
+	SetPlayerOwner = function( itemid, owner )				Squad_SetPlayerOwner( itemid, owner )  end,
+	
+	DestroyItem = function( itemid )							Squad_Destroy( itemid ) end,
+	
+	GetItemBlueprint = function( itemid )						if Squad_IsAttached( itemid ) then 
+																				return Squad_GetBlueprintName( itemid ), Squad_GetAttachedBlueprintName( itemid ) 
+																			else 
+																				return Squad_GetBlueprintName( itemid ) 
+																			end end,
+																			
+	BlueprintExists = function( bpname )						return SBP_Exists( bpname ) end,
+	
+	GetGameID = function( itemid )								return Squad_GetGameID( itemid ) end,
+	ApplyModifier = function( itemid, Modifier )				return Modifier_ApplyToSquad( Modifier, itemid ) end,
+	
+	GetHealthInvulnerable = function( itemid )				return Squad_GetHealthInvulnerable( itemid ) end,
+	SetHealthInvulnerable = function( itemid, enabled )	Squad_SetHealthInvulnerable( itemid, enabled ) end,
+	
+	ReSpawnItem = function( itemid )								Squad_Spawn( itemid, Squad_GetPositionDeSpawned( itemid ) ) end,
+	ReSpawnItemPosition = function( itemid, position)	Squad_Spawn( itemid, position ) end,
+	DeSpawnItem = function( itemid )								Squad_DeSpawn( itemid ) end,
+	
+	IsSelected = function( itemid )							return Misc_IsSquadSelected( itemid ) end,
+}
+
+-- Caller object for entity groups
+EGroupCaller = {
+	GetCount = function( id ) 										return EGroup_Count( id ) end,
+	GetDeSpawnedCount = function( id ) 									return EGroup_CountDeSpawned( id ) end,
+	GetPosition = function( id ) 									return EGroup_GetPosition( id ) end,
+	Create = function ( name )									return EGroup_Create( name ) end,
+	CreateIfNotFound = function ( name )									return EGroup_CreateIfNotFound( name ) end,
+	FromName = function( name )								return EGroup_FromName( name ) end,
+	Exists = function( name )										return EGroup_Exists( name ) end,
+	GetDistanceToPoint = function( id, point, closest ) 	return World_DistanceEGroupToPoint( id, point, closest ) end,
+	
+	GetItemPosition = function( itemid ) 						return Entity_GetPosition( itemid ) end,
+	GetItemPlayer = function( itemid )							return Entity_GetPlayerOwner( itemid ) end,
+	GetItemActiveCommand = function( itemid )				return Entity_GetActiveCommand( itemid ) end,
+	
+	IsItemInCover = function( itemid, all )						return Entity_IsInCover( itemid ) end,
+	IsItemUnderAttack = function( itemid )					return Entity_IsUnderAttack( itemid ) end,
+	IsItemUnderAttackByPlayer = function( itemid, player )				return Entity_IsUnderAttackByPlayer( itemid, player ) end,
+	CanItemSeeEntity = function( itemid, entity )			return Entity_CanSeeEntity( itemid, entity ) end,
+	CanItemSeeSquad = function( itemid, squad )			return Entity_CanSeeSquad( itemid, squad ) end,
+	
+	ForEachAllOrAny = function( groupId, all, func ) 		return EGroup_ForEachAllOrAny( groupId, all, func ) end,
+	ForEach = function( groupId, func ) 						return EGroup_ForEach( groupId, func ) end,
+	ForEachAllOrAnyEx = function( groupId, all, func, spawned, despawned ) 		return EGroup_ForEachAllOrAnyEx( groupId, all, func, spawned, despawned ) end,
+	ForEachEx = function( groupId, func, spawned, despawned ) 						return EGroup_ForEachEx( groupId, func, spawned, despawned ) end,
+	ForEachExPosition = function( groupid, func, spawned, despawned, position )	return EGroup_ForEachExPosition( groupid, func, position, spawned, despawned ) end,	
+		
+	AddItem = function( id, item )								EGroup_Add( id, item ) end,
+	RemoveItem = function( id, item )								EGroup_Remove( id, item ) end,
+	
+	GetItemHealth = function ( itemid )						return Entity_GetHealth( itemid ) end,
+	GetItemHealthMax = function ( itemid )					return Entity_GetHealthMax( itemid ) end,
+	SetItemHealth= function ( itemid, percent )				return Entity_SetHealth( itemid, percent ) end,
+	
+	SetPlayerOwner = function( itemid, owner )				Entity_SetPlayerOwner( itemid, owner )  end,
+	
+	DestroyItem = function( itemid )							Entity_Destroy( itemid ) end,
+	
+	GetItemBlueprint = function( itemid )						return Entity_GetBlueprintName( itemid ) end,
+	BlueprintExists = function( bpname )						return EBP_Exists( bpname ) end,
+	
+	GetGameID = function( itemid )								return Entity_GetGameID( itemid ) end,
+	ApplyModifier = function( itemid, Modifier )				return Modifier_ApplyToEntity( Modifier, itemid ) end,
+	
+	GetHealthInvulnerable = function( itemid )				return Entity_GetHealthInvulnerable( itemid ) end,
+	SetHealthInvulnerable = function( itemid, enabled )	Entity_SetHealthInvulnerable( itemid, enabled ) end,
+
+	ReSpawnItem = function( itemid )								Entity_Spawn( itemid ) end,
+	ReSpawnItemPosition = function( itemid, position)	Entity_SetPosition( itemid, position ) Entity_Spawn( itemid ) end,	
+	DeSpawnItem = function( itemid )								Entity_DeSpawn( itemid ) end,
+	
+	IsSelected = function( itemid )							return Misc_IsEntitySelected( itemid ) end,
+}

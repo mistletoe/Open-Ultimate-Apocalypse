@@ -1,0 +1,41 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+GameData["modifiers"]["modifier_01"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
+GameData["modifiers"]["modifier_01"]["value"] = 10
+GameData["modifiers"]["modifier_02"] = Reference([[modifiers\income_cap_requisition_player_modifier.lua]])
+GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_multiplication.lua]])
+GameData["modifiers"]["modifier_02"]["value"] = 2
+--REPLACE_ME
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\required_total_pop.lua]])
+GameData["requirements"]["required_1"]["population_required"] = 300
+GameData["requirements"]["required_2"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_2"]["research_name"] = [[research\ork_requisition_research_5.lua]]
+GameData["requirements"]["required_3"] = Reference([[requirements\required_ownership.lua]])
+GameData["requirements"]["required_3"]["own_name"] = [[strategic_objective_struct]]
+GameData["requirements"]["required_3"]["owned_count"] = 1
+GameData["requirements"]["required_4"] = Reference([[requirements\required_ownership.lua]])
+GameData["requirements"]["required_4"]["own_name"] = [[relic_struct]]
+GameData["requirements"]["required_4"]["owned_count"] = 1
+GameData["requirements"]["required_10"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["requirements"]["required_10"]["research_name"] = [[research\ork_requisition_research_5.lua]]
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["power"] = 20000
+GameData["time_cost"]["cost"]["requisition"] = 3600
+GameData["time_cost"]["time_seconds"] = 300
+GameData["ui_hotkey_name"] = [[hotkey_s]]
+GameData["ui_index_hint"] = 6
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$95521]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$18210898]] -- - Because of the high Ork population, Grot Scavengers will loot productions of other Strategic Points around the map.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$18210903]] -- - Further increases the requisition resource tremendously and increases the maximum requisition resource rate by +1000.
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$18210904]] -- - Second of two possible upgrades.
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[ork_icons/req_inc_research_2]]
+GameData["ui_info"]["screen_name_id"] = [[$18210902]] -- Even Moar Supa Dupa Money
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["override_help_text_list"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["ui_info"]["use_override_table_for_non_requisition_races"] = nil

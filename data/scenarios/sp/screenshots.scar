@@ -1,0 +1,203 @@
+-------------------------------------------------
+--[[ IMPORTS ]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[ GAME SETUP ]]
+-------------------------------------------------
+
+--[[global variables]]
+g_firstrun = true
+g_Jump = false
+g_Moral = true
+g_Vehicle = 1
+g_Win = false
+g_Relic = false
+g_Target = 1
+g_Timer = 0
+g_Raids = 0
+g_HQ_Type = nil
+g_add_button = false
+g_Orbital = false
+g_assault = 0
+g_insert1 = true
+g_insert2 = true
+g_insert3 = true
+g_insert4 = true
+g_insert5 = true
+g_insert6 = true
+g_insert7 = true
+g_insert8 = true
+g_insert9 = true
+g_insert10 = true
+
+
+
+--difficulty variable
+g_Difficulty = 0
+
+--army iterations
+g_Whirlwind_Army_iter = 1
+g_Gap_Army_iter = 1
+g_CP_Army_iter = 1
+g_Mine_Army_iter = 1
+g_LP_Army_iter = 1
+g_RP_Army_iter = 1
+g_Slag_Army_iter = 1
+g_Bastion_Army_iter = 1
+g_Patrol_Army_A_iter = 1
+g_SM_Reinforcement_Army_1_iter = 1
+g_SM_Reinforcement_Army_2_iter = 1
+g_SM_Reinforcement_Army_3_iter = 1
+g_SM_Reinforcement_Army_4_iter = 1
+g_FLP_Army_iter = 1
+g_FRP_Army_iter = 1
+g_Scout_Army_iter = 1
+g_Snow_Army_iter = 1
+g_Assault_Army_iter = 1
+
+--Army size variables
+g_Gap = 0
+g_CP = 0
+g_Mine = 0
+g_LP = 0
+g_RP = 0
+g_Slag = 0
+g_Bastion = 0
+g_Patrol_A = 0
+
+--patrol iteration
+g_Patrol_Move = 0
+
+--space marine reinforcement
+g_SM_Reinforcement = 0
+g_One = false
+g_Two = false
+g_Three = false
+
+--whether a spot has been abandonned
+g_RP_Abandon = false
+g_Bastion_Abandon = false
+g_LP_Abandon = false
+g_CP_Abandon = false
+
+--[[ the OnGameSetup() function is mandatory! ]]
+function OnGameSetup()
+
+
+
+
+	g_Player1 = Setup_Player(0, "$690015", "tau_race", 1)
+	Misc_PlayerTeamColor(g_Player1, "default_0")
+	
+	g_Player2 = Setup_Player(1, "$690016", "necron_race", 2)
+	Misc_PlayerTeamColor(g_Player2,"default_0")
+	
+	g_Player3 = Setup_Player(2, "$690015", "tau_race", 2)
+	Misc_PlayerTeamColor(g_Player3,"default_0")
+	
+	g_Player4 = Setup_Player(3, "$690015", "tau_race", 1)
+	Misc_PlayerTeamColor(g_Player4,"default_0")
+	
+	
+--[[ DEFINE VARIABLES AND TABLES - define any preset values here for later use]]
+
+
+--[[ define the "enemy" who will win if the player 'loses' ]]
+	g_enemy = g_Player2
+
+--[[Win condition Objective]]
+	
+
+end
+--
+--------------------------------------------------
+
+--[[ the OnGameRestore() function is mandatory!, this will only get called after loading a game ]]
+
+function OnGameRestore()
+
+		
+end
+
+
+-------------------------------------------------
+--[[ ON INITIALIZATION ]]
+-------------------------------------------------
+
+function OnInit()
+
+	--[[ RESEARCH LEVEL - sets the research level of the mission, locks researches, squads, and buildings for the appropriate mission number DOW specific!
+	 sets the research level of the mission, locks researches, squads, and buildings]]
+	Rule_SetResearchLevel( 4 )
+		
+	
+	--[[ SET AI - call the function to set the pregame state of the AI 
+	call the function to set the pregame state of the AI ]]
+	Rule_PresetAI()		
+		
+	--[[ START NIS - calls the NIS function located in the MissionName.nis file 
+	calls the NIS function located in the MissionName.nis file ]]	
+--	Util_StartNIS( EVENTS.NIS_Opening )
+
+		
+	
+end
+
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+-------------------------------------------------
+--[[ GAME RESTRICTIONS ]]
+-------------------------------------------------
+
+	--[[ Disables, enables, and grants research items ]]
+function Rule_SetResearchLevel( resLevel )
+
+	--[[ WXP Specific ]]
+	WXP_Restrict( resLevel )
+
+end
+
+
+
+-------------------------------------------------
+--[[ PRESET AI ]]
+-------------------------------------------------
+
+function Rule_PresetAI()
+
+	Cpu_Enable(g_Player3, false)
+	Cpu_Enable(g_Player2, false)	
+	
+end
+
+
+
+
+
+-------------------------------------------------
+--[[ AI ]]
+-------------------------------------------------
+
+function Rule_StartAI()
+	
+	Cpu_EnableAll(false)	
+
+end
+
+
+
+-------------------------------------------------
+--[[ CORE GAME ]]
+-------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+--[[Spawning andUpgrading Things on the map]]
+--------------------------------------------------------------------------------
+
+

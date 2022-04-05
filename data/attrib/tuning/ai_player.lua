@@ -1,0 +1,11 @@
+GameData = Inherit([[]])
+GameData["res_gather_bonus_advanced"] = 1.25
+GameData["res_gather_bonus_easy"] = 0.5
+GameData["res_gather_bonus_hard"] = 1
+GameData["res_gather_bonus_insane"] = 2
+GameData["res_gather_bonus_standard"] = 0.8999999762
+GameData["res_renew_bonus_advanced"] = 1.25
+GameData["res_renew_bonus_easy"] = 0.5
+GameData["res_renew_bonus_hard"] = 1
+GameData["res_renew_bonus_insane"] = 2
+GameData["res_renew_bonus_standard"] = 0.8999999762

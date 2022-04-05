@@ -1,0 +1,717 @@
+----------------------------------------------------------------------------------------------------------------
+-- Single player scar helper functions
+-- (c) 2005 Relic Entertainment Inc.
+
+import("ScarUtil.scar")
+
+import("WXPActor.scar")
+import("WXPButton.scar")
+import("WXPCommand.scar")
+import("WXPDifficultyLevel.scar")
+import("WXPEntityPrecach.scar")
+import("WXPGroups.scar")
+import("WXPMetaMap.scar")
+import("WXPRestrict.scar")
+import("WXPUI.scar")
+
+--? @group Core
+
+--? @shortdesc Checks to see if a Rule exists. If it does not exist, the rule will be added to be executed  'calls' times, at every 'interval' seconds 
+--? @args LuaFunction f, Real interval, Integer calls
+--? @result Void
+-- creator: degnan
+function Rule_Check_AddIntervalEx(functionName, delay, iter)
+
+	if Rule_Exists(functionName) == false then
+		Rule_AddIntervalEx(functionName, delay, iter)
+	end
+
+end
+
+--? @shortdesc Checks to see if a Rule exists. If it does not exist, the rule will be added to be executed at every 'interval' seconds
+--? @args LuaFunction f, Real interval
+--? @result Void
+-- creator: degnan
+function Rule_Check_AddInterval(functionName, delay)
+
+	if Rule_Exists(functionName) == false then
+		Rule_AddInterval(functionName, delay)
+	end
+
+end
+
+--? @shortdesc Checks to see if a Rule exists. If it does not exist, the rule will be added to be executed once, after 'interval' seconds
+--? @args LuaFunction f, Real interval
+--? @result Void
+-- creator: degnan
+function Rule_Check_AddOneShot(functionName, delay)
+
+	if Rule_Exists(functionName) == false then
+		Rule_AddOneShot(functionName, delay)
+	end
+
+end
+
+--? @shortdesc Checks to see if a Rule exists. If it does, it will be deleted. If it doesn't there will be no result.
+--? @args LuaFunction f
+--? @result Void
+-- creator: degnan
+function Rule_Check_Remove(functionName)
+
+	if Rule_Exists(functionName) == true then
+		Rule_Remove(functionName)
+	end
+
+end
+
+--? @group Squad
+--? @shortdesc Pass in a string of a sgroup. If the group exists, any squads within that group will be destroyed. If the group does not exist or if the group is empty there will be no result. 
+--? @extdesc The sgroupname is not deleted, it will still exist once the members are destroyed
+--? @args String squadgroupName
+--? @result Void
+-- creator: degnan
+function SGroup_Check_DestroyAllSquads(groupName)
+
+	if SGroup_Exists(groupName) then
+		SGroup_DestroyAllSquads(groupName)
+	end
+
+end
+
+--? @group Sound
+--? @shortdesc Adds a set of tracks to the requested playlist channel, sets how the next track to be played will be chosen, ordered (true) or random (false), and sets silence intervals between tracks for the requested playlist channel.
+--? @args SoundChannel channel, LuaConfig::RefTable tracksTable, Boolean sequential, Boolean looping, LuaConfig::RefTable silenceTable, 
+--? @result Void
+--? @extdesc 
+--? Example:\n
+--? \tValid sound channels are either PC_Music or PC_Ambient\n
+--? \tThis utility function should be called once per channel\n\n
+--? \tlocal tracksTable = {"music_track1", "music_track2"}\n
+--? \tMust use valid music or ambient track names from the \Warhammer\DataGeneric\W40k\Sound\Music or \Warhammer\DataGeneric\WXP\Sound\Music directory\n\n
+--? \tlocal silenceTable = {5, 20}\n
+--? \tThis example would set a random time of as little as 5 seconds but no more than 20 seconds between each track.\n\n
+--? \tThe function call could look something like: \n
+--? \tt_music = {"music_theme_chaos_01", "music_ork_theme", "music_coming_of_chaos" }\n
+--? \tPlaylist_Manager( PC_Music, t_music, true , {20, 40})\n\n
+-- creator: degnan
+function Playlist_Manager( channel, tracksTable, sequential, looping, silenceTable)
+
+	--[[ clear the 'channel' playlist ]]
+	Sound_PlaylistClear( channel )
+
+	for i = 1, table.getn(tracksTable) do
+		--[[ add tracksTable to the playlist ]]
+		Sound_PlaylistAddTrack( channel, tracksTable[i] )
+	end
+
+    --[[ mark the tracks of 'channel' to play sequentially or randomly ]]
+    Sound_PlaylistSetorder( channel, sequential )
+	
+	--[[ mark the playlist to be or not to be looping ]]
+	Sound_PlaylistSetLooping( channel, looping )
+    
+	--[[ add silence[1] to silence[2] seconds silence between tracks ]]
+    Sound_PlaylistSetSilence( channel, silenceTable[1], silenceTable[2] )
+	
+	Sound_PlaylistStart( channel )
+	
+end
+
+--? @group Player
+--? @shortdesc Sets the Requisition, Power and Pop for the player. Pass in a 'nil' value instead of a Real amount to skip the associated Resource Type. Ignores income cap and resource sharing. 
+--? @extdesc Leaving one Real amount off will automatically skip setting RT_Pop. Leaving two Real amounts off will skip RT_Power and RT_Pop.
+--? @args PlayerID player, Real req, Real power, Real pop
+--? @result Void
+-- creator: degnan
+function Player_SetAllResources(playerID, requisition, power, pop)
+
+	--[[ SET RESOURCES ]]
+	if requisition ~= nil then
+		Player_SetResource(playerID, RT_Requisition, requisition)
+	end
+	if power ~= nil then
+		Player_SetResource(playerID, RT_Power, power)
+	end
+	if pop ~= nil then
+		Player_SetResource(playerID, RT_Pop, pop)
+	end
+	
+end
+
+--? @group WXP
+--? @shortdesc Turns off event cues, sets the viewable space to faded out, and presets the UI into letterbox mode 
+--? @extdesc 
+--? @args Void
+--? @result Void
+-- creator: degnan
+function WXP_OpeningNISPreset()
+	
+	--[[ turn off event cues, set the viewable space to black (faded out) and preset letterboxing ]]
+	EventCue_Enable(false)
+	Fade_Start( 0, false )	
+	W40k_Letterbox( true, 0 )	
+	
+end
+
+--? @group Path
+--? @shortdesc Positions the camera view at the start of the first path so the game can fade up to a 'ready' shot. MUST be used first before any other CPath's are started. Should use CPath_CutToPath() to follow up.
+--? @extdesc 
+--? @args String canimName, String startKey, String endKey 
+--? @result Void 
+-- creator: degnan
+function CPath_PresetCamera(canimName, startKey, endKey)
+
+	CPath_Start( canimName, startKey, endKey )
+	CPath_CutToPoint( canimName, startKey )
+
+end
+
+--? @group WXP
+--? @shortdesc Adds all squads belonging to all players into a group. Removes any from the group that are despawned and destroys whatever is left. 
+--? @extdesc Should only be used when cleaning up, as this will destroy EVERY spawned squad in the entire game.
+--? @args Void
+--? @result Void
+-- creator: degnan
+function WXP_KillAllPlayersSpawnedSquads()
+
+    local RemoveDespawnSquad = function( sgroupid, itemindex, squadid )
+        SGroup_Remove( sgroupid, squadid )
+    end
+
+	local sgroupID = SGroup_CreateIfNotFound("_killallsquads")
+	local count = World_GetPlayerCount()
+
+	for i = 0, count - 1 do
+		local player = World_GetPlayerAt(i)
+		SGroup_AddGroup(sgroupID, Player_GetSquads(player))
+	end
+
+	SGroup_ForEachAllOrAnyEx(sgroupID, true, RemoveDespawnSquad, false, true )
+	SGroup_DestroyAllSquads("_killallsquads")
+	SGroup_Destroy(sgroupID)
+
+end
+
+
+--? @group WXP
+--? @shortdesc Adds all squads belonging to all players into a group. Removes any from the group that are despawned or in the indicated sgroup and destroys whatever is left. 
+--? @extdesc Should only be used when cleaning up, as this will destroy EVERY spawned squad in the entire game... except the one that you ask it not to.
+--? @args String squadgroupName
+--? @result Void
+-- creator: degnan
+function WXP_KillAllPlayersSpawnedSquadsExcept(sgroupname)
+
+    local RemoveDespawnSquad = function( sgroupid, itemindex, squadid )
+        SGroup_Remove( sgroupid, squadid )
+    end
+    local RemoveSGroup = function( sgroupid, itemindex, squadid )
+		local sgroupID2 = SGroup_FromName(sgroupname)
+		for i = 1, SGroup_CountSpawned(sgroupID2) do
+			local squadID2 = SGroup_GetSpawnedSquadAt(sgroupID2, i )
+			SGroup_Remove( sgroupid, squadID2 )
+		end
+    end
+
+	local sgroupID1 = SGroup_CreateIfNotFound("_killallsquads")
+	local count = World_GetPlayerCount()
+
+	for i = 0, count - 1 do
+		local player = World_GetPlayerAt(i)
+		SGroup_AddGroup(sgroupID, Player_GetSquads(player))
+	end
+
+	SGroup_ForEachAllOrAnyEx(sgroupID1, true, RemoveDespawnSquad, false, true )
+	SGroup_ForEach(sgroupID1, RemoveSGroup)
+	SGroup_DestroyAllSquads("_killallsquads")
+	SGroup_Destroy(sgroupID)
+
+end
+
+
+--? @group Squad
+--? @shortdesc Takes the given sgroupname and issues the 'Destroy' command to all squads. It should behave the same as if the player hit the delete key for each member. 
+--? @extdesc To absolutely kill squads, this should be used instead of either SGroup_SetAvgHealth(sgroupname, 0) or SGroup_DestroyAllSquads(sgroupname) as both of these do not always accomplish the desired effect
+--? @args String sgroupname, Boolean spawnedOnly
+--? @result Void
+-- creator: degnan
+function SGroup_SelfDestroy(sgroupname, boolean)
+
+	local sgroupID1 = SGroup_FromName(sgroupname)
+
+    local RemoveDespawnSquad = function( sgroupid, itemindex, squadid )
+        SGroup_Remove( sgroupid, squadid )
+    end
+
+    local DestroyCommand = function( sgroupid, itemindex, squadid )
+		local playerID = Squad_GetPlayerOwner(squadid)
+		local sgroupID2 = SGroup_CreateIfNotFound("_sg_destroycommand")
+		SGroup_Clear(sgroupID2)
+		SGroup_Add(sgroupID2, squadid)
+		Command_Squad(playerID, sgroupID2, SCMD_Destroy)
+    end
+
+	SGroup_ForEachAllOrAnyEx(sgroupID1, true, RemoveDespawnSquad, false, boolean )
+	SGroup_ForEach(sgroupID1, DestroyCommand)
+
+end
+
+--? @group Entity
+--? @shortdesc Takes the given egroupname and issues the 'Destroy' command to all entities. It should behave the same as if the player hit the delete key for each member. 
+--? @extdesc To absolutely kill entities, this should be used instead of either EGroup_SetAvgHealth(egroupname, 0) or EGroup_DestroyAllEntities(egroupname) as both of these do not always accomplish the desired effect
+--? @args String egroupname, Boolean spawnedOnly
+--? @result Void
+-- creator: degnan
+function EGroup_SelfDestroy(egroupname, boolean)
+
+	local egroupID1 = EGroup_FromName(egroupname)
+
+    local RemoveDespawnEntities = function( egroupid, itemindex, entityid )
+        EGroup_Remove( egroupid, entityid )
+    end
+
+    local DestroyCommand = function( egroupid, itemindex, entityid )
+		local playerID = Entity_GetPlayerOwner(entityid)
+		local egroupID2 = EGroup_CreateIfNotFound("_eg_destroycommand")
+		EGroup_Clear(egroupID2)
+		EGroup_Add(egroupID2, entityid)
+		Command_Entity(playerID, egroupID2, CMD_Destroy)
+    end
+
+	EGroup_ForEachAllOrAnyEx(egroupID1, true, RemoveDespawnEntities, false, boolean )
+	EGroup_ForEach(egroupID1, DestroyCommand)
+
+end
+
+--? @group Entity
+--? @shortdesc Enables or disables the shroud ability for all entities in the group that have the ability
+--? @extdesc Shroud will be turned on if 'enable' is true and turned off when it is false
+--? @args String groupName, Boolean enable
+--? @result Void
+function EGroup_Shroud(groupName, enable)
+	-- declare the temp group before the FilterEntities function since we will be using it there
+	local tempGroup
+
+	-- function to filter entities out of a group that have the shroud ability on or off (depending on the enable flag)
+	local FilterEntities = function(groupID, itemIndex, itemID)
+		local already_enabled = Entity_IsAbilityActive(itemID, "eldar_shroud")
+	
+		-- if we want to enable shroud and the entity does not have it enabled, add it to the temp group
+		if (enable == true) and (already_enabled == false) then
+			EGroup_Add(tempGroup, itemID)
+		-- if we want to disable shroud and the entity does not have it disabled, add it to the temp group
+		elseif (enable == false) and (already_enabled == true) then
+			EGroup_Add(tempGroup, itemID)
+		end
+		
+		-- return true so we go through all entities (the 'all' flag is set for iteration)
+		return false
+	end
+	
+	-- create the temp group and filter out entities out of the correct passed in group
+	tempGroup = EGroup_Create("temp_group")
+	EGroup_ForEachAllOrAny(groupName, false, FilterEntities)
+
+	-- use the shroud abilitiy on the filtered entities
+	if EGroup_Count(tempGroup) > 0 then
+		Cmd_EGroupCastAbilitySelf("temp_group", "eldar_shroud")
+	end
+	
+	EGroup_Destroy(tempGroup)
+end
+
+--? @group Entity
+--? @shortdesc Returns whether all or any entities in the group are shrouded
+--? @extdesc If 'all' is true, all entities must be shrouded for the function to return true. If 'all' is false, at least one entity must be shrouded.
+--? @args String groupName, Boolean all
+--? @result Boolean
+function EGroup_IsShrouded(groupName, all)
+	return EGroup_HasModifier(groupName, "ability_eldar_shroud_event", all)
+end
+
+--? @group UI
+--? @shortdesc Update the value of a counter. Pass in the name and the new value for the counter to display
+--? @args String counterName, Real countValue
+--? @result Void
+function UI_ShowCountUpdate(counterName, countValue)
+	
+	-- display seconds
+	WinWarning_SetText( counterName, Loc_FormatText1( g_UI_ShowCountFormatID, Loc_ConvertNumber( countValue )))
+	
+end
+
+--? @group UI
+--? @shortdesc Create a counter with a displayed value. Assign a player and the formatID (aka. Localized String value )
+--? @extdesc Example: UI_ShowCount( "ct_test", g_Player1, 861016, 5 )
+--? @args String counterName, PlayerID player, Integer formatID, Real initialValue
+--? @result Void
+function UI_ShowCount( counterName, playerID, formatID, initialValue )
+	-- validate params
+	if initialValue < 0 then error("secsRemaining must be greater than or equal to 0") end
+	
+	-- add a new one if it doesnt exist
+	if not WinWarning_Exists( counterName ) then
+		WinWarning_Add( counterName, playerID, "", "", "" )
+	end
+	
+	g_UI_ShowCountFormatID = formatID
+	
+	-- call once straight away
+	UI_ShowCountUpdate(counterName, initialValue)
+	
+end
+
+
+--? @group UI
+--? @shortdesc Update the value of a counter. Pass in the name  the new value for the counter to display and the formatID
+--? @args String counterName, Real countValue, Integer formatID.
+--? @result Void
+function UI_ShowCountUpdateDxp(counterName, countValue, formatID)
+	
+	-- display seconds
+	WinWarning_SetText( counterName, Loc_FormatText1(formatID, Loc_ConvertNumber( countValue )))
+	
+end
+--? @group UI
+--? @shortdesc Create a counter with a displayed value. Assign a player and the formatID (aka. Localized String value )
+--? @extdesc Example: UI_ShowCount( "ct_test", g_Player1, 861016, 5 )
+--? @args String counterName, PlayerID player, Integer formatID, Real initialValue
+--? @result Void
+function UI_ShowCountDXP( counterName, playerID, formatID, initialValue)
+	-- validate params
+	if initialValue < 0 then error("secsRemaining must be greater than or equal to 0") end
+	
+	-- add a new one if it doesnt exist
+	if not WinWarning_Exists( counterName ) then
+		WinWarning_Add( counterName, playerID, "", "", "" )
+	end
+		
+	-- call once straight away
+	UI_ShowCountUpdateDxp(counterName, initialValue, formatID)
+	
+end
+
+
+
+--? @group UI
+--? @shortdesc Hide and remove a counter
+--? @args String counterName
+--? @result Void
+function UI_HideCount( counterName )
+	-- hide if exists
+	if WinWarning_Exists( counterName ) then
+		WinWarning_Remove( counterName )
+	end
+end
+
+--? @group UI
+--? @shortdesc Create a ratio with displayed values. Assign a player and the formatID (aka. Localized String value )
+--? @extdesc Example: UI_ShowRatioDxp( "ratio_test", g_Player1, 38025, 4, 5 )
+--? @args String counterName, PlayerID player, Integer formatID, Real value1, Real value2
+--? @result Void
+function UI_ShowRatio( ratioName, playerID, formatID, value1, value2 )
+	
+	-- add a new ratio if one with this name doesnt exist
+	if not WinWarning_Exists( ratioName ) then
+		WinWarning_Add( ratioName, playerID, "", "", "" )
+	end
+	
+	-- call once straight away
+	UI_ShowRatioUpdate(ratioName, formatID, value1, value2)
+	
+end
+
+
+--? @group UI
+--? @shortdesc Update the values of a ratio. Pass in the name, the formatID (aka. Localized String value) and the new values for the ratio to display
+--? @args String ratioName, Integer formatID, Real value1, Real value2
+--? @result Void
+function UI_ShowRatioUpdate(ratioName, formatID, value1, value2)
+	
+	-- display seconds
+	WinWarning_SetText( ratioName, Loc_FormatText2(formatID, Loc_ConvertNumber( value1 ), Loc_ConvertNumber( value2 )))
+	
+end
+
+
+--? @group UI
+--? @shortdesc Hide and remove a ratio
+--? @args String ratioName
+--? @result Void
+function UI_HideRatio( ratioName )
+	-- hide if exists
+	if WinWarning_Exists( ratioName ) then
+		WinWarning_Remove( ratioName )
+	end
+end
+
+--? @group FOW
+--? @shortdesc Unreveals an area the size of a given markers proximity at that markers position.  YOU SHOULD ONLY CALL THIS IF YOU HAVE USED FOW_RevealMarker ON THAT MARKER PREVIOUSLY.
+--? @extdesc This function will unreveal the FOW for ALL alive players.
+--? @args String markername
+--? @result Void
+function FOW_UnRevealMarker( markername )
+	local markerID = Marker_FromName( markername, "basic_marker" )
+	local markerPos = Marker_GetPosition( markerID )
+	local markerProx = Marker_GetProximity( markerID )
+	
+	-- reveal the area
+	FOW_UnRevealArea( markerPos.x, markerPos.z, markerProx )
+end
+
+--? @group Util
+
+--? @shortdesc Create an Objective Beacon FX at a position
+--? @args ScarPos position
+--? @result beaconID
+function Util_CreateBeaconPosition_Red( pos )
+	return World_FXEventLooping( "data:Art/Events/Gameplay/Objective_Beacon_Red", pos )
+end
+
+--? @shortdesc Create an Objective Beacon FX at a marker
+--? @args String markerName
+--? @result beaconID
+function Util_CreateBeaconMarker_Red( marker )
+	return World_FXEventLooping( "data:Art/Events/Gameplay/Objective_Beacon_Red", Marker_GetPosition(Marker_FromName(marker, "basic_marker")) )
+end
+
+--? @shortdesc Create an Objective Beacon FX at a position
+--? @args ScarPos position
+--? @result beaconID
+function Util_CreateBeaconPosition_Blue( pos )
+	return World_FXEventLooping( "data:Art/Events/Gameplay/Objective_Beacon_Blue", pos )
+end
+
+--? @shortdesc Create an Objective Beacon FX at a marker
+--? @args String markerName
+--? @result beaconID
+function Util_CreateBeaconMarker_Blue( marker )
+	return World_FXEventLooping( "data:Art/Events/Gameplay/Objective_Beacon_Blue", Marker_GetPosition(Marker_FromName(marker, "basic_marker")) )
+end
+
+--? @shortdesc Removes an existing Objective Beacon - colour doesn't matter (*snicker*)
+--? @args Integer beaconID
+--? @result Void
+function Util_RemoveBeaconMarker( beaconID )
+	World_FXEventDestroy( beaconID )
+end
+
+--? @shortdesc Create a looping ping.
+--? @extdesc Works with the Util_Ping_Stop( ) to allow for the easy removal of looping pings without having to save pingID variables. Make up a pingname string and pass it in.
+--? @result Void
+--? @args String pingname, String markername
+function Util_Ping_LoopingPos(pingname, pos)
+
+	if _ping_table == nil then
+		_ping_table = {}
+	end
+	
+	local pingID = Ping_Position(pos, true)
+	
+	table.insert(_ping_table, {pingID, pingname})
+
+end
+
+--? @group Util
+--? @shortdesc Sets the blood level for every blood pit in the group
+--? @extdesc The level must be in the [0.0, 1.0] range
+--? @args String bloodpitGroupName, Real level
+--? @result Void
+function Util_SetBloodPitLevel( pitGroupName, level )
+	if ((level < 0.0) or (level > 1.0)) then
+		error("Error setting blood pit level - level '"..level.."' is out of range")
+	end
+
+	local SetBloodPitLevel = function( groupID, itemIndex, itemID )
+		Entity_SetActionVariableFloat( itemID, "build_progress", level )
+		return true
+	end
+
+	EGroup_ForEachAllOrAny( pitGroupName, true, SetBloodPitLevel )
+end
+
+
+--? @shortdesc Creates an objective and plays the objective created stinger to accompany it, and flashes the objective button.
+--? @extdesc Use this function to create an objective with the sound
+--? @result Void
+--? @args LuaTable objectiveTable, boolean primary, Integer playerID
+function Util_WXP_ObjectiveCreate( objectiveTable, primary, playerID )
+	if playerID == nil then
+		Objective_Add( objectiveTable, primary )
+	else
+		Objective_AddPlayer( objectiveTable, primary, playerID )
+	end
+	Sound_PlayStinger( "stinger_newobjective" )
+	Flash_OtherButton("dlg_objectives", 0, true, true)
+end
+
+--? @shortdesc Creates a sub objective and plays the objective created stinger to accompany it, and flashes the objective button. Pass in the objective ID of the 'parent' objective
+--? @extdesc Use this function to create an objective with the sound
+--? @result Void
+--? @args LuaTable objectiveTable, Integer parentObjectiveID
+function Util_WXP_ObjectiveSubCreate( objectiveTable, parent_id )
+	Objective_SubAdd( objectiveTable, parent_id )
+	Sound_PlayStinger( "stinger_newobjective" )
+	Flash_OtherButton("dlg_objectives", 0, true, true)
+end
+
+
+
+--? @shortdesc Marks the specified objective as completed
+--? @extdesc Use this function to complete an objective with the sound
+--? @result Void
+--? @args Integer titleid
+-- added the check to see if the objective is incomplete to avoid conflicts with the parent objective system
+function Util_ObjectiveComplete( objectiveTableTitleId )
+	if Objective_GetState(objectiveTableTitleId) == OS_Incomplete then
+		Objective_SetState( objectiveTableTitleId, OS_Complete )
+		Sound_PlayStinger( "stinger_completeobjective" )
+	end
+end
+
+--? @shortdesc Makes the specified objective as failed
+--? @extdesc Use this function to fail an objective with the sound
+--? @result Void
+--? @args Integer titleid
+-- added the check to see if the objective is incomplete to avoid conflicts with the parent objective system
+function Util_ObjectiveFail( objectiveTableTitleId )
+	if Objective_GetState(objectiveTableTitleId) == OS_Incomplete then
+		Objective_SetState( objectiveTableTitleId, OS_Failed )
+		Sound_PlayStinger( "stinger_newobjective" )
+	end
+end
+
+--? @shortdesc Create a looping ping.
+--? @extdesc Works with the Util_Ping_Stop( ) to allow for the easy removal of looping pings without having to save pingID variables. Make up a pingname string and pass it in.  This now also reveals the area underneath the ping for a short period of time.
+--? @result Void
+--? @args String pingname, String markername
+function Util_Ping_LoopingMkr(pingname, markername)
+
+	if _ping_table == nil then
+		_ping_table = {}
+	end
+	
+	local pingID = Ping_Position(Marker_GetPosition(Marker_FromName(markername, "basic_marker")), true)
+	
+	local position = Marker_GetPosition(Marker_FromName(markername, "basic_marker"))
+	FOW_RevealArea( position.x, position.z, 20, 4 )	
+	
+	table.insert(_ping_table, {pingID, pingname})
+
+end
+
+
+
+--? @shortdesc Toggles all modifier event FX for the player
+--? @extdesc Use this function to make NIS's look clean without wierd icons above units' heads
+--? @result Void
+--? @args Integer titleid
+-- added the check to see if the objective is incomplete to avoid conflicts with the parent objective system
+function Util_NIS_ToggleModifierEvents( player, state )
+
+	t_ModifierList = {
+									"builder_idle_event",
+									"negative_cover_event_modifier",
+									"cover_event_modifier",
+									"morale_break_event",
+									"morale_break_event_space_marine",
+									"morale_break_event_ork"
+								}
+								
+	for x=1,table.getn(t_ModifierList) do
+		Modifier_Player_FX_Enable( player, t_ModifierList[x], state )
+	end
+	
+end
+
+
+--? @shortdesc Plays the non looping piece of music once through, then, after delay, plays the looping piece of music, looping.
+--? @extdesc Use this function to setup detailed playlists in missions.
+--? @result Void
+--? @args LuaTable non_loopingTracks, LuaTable loopingTracks, Integer delay
+function Util_Music_CreateSingleLoop( musictable_non, musictable_loop, delay )
+	
+	--[[ play now ]]
+	Playlist_Manager( PC_Music, musictable_non, true, false , {0, 0}) 
+ 
+	--[[ delay ]]
+	_util_music_delay = delay
+	
+	--[[ save for later ]]
+	_util_music_loop = musictable_loop
+	
+	--[[ add the countdown function if it doesn't already exist ]]
+	if Rule_Exists( _Util_LoopToNext ) == false then 
+		Rule_AddInterval( _Util_LoopToNext, 1) 
+	end    
+
+end
+
+--[[ the countdown function will always adapt.
+the delay can be pushed out when called again 
+from above, as well the variable for the track(s)
+to loop will also be updated with a new call ]]
+function _Util_LoopToNext()
+	
+	if _util_music_delay ~= nil and _util_music_delay == 0 then
+		
+		--[[ takes the variable from above and calls the 
+		playlist manager when the countdown finishes ]]
+		Playlist_Manager( PC_Music, _util_music_loop, true, true , {20, 40})
+		
+		--[[ removes - it has done its job ]]
+		Rule_Remove( _Util_LoopToNext )
+		
+	elseif _util_music_delay ~= nil and _util_music_delay > 0 then
+		
+		--[[ the countdown ]]
+		_util_music_delay = _util_music_delay-1
+		
+	elseif _util_music_delay == nil then
+		
+		--[[ a possible reset contingency ]]
+		_util_music_delay = 0
+		
+	end
+	
+end
+
+--? @shortdesc Gets units moving to a random position within the radius of a marker
+--? @extdesc Use this function to create controlled random movement to make units appear more lifelike
+--? @result Void
+--? @args String sgroupname, String markername
+function Util_AttackMoveMarkerRandomRadius( squadgroupname, markername)
+	
+		local pos = Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+		local prox = Marker_GetProximity( Marker_FromName( markername, "basic_marker" ) )
+		
+		
+		local xrand = World_GetRand( -prox, prox ) 
+		local zrand = World_GetRand( -prox, prox ) 
+			
+				
+		local attackpos = World_Pos( xrand + pos.x, pos.y, zrand + pos.z )
+
+		
+		Cmd_AttackMovePos(squadgroupname, attackpos)  
+
+end
+
+
+--? @shortdesc Gets units to attack the ground at a random position within the radius of a marker
+--? @extdesc Use this function to create controlled random ground attacks to make units appear more lifelike
+--? @result Void
+--? @args String sgroupname, String markername
+function Util_AttackGroundMarkerRandomRadius( squadgroupname, markername)
+	
+		local pos = Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+		local prox = Marker_GetProximity( Marker_FromName( markername, "basic_marker" ) )
+		
+		
+		local xrand = World_GetRand( -prox, prox ) 
+		local zrand = World_GetRand( -prox, prox ) 
+			
+				
+		local attackpos = World_Pos( xrand + pos.x, pos.y, zrand + pos.z )
+
+		Cmd_AttackGroundPos(squadgroupname, attackpos)
+end

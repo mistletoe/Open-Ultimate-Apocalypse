@@ -1,0 +1,97 @@
+Model = "Marconia"
+Planet = "Kaurava_IV"
+
+Name = "$3900038"
+Description = "$3900357"
+TerrainType = "$2851002"
+TerrainDescription = "$3900358"
+
+History = 
+{
+"$3900359",
+}
+
+MissionFileAttacking = "4P_Marconia"
+MissionFileAttackingConquered = "4P_Marconia"
+MissionFileDefending = "4P_Marconia"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = .75
+
+NeighborTerritories = 
+{
+	"Morholt_Range",
+	"Gurmuns_Pass",
+	"Parmenie",
+	"Tristram_Plains",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_aspiring_champion_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_apothecary_veteran_stronghold_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_stormboy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_enginseer_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_wraithlord_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_crisis_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_basic_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_battle_sister_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_mandrake_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "chaos_marine_race"
+OwnerSecondary = "dark_eldar_race"
+
+StartingResourceBonus = 0.0

@@ -1,0 +1,119 @@
+----------------------------------------------------------------------------------------------------------------
+-- Starting Army
+-- Edited by Krronus, 2:54 8/4/10
+-- Edited by Cylarne @ 2011
+-- Finished @  11/20/10
+--
+--	All players start with an already created army.
+--
+-- Apocalypse Mod Team
+import("ScarUtil.scar");
+
+function AddArmy()
+	
+	-- Add an army to the game.
+	local count = World_GetPlayerCount()
+	for i = 0, count-1
+	do
+		local player = World_GetPlayerAt(i)
+		local pos = Player_GetStartPosition(player)
+		--local race = Player_GetRace(player)
+	
+		if (Player_GetRaceName(player) == "chaos_marine_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "chaos_squad_lord", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "chaos_squad_cultist", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "chaos_marine_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "chaos_squad_raptor", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "chaos_squad_dreadnought", pos, 2)
+
+		elseif (Player_GetRaceName(player) == "dark_eldar_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "dark_eldar_squad_archon", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "dark_eldar_squad_mandrake", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "dark_eldar_squad_warrior", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "dark_eldar_squad_hellion", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "dark_eldar_squad_talos", pos, 2)
+			
+		elseif (Player_GetRaceName(player) == "eldar_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_squad_farseer", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_guardian_squad", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_squad_banshees", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_dire_avenger_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_squad_wraithlord", pos, 2)
+			--Util_CreateSquadsAtPosition(player, "startingarmy", "eldar_squad_phoenix", pos, 6)
+		
+		elseif (Player_GetRaceName(player) == "guard_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_command_squad", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_guardsmen_conscript", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_guardsmen", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_guardsmen", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_hellhound", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "guard_squad_sentinel", pos, 1)
+		
+		elseif (Player_GetRaceName(player) == "necron_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "necron_lord_squad", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "necron_wraith_squad", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "necron_basic_warrior_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "necron_flayed_one_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "necron_tomb_spyder_squad", pos, 2)
+		
+		elseif (Player_GetRaceName(player) == "ork_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "ork_squad_warboss", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "ork_squad_slugga", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "ork_squad_shoota_boy", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "ork_squad_stormboy", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "ork_squad_killa_kan", pos, 2)
+			
+		elseif (Player_GetRaceName(player) == "sisters_race") then			
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_canoness", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_missionary", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_battle_sister", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_seraphim", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_immolator_tank", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_sentinel", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_lightning_strike", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_almoness", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_curia", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "sisters_squad_exorcist_mk", pos, 1)
+		
+		elseif (Player_GetRaceName(player) == "space_marine_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "space_marine_squad_chaplain", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "space_marine_squad_scout", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "space_marine_squad_tactical", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "space_marine_squad_assault", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "space_marine_squad_dreadnought", pos, 2)
+			
+		elseif (Player_GetRaceName(player) == "tau_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tau_commander_squad", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tau_stealth_team_squad", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tau_fire_warrior_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tau_kroot_carnivore_squad", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tau_skyray_squad", pos, 2)
+			
+		elseif (Player_GetRaceName(player) == "daemons_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_lord", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_possessed_marine", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_daemonettes", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_screamers", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_plague_bearers", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_bloodletters", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_horror", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "daemon_squad_obliterator", pos, 2)
+				
+		elseif (Player_GetRaceName(player) == "inquisition_daemonhunt_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "inquisition_squad_inquisitor_lord", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "inquisition_squad_bodyguard", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "inquisition_squad_shock_troops", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "inquisition_squad_shock_troops", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "inquisition_squad_dreadnought_assault", pos, 2)
+				
+		elseif (Player_GetRaceName(player) == "tyranids_race") then
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tyranids_squad_broodlord", pos, 1)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tyranids_squad_spinegaunt", pos, 3)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tyranids_squad_termagant", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tyranids_squad_hormagaunt", pos, 2)
+			Util_CreateSquadsAtPosition(player, "startingarmy", "tyranids_squad_carnifex", pos, 2)
+		end
+	end
+
+end
+Scar_AddInit(AddArmy)

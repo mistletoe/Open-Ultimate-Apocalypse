@@ -1,0 +1,102 @@
+Model = "Shakun_Coast"
+Planet = "Kaurava_I"
+
+Name = "$3900013"
+Description = "$3900118"
+TerrainDescription = "$3900119"
+History = 
+{
+"$3900120",
+"$3900121",
+"$3900122",
+"$3900123",
+"$3900124",
+"$3900125",
+"$3900376",
+"$3900126",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "6P_Shakun_Coast"
+MissionFileAttackingConquered = "6P_Shakun_Coast"
+MissionFileDefending = "6P_Shakun_Coast"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Vyasastan",
+	"Dussala_Precinct",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_defiler_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_grey_knights_hg_dxp3",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_armored_nob_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_commissar_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_harlequin_squad_hg_dxp3",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_hound_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_tomb_spyder_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_seraphim_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_warp_beast_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "guard_race"
+OwnerSecondary = "sisters_race"
+
+StartingResourceBonus = 0.0

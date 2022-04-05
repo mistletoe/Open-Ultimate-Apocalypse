@@ -1,0 +1,255 @@
+----------------------------------------------------------------------------------------------------------------
+-- Restriction tables for single player missions
+-- (c) 2003 Relic Entertainment Inc.
+
+----------------------------------------------------------------------------------------------------------------
+-- This table holds all the restriction levels for space marines.
+-- Items with a level that are GREATER then the given level will be restricted.
+-- Items that are in the game, but not specified in these tables WILL NOT be restricted.
+_SpaceMarineRestrictions = 
+{
+	Buildings = 
+	{
+	--	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_ability_building", 							5 ,						408054,					"$42958"},
+		{ "space_marine_armoury", 									1,							408044,					"$42948"},
+		{ "space_marine_barracks", 									1,							408042,					"$42946"},
+		{ "space_marine_generator", 									1,							408058,					"$42962"},
+		{ "space_marine_hq", 											1,							408062,					"$42966"},
+		{ "space_marine_listening_post", 							1,							"none",							"none"},
+		{ "space_marine_orbital_relay", 								7,							408056,					"$42960"},
+		{ "space_marine_thermo_generator", 						4,							408060,					"$42964"},
+		{ "space_marine_turret_bolter", 								3,							408046,					"$42950"},
+		{ "space_marine_vehicle_building", 						4,							408052,					"$42956"},
+		{ "space_marine_mine_field", 								3,							408050,					"$42954"},
+	},
+	
+	Squads = 
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_squad_apothecary", 						5,							408008,					"$42910"},
+		{ "space_marine_squad_assault", 							4,							408006,					"$42908"},
+		{ "space_marine_squad_dreadnought", 					3,							408018,					"$42922"},
+		{ "space_marine_squad_dreadnought_hellfire",		5,							"none",							"$42924"},
+		{ "space_marine_squad_force_commander", 			20,						"none",							"none"},
+		{ "space_marine_squad_land_raider", 					8,							408024,					"$42930"},
+		{ "space_marine_squad_land_speeder", 					6,							408016,					"$42918"},
+		{ "space_marine_squad_librarian",		 					20,						"none",							"none"},
+		{ "space_marine_squad_rhino", 								5,							408014,					"$42916"},
+		{ "space_marine_squad_predator", 						6,							408022,					"$42928"},
+		{ "space_marine_squad_servitor",							1,							408000,					"$42902"},
+		{ "space_marine_squad_scout", 								2,							408002,					"$42904"},
+		{ "space_marine_squad_skull_probe", 					2,							408012,					"$42914"},
+		{ "space_marine_squad_tactical", 							1,							408004,					"$42906"},
+		{ "space_marine_squad_terminator", 						7,							408010,					"$42912"},
+		{ "space_marine_squad_terminator_assault", 			7,							408064,					"$42920"},
+		{ "space_marine_squad_whirlwind", 						4,							408020,					"$42926"},
+	},
+	
+	AddOns =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{"space_marine_hq_addon_1",								2,							408038,					"$42942"},
+		{"space_marine_hq_addon_2",								6,							408040,					"$42944"},
+		{"space_marine_list_post_addon_1",						2,							"none",							"none"},
+		{"space_marine_list_post_addon_2",						6,							"none",							"none"},
+	},
+	
+	Research =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "marine_scout_infiltrate_research", 						2,							"none",							"none"},
+		{ "marine_max_weapons_research", 						2,							"none",							"none"},
+		{ "marine_health_upgrade_research", 					2,							"none",							"none"},
+		{ "marine_health_upgrade_research_2", 					3,							"none",							"none"},
+		{ "marine_accuracy_upgrade_research", 				2,							"none",							"none"},
+		{ "marine_accuracy_upgrade_research_2", 				3,							"none",							"none"},
+		{ "marine_sergeant_melee_upgrade_1", 					2,							"none",							"none"},
+		{ "marine_sergeant_melee_upgrade_2", 					3,							"none",							"none"},
+		{ "marine_sergeant_ranged_upgrade_1", 				3,							"none",							"none"},
+		{ "marine_force_commander_ability_research_1", 	2,							"none",							"none"},
+		{ "marine_force_commander_research_2", 				3,							"none",							"none"},
+		{ "marine_librarian_research_1", 							2,							"none",							"none"},
+		{ "marine_librarian_research_2", 							3,							"none",							"none"},
+		{ "marine_commander_health_research_1", 			2,							"none",							"none"},
+		{ "marine_commander_health_research_2", 			3,							"none",							"none"},
+		{ "marine_frag_grenade_research", 						2,							"none",							"none"},
+		{ "marine_melta_bomb_research", 							3,							"none",							"none"},
+		{ "marine_smoke_launcher_research", 					5,							"none",							"none"},
+		{ "squad_cap_research", 										1,							"none",							"none"},
+		{ "squad_cap_research_1", 									2,							"none",							"none"},
+		{ "support_cap_research", 										3,							"none",							"none"},
+		{ "support_cap_research_1", 									3,							"none",							"none"},
+		{ "support_cap_research_2", 									4,							"none",							"none"},
+		{ "support_cap_research_3", 									5,							"none",							"none"},
+		{ "marine_requisition_research_1", 						3,							"none",							"none"},
+		{ "marine_requisition_research_2", 						4,							"none",							"none"},
+		{ "marine_power_research_1", 								3,							"none",							"none"},
+		{ "marine_power_research_2", 								4,							"none",							"none"},
+	},
+	
+	Weapon =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_flamer_tactical", 							1,							"none",							"none"},
+		{ "space_marine_heavy_bolter_tactical", 				1,							"none",							"none"},
+		{ "space_marine_missile_launcher_tactical", 			3,							"none",							"none"},
+		{ "space_marine_plasma_gun_scout", 					3,							"none",							"none"},
+		{ "space_marine_sniper_rifle", 								2,							"none",							"none"},
+		{ "space_marine_plasma_gun",								3,							"none",							"none"},
+	}
+}
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Restrict functions
+
+--? @shortdesc Applies restrictions for space marines.  You should call this at the begining of your mission for Player 1.
+--? @args PlayerID playerId, Integer level
+--? @result Void
+function Restrict_SpaceMarines( playerId, level )
+	if(Player_GetRaceName( playerId ) ~= "space_marine_race") then
+		error("Restrict_SpaceMarines can only be called for space marines!")
+	end
+	
+	_RestrictionPrivate.ApplyRestrictionsTable( playerId, level, _SpaceMarineRestrictions )
+end
+
+--? @shortdesc Unrestricts a specific building and gives an intelevent style dialog and an event cue with it.  Pass in "none" for event cue or dialog in order to not display the alerts
+--? @args PlayerID playerId, blueprint building_blueprint, locID eventcuedescription_locId, locID dialog_locId 
+--? @result Void
+function Unrestrict_BuildingWithAlerts( playerId, building_blueprint, eventcuedescription_locId, dialog_locId )	
+		Player_UnRestrictBuilding( playerId, building_blueprint )		
+		-- now display event cue
+		if eventcuedescription_locId ~= "none" then
+			EventCue_DoEvent( "newtechavailable", "Event_cue_notifications/General_alert", "$42900", eventcuedescription_locId )
+		end
+		-- now make actor speak
+		if dialog_locId ~= "none" then
+--~ 			Actor_PlaySpeech( ACT.Gabriel, dialog_locId, "speech/Races/Space_Marines/Force_commander/Attack" )
+			Actor_PlaySpeech( ACT.Gabriel, dialog_locId )
+		end
+end
+
+--? @shortdesc Unrestricts a specific addon and gives an intelevent style dialog and an event cue with it.  Pass in "none" for event cue or dialog in order to not display the alerts
+--? @args PlayerID playerId, blueprint addon_blueprint, locID eventcuedescription_locId, locID dialog_locId 
+--? @result Void
+function Unrestrict_AddOnWithAlerts( playerId, building_blueprint, eventcuedescription_locId, dialog_locId )	
+		Player_UnRestrictAddOn( playerId, building_blueprint )		
+		
+		-- now display event cue
+		if eventcuedescription_locId ~= "none" then
+			EventCue_DoEvent( "newtechavailable", "Event_cue_notifications/General_alert", "$42900", eventcuedescription_locId )
+		end
+		-- now make actor speak
+		if dialog_locId ~= "none" then
+--~ 			Actor_PlaySpeech( ACT.Gabriel, dialog_locId, "speech/Races/Space_Marines/Force_commander/Attack" )
+			Actor_PlaySpeech( ACT.Gabriel, dialog_locId )
+		end
+end
+
+--? @shortdesc Unrestricts a specific research and gives an intelevent style dialog and an event cue with it.  Pass in "none" for event cue or dialog in order to not display the alerts
+--? @args PlayerID playerId, blueprint research_blueprint, locID eventcuedescription_locId, locID dialog_locId 
+--? @result Void
+function Unrestrict_ResearchWithAlerts( playerId, building_blueprint, eventcuedescription_locId, dialog_locId )	
+		Player_UnRestrictResearch( playerId, building_blueprint )	
+		
+		
+		
+		-- now display event cue
+		if eventcuedescription_locId ~= "none" then
+			EventCue_DoEvent( "newtechavailable", "Event_cue_notifications/General_alert", "$42900", eventcuedescription_locId )
+		end
+		-- now make actor speak
+		if dialog_locId ~= "none" then
+--~ 			Actor_PlaySpeech( ACT.Gabriel, dialog_locId, "speech/Races/Space_Marines/Force_commander/Attack" )
+			Actor_PlaySpeech( ACT.Gabriel, dialog_locId )
+		end
+end
+
+--? @shortdesc Unrestricts a specific squad and gives an intelevent style dialog and an event cue with it.  Pass in "none" for event cue or dialog in order to not display the alerts
+--? @args PlayerID playerId, blueprint squad_blueprint, locID eventcuedescription_locId, locID dialog_locId 
+--? @result Void
+function Unrestrict_SquadWithAlerts( playerId, building_blueprint, eventcuedescription_locId, dialog_locId )	
+		Player_UnRestrictSquad( playerId, building_blueprint )		
+		
+		-- now display event cue
+		if eventcuedescription_locId ~= "none" then
+			EventCue_DoEvent( "newtechavailable", "Event_cue_notifications/General_alert", "$42900", eventcuedescription_locId )
+		end
+		-- now make actor speak
+		if dialog_locId ~= "none" then
+--~ 			Actor_PlaySpeech( ACT.Gabriel, dialog_locId, "speech/Races/Space_Marines/Force_commander/Attack" )
+			Actor_PlaySpeech( ACT.Gabriel, dialog_locId )
+		end
+end
+
+--? @shortdesc Unrestricts a specific weapon  and gives an intelevent style dialog and an event cue with it.  Pass in "none" for event cue or dialog in order to not display the alerts
+--? @args PlayerID playerId, blueprint weapon_blueprint, locID eventcuedescription_locId, locID dialog_locId 
+--? @result Void
+function Unrestrict_WeaponWithAlerts( playerId, building_blueprint, eventcuedescription_locId, dialog_locId )	
+
+		Player_UnRestrictWeapon( playerId, building_blueprint )		
+		-- now display event cue
+		if eventcuedescription_locId ~= "none" then
+			EventCue_DoEvent( "newtechavailable", "Event_cue_notifications/General_alert", "$42900", eventcuedescription_locId )
+		end
+		-- now make actor speak
+		if dialog_locId ~= "none" then
+--~ 			Actor_PlaySpeech( ACT.Gabriel, dialog_locId, "speech/Races/Space_Marines/Force_commander/Attack" )
+			Actor_PlaySpeech( ACT.Gabriel, dialog_locId )
+		end
+end
+
+----------------------------------------------------------------------------------------------------------------
+-- Private implementation
+
+_RestrictionPrivate = 
+{
+	ApplyRestrictionsTable = function( playerId, level, Restrictions )
+		
+		-- Restrictor functions for sub tables
+		local RestrictBuilding 	= function( name ) Player_RestrictBuilding( playerId, name ) end
+		local RestrictSquad		= function( name ) Player_RestrictSquad( playerId, name ) end
+		local RestrictAddOn 		= function( name ) Player_RestrictAddOn( playerId, name ) end
+		local RestrictResearch 	= function( name ) Player_RestrictResearch( playerId, name ) end
+		local RestrictWeapon 	= function( name ) Player_RestrictWeapon( playerId, name ) end
+		
+		-- Restrict everything greater then level for a given subtable.  Uses one of the above restrictor functions
+		local ApplyRestrictionsSubTable = function( SubTable, RestrictorFunction )
+			
+			-- Ignore nil subtables
+			if( SubTable == nil ) then return end
+			
+			for i = 1, table.getn( SubTable ) do
+				if( SubTable[i][2] >= level ) then 
+--~ 					if ( SubTable[i][2] == level ) then
+--~ 						print( "***ALERT*** YOU MUST UNRESTRICT THIS ITEM IN YOUR MISSION - Restricting: "..SubTable[i][1] )
+--~ 						if SubTable == Restrictions.Buildings then
+--~ 							print( "UNRESTRICT WITH THE FOLLOWING FUNCTION: Unrestrict_BuildingWithAlerts( g_Player1, \""..SubTable[i][1].."\", \""..SubTable[i][4].."\", "..SubTable[i][3].." )" )
+--~ 						elseif SubTable == Restrictions.Squads then
+--~ 							print( "UNRESTRICT WITH THE FOLLOWING FUNCTION: Unrestrict_SquadWithAlerts( g_Player1, \""..SubTable[i][1].."\", \""..SubTable[i][4].."\", "..SubTable[i][3].." )" )
+--~ 						elseif SubTable == Restrictions.AddOns then
+--~ 							print( "UNRESTRICT WITH THE FOLLOWING FUNCTION: Unrestrict_AddOnWithAlerts( g_Player1, \""..SubTable[i][1].."\", \""..SubTable[i][4].."\", "..SubTable[i][3].." )" )
+--~ 						elseif SubTable == Restrictions.Research then
+--~ 							print( "UNRESTRICT WITH THE FOLLOWING FUNCTION: Unrestrict_ResearchWithAlerts( g_Player1, \""..SubTable[i][1].."\", \""..SubTable[i][4].."\", "..SubTable[i][3].." )" )
+--~ 						elseif SubTable == Restrictions.Weapons then
+--~ 							print( "UNRESTRICT WITH THE FOLLOWING FUNCTION: Unrestrict_WeaponWithAlerts( g_Player1, \""..SubTable[i][1].."\", \""..SubTable[i][4].."\", "..SubTable[i][3].." )" )
+--~ 						end						
+--~ 					else
+--~ 						print( "Restricting "..SubTable[i][1] )
+--~ 					end
+					RestrictorFunction( SubTable[i][1] )
+				end
+			end
+		end
+		
+		-- Restrict all subtables
+		ApplyRestrictionsSubTable( Restrictions.Buildings, 	RestrictBuilding )	
+		ApplyRestrictionsSubTable( Restrictions.Squads, 		RestrictSquad )	
+		ApplyRestrictionsSubTable( Restrictions.AddOns, 		RestrictAddOn )	
+		ApplyRestrictionsSubTable( Restrictions.Research, 	RestrictResearch )	
+		ApplyRestrictionsSubTable( Restrictions.Weapons, 	RestrictWeapon )	
+		
+	end
+}

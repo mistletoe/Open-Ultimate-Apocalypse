@@ -1,0 +1,2279 @@
+IntroMovie = "" 
+IntroMovieText =
+{
+
+}
+
+OutroMovie = "ss_space_marine_race_outro"
+OutroMovieText =
+{
+	{
+		Text = "$5200187",
+		Start = 3.200,
+		End = 37.000,
+	},
+	{
+		Text = "$5200188",
+		Start = 44.110,
+		End = 68.070,
+	},
+	{
+		Text = "$5200189",
+		Start = 79.150,
+		End = 107.250,
+	},
+}
+
+NuggetMovie = "space_marine_race_nugget"
+
+ForceName = "$690010"
+TeamColourForceName = "Blood Ravens"
+TeamColour = "default_0"
+CommanderName = "space_marine_squad_force_commander_advance_sp"
+
+ArmyModel = "Art/UI/3D_Models/MM_Force_Commander"
+ArmyModelScale = 0.15
+ArmyModelBone = "master"
+
+TerritoryColour = { 152, 20, 32 }
+
+-- Delays used for army move fx
+TeleportFXLength = 0.5
+SpacePortTeleportFXLength = 0.5
+
+ApplyTeamColours = true
+
+CommanderScreenModel = "Art/UI/3D_Models/Race_Space_Marine"
+CommanderScreenBackgroundImage = "Art/UI/RaceImages/Race_Space_Marine"
+CommanderScreenAction = "sp_wargear"
+
+WargearScreenModel = "Art/EBPs/Races/Space_Marines/Troops/Force_Commander_TGD"
+WargearScreenBackgroundImage = "Art/UI/Wargear/sm wargear backdrop"
+WargearScreenAction = "default"
+
+RetractedStartingSquads = {}
+
+-- Territory special ability values
+IndustrialProductionRequisitionBonus = 1000
+IndustrialProductionPowerBonus = 0
+
+IncreasedManpowerStartingSquadCapBonus = 4
+IncreasedManpowerMaximumSquadCapBonus = 4
+IncreasedManpowerStartingVehicleCapBonus = 2
+IncreasedManpowerMaximumVehicleCapBonus = 2
+
+RequisitionReducedCostBonus = 0.85
+
+PopulationGrowthTerritoryRate = 3
+PopulationGrowthTerritoryChance = 0.33
+PopulationGrowthArmyRate = 3
+PopulationGrowthMilitaryStrengthIncrement = 1
+PopulationGrowthAIRankIncrement = 1
+
+RessurectionChancePlayer = 0.33
+RessurectionChanceAI = 0.33
+
+TauGunMinDamageAI = 0
+TauGunMaxDamageAI = 1
+TauGunMinDamagePlayer = 0
+TauGunMaxDamagePlayer = 1
+
+RoadwaySeedsMaxDistance = 3
+
+DisconnectedSupplyModifier = 0.0
+
+RaceSelectionScreen =
+{
+	Model = "Race_Space_Marine",
+	RaceImage = "Race_Space_Marine",
+	ExitAnimationLength = 1.75,
+	AmbientLight = { 128, 128, 128 }
+}
+
+VictoryScreen =
+{
+	ImageVictory = "SpaceMarineVictory",
+	ImageDefeat = "SpaceMarineDefeat",
+
+	TextVictoryAttacking = "$3000500",
+	TextVictoryDefending = "$3000501",
+
+	TextDefeatAttacking = "$3000502",
+	TextDefeatDefending = "$3000503",
+
+	TextDescription_chaos_marine_race = "$3000504",
+	TextDescription_eldar_race = "$3000505",
+	TextDescription_guard_race = "$3000506",
+	TextDescription_necron_race = "$3000507",
+	TextDescription_ork_race = "$3000508",
+	TextDescription_tau_race = "$3000509",
+	TextDescription_dark_eldar_race  = "$3900441",
+	TextDescription_sisters_race  = "$3900448",
+}
+
+Messages =
+{
+	-- Bonus Units
+	NewBonusUnit = "$3003010",
+	PreservedBonusUnit = "$3003011",
+	FailedToGainBonusUnit = "$3003013",
+	LostBonusUnit = "$3003012",
+
+	-- Abilities
+	NewAbility = "$3003010",
+	PreservedAbility = "$3003011",
+	FailedToGainAbility = "$3003013",
+	LostAbility = "$3003012",
+
+	-- Race elimination
+	DefeatedRace = "$3003014",
+}
+
+BonusSquadCosts =
+{
+    space_marine_squad_scout_advance_sp = 225,
+	space_marine_squad_veteran_sp = 325,
+	space_marine_squad_assault_veteran_sp = 375,
+	space_marine_squad_grey_knights_hg_dxp3 = 500,
+	space_marine_squad_terminator_assault_veteran_sp = 550,
+	space_marine_squad_apothecary_veteran_stronghold_sp = 350,
+	space_marine_squad_librarian_advance_sp = 375,
+	space_marine_squad_land_speeder_advance_sp = 475,
+	space_marine_squad_dreadnought_advance_sp = 900,
+	space_marine_squad_dreadnought_hellfire_advance_sp = 925
+}
+
+ReinforcementStructures =
+{
+	{
+		Blueprint = "space_marine_generator",
+		Cost = 50,
+		Markers =
+		{
+			"MM_Reinforcement0", "MM_Reinforcement1", "MM_Reinforcement2",
+			"MM_Reinforcement3"		
+		}
+	},
+	{
+		Blueprint = "space_marine_turret_bolter",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement6", "MM_Reinforcement7", "MM_Reinforcement8", "MM_Reinforcement9"
+		}
+	},
+	{
+		Blueprint = "space_marine_barracks",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement10"
+		}
+	},
+	{
+		Blueprint = "space_marine_armoury",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement11"
+		}
+	},
+}
+
+ReinforcementSquads = 
+{
+	{
+		Blueprint = "space_marine_squad_servitor",
+		Cost = 25,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "space_marine_squad_tactical",
+		Cost = 85,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "space_marine_squad_assault",
+		Cost = 110,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+
+	{
+		Blueprint = "space_marine_squad_dreadnought",
+		Cost = 250,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+}
+
+DeepStrikeSquads = 
+{
+	{
+		Blueprint = "space_marine_squad_servitor",
+		Cost = 125,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "space_marine_squad_tactical",
+		Cost = 350,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "space_marine_squad_assault",
+		Cost = 400,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+
+	{
+		Blueprint = "space_marine_squad_dreadnought",
+		Cost = 1000,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+}
+
+TechLevel2Structures =
+{
+	"space_marine_hq_addon_1"
+}
+
+TechLevel3Structures =
+{
+	"space_marine_hq_addon_2"
+}
+
+WarGear =
+{
+	{
+		Research = "marine_wargear_upgrade_03_plasma_pistol_research",
+		WeaponName = "space_marine_plasma_pistol_commander",
+		WeaponNameDefault = "space_marine_bolt_pistol_forcecommander",
+		ClauseKey = "Weapon_Range_Upgrade_Main",
+		ClauseValueOn = "Space_Marines_Plasma_Pistol",
+		ClauseValueDefault = "Space_Marines_Bolt_Pistol",
+		Name = "$3001080",
+		Icon = 10,
+		Description = "$3001081",
+		Specification = "$3001082",
+    AIVictoriesRequired = 1,
+	},
+	{
+		Research = "marine_wargear_upgrade_04_multi_melta_research",
+		WeaponName = "space_marine_bolt_pistol_combi_chaingun_forcecommander",
+		WeaponNameDefault = "space_marine_bolt_pistol_forcecommander",
+		ClauseKey = "Weapon_Range_Upgrade_Main",
+		ClauseValueOn = "Space_Marines_Meltagun",
+		ClauseValueDefault = "Space_Marines_Bolt_Pistol",
+		Name = "$3001310",
+		Icon = 2,
+		Description = "$3001311",
+		Specification = "$3001312",
+    AIVictoriesRequired = 2,
+	},
+	{
+		Research = "marine_wargear_upgrade_01_power_sword_research",
+		WeaponName = "space_marine_power_sword_force_commander",
+		WeaponNameDefault = "space_marine_chainsword_force_commander",
+		ClauseKey = "Weapon_Melee_Upgrade_Main",
+		ClauseValueOn = "Space_Marines_Rogal's_Fist",
+		ClauseValueDefault = "Space_Marines_Chainsword",
+		Name = "$4000140",
+		Icon = 11,
+		Description = "$4000141",
+		Specification = "$4000142",
+    AIVictoriesRequired = 3,
+	},
+	{
+		Research = "marine_wargear_upgrade_02_daemon_hammer_research",
+		WeaponName = "space_marine_daemon_hammer_advance_sp",
+		WeaponNameDefault = "space_marine_chainsword_force_commander",
+		ClauseKey = "Weapon_Melee_Upgrade_Main",
+		ClauseValueOn = "Space_Marines_Daemon_Hammer",
+		ClauseValueDefault = "Space_Marines_Chainsword",
+		Name = "$3001060",
+		Icon = 8,
+		Description = "$3001061",
+		Specification = "$3001062",
+    AIVictoriesRequired = 4,
+	},
+	{
+		Research = "marine_wargear_upgrade_05_halo_research",
+		WeaponName = "Wargear_05",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_05",
+		ClauseValueOn = "Wargear_05",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$3001040",
+		Icon = 6,
+		Description = "$3001041",
+		Specification = "$3001042",
+    AIVictoriesRequired = 5,
+	},
+	{
+		Research = "marine_wargear_upgrade_06",
+		WeaponName = "Wargear_06",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_06",
+		ClauseValueOn = "Wargear_06",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$4000143",
+		Icon = 3,
+		Description = "$4000144",
+		Specification = "$4000145",
+    AIVictoriesRequired = 6,
+	},
+	{
+		Research = "marine_wargear_upgrade_07",
+		WeaponName = "Wargear_07",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_07",
+		ClauseValueOn = "Wargear_07",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$4000146",
+		Icon = 9,
+		Description = "$4000147",
+		Specification = "$4000148",
+    AIVictoriesRequired = 7,
+	},
+	{
+		Research = "marine_wargear_upgrade_08",
+		WeaponName = "Wargear_08",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_08",
+		ClauseValueOn = "Wargear_08",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$4000149",
+		Icon = 5,
+		Description = "$4000150",
+		Specification = "$4000151",
+    AIVictoriesRequired = 8,
+	},
+	{
+		Research = "marine_wargear_upgrade_09_greaves_research",
+		WeaponName = "Wargear_09",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_09",
+		ClauseValueOn = "Wargear_09",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$4000152",
+		Icon = 4,
+		Description = "$4000153",
+		Specification = "$4000154",
+    AIVictoriesRequired = 9,
+	},
+	{
+		Research = "marine_wargear_upgrade_10_teleporter_research",
+		WeaponName = "Wargear_10",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_10",
+		ClauseValueOn = "Wargear_10",
+		ClauseValueDefault = "titan_maincannon",
+		Name = "$3001050",
+		Icon = 7,
+		Description = "$3001051",
+		Specification = "$3001052",
+    AIVictoriesRequired = 10,
+	}
+}
+
+Promotions =
+{
+	{
+		Name = "$3002000",
+		Description = "$3003001",
+		Conditions = 
+		{
+			ConqueredTerritories = 1
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003002",
+		Conditions = 
+		{
+			ConqueredTerritories = 5
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003003",
+		Conditions = 
+		{
+			ConqueredTerritories = 15
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003004",
+		Conditions = 
+		{
+			UnitKillsLifetime = 2000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003005",
+		Conditions = 
+		{
+			UnitKillsLifetime = 5000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003006",
+		Conditions = 
+		{
+			ConqueredStrongholds = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003000",
+		Conditions = 
+		{
+			UnitKillsMission = 200,
+			KillRatioMission = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003007",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 1,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003008",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 3,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003009",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 5,
+		}
+	},
+}
+
+AIStartingStructuresAttacking =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 2,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+	
+	{
+		MilitaryStrength = 3,
+		Structures =
+		{
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingStructuresDefending =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+		},
+	},
+
+	{
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 3,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_barracks",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "space_marine_armoury",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "space_marine_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "space_marine_vehicle_building",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+			{
+				Blueprint = "space_marine_ability_building",
+				Markers =
+				{
+					"start9_",
+				},
+			},
+		},
+	},	
+}
+
+AIStartingSquadsAttacking =
+{
+	{
+
+		MilitaryStrength = 2,
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 3,
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},		
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+}
+
+AIStartingSquadsDefending =
+{
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+}
+
+ArmyRanks =
+{
+	-- Rank 1
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 2
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 3
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 4
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 5
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 6
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_land_speeder",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 7
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_land_speeder",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_chaplain",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 8
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_land_speeder",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_chaplain",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_terminator",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 9
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_land_speeder",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_chaplain",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_terminator",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_terminator_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 10
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "space_marine_squad_force_commander_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_scout",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_tactical",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_grey_knights",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_land_speeder",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_chaplain",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_terminator",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_terminator_assault",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "space_marine_squad_predator",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+}

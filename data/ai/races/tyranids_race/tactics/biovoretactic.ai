@@ -1,0 +1,42 @@
+----------------------------------------
+-- File: 'biovoretactic.ai'
+-- Created by Gambit	@ 25.07.2017
+
+class 'BiovoreTactic' (TyranidInfantryTactic)
+
+function BiovoreTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Biovore Tactic")
+	self.numOfUpgradesBiovoreMax = math.random(math.random(0,1), math.random(2,3))
+	self.numOfUpgradesBiovoreCurrent = 0
+end
+
+
+function BiovoreTactic:Upgrade()
+	local troops = self.squad_ai:GetNumTroopers()
+	-- Upgrade randomly per squad, with number of upgrades varying from 0 to 3
+	if troops == 1 or self.numOfUpgradesBiovoreMax <= self.numOfUpgradesBiovoreCurrent then
+		return
+	end
+	-- Check if we are reinforcing
+	if (self.squad_ai:IsReinforcing() or not self.squad_ai:HasUpgradableTrooper()) then
+		return
+	end
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end	
+	-- Only upgrade in healthy state
+	if (troops < self.squad_ai:GetMaxTroopers() * 0.6 or self.squad_ai:GetHealthPercentage() < 0.5) then
+		return
+	end
+	-- Try to upgrade only if enemy's favourite class is found
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer()
+	if oEnemy ~= nil then
+		eUpgradeType = oEnemy:GetMajorityClassType()
+		if eUpgradeType ~= nil then
+			self.squad_ai:DoBestUpgrade(eUpgradeType)
+			self.numOfUpgradesBiovoreCurrent = self.numOfUpgradesBiovoreCurrent + 1
+		end
+	end
+end

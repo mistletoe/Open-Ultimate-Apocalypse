@@ -1,0 +1,139 @@
+----------------------------------------------------------------------------------------------------------------
+-- Actor / NIS helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+-- Note: Add more / uncomment as you need them
+
+-- This is a table of the all actors used in NISlet speech events.
+-- Each actor needs a blueprint and a speech icon associated with it.
+-- NOTE: As you update these, make sure to update the @extdesc in Util_PlayActorSpeech below!
+ACT ={
+	-- MISC
+	Tutorial_Chaos						=	{	squadID = nil,	blueprint = "none",				icon = [[Data:Art\UI\InGame\speech_icons\tutorial_chaos_icon.tga]]			},
+	Tutorial_Eldar						=	{	squadID = nil,	blueprint = "none",				icon = [[Data:Art\UI\InGame\speech_icons\tutorial_eldar_icon.tga]]			},
+	Tutorial_Ork						=	{	squadID = nil,	blueprint = "none",				icon = [[Data:Art\UI\InGame\speech_icons\tutorial_ork_icon.tga]]			},
+	Tutorial_Marine						=	{	squadID = nil,	blueprint = "none",				icon = [[Data:Art\UI\InGame\speech_icons\tutorial_icon.tga]]			},
+	
+	-- SPACE MARINES
+	Gabriel 						=	{	squadID = nil,	blueprint = "force_commander",				icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	Isador 						=	{	squadID = nil,	blueprint = "librarian",							icon = [[Data:Art\UI\InGame\speech_icons\librarian_icon.tga]]			},
+	Scout 						=	{	squadID = nil,	blueprint = "scout_marine",					icon = [[Data:Art\UI\InGame\speech_icons\scoutmarine_icon.tga]]			},
+	TacticalMarine 			=	{	squadID = nil,	blueprint = "space_marine_tactical",		icon = [[Data:Art\UI\InGame\speech_icons\spacemarine_icon.tga]]			},
+	--Sergeant					=	{	squadID = nil,	blueprint = "sergeant",							icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	--Terminator 					=	{	squadID = nil,	blueprint = "terminator",						icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	--Dreadnought 				=	{	squadID = nil,	blueprint = "dreadnought",						icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	Apothecary 				=	{	squadID = nil,	blueprint = "apothecary",						icon = [[Data:Art\UI\InGame\speech_icons\apothecary_icon.tga]]			},
+	Corralis 								=	{	squadID = nil,	blueprint = "todo_blueprint",						icon = [[Data:Art\UI\InGame\speech_icons\corralis_icon.tga]]			},
+	Servitor 								=	{	squadID = nil,	blueprint = "servitor",						icon = [[Data:Art\UI\InGame\speech_icons\servitor_icon.tga]]			},
+	Matiel 								=	{	squadID = nil,	blueprint = "sergeant",						icon = [[Data:Art\UI\InGame\speech_icons\matiel_icon.tga]]			},
+	EvilIsador 						=	{	squadID = nil,	blueprint = "evil_librarian",							icon = [[Data:Art\UI\InGame\speech_icons\librarian_icon.tga]]			},
+	
+	-- CHAOS
+	Bale 							=	{	squadID = nil,	blueprint = "chaos_lord",						icon = [[Data:Art\UI\InGame\speech_icons\bale_icon.tga]]			},
+	Sindri 						=	{	squadID = nil,	blueprint = "chaos_sorcerer",					icon = [[Data:Art\UI\InGame\speech_icons\sindri_icon.tga]]			},
+	--EvilIsador					=	{	squadID = nil,	blueprint = *"todo_blueprint",					icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	Cultist 						=	{	squadID = nil,	blueprint = "chaos_cultist",					icon = [[Data:Art\UI\InGame\speech_icons\cultist_icon.tga]]			},
+	Daemon 						=	{	squadID = nil,	blueprint = "none",					icon = [[Data:Art\UI\InGame\speech_icons\daemon_icon.tga]]			},
+	Daemon_Prince 						=	{	squadID = nil,	blueprint = "chaos_daemon_prince",					icon = [[Data:Art\UI\InGame\speech_icons\daemon_prince_icon.tga]]			},
+	
+	-- ORKS
+	Orkamungus 				=	{	squadID = nil,	blueprint = "ork_warboss",		icon = [[Data:Art\UI\InGame\speech_icons\warboss_icon.tga]]			},
+	SluggaBoy 				=	{	squadID = nil,	blueprint = "ork_slugga_boy",		icon = [[Data:Art\UI\InGame\speech_icons\orkboy_icon.tga]]			},
+	Nob 							=	{	squadID = nil,	blueprint = "ork_nob",		icon = [[Data:Art\UI\InGame\speech_icons\nob_icon.tga]]			},
+	NobSP 							=	{	squadID = nil,	blueprint = "ork_nob_leader_sp",		icon = [[Data:Art\UI\InGame\speech_icons\nob_icon.tga]]			},
+	Grot 							=	{	squadID = nil,	blueprint = "ork_grot",		icon = [[Data:Art\UI\InGame\speech_icons\grot_icon.tga]]			},
+	
+	-- ELDAR
+	Macha						=	{	squadID = nil,	blueprint = "eldar_farseer",						icon = [[Data:Art\UI\InGame\speech_icons\macha_icon.tga]]			},
+	Ranger						=	{	squadID = nil,	blueprint = "eldar_rangers",						icon = [[Data:Art\UI\InGame\speech_icons\ranger_icon.tga]]			},
+	Warlock						=	{	squadID = nil,	blueprint = "eldar_warlock",						icon = [[Data:Art\UI\InGame\speech_icons\warlock_icon.tga]]			},
+	Dark_Reaper_Exarch		=	{	squadID = nil,	blueprint = "eldar_dark_reaper_exarch",						icon = [[Data:Art\UI\InGame\speech_icons\dark_reaper_icon.tga]]		},
+	
+	-- IMPERIAL GUARD
+	Guardsmen 					=	{	squadID = nil,	blueprint = "guard_soldier",						icon = [[Data:Art\UI\InGame\speech_icons\guardsmen_icon.tga]]			},
+	--MaleCivilian 					=	{	squadID = nil,	blueprint = *"todo_blueprint",						icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	Brom 								=	{	squadID = nil,	blueprint = "guard_colonel",						icon = [[Data:Art\UI\InGame\speech_icons\brom_icon.tga]]			},
+	--EvilBrom 						=	{	squadID = nil,	blueprint = *"todo_blueprint",						icon = [[Data:Art\UI\InGame\speech_icons\forcecommander_icon.tga]]			},
+	Toth 								=	{	squadID = nil,	blueprint = "guard_inquisitor",						icon = [[Data:Art\UI\InGame\speech_icons\toth_icon.tga]]			},
+}
+
+--? @shortdesc Assign an sgroup to a actor.  Will take the first matching blueprint from the sgroup.
+--? @result Void
+--? @args ActorTable actor, String sgroupname
+--? @extdesc
+--?  Actor_SetFromSGroup( ACT.Gabriel, "sg_Gabriel" )
+function Actor_SetFromSGroup( actor, groupname )
+	
+	-- init
+	actor.squadID = nil
+	actor.squadGameID = nil
+	
+	-- find first squad containing bp	
+	local CheckBP = function( groupID, squadIDX, squadID )
+		local leaderBP = Squad_GetLeaderBP( squadID )
+		--print( "ACTOR -- Checking "..actor.blueprint.." with "..leaderBP )
+		if( actor.blueprint == leaderBP ) then
+			--
+			actor.squadID = squadID
+			actor.squadGameID = Squad_GetGameID( squadID )
+			
+			-- push a custom NIS idle action
+			Anim_PushNISAction( squadID, "Sp_default" )
+			return true
+		end
+		
+		return false
+	end
+	
+	-- find any spawned or despawned that return true
+	if( SGroup_ForEachAllOrAnyEx( groupname, false, CheckBP, true, true ) == false ) then
+		error( "Could not find bp "..actor.blueprint.." in sgroup "..groupname )
+	end
+end
+
+--? @shortdesc Breaks the relationship between an actor an its sgroup. 
+--? @result Void
+--? @args ActorTable actor
+--? @extdesc Speech played by this actor after this function call will no longer look for the actor in the sgroup to play the talk animation.  This function also removes the special sp_idle that is applied to all actors.
+function Actor_Clear( actor )
+	--
+	if( actor == nil ) then error( "actor cannot be a nil value, check spelling" ) end
+	
+	-- pop nis idle action
+	if( actor.squadID ~= nil and actor.squadGameID ~= nil ) then
+		
+		-- pop action if squad still exists
+		if Squad_Exists( actor.squadGameID ) then
+			Anim_PopNISAction( actor.squadID, "Sp_default" )
+		end
+		
+		actor.squadID = nil
+		actor.squadGameID = nil
+	end
+end
+
+--? @shortdesc Plays a speech event for a given actor.
+--? @result Void
+--? @args ActorTable actor, Integer locID, String optionalPath
+--? @extdesc
+--? **Sounds will be taken from the data:sound/speech/nis/ folder.  If you wish to play a sound from another folder you must use an optional path (ie. 'speech/single_player/guardsman/morale')\n\n
+--? If the speech file is not available, a placeholder time will be calculated for the message using the number of words and the message will be displayed for that length of time.\n
+--? Actors:\n
+--? \tACT.Gabriel, ACT.Isador, ACT.Matiel, ACT.Bale, ACT.Sindri, ACT.Orkamungus, ACT.Macha, ACT.Brom, ACT.Toth, ACT.ScoutMarine, ACT.TacticalMarine, ACT.SluggaBoy, ACT.Guardsmen, ACT.Ranger, ACT.Apothecary, ACT.Cultist, ACT.Nob, ACT.Grot, ACT.Corralis, ACT.Servitor, ACT.Warlock, ACT.Dark_Reaper_Exarch, ACT.EvilIsador\n\n
+--? To play speech for a custom actor, pass in a table = { blueprint = "blueprint_name", icon = "data:icon_path.tga" } for the Actor.
+function Actor_PlaySpeech( actor, locID, custPath )
+	
+	local speechPath = ""
+	if( custPath ~= nil ) then
+		--
+		speechPath = custPath
+	end
+	
+	-- play speech
+	if( actor.squadID == nil ) then
+		W40k_PlaySpeech( actor.icon, locID, speechPath )		
+	else	
+		W40k_PlaySquadSpeech( actor.squadID, actor.blueprint, actor.icon, locID, speechPath )
+	end
+	
+end

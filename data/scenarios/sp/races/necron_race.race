@@ -1,0 +1,2302 @@
+IntroMovie = "" 
+IntroMovieText =
+{
+
+}
+
+OutroMovie = "ss_necron_race_outro"
+OutroMovieText =
+{
+	{
+		Text = "$5200196",
+		Start = 2.070,
+		End = 30.220,
+	},
+	{
+		Text = "$5200198",
+		Start = 43.010,
+		End = 73.230,
+	},	
+}
+
+NuggetMovie = "necron_race_nugget"
+
+ForceName = "$3950223"
+TeamColourForceName = "Kaurava III"
+TeamColour = "default_0"
+CommanderName = "necron_lord_squad_advance_sp"
+
+ArmyModel = "Art/UI/3D_Models/MM_Necron_Lord"
+ArmyModelScale = 0.15
+ArmyModelBone = "master"
+
+TerritoryColour = { 16, 16, 16} --{ 134, 143, 126 }
+
+-- Delays used for army move fx
+TeleportFXLength = 0.5
+SpacePortTeleportFXLength = 0.5
+
+ApplyTeamColours = true
+
+CommanderScreenModel = "Art/UI/3D_Models/Race_Necron"
+CommanderScreenBackgroundImage = "Art/UI/RaceImages/Race_Necron"
+CommanderScreenAction = "sp_wargear"
+
+WargearScreenModel = "Art/EBPs/Races/Necrons/Troops/Necron_Lord_TGD"
+WargearScreenBackgroundImage = "Art/UI/Wargear/necron wargear backdrop"
+WargearScreenAction = "default"
+
+RetractedStartingSquads = 
+{
+	"necron_lord_squad"
+}
+
+-- Territory special ability values
+IndustrialProductionRequisitionBonus = 0
+IndustrialProductionPowerBonus = 1000
+
+IncreasedManpowerStartingSquadCapBonus = 4
+IncreasedManpowerMaximumSquadCapBonus = 4
+IncreasedManpowerStartingVehicleCapBonus = 2
+IncreasedManpowerMaximumVehicleCapBonus = 2
+
+RequisitionReducedCostBonus = 0.85
+
+PopulationGrowthTerritoryRate = 3
+PopulationGrowthTerritoryChance = 0.33
+PopulationGrowthArmyRate = 3
+PopulationGrowthMilitaryStrengthIncrement = 1
+PopulationGrowthAIRankIncrement = 1
+
+RessurectionChancePlayer = 0.33
+RessurectionChanceAI = 0.33
+
+TauGunMinDamageAI = 0
+TauGunMaxDamageAI = 1
+TauGunMinDamagePlayer = 0
+TauGunMaxDamagePlayer = 1
+
+RoadwaySeedsMaxDistance = 3
+
+DisconnectedSupplyModifier = 0.0
+
+RaceSelectionScreen =
+{
+	Model = "Race_Necron",
+	RaceImage = "Race_Necron",
+	ExitAnimationLength = 2.25,
+	AmbientLight = { 128, 128, 128 }
+}
+
+VictoryScreen =
+{
+	ImageVictory = "NecronVictory",
+	ImageDefeat = "NecronDefeat",
+
+	TextVictoryAttacking = "$3000800",
+	TextVictoryDefending = "$3000801",
+
+	TextDefeatAttacking = "$3000802",
+	TextDefeatDefending = "$3000803",
+
+	TextDescription_chaos_marine_race = "$3000804",
+	TextDescription_eldar_race = "$3000805",
+	TextDescription_guard_race = "$3000806",
+	TextDescription_space_marine_race = "$3000807",
+	TextDescription_ork_race = "$3000808",
+	TextDescription_tau_race = "$3000809",
+	TextDescription_dark_eldar_race  = "$3900446",
+	TextDescription_sisters_race  = "$3900454",
+}
+
+Messages =
+{
+	-- Bonus Units
+	NewBonusUnit = "$3003010",
+	PreservedBonusUnit = "$3003011",
+	FailedToGainBonusUnit = "$3003013",
+	LostBonusUnit = "$3003012",
+
+	-- Abilities
+	NewAbility = "$3003010",
+	PreservedAbility = "$3003011",
+	FailedToGainAbility = "$3003013",
+	LostAbility = "$3003012",
+
+	-- Race elimination
+	DefeatedRace = "$3003014",
+}
+
+BonusSquadCosts =
+{
+	necron_builder_scarab_squad_advance_sp = 125,
+	necron_basic_warrior_squad_advance_sp = 325,
+	necron_wraith_squad_advance_sp = 250,
+	necron_flayed_one_squad_advance_sp = 475,
+	necron_immortal_squad_advance_sp = 450,
+	necron_pariah_squad_advance_sp = 525,
+	necron_destroyer_squad_advance_sp = 600,
+	necron_tomb_spyder_squad_advance_sp = 800,
+}
+
+ReinforcementStructures =
+{
+	{
+		Blueprint = "necron_plasma_generator",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement0", "MM_Reinforcement1", "MM_Reinforcement2",
+			"MM_Reinforcement3"
+		}
+	},
+	{
+		Blueprint = "necron_turret",
+		Cost = 85,
+		Markers =
+		{
+			"MM_Reinforcement6", "MM_Reinforcement7", "MM_Reinforcement8", "MM_Reinforcement9"
+		}
+	},
+	{
+		Blueprint = "necron_summoning_core",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement10"
+		}
+	},
+	{
+		Blueprint = "necron_forbidden_archive",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement11"
+		}
+	},
+}
+
+ReinforcementSquads = 
+{
+	{
+		Blueprint = "necron_builder_scarab_squad",
+		Cost = 45,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "necron_basic_warrior_squad",
+		Cost = 85,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+
+	{
+		Blueprint = "necron_immortal_squad",
+		Cost = 125,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "necron_tomb_spyder_squad",
+		Cost = 225,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+}
+
+DeepStrikeSquads = 
+{
+		{
+		Blueprint = "necron_builder_scarab_squad",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "necron_basic_warrior_squad",
+		Cost = 350,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+
+	{
+		Blueprint = "necron_immortal_squad",
+		Cost = 475,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "necron_tomb_spyder_squad",
+		Cost = 875,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+}
+
+TechLevel2Structures =
+{
+	"addon_necron_hq_1"
+}
+
+TechLevel3Structures =
+{
+	"addon_necron_hq_2",
+	"necron_restored_monolith"
+}
+
+WarGear =
+{
+	{
+		Research = "necron_wargear_upgrade_03_necrotyr_sigils_research",
+		WeaponName = "necron_lord_staff_of_light_ranged_2",
+		WeaponNameDefault = "necron_lord_staff_of_light_ranged",
+		ClauseKey = "Weapon_Range_Upgrade_Main",
+		ClauseValueOn = "necron_lord_staff_of_light_ranged_2",
+		ClauseValueDefault = "necron_lord_staff_of_light_ranged",
+		Name = "$3001100",
+		Icon = 03,
+		Description = "$3001101",
+		Specification = "$3001102",
+    AIVictoriesRequired = 1,
+	},
+	{
+		Research = "necron_wargear_upgrade_04_gauss_flayer_research",
+		WeaponName = "necron_lord_staff_of_light_gauss_flayer",
+		WeaponNameDefault = "necron_lord_staff_of_light_ranged",
+		ClauseKey = "Weapon_Range_Upgrade_Main",
+		ClauseValueOn = "necron_lord_staff_of_light_gauss_flayer",
+		ClauseValueDefault = "necron_lord_staff_of_light_ranged",
+		Name = "$4000113",
+		Icon = 04,
+		Description = "$4000114",
+		Specification = "$4000115",
+    AIVictoriesRequired = 2,
+	},
+	{
+		Research = "necron_wargear_upgrade_01_skinning_blades_research",
+		WeaponName = "necron_lord_staff_of_light_skinning_blades",
+		WeaponNameDefault = "necron_lord_staff_of_light_melee",
+		ClauseKey = "Weapon_melee_upgrade_main",
+		ClauseValueOn = "necron_lord_staff_of_light_skinning_blades",
+		ClauseValueDefault = "necron_lord_staff_of_light_melee",
+		Name = "$3001120",
+		Icon = 01,
+		Description = "$3001121",
+		Specification = "$3001122",
+    AIVictoriesRequired = 3,
+	},
+	{
+		Research = "necron_wargear_upgrade_02_reaping_blades_research",
+		WeaponName = "necron_lord_staff_of_light_reaping_blades",
+		WeaponNameDefault = "necron_lord_staff_of_light_melee",
+		ClauseKey = "Weapon_melee_upgrade_main",
+		ClauseValueOn = "necron_lord_staff_of_light_reaping_blades",
+		ClauseValueDefault = "necron_lord_staff_of_light_melee",
+		Name = "$4000110",
+		Icon = 02,
+		Description = "$4000111",
+		Specification = "$4000112",
+    AIVictoriesRequired = 4,
+	},
+	{
+		Research = "necron_wargear_upgrade_08_ribcage_research",
+		WeaponName = "necron_lord_ribcage",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_03",
+		ClauseValueOn = "Wargear_03",
+		ClauseValueDefault = "<NONE>",
+		Name = "$4000119",
+		Icon = 08,
+		Description = "$4000120",
+		Specification = "$4000121",
+    AIVictoriesRequired = 5,
+	},
+	{
+		Research = "necron_wargear_upgrade_05_death_mask_research",
+		WeaponName = "necron_lord_death_mask",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_04",
+		ClauseValueOn = "Wargear_04",
+		ClauseValueDefault = "<NONE>",
+		Name = "$3001150",
+		Icon = 05,
+		Description = "$3001151",
+		Specification = "$3001152",
+    AIVictoriesRequired = 6,
+	},
+	{
+		Research = "necron_wargear_upgrade_06_under_shoulder_research",
+		WeaponName = "necron_lord_under_shoulder",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_05",
+		ClauseValueOn = "Wargear_05",
+		ClauseValueDefault = "<NONE>",
+		Name = "$3001160",
+		Icon = 06,
+		Description = "$3001161",
+		Specification = "$3001162",
+    AIVictoriesRequired = 7,
+	},
+	{
+		Research = "necron_wargear_upgrade_07",
+		WeaponName = "necron_lord_mantle_of_doom",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_06",
+		ClauseValueOn = "Wargear_06",
+		ClauseValueDefault = "<NONE>",
+		Name = "$4000116",
+		Icon = 07,
+		Description = "$4000117",
+		Specification = "$4000118",
+    AIVictoriesRequired = 8,
+	},
+	{
+		Research = "necron_wargear_upgrade_10_death_shroud_research",
+		WeaponName = "necron_lord_death_shroud",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_01",
+		ClauseValueOn = "Wargear_01",
+		ClauseValueDefault = "<NONE>",
+		Name = "$4000122",
+		Icon = 10,
+		Description = "$4000123",
+		Specification = "$4000124",
+    AIVictoriesRequired = 9,
+	},
+	{
+		Research = "necron_wargear_upgrade_09_gauntlets_research",
+		WeaponName = "necron_lord_gauntlets",
+		WeaponNameDefault = nil,
+		ClauseKey = "Wargear_Upgrade_02",
+		ClauseValueOn = "Wargear_02",
+		ClauseValueDefault = "<NONE>",
+		Name = "$3001190",
+		Icon = 09,
+		Description = "$3001191",
+		Specification = "$3001192",
+    AIVictoriesRequired = 10,
+	},
+
+}
+
+Promotions =
+{
+	{
+		Name = "$3002000",
+		Description = "$3003001",
+		Conditions = 
+		{
+			ConqueredTerritories = 1
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003002",
+		Conditions = 
+		{
+			ConqueredTerritories = 5
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003003",
+		Conditions = 
+		{
+			ConqueredTerritories = 15
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003004",
+		Conditions = 
+		{
+			UnitKillsLifetime = 2000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003005",
+		Conditions = 
+		{
+			UnitKillsLifetime = 5000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003006",
+		Conditions = 
+		{
+			ConqueredStrongholds = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003000",
+		Conditions = 
+		{
+			UnitKillsMission = 200,
+			KillRatioMission = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003007",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 1,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003008",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 3,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003009",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 5,
+		}
+	},
+}
+
+AIStartingStructuresAttacking =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 2,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+		MilitaryStrength = 3,
+		Structures =
+		{
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+	
+	{
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+}
+
+AIStartingStructuresDefending =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+		},
+	},
+
+	{
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 3,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "necron_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "necron_summoning_core",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "necron_turret_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "necron_greater_summoning_core",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+--[[			{
+				Blueprint = "chaos_sacrificial_circle",
+				Markers =
+				{
+					"start9_",
+				},
+			},]]
+		},
+	},	
+}
+
+AIStartingSquadsAttacking =
+{
+	{
+
+		MilitaryStrength = 2,
+		Squads =
+		{
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 3,
+		Squads =
+		{
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+		
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+		
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+
+		},
+	},		
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+	
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+
+
+		},
+	},	
+}
+
+AIStartingSquadsDefending =
+{
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+	
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+	
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+	
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+			{
+				Blueprint = "necron_lord_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+			{
+				Blueprint = "necron_lord_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "necron_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+}
+
+ArmyRanks =
+{
+	-- Rank 1
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 2
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 3
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 4
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 5
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		}
+	},
+	-- Rank 6
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 7
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 8
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_pariah_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 9
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_pariah_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_immortal_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 10
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "necron_builder_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_basic_warrior_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_flayed_one_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_scarab_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_pariah_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_immortal_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "necron_heavy_destroyer_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+}

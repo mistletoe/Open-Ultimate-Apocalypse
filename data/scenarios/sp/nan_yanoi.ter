@@ -1,0 +1,280 @@
+Model = "Nan_Yanoi_Moon"
+Planet = "Kaurava_II"
+
+Name = "$3900024"
+Description = "$3900250"
+TerrainDescription = "$3900251"
+
+History = 
+{
+	"$3900252",
+	"$3900253",
+	"$3900254",
+	"$3900255",
+	"$3900256",
+	"$3900257",
+}
+
+TerrainType = "$2851402"
+
+Nuggets = 
+{
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550160",
+		Text =
+		{
+			"$5100065",
+			"$2850018",
+			"$5100066",
+		},
+		Speech =
+		{
+			5100065,
+			5100066,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550260",
+		Text =
+		{
+			"$5100067",
+			"$2850018",
+			"$5100068",
+		},
+		Speech =
+		{
+			5100067,
+			5100068,
+		}
+	},
+	{
+		Race = "guard_race",
+		Title = "", --"$3550360",
+		Text =
+		{
+			"$5100058",
+			"$2850018",
+			"$5100059",
+			"$2850018",
+			"$5100060",
+		},
+		Speech =
+		{
+			5100058,
+			5100059,
+			5100060,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550460",
+		Text =
+		{
+			"$5100073",
+			"$2850018",
+			"$5100074",
+		},
+		Speech =
+		{
+			5100073,
+			5100074,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550560",
+		Text =
+		{
+			"$5100071",
+			"$2850018",
+			"$5100072",
+		},
+		Speech =
+		{
+			5100071,
+			5100072,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550660",
+		Text =
+		{
+			"$5100061",
+			"$2850018",
+			"$5100062",
+		},
+		Speech =
+		{
+			5100061,
+			5100062,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550660",
+		Text =
+		{
+			"$5100063",
+			"$2850018",
+			"$5100064",
+		},
+		Speech =
+		{
+			5100063,
+			5100064,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550660",
+		Text =
+		{
+			"$5100069",
+			"$2850018",
+			"$5100070",
+		},
+		Speech =
+		{
+			5100069,
+			5100070,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100055",
+		"$2851718",
+		"$5100056",
+		"$2851718",
+		"$5100057",
+	},
+	Speech =
+	{
+		5100055,
+		--5100056,
+		--5100057,
+	},
+}
+
+
+
+
+MissionFileAttacking = "Stronghold_Tau"
+MissionFileAttackingConquered = "8P_Nan_Yanoi_Attack_Skirmish"
+MissionFileDefending = "8P_Nan_Yanoi"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 0.5
+ArmyModelScaleZoomedOut = 0.5
+
+NeighborTerritories = 
+{
+	"Rokclaw_Foothills",
+	"Clooth-na-Bare",
+}
+
+VictoryBonusSquads =
+{--[[
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_fire_warrior_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_alpha_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_hound_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_skyray_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_vespid_elder_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_drone_harbinger_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_crisis_suit_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_shaper_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "tau_race",
+		Blueprint = "tau_pathfinder_squad_advance_sp",
+		Count = 1,
+	},]]
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "tau_race"
+OwnerSecondary = "tau_race"
+
+KeyLocationAbility =
+{
+	ID = "tau_gun",
+	Name = "$3900072",
+	HelpText =
+	{
+		"$3900423",
+		"$3900424",
+	},
+  CommanderScreenName = "$3900502",
+	CommanderScreenHelpText =
+	{
+		"$3900503",
+		"$3900504",
+		"$3900423",
+		"$3900424",
+	},
+  CommanderScreenLostName = "$3900502",
+	CommanderScreenLostHelpText =
+	{
+		"$3900503",
+		"$3900505",
+	}  
+}
+
+StartingResourceBonus = 0.0

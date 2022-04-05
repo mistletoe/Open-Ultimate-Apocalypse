@@ -1,0 +1,952 @@
+----------------------------------------------------------------------------------------------------------------
+-- Enders Game Win Condtition - Used for Hyperion Peaks Province in Dark Crusade
+--
+--	Eliminate all enemy forces on the map using a predetermined and finite force.  
+--
+--  Author: James Mouat
+--
+-- (c) 2006 Relic Entertainment Inc.
+
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+
+function OnGameSetup()
+
+	g_Counter_firstrun =  true
+
+	g_territory_index = MetaMap_GetDefendingTerritoryIndex()
+
+	g_total_enemy_count = MetaMap_GetTerritoryOpponentCount(g_territory_index)
+	
+	
+	g_player2_active = false
+	g_player3_active = false
+	g_player4_active = false
+	
+	g_HQ_Check1 = false
+	g_HQ_Check2 = false
+	g_HQ_Check3 = false
+	
+	
+	------------------------------------------------------------------------------
+	--[[Start Darwin's attacker/defender algorhythm]]
+	
+	g_attacker_race = MetaMap_GetAttackerRaceName()
+	g_defender_race = MetaMap_GetDefenderRaceName()
+	g_player_race = MetaMap_GetPlayerRaceName() 
+	
+	--print("attacker race = "..g_attacker_race)
+	--print("defender race = "..g_defender_race)
+
+	
+	--check for player vs CPU -- used in the enemy creation functions!
+	if g_player_race == g_attacker_race then
+		
+		g_cpu_player_race = g_defender_race
+		
+		g_defender_strength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetDefendingTerritoryIndex())
+		
+		--print("defender military strength = "..g_defender_strength)
+		
+		g_cpu_strength = g_defender_strength
+		
+	elseif g_player_race == g_defender_race then
+		
+		g_cpu_player_race = g_attacker_race
+		
+		g_attacker_strength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetAttackingTerritoryIndex())
+		
+		--print("attacker military strength = "..g_attacker_strength)
+		
+		g_cpu_strength = g_attacker_strength
+		
+	end
+	
+	g_enemy_players_on_map = MetaMap_GetTerritoryOpponentCount(7)
+	
+	--define a global varible that tells how many total players are on the map.
+	g_total_players_on_map = g_enemy_players_on_map + 1
+	
+	
+	--[[defining the name of the player's faction +P1 Race ID's +Engineer BP's +Build Restriction tables +default energy]]
+	if g_player_race == "chaos_marine_race" then
+		
+		factionname = "$690014"
+		g_P1_ID = 1
+		g_P1_Engineer = "chaos_squad_slave"
+		g_P1_color = "default_1"
+		g_P1_energy = 1000
+		
+		t_P1_Rectrictions_List = {	"chaos_armoury", "chaos_greater_sacrificial_circle", "chaos_hq", "chaos_machine_pit", "chaos_mine_field", "chaos_sacrificial_circle", 
+											"chaos_single_player_only_sacrificial_circle", "chaos_temple", "chaos_thermo_plasma_generator", "chaos_turret_bolter"}
+		
+		t_P1_Research = {"chaos_requisition_research_1"}
+		
+		g_P1_Pop = 15
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+		Misc_PlayerTeamColor(g_Player1,g_P1_color)
+		
+	elseif g_player_race == "eldar_race" then
+		
+		factionname = "$690012"
+		g_P1_ID = 2
+		g_P1_Engineer = "eldar_squad_bonesinger"
+		g_P1_color = "default_5"
+		g_P1_energy = 1250
+		
+		t_P1_Rectrictions_List = {	"eldar_advanced_warp_generator", "eldar_aspect_portal", "eldar_hq", "eldar_mine_field", "eldar_soul_shrine", 
+											"eldar_support_platform_scatterlaser", "eldar_support_portal", "eldar_webway_gate"}
+		
+		t_P1_Research = {"eldar_requisition_research_1"}
+		
+		g_P1_Pop = 15
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+		Misc_PlayerTeamColor(g_Player1,g_P1_color)
+		
+		
+	elseif g_player_race == "guard_race" then
+		
+		factionname = "$690011"
+		g_P1_ID = 3
+		g_P1_Engineer = "guard_squad_enginseer"
+		g_P1_color = "liberators"
+		g_P1_energy = 1000
+		
+		t_P1_Rectrictions_List = {	"guard_hq", "guard_infantry", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_tactica", "guard_thermo_plasma", 
+											"guard_turret_heavy_bolter"}
+		
+		t_P1_Research = {"guard_upgrade_requisition_1"}
+		
+		g_P1_Pop = 15
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+
+		
+	elseif g_player_race == "ork_race" then
+		
+		factionname = "$690013"
+		g_P1_ID = 4
+		g_P1_Engineer = "ork_squad_grot"
+		g_P1_color = "default_4"
+		g_P1_energy = 1000
+		
+		t_P1_Rectrictions_List = {"ork_bigger_generator", "ork_boy_hut", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns"} --[["ork_waagh_banner"]] --omitted waagh banner
+		
+		t_P1_Research = {"ork_requisition_research_1"}
+		
+		g_P1_Pop = 40
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+		Misc_PlayerTeamColor(g_Player1,g_P1_color)
+		
+		
+	elseif g_player_race == "space_marine_race" then
+		
+		factionname = "$690010"
+		g_P1_ID = 5
+		g_P1_Engineer = "space_marine_squad_servitor"
+		g_P1_color = "default_0"
+		g_P1_energy = 1000
+		
+		t_P1_Rectrictions_List = {	"space_marine_ability_building", "space_marine_armoury", "space_marine_barracks", "space_marine_drop_pod_building", 
+											"space_marine_hq", "space_marine_interface_relay", "space_marine_mine_field", "space_marine_orbital_relay", 
+											"space_marine_thermo_generator", "space_marine_vehicle_building"}
+		
+		t_P1_Research = {"marine_requisition_research_1"}
+		
+		g_P1_Pop = 15
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+
+		
+	elseif g_player_race == "tau_race" then
+		
+		factionname = "$690015"
+		g_P1_ID = 6
+		g_P1_Engineer = "tau_builder_squad"
+		g_P1_color = "default_0"
+		g_P1_energy = 1000
+		
+		t_P1_Rectrictions_List = {	"tau_barracks", "tau_hq", "tau_kroot_nest", "tau_research_building", "tau_shrine_of_kauyon", "tau_shrine_of_montka", 
+											"tau_shrine_of_purpose", "tau_thermoplasma_generator", "tau_vehicle_building"}
+		
+		t_P1_Research = {"tau_requisition_research", "tau_feral_leap_research", "tau_missile_barrage_research"}
+		
+		g_P1_Pop = 15
+		
+		g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+
+		
+	elseif g_player_race == "necron_race" then
+		
+		factionname = "$690016"
+		g_P1_ID = 7
+		g_P1_Engineer = "necron_builder_scarab_squad"
+		g_P1_color = "default_0"
+		g_P1_energy = 1700
+		
+		t_P1_Rectrictions_List = {	"monolith", "necron_energy_core", "necron_forbidden_archive", "necron_greater_summoning_core", "necron_summoning_core", 
+											"necron_thermoplasma_generator", "necron_turret"}
+		
+		t_P1_Research = {"necron_power_research", "necron_resurrection_orb_research"}
+		
+		g_P1_Pop = 12
+		
+	g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 1)
+
+		
+		
+	end
+	
+	
+	--[[defining the name of the enemy's faction +BP's +Engineer BP's +CPU Race ID's +Team color +Build Restriction tables]]  
+	if g_cpu_player_race == "chaos_marine_race" then
+		
+		enemy_factionname = "$690088"
+		g_CPU_HQ = "chaos_hq"
+		g_CPU_Barracks = "chaos_temple"
+		g_CPU_Mech = "chaos_machine_pit"
+		g_CPU_Generator = "chaos_plasma_generator"
+		g_CPU_Turret = "chaos_turret_bolter"
+		g_CPU_Turret_Upgrade = "chaos_turret_addon"
+		
+		g_CPU_Engineer = "chaos_squad_slave"
+		g_CPU_ID = 1
+		g_CPU_color = "default_1"
+		
+		t_CPU_Building_Rectrictions = {"chaos_hq", "chaos_armoury", "chaos_machine_pit"}
+		t_CPU_Squad_Rectrictions = {"chaos_squad_daemon_prince", "chaos_squad_bloodthirster"}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "eldar_race" then
+		
+		enemy_factionname = "$690083"
+		g_CPU_HQ = "eldar_hq"
+		g_CPU_Barracks = "eldar_aspect_portal"
+		g_CPU_Mech = "eldar_support_portal"
+		g_CPU_Generator = "eldar_warp_generator"
+		g_CPU_Turret = "eldar_support_platform_scatterlaser"
+		g_CPU_Turret_Upgrade = "eldar_support_platform_addon"
+		
+		g_CPU_Engineer = "eldar_squad_bonesinger"
+		g_CPU_ID = 2
+		g_CPU_color = "default_5"
+		
+		t_CPU_Building_Rectrictions = {"eldar_hq", "eldar_aspect_portal", "eldar_support_portal"}
+		t_CPU_Squad_Rectrictions = {}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "guard_race" then
+		
+		enemy_factionname = "$690011"
+		g_CPU_HQ = "guard_hq"
+		g_CPU_Barracks = "guard_infantry"
+		g_CPU_Mech = "guard_mechanized"
+		g_CPU_Generator = "guard_plasma_generator"
+		g_CPU_Turret = "guard_turret_heavy_bolter"
+		g_CPU_Turret_Upgrade = "addon_guard_turret"
+		
+		g_CPU_Engineer = "guard_squad_enginseer"
+		g_CPU_ID = 3
+		g_CPU_color = "liberators"
+		
+		t_CPU_Building_Rectrictions = {"guard_hq", "guard_infantry", "guard_mechanized"}
+		t_CPU_Squad_Rectrictions = {}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "ork_race" then
+		
+		enemy_factionname = "$690087"
+		g_CPU_HQ = "ork_hq"
+		g_CPU_Barracks = "ork_boy_hut"
+		g_CPU_Mech = "ork_mek_shop"
+		g_CPU_Generator = "ork_generator"
+		g_CPU_Turret = "ork_waagh_banner"
+		g_CPU_Turret_Upgrade = "ork_waagh_banner_gunzaddon"
+		g_CPU_Turret_Upgrade2 = "ork_waagh_banner_gunzaddon_2"
+		
+		g_CPU_Engineer = "ork_squad_grot"
+		g_CPU_ID = 4
+		g_CPU_color = "default_4"
+		
+		t_CPU_Building_Rectrictions = {"ork_hq", "ork_boy_hut", "ork_mek_shop"}
+		t_CPU_Squad_Rectrictions = {}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "space_marine_race" then
+		
+		enemy_factionname = "$690085"
+		g_CPU_HQ = "space_marine_hq"
+		g_CPU_Barracks = "space_marine_barracks"
+		g_CPU_Mech = "space_marine_vehicle_building"
+		g_CPU_Generator = "space_marine_generator"
+		g_CPU_Turret = "space_marine_turret_bolter"
+		g_CPU_Turret_Upgrade = "space_marine_turret_addon"
+		
+		g_CPU_Engineer = "space_marine_squad_servitor"
+		g_CPU_ID = 5
+		g_CPU_color = "default_0"
+		
+		t_CPU_Building_Rectrictions = {"space_marine_hq", "space_marine_barracks", "space_marine_vehicle_building"}
+		t_CPU_Squad_Rectrictions = {}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "tau_race" then
+		
+		enemy_factionname = "$690081"
+		g_CPU_HQ = "tau_hq"
+		g_CPU_Barracks = "tau_barracks"
+		g_CPU_Mech = "tau_vehicle_building"
+		g_CPU_Generator = "tau_plasma_generator"
+		--g_CPU_Turret = "space_marine_turret_bolter"   --Tau have no turrets
+		--g_CPU_Turret_Upgrade = "space_marine_turret_addon"  --Tau have no turrets
+		
+		g_CPU_Engineer = "tau_builder_squad"
+		g_CPU_ID = 6
+		g_CPU_color = "default_0"
+		
+		t_CPU_Building_Rectrictions = {"tau_hq", "tau_barracks", "tau_vehicle_building"}
+		t_CPU_Squad_Rectrictions = {}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {}
+		
+	elseif g_cpu_player_race == "necron_race" then
+		
+		enemy_factionname = "$690084"
+		g_CPU_HQ = "monolith"
+		g_CPU_Barracks = "necron_summoning_core"  --barracks replaced with summoning core. Necron have no individual barracks building
+		g_CPU_Mech = "necron_forbidden_archive"  --mech shop replaced with forbidden archive. Necron have no individual mech shop building
+		g_CPU_Generator = "necron_plasma_generator"
+		g_CPU_Turret = "necron_turret"
+		g_CPU_Turret_Upgrade = "addon_necron_turret"
+		
+		g_CPU_Engineer = "necron_builder_scarab_squad"
+		g_CPU_ID = 7
+		g_CPU_color = "default_0"
+		
+		t_CPU_Building_Rectrictions = {"monolith"}
+		t_CPU_Squad_Rectrictions = {"necron_restored_monolith_squad"}
+		t_CPU_Research_Rectrictions = {}
+		t_CPU_Addon_Rectrictions = {"addon_necron_hq_3"}
+		
+	end
+	
+	--[[End Darwin's attacker/defender algorhythm]]
+	----------------------------------------------------------------------------
+
+	
+	g_Player2 = Setup_Player(1, enemy_factionname, g_cpu_player_race, 2)
+	Misc_PlayerTeamColor(g_Player2, g_CPU_color)
+	
+	g_Player3 = Setup_Player(2, enemy_factionname, g_cpu_player_race, 2)
+	Misc_PlayerTeamColor(g_Player3, g_CPU_color)
+	
+	g_Player4 = Setup_Player(3, enemy_factionname, g_cpu_player_race, 2)
+	Misc_PlayerTeamColor(g_Player4, g_CPU_color)
+	
+	--[[ define the "enemy" who will win if the player 'loses' ]]
+	g_enemy = g_Player2
+	
+end
+
+
+function OnInit()
+ 
+	
+	Rule_Add(Enders_Game)
+
+end
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+function Enders_Game()	
+	
+	Rule_AddOneShot(Rule_Create_Player_Bonus_Units,0)
+	Rule_AddOneShot(Rule_Create_Player_Racial_Units,0)
+	
+	Rule_AddOneShot(Rule_Create_Enemy_Bonus_Squads,0)
+	
+	Rule_AddOneShot(Rule_set_resources, 0)
+	
+	Rule_AddOneShot(Rule_Create_NPC_Buildings,1)
+
+	Rule_AddOneShot(Rule_PresetAI, 1)
+	
+	Rule_AddIntervalDelay(Rule_HQ_Checker, 5, 30)
+	
+	Rule_AddOneShot(Rule_Create_Engineers,1)
+	
+	Rule_AddInterval(Rule_Building_Counter,1)
+	
+	Rule_AddInterval(Rule_Player_Forces_Counter,1)
+	
+	Rule_AddOneShot(Rule_Player_Restrictions,1)
+	Rule_AddOneShot(Rule_CPU_Restrictions,5)
+	
+	Rule_AddOneShot(Rule_Player_Research,1)
+	
+	Rule_AddOneShot(Rule_Add_Objective, 5)
+	
+	Rule_AddIntervalDelay(Rule_EndGame_Win,5,10)
+	Rule_AddIntervalDelay(Rule_EndGame_Lose,5,10)
+	
+	--[[ Music ]]
+	Rule_AddOneShot(Rule_Start_Music, 0)
+	
+	Rule_Remove(Enders_Game)
+	
+end
+
+function Rule_Add_Objective()
+	
+	--establish objective
+	Objective_Enders_Game = { title_id = 3700001, short_desc_id = 3700002, help_tip_id = 3700001 }
+	
+	Util_WXP_ObjectiveCreate(Objective_Enders_Game, true, g_Player1)
+	
+	Objective_ShowScreen()
+	Flash_OtherButton("dlg_objectives", 0, false, true)
+	
+end
+
+
+function Rule_set_resources()
+	
+	--player resources
+	--adding extra energy to player reserves - this does not conflict with the industrial bonus method.
+	Player_AddResource(g_Player1, RT_Power, g_P1_energy)
+	
+	--AI resources.
+	Player_SetAllResources(g_Player2, 5000, 5000)
+	Player_SetAllResources(g_Player3, 5000, 5000)
+	Player_SetAllResources(g_Player4, 5000, 5000)
+	
+end
+
+
+function Rule_Start_Music()
+	
+	--set the music table based on the players race
+	if MetaMap_GetPlayerRaceName()  == "chaos_marine_race" then
+		
+		t_music = {	"MU_IG_STR_Chaos_perc_brass", "MU_IG_STR_Chaos", "MU_IG_STR_Chaos_perc", 
+							"MU_IG_STR_Chaos_perc_str", "MU_IG_STR_Chaos_perc_voice"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "eldar_race" then
+		
+		t_music = {	"MU_IG_STR_Eldar_perc_brass", "MU_IG_STR_Eldar", "MU_IG_STR_Eldar_perc", 
+							"MU_IG_STR_Eldar_perc_str"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "guard_race" then
+		
+		t_music = {	"MU_IG_STR_ImpGd_perc_brass", "MU_IG_STR_ImpGd", "MU_IG_STR_ImpGd_perc", 
+							"MU_IG_STR_ImpGd_perc_str", "MU_IG_STR_ImpGd_perc_voice"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "ork_race" then
+		
+		t_music = {	"MU_IG_STR_Ork_perc_brass", "MU_IG_STR_Ork", "MU_IG_STR_Ork_perc", 
+							"MU_IG_STR_Ork_perc_str"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "space_marine_race" then
+		
+		t_music = {	"MU_IG_STR_SpaceMarine_perc_brass", "MU_IG_STR_SpaceMarine", "MU_IG_STR_SpaceMarine_perc", 
+							"MU_IG_STR_SpaceMarine_perc_str"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "tau_race" then
+		
+		t_music = {	"MU_IG_STR_Tau_perc_brass", "MU_IG_STR_Tau", "MU_IG_STR_Tau_perc", 
+							"MU_IG_STR_Tau_perc_str"}
+		
+	elseif MetaMap_GetPlayerRaceName()  == "necron_race" then
+		
+		t_music = {	"MU_IG_STR_Necron_perc_brass", "MU_IG_STR_Necron", "MU_IG_STR_Necron_brass", 
+							"MU_IG_STR_Necron_perc"}
+		
+	end
+	
+	Playlist_Manager( PC_Music, t_music, true, true , {2, 4})
+	
+	
+	--set ambient sounds
+	t_ambient = {"ambient_city"}
+	
+	Playlist_Manager( PC_Ambient, t_ambient, true, true , {0, 15})
+	
+end
+
+
+
+function Rule_Create_Player_Racial_Units()
+	
+	--[[g_P1_ID = 1]]
+	t_chaos_units = {--[[1]] "chaos_squad_daemon_prince", --[[2]] "chaos_squad_predator", --[[2]] "chaos_squad_predator", --[[4]] "chaos_squad_predator", 
+							--[[5]] "chaos_squad_predator", --[[6]] "chaos_squad_defiler", --[[7]] "chaos_squad_defiler", --[[8]] "chaos_squad_possessed_marine",
+							--[[9]] "chaos_squad_possessed_marine", --[[10]] "chaos_squad_cultist", --[[11]] "chaos_squad_cultist", --[[12]] "chaos_squad_cultist", 
+							--[[13]] "chaos_squad_cultist", --[[14]] "chaos_squad_sorcerer"}
+	
+	--[["chaos_squad_bloodthirster"  "chaos_squad_daemon_prince"  "chaos_squad_defiler"  "chaos_squad_predator"  "chaos_squad_possessed_marine"]]
+	
+	--[[g_P1_ID = 2]]
+	t_eldar_units = {	--[[1]] "eldar_squad_avatar", --[[2]] "eldar_squad_fire_prism", --[[3]] "eldar_squad_fire_prism", --[[4]] "eldar_squad_wraithlord", 
+							--[[5]] "eldar_squad_wraithlord", --[[6]] "eldar_squad_wraithlord", --[[7]] "eldar_squad_vypers", --[[8]] "eldar_squad_vypers", 
+							--[[9]] "eldar_squad_falcon_grav_tank", --[[10]] "eldar_squad_falcon_grav_tank", --[[11]] "eldar_squad_warp_spider", 
+							--[[12]] "eldar_squad_rangers", --[[13]] "eldar_squad_rangers", --[[14]] "eldar_squad_seer_council", --[[15]] "eldar_squad_seer_council"}
+	
+	--[["eldar_squad_avatar"  "eldar_squad_falcon_grav_tank"  "eldar_squad_fire_prism"  "eldar_squad_grav_platform"  "eldar_squad_grav_platform_brightlance"   
+		"eldar_squad_vypers"  "eldar_squad_wraithlord"]]
+	
+	--[[g_P1_ID = 3]]
+	t_guard_units = {	--[[1]] "guard_squad_baneblade", --[[2]] "guard_squad_baneblade", --[[3]] "guard_squad_basilisk", --[[4]] "guard_squad_basilisk", 
+								--[[5]] "guard_squad_kasrkin", --[[6]] "guard_squad_kasrkin", --[[7]] "guard_squad_guardsmen", --[[8]] "guard_squad_guardsmen", 
+								--[[9]] "guard_squad_guardsmen", --[[10]] "guard_squad_guardsmen", --[[11]] "guard_squad_sentinel", --[[12]] "guard_squad_sentinel",
+								--[[13]] "guard_heavy_weapons_team_squad", --[[14]] "guard_heavy_weapons_team_squad", --[[15]] "guard_squad_psyker",
+								--[[16]] "guard_squad_psyker"}
+	
+	--[["guard_squad_chimera"  "guard_squad_basilisk"  "guard_squad_kasrkin"  "guard_squad_ogryns"  "guard_squad_lemanruss"  "guard_squad_sentinel"]]
+	
+	--[[g_P1_ID = 4]]
+	t_ork_units = {--[[1]] "ork_squad_squiggoth", --[[2]] "ork_squad_squiggoth", --[[3]] "ork_squad_looted_tank", --[[4]] "ork_squad_looted_tank", 
+						--[[5]] "ork_squad_looted_tank", --[[6]] "ork_squad_looted_tank", --[[7]] "ork_squad_wartrak", --[[8]] "ork_squad_wartrak", --[[9]] "ork_squad_wartrak", 
+						--[[10]] "ork_squad_wartrak", --[[11]] "ork_squad_killa_kan", --[[12]] "ork_squad_killa_kan", --[[13]] "ork_squad_armored_nob", 
+						--[[14]] "ork_squad_armored_nob", --[[15]] "ork_squad_shoota_boy", --[[16]] "ork_squad_shoota_boy", --[[17]] "ork_squad_shoota_boy",
+						--[[18]] "ork_squad_shoota_boy", --[[19]] "ork_squad_shoota_boy", --[[20]] "ork_squad_slugga", --[[21]] "ork_squad_slugga",
+						--[[22]] "ork_squad_slugga"}
+	
+	--[["ork_squad_killa_kan"  "ork_squad_looted_tank"  "ork_squad_squiggoth"  "ork_squad_trukk"  "ork_squad_wartrak"]]
+	
+	--[[g_P1_ID = 5]]
+	t_space_marine_units = {	--[[1]] "space_marine_squad_land_raider", --[[2]] "space_marine_squad_land_raider", --[[3]] "space_marine_squad_dreadnought", 
+										--[[4]] "space_marine_squad_dreadnought", --[[5]] "space_marine_squad_dreadnought_hellfire", --[[6]] "space_marine_squad_dreadnought_hellfire",
+										--[[7]] "space_marine_squad_whirlwind", --[[8]] "space_marine_squad_whirlwind", --[[9]] "space_marine_squad_apothecary",
+										--[[10]] "space_marine_squad_terminator_assault", --[[11]] "space_marine_squad_tactical", --[[12]] "space_marine_squad_tactical",
+										--[[13]] "space_marine_squad_terminator", --[[14]] "space_marine_squad_terminator", --[[15]] "space_marine_squad_librarian",
+										--[[16]] "space_marine_squad_librarian"}
+	
+	--[["space_marine_squad_dreadnought"  "space_marine_squad_land_raider"  "space_marine_squad_land_speeder"  "space_marine_squad_predator"  
+		"space_marine_squad_whirlwind"  "space_marine_squad_dreadnought_hellfire"]]
+	
+	--[[g_P1_ID = 6]]
+	t_tau_units = {	--[[1]] "tau_greater_knarloc_squad", --[[2]] "tau_greater_knarloc_squad", --[[3]] "tau_greater_knarloc_squad", --[[4]] "tau_hammerhead_gunship_squad", 
+							--[[5]] "tau_hammerhead_gunship_squad",  --[[6]] "tau_skyray_squad", --[[7]] "tau_skyray_squad", --[[8]] "tau_krootox_squad", --[[9]] "tau_krootox_squad", 
+							--[[10]] "tau_krootox_squad", --[[11]] "tau_kroot_carnivore_squad", --[[12]] "tau_kroot_carnivore_squad", --[[13]] "tau_kroot_carnivore_squad", 
+							--[[14]] "tau_kroot_carnivore_squad", --[[15]] "tau_kroot_hound_squad", --[[16]] "tau_broadside_battlesuit_squad", 
+							--[[17]] "tau_broadside_battlesuit_squad", --[[18]] "tau_pathfinder_squad", --[[19]] "tau_vespid_auxiliary_squad"}
+	
+	--[["tau_drone_squad"  "tau_skyray_squad"  "tau_hammerhead_gunship_squad"  "tau_devilfish_troop_carrier"  "tau_greater_knarloc_squad"  
+		"tau_drone_harbinger_squad"]]
+	
+	--[[g_P1_ID = 7]]
+	t_necron_units = {	--[[1]] "necron_restored_monolith_squad", --[[2]] "necron_restored_monolith_squad", --[[3]] "necron_lord_destroyer_squad", 
+								--[[4]] "necron_lord_destroyer_squad", --[[5]] "necron_tomb_spyder_squad", --[[6]] "necron_tomb_spyder_squad",
+								--[[7]] "necron_destroyer_squad", --[[8]] "necron_destroyer_squad", --[[9]] "necron_flayed_one_squad", --[[10]] "necron_flayed_one_squad", 
+								--[[11]] "necron_pariah_squad", --[[12]] "necron_pariah_squad", --[[13]] "necron_immortal_squad", --[[14]] "necron_immortal_squad",
+								--[[15]] "necron_wraith_squad", --[[16]] "necron_wraith_squad"}
+	
+
+	--[[ "necron_destroyer_squad"  "necron_heavy_destroyer_squad"  "necron_lord_destroyer_squad"  "necron_restored_monolith_squad"  "necron_tomb_spyder_squad"
+		"necron_night_bringer"  "necron_flayed_one_squad"  "necron_basic_warrior_squad"  "necron_immortal_squad"]]
+	
+	t_race_table = {	--[[1]] t_chaos_units, --[[2]] t_eldar_units, --[[3]] t_guard_units, --[[4]] t_ork_units, --[[5]] t_space_marine_units, 
+							--[[6]] t_tau_units, --[[7]] t_necron_units, }
+	
+	for i = 1,table.getn(t_race_table[g_P1_ID]) do
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_racial_units", t_race_table[g_P1_ID][i], "mkr_racial_spawn"..i, 1)
+		
+	end
+	
+end
+
+function Rule_Create_Player_Bonus_Units()
+	
+	--setting up the bonus units for the player
+	t_blueprintbonus = {}
+	MetaMap_GetRaceStartingSquadsList(MetaMap_GetPlayerRaceName(), t_blueprintbonus)
+	
+	for j = 1,table.getn(t_blueprintbonus) do
+		
+		if j <= 7 then
+			
+			k = j
+			
+		else
+			
+			k = j - 7
+			
+		end
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_Bonus"..j, t_blueprintbonus[j], "mkr_Bonus"..k, 1)
+		
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_Bonus_Parent"), "sg_Bonus"..j)
+		
+	end
+	
+	
+	--setting up the upgrades for the commander
+	MetaMap_UpdatePlayerWargear(g_Player1)
+	
+end
+
+
+function Rule_Create_Enemy_Bonus_Squads()
+
+	--setting up the bonus units for the player
+	t_cpu_blueprintbonus = {}
+	MetaMap_GetRaceStartingSquadsList(g_cpu_player_race, t_cpu_blueprintbonus)
+	
+	for t = 1,  table.getn(t_cpu_blueprintbonus) do
+			
+		u = math.mod(t - 1, 6) + 1
+		
+		Util_CreateSquadsAtMarker(g_Player2, "sg_cpu_bonus"..t, t_cpu_blueprintbonus[t], "mkr_cpu_bonus"..u, 1)
+		
+		
+	end
+
+end
+
+
+function Rule_Create_NPC_Buildings()
+
+	t_CPU_Players = {--[[1]] g_Player2, --[[2]] g_Player3, --[[3]] g_Player4}
+	
+	--create basic buildings for each player
+	for i = 1,3 do
+		
+		--HQ
+		Entity_CreateBuildingMarker(t_CPU_Players[i], "eg_HQ_NPCPlayer"..i, g_CPU_HQ, "mkr_NPC_Player"..i, 1)
+		
+		--Barracks
+		Entity_CreateBuildingMarker(t_CPU_Players[i], "eg_Barracks_NPCPlayer"..i, g_CPU_Barracks, "mkr_NPC_barracks"..i, 1)
+		
+		--Mech shop
+		Entity_CreateBuildingMarker(t_CPU_Players[i], "eg_Mech_NPCPlayer"..i, g_CPU_Mech, "mkr_NPC_mech"..i, 1)
+		
+	end
+	
+	--create generators
+	for j = 1,3 do
+		
+		--NPC Player 1 gens
+		if j == 1 then
+			
+			for l = 1,6 do
+				
+				Entity_CreateBuildingMarker(t_CPU_Players[j], "eg_Generator_NPCPlayer"..j, g_CPU_Generator, "mkr_generator_A"..l, 1)
+				
+			end
+			
+		end
+		
+		--NPC Player 2 gens
+		if j == 2 then
+			
+			for l = 1,6 do
+				
+				Entity_CreateBuildingMarker(t_CPU_Players[j], "eg_Generator_NPCPlayer"..j, g_CPU_Generator, "mkr_generator_B"..l, 1)
+				
+			end
+			
+		end
+		
+		--NPC Player 3 gens
+		if j == 3 then
+			
+			for l = 1,6 do
+				
+				Entity_CreateBuildingMarker(t_CPU_Players[j], "eg_Generator_NPCPlayer"..j, g_CPU_Generator, "mkr_generator_C"..l, 1)
+				
+			end
+			
+		end
+		
+	end
+	
+	--if the enemy player is Tau, then the turret creation will be bypassed since Tau have no turrets.
+	if not (g_cpu_player_race == "tau_race") then
+		
+		--create map turrets
+		for k = 1,18 do
+			
+			Entity_CreateBuildingMarker(t_CPU_Players[1], "eg_NPC_turrets", g_CPU_Turret, "mkr_turret"..k, 1)
+			
+		end
+		
+		--create and upgrade rocket turrets.
+		for m = 1,10 do
+			
+			Entity_CreateBuildingMarker(t_CPU_Players[1], "eg_NPC_rocket_turret"..m, g_CPU_Turret, "mkr_rocket_turret"..m, 1)
+			EGroup_ForceAddOn("eg_NPC_rocket_turret"..m, g_CPU_Turret_Upgrade)
+			
+			--ork turrets require two upgrade steps to get to rocket launchers.
+			if g_cpu_player_race == "ork_race" then
+				
+				EGroup_ForceAddOn("eg_NPC_rocket_turret"..m, g_CPU_Turret_Upgrade2)
+				
+			end
+			
+		end
+		
+	end
+	
+end
+
+
+function Rule_Create_Engineers()
+	
+	t_players = {--[[1]] g_Player1, --[[2]] g_Player2, --[[3]] g_Player3, --[[4]] g_Player4}
+	
+	for i = 1,g_total_players_on_map do
+		
+		if i == 1 then
+			
+			Util_CreateSquadsAtMarker(t_players[i],"sg_engineer_P"..i, g_P1_Engineer, "mkr_engineer"..i, 1)
+			
+		else
+			
+			Util_CreateSquadsAtMarker(t_players[i],"sg_engineer_P"..i, g_CPU_Engineer, "mkr_NPC_engineer"..i-1, 1)
+			
+		end
+		
+	end
+	
+end
+
+
+function Rule_PresetAI()
+	
+	--print("g_total_enemy_count = "..g_total_enemy_count)
+	
+	if g_total_enemy_count > 0 then
+		
+		--[[CPU player2]]
+		Cpu_Enable(g_Player2, true)
+		Cpu_EnableComponent(g_Player2, true, CT_Resourcing)
+		Cpu_EnableComponent(g_Player2, true, CT_BuildBuildings)
+		Cpu_EnableComponent(g_Player2, true, CT_BuildUnits)
+		Cpu_EnableComponent(g_Player2, true, CT_BuildResearch)
+		Cpu_EnableComponent(g_Player2, true, CT_BuildAddOns)
+		Cpu_EnableComponent(g_Player2, true, CT_Tactics)
+		Cpu_EnableComponent(g_Player2, true, CT_Attacking)
+		
+		--set difficulty based on kronus.map tabled values.
+		Cpu_SetDifficulty(g_Player2, MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,0))
+		--print(MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,0))
+		
+		g_player2_active = true
+		
+		if g_total_enemy_count > 1 then
+			
+			--[[CPU player3]]
+			Cpu_Enable(g_Player3, true)	
+			Cpu_EnableComponent(g_Player3, true, CT_Resourcing)
+			Cpu_EnableComponent(g_Player3, true, CT_BuildBuildings)
+			Cpu_EnableComponent(g_Player3, true, CT_BuildUnits)
+			Cpu_EnableComponent(g_Player3, true, CT_BuildResearch)
+			Cpu_EnableComponent(g_Player3, true, CT_BuildAddOns)
+			Cpu_EnableComponent(g_Player3, true, CT_Tactics)
+			Cpu_EnableComponent(g_Player3, true, CT_Attacking)
+			
+			--set difficulty based on kronus.map tabled values.
+			Cpu_SetDifficulty(g_Player3, MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,1))
+			--print(MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,1))
+			
+			g_player3_active = true
+			
+			if g_total_enemy_count > 2 then
+				
+				--[[CPU player4]]
+				Cpu_Enable(g_Player4, true)
+				Cpu_EnableComponent(g_Player4, true, CT_Resourcing)
+				Cpu_EnableComponent(g_Player4, true, CT_BuildBuildings)
+				Cpu_EnableComponent(g_Player4, true, CT_BuildUnits)
+				Cpu_EnableComponent(g_Player4, true, CT_BuildResearch)
+				Cpu_EnableComponent(g_Player4, true, CT_BuildAddOns)
+				Cpu_EnableComponent(g_Player4, true, CT_Tactics)
+				Cpu_EnableComponent(g_Player4, true, CT_Attacking)
+				
+				--set difficulty based on kronus.map tabled values.
+				Cpu_SetDifficulty(g_Player4, MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,2))
+				--print(MetaMap_GetTerritoryOpponentDifficulty(g_territory_index,2))
+				
+				g_player4_active = true
+				
+			end
+			
+		end
+		
+	end
+	
+end
+
+
+function Rule_HQ_Checker()
+	
+	--this rule will stop each AI from building once their HQ has been destroyed.
+	
+	if g_player2_active == true and g_HQ_Check1 == false then
+		
+		if EGroup_Exists("eg_HQ_NPCPlayer1") == false or EGroup_IsEmpty("eg_HQ_NPCPlayer1") == true then
+			
+			Cpu_EnableComponent(g_Player2, false, CT_BuildBuildings)
+			
+			g_HQ_Check1 = true
+			
+		end
+		
+	end
+	
+	if g_player3_active == true and g_HQ_Check2 == false then
+		
+		if EGroup_Exists("eg_HQ_NPCPlayer2") == false or EGroup_IsEmpty("eg_HQ_NPCPlayer2") == true then
+			
+			Cpu_EnableComponent(g_Player3, false, CT_BuildBuildings)
+			
+			g_HQ_Check2 = true
+			
+		end
+		
+	end
+	
+	if g_player4_active == true and g_HQ_Check3 == false then
+		
+		if EGroup_Exists("eg_HQ_NPCPlayer3") == false or EGroup_IsEmpty("eg_HQ_NPCPlayer3") == true then
+			
+			Cpu_EnableComponent(g_Player4, false, CT_BuildBuildings)
+			
+			g_HQ_Check3 = true
+			
+		end
+		
+	end
+	
+end
+
+
+function Rule_Building_Counter()
+	
+	t_Exceptions = {"strategic_point_flag", "ork_gork_totem", "space_marine_listening_post", "chaos_listening_post", "eldar_listening_post", "guard_listening_post", "necron_listening_post", "tau_listening_post"}
+	
+	--count all buildings owned by each AI player, except stragetic points.
+	local count1 = Player_GetBuildingsCountExcept(g_Player2, t_Exceptions)
+	local count2 = Player_GetBuildingsCountExcept(g_Player3, t_Exceptions)
+	local count3 = Player_GetBuildingsCountExcept(g_Player4, t_Exceptions)
+	
+	--sum them all up
+	local count_sum = count1 + count2 + count3
+	
+	g_enemy_building = count_sum
+	
+	--display or update counter
+	if g_Counter_firstrun == true then
+		
+		UI_ShowCount("Building_Counter", g_Player1, 3700100, g_enemy_building)
+		
+		g_Counter_firstrun = false
+		
+	else
+		
+		UI_ShowCountUpdateDxp("Building_Counter", g_enemy_building, 3700100)
+		
+	end
+	
+end
+
+
+function Rule_Player_Forces_Counter()
+	
+	g_player_forces = SGroup_Count(Player_GetSquads(g_Player1))
+	
+end
+
+
+function Rule_Player_Restrictions()
+	
+	Player_RestrictBuildingList(g_Player1, t_P1_Rectrictions_List)
+	
+	if g_player_race == "necron_race" then
+		
+		Cpu_SetBuildingLimit(g_Player1, "necron_plasma_generator", 2)
+		
+	end
+	
+end
+
+
+function Rule_CPU_Restrictions()
+	
+	for i = 1,table.getn(t_CPU_Players) do
+		
+		Player_RestrictBuildingList(t_CPU_Players[i], t_CPU_Building_Rectrictions)
+		
+		Player_RestrictSquadList(t_CPU_Players[i], t_CPU_Squad_Rectrictions)
+		
+		Player_RestrictResearchList(t_CPU_Players[i], t_CPU_Research_Rectrictions)
+		
+		Player_RestrictAddOnList(t_CPU_Players[i], t_CPU_Addon_Rectrictions)
+		
+	end
+	
+end
+
+function Rule_Player_Research()
+	
+	for i = 1,table.getn(t_P1_Research) do
+		
+		Player_GrantResearch(g_Player1, t_P1_Research[i])
+		
+	end
+	
+end
+
+	
+function Rule_EndGame_Win()
+
+	if g_enemy_building == 0 then
+		
+		Util_ObjectiveComplete(Objective_Enders_Game.title_id)
+		
+		World_SetTeamWin( g_Player1, "" )
+		Rule_AddIntervalEx( Rule_GameOver,10,1)
+		
+		Rule_Remove(Rule_EndGame_Win)
+		Rule_Remove(Rule_EndGame_Lose)
+		
+	end
+	
+end
+
+
+function Rule_EndGame_Lose()
+
+	if g_player_forces == 0 then
+		
+		Fade_Start(4, false)
+		World_SetTeamWin( g_enemy, "" )
+		Rule_AddIntervalEx( Rule_GameOver,5,1 )
+		
+		Rule_Remove(Rule_EndGame_Win)
+		Rule_Remove(Rule_EndGame_Lose)
+		
+	end
+	
+end
+
+
+--[[ call this with an interval to ensure the mission ends ]]
+function Rule_GameOver()
+	World_SetGameOver() 
+end
+
+
+
+

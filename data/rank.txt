@@ -1,0 +1,8 @@
+RankStartAt =
+{
+	OneStar = 1100,
+	TwoStar = 1200,
+	ThreeStar = 1400,
+	FourStar = 1700,
+	FiveStar = 2000,
+}

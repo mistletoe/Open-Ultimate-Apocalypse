@@ -1,0 +1,627 @@
+-- -----------------------------------------------------------------
+-- Mission Name - NISLets and Intel Events
+--
+-- (c) 2006 Relic Entertainment
+-- -----------------------------------------------------------------
+
+EVENTS = {}
+
+-------------------------------------------------
+--[[ INTEL EVENTS ]]
+-------------------------------------------------
+
+--all lines spoken by Servitor
+--[[Servitor Found by Player]]	
+EVENTS.IE_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Servitor, 3100210 )  --I serve Magos Explorator Gaius. Your access codes are correct. I will follow.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+	
+--[[Servitor Arrives at Player's Base]]	
+EVENTS.IE_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Servitor, 3100220 )  --I have arrived at your facility, my lord. I await the arrival of others to begin accessing the space port facility.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+--[[Servitor Found by Enemy]]
+EVENTS.IE_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Servitor, 3100230 )  --My lord, a Servitor as fallen into your enemy's hands.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+--[[Enemy About to Win]]
+EVENTS.IE_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Servitor, 3100240 )  --My lord, my fellow Servitors are readying to grant access to your enemies.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+--[[Mission Success]]
+EVENTS.IE_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Servitor, 3100250 )  --We are prepared, my lord. Space Port facility access granted.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+-------------------------------------------------------------------
+--[[Chaos Specific Lines]]
+-------------------------------------------------------------------
+--Chaos Lord Speaks
+--Servitor Found by Player	
+EVENTS.IE_Chaos_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 3100210 )  --Excellent. Make sure that Servitor gets safely back to our stronghold.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_Chaos_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 3100220 )  --Well done, the Servitor has arrived safely. Gather more of them before the enemy does.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_Chaos_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 3100230 )  --The enemy has found a Servitor. I will not have us outmaneuvered here!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_Chaos_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 3100240 )  --The enemy will soon have enough Servitors to activate the tracking system. I will have your head for this! 
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_Chaos_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 3100250 )  --Excellent! The tracking system is now ours! Let all of Kronus fear the power of Chaos!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+
+-------------------------------------------------------------------
+--[[Eldar Specific Lines]]
+-------------------------------------------------------------------
+--Farseer speaks
+--Servitor Found by Player	
+EVENTS.IE_Eldar_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 3100310 )  --Well done. Return the human to the Webway Assembly. 
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_Eldar_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 3100320 )  --One of the human Servitors has arrived at the Webway Assembly, but more are needed to make use of this place.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_Eldar_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 3100330 )  --I see our enemies have found a Servitor.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_Eldar_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 3100340 )  --Redouble your efforts, my brothers and sisters! Our enemy will soon have all the Servitors he needs.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_Eldar_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 3100350 )  --We have enough of the humans to retrieve their databanks.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+-------------------------------------------------------------------
+--[[IG Specific Lines]]
+-------------------------------------------------------------------
+--Imperial General speaks
+--Servitor Found by Player	
+EVENTS.IE_IG_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 3100410 )  --There is one of the Servitors men. Make sure it gets safely back to our command facility.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_IG_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 3100420 )  --The Techpriests have a Servitor in hand, men. Gather more so we can retrieve their data.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_IG_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 3100430 )  --The enemy has captured one of the Servitors. We must not let more fall into their hands.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_IG_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 3100440 )  --Liberators! The enemy has almost retrieved the access codes for the orbital tracking system! We must find those Servitors!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_IG_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 3100450 )  --Victory is ours, men! 
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+-------------------------------------------------------------------
+--[[Ork Specific Lines]]
+-------------------------------------------------------------------
+--Warboss speaks
+--Servitor Found by Player	
+EVENTS.IE_Ork_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 3100510 )  --Dats one of dem humie Servitors! Get 'im back to da camp!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_Ork_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 3100520 )  --We gots a Servitor 'ere at da camp an' da Mek Boyz iz lookin' at 'im. But we needs some more.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_Ork_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 3100530 )  --Oy! Wot ya doin' ya grots?! Da enemy's got one of me Servitors!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_Ork_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 3100540 )  --Dis ain't no way ta fight a Waaagh! da enemy's got almost all dem Servitors. Get 'em back!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_Ork_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 3100550 )  --Hah! We gots all we need, boyz. Our fightabombaz iz gonna be flying high now!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+
+-------------------------------------------------------------------
+--[[Necron Specific Lines]]
+-------------------------------------------------------------------
+--Pariah speaks
+--Servitor Found by Player	
+EVENTS.IE_Necron_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 3100610 )  --That human is a crude melding of flesh and metal, but it contains valuable information.  Bring it to the Monolith.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_Necron_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 3100620 )  --The scarabs are analyzing the human hybrid, but we require more of them. 
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_Necron_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 3100630 )  --The living have recovered a Servitor. Do not let them savor their petty victory.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_Necron_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 3100640 )  --Our enemies have recovered most of the Servitors. We must gather more quickly.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_Necron_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 3100650 )  --We have all we need. Our purge continues unabated.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+-------------------------------------------------------------------
+--[[SM Specific Lines]]
+-------------------------------------------------------------------
+--Force Commander speaks	
+--Servitor Found by Player	
+EVENTS.IE_SM_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 3100710 )  --One of the Techpriests Servitors. Bring it to our stronghold.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_SM_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 3100720 )  --Well done, brothers. We have safely recovered a Servitor. We will need more to revive this space port, however.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_SM_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 3100730 )  --Take heed, brothers. The enemy is gathering Servitors as well.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_SM_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 3100740 )  --The enemy is on the verge of victory, brothers. We must succeed here! The Emperor wills it!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_SM_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 3100750 )  --The Emperor is with us, brothers! Victory is ours!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+-------------------------------------------------------------------
+--[[Tau Specific Lines]]
+-------------------------------------------------------------------
+--Tau Commander speaks	
+--Servitor Found by Player	
+EVENTS.IE_Tau_Found_By_Player = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 3100810 )  --There is one of the Imperium Servitors. Return it to the headquarters.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Arrives at Player's Base
+EVENTS.IE_Tau_Servitor_Arrives_At_Players_Base = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 3100820 )  --A Servitor has made it to our headquarters, Shas'la. We must recover more.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Servitor Found by Enemy	
+EVENTS.IE_Tau_Found_By_Enemy = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 3100830 )  --The enemy gathers these Servitors as well. We must act quickly.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Enemy About to Win
+EVENTS.IE_Tau_Enemy_About_To_Win = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 3100840 )  --The enemy has recovered many Servitors. Strike before it is too late!
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+	
+--Mission Success	
+EVENTS.IE_Tau_Mission_Success = function()
+	
+	Util_SetIE( true )
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 3100850 )  --Like Tau, we have prospered. The space port is ours.
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+	
+end
+
+
+-------------------------------------------------------------------
+--[[ Space Marine Campaign Outro  NIS ]]
+-------------------------------------------------------------------
+
+EVENTS.NIS_SM_Campaign_Outro1 = function()
+	
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+
+	--[[Removing all the rules]]
+
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+	Rule_RemoveAll()
+	
+	
+	
+	--[[Remove all the buildings and units to clear the Nis scenes]]
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+
+	
+	
+	CTRL.Event_Delay( 3 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+
+	
+	Fade_Start( 2.0, true )
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	--impaled guardsman
+	EGroup_ReSpawn("eg_SM_C_Outro1")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro1"))
+	
+	--destroyed leman russ bits
+	EGroup_ReSpawn("eg_SM_C_Outro2")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro2"))
+	
+	--guardsmen bodies
+	EGroup_ReSpawn("eg_SM_C_Outro3")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro3"))
+	
+	--fire and smoke
+	EGroup_ReSpawn("eg_SM_C_Outro4")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro4"))
+	
+	CTRL.CPath_Start("canim_SM_C_Outro1", "start", "end")
+	
+		Actor_PlaySpeech(ACT.Varnus, 3550672 ) --After many long and bloody battles, the Blood Ravens finally completed their purge of the Planet Kronus. The Battle Barge Litany of Fury remained in close orbit, imposing a strict prohibition on any visits to the world, while the fifth company maintained the Castellum Incorruptus in North Vandea.
+		
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 20 )
+	CTRL.WAIT()
+
+	
+	--[[destroying buildings]]
+	EGroup_DestroyAllEntities("eg_All_C_Outro_Buildings")
+	EGroup_Destroy(EGroup_FromName("eg_All_C_Outro_Buildings"))
+	
+	CTRL.W40k_Letterbox( false, 2)
+	
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+		
+	
+end

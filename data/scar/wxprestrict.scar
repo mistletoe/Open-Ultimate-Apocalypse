@@ -1,0 +1,123 @@
+----------------------------------------------------------------------------------------------------------------
+-- Restriction tables for single player missions
+-- (c) 2005 Relic Entertainment Inc.
+
+--[[
+----------------------------------------------------------------------------------------------------------------
+-- This table holds all the restriction levels for space marines.
+-- Items with a level that are GREATER then the given level will be restricted.
+-- Items that are in the game, but not specified in these tables WILL NOT be restricted.
+_SpaceMarineRestrictions = 
+{
+	Buildings = 
+	{
+	--	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_ability_building", 							5 ,						408054,					"$42958"},
+		{ "space_marine_armoury", 									1,							408044,					"$42948"},
+		{ "space_marine_barracks", 									1,							408042,					"$42946"},
+		{ "space_marine_generator", 									1,							408058,					"$42962"},
+		{ "space_marine_hq", 											1,							408062,					"$42966"},
+		{ "space_marine_listening_post", 							1,							"none",							"none"},
+		{ "space_marine_orbital_relay", 								7,							408056,					"$42960"},
+		{ "space_marine_thermo_generator", 						4,							408060,					"$42964"},
+		{ "space_marine_turret_bolter", 								3,							408046,					"$42950"},
+		{ "space_marine_vehicle_building", 						4,							408052,					"$42956"},
+		{ "space_marine_mine_field", 								3,							408050,					"$42954"},
+	},
+	
+	Squads = 
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_squad_apothecary", 						5,							408008,					"$42910"},
+		{ "space_marine_squad_assault", 							4,							408006,					"$42908"},
+		{ "space_marine_squad_dreadnought", 					3,							408018,					"$42922"},
+		{ "space_marine_squad_dreadnought_hellfire",		5,							"none",							"$42924"},
+		{ "space_marine_squad_force_commander", 			20,						"none",							"none"},
+		{ "space_marine_squad_land_raider", 					8,							408024,					"$42930"},
+		{ "space_marine_squad_land_speeder", 					6,							408016,					"$42918"},
+		{ "space_marine_squad_librarian",		 					20,						"none",							"none"},
+		{ "space_marine_squad_rhino", 								5,							408014,					"$42916"},
+		{ "space_marine_squad_predator", 						6,							408022,					"$42928"},
+		{ "space_marine_squad_servitor",							1,							408000,					"$42902"},
+		{ "space_marine_squad_scout", 								2,							408002,					"$42904"},
+		{ "space_marine_squad_skull_probe", 					2,							408012,					"$42914"},
+		{ "space_marine_squad_tactical", 							1,							408004,					"$42906"},
+		{ "space_marine_squad_terminator", 						7,							408010,					"$42912"},
+		{ "space_marine_squad_terminator_assault", 			7,							408064,					"$42920"},
+		{ "space_marine_squad_whirlwind", 						4,							408020,					"$42926"},
+	},
+	
+	AddOns =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{"space_marine_hq_addon_1",								2,							408038,					"$42942"},
+		{"space_marine_hq_addon_2",								6,							408040,					"$42944"},
+		{"space_marine_list_post_addon_1",						2,							"none",							"none"},
+		{"space_marine_list_post_addon_2",						6,							"none",							"none"},
+	},
+	
+	Research =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "marine_scout_infiltrate_research", 						2,							"none",							"none"},
+		{ "marine_max_weapons_research", 						2,							"none",							"none"},
+		{ "marine_health_upgrade_research", 					2,							"none",							"none"},
+		{ "marine_health_upgrade_research_2", 					3,							"none",							"none"},
+		{ "marine_accuracy_upgrade_research", 				2,							"none",							"none"},
+		{ "marine_accuracy_upgrade_research_2", 				3,							"none",							"none"},
+		{ "marine_sergeant_melee_upgrade_1", 					2,							"none",							"none"},
+		{ "marine_sergeant_melee_upgrade_2", 					3,							"none",							"none"},
+		{ "marine_sergeant_ranged_upgrade_1", 				3,							"none",							"none"},
+		{ "marine_force_commander_ability_research_1", 	2,							"none",							"none"},
+		{ "marine_force_commander_research_2", 				3,							"none",							"none"},
+		{ "marine_librarian_research_1", 							2,							"none",							"none"},
+		{ "marine_librarian_research_2", 							3,							"none",							"none"},
+		{ "marine_commander_health_research_1", 			2,							"none",							"none"},
+		{ "marine_commander_health_research_2", 			3,							"none",							"none"},
+		{ "marine_frag_grenade_research", 						2,							"none",							"none"},
+		{ "marine_melta_bomb_research", 							3,							"none",							"none"},
+		{ "marine_smoke_launcher_research", 					5,							"none",							"none"},
+		{ "squad_cap_research", 										1,							"none",							"none"},
+		{ "squad_cap_research_1", 									2,							"none",							"none"},
+		{ "support_cap_research", 										3,							"none",							"none"},
+		{ "support_cap_research_1", 									3,							"none",							"none"},
+		{ "support_cap_research_2", 									4,							"none",							"none"},
+		{ "support_cap_research_3", 									5,							"none",							"none"},
+		{ "marine_requisition_research_1", 						3,							"none",							"none"},
+		{ "marine_requisition_research_2", 						4,							"none",							"none"},
+		{ "marine_power_research_1", 								3,							"none",							"none"},
+		{ "marine_power_research_2", 								4,							"none",							"none"},
+	},
+	
+	Weapon =
+	{
+	-- 	ItemName																RestrictionLevel		dialogID,						event_cue description
+		{ "space_marine_flamer_tactical", 							1,							"none",							"none"},
+		{ "space_marine_heavy_bolter_tactical", 				1,							"none",							"none"},
+		{ "space_marine_missile_launcher_tactical", 			3,							"none",							"none"},
+		{ "space_marine_plasma_gun_scout", 					3,							"none",							"none"},
+		{ "space_marine_sniper_rifle", 								2,							"none",							"none"},
+		{ "space_marine_plasma_gun",								3,							"none",							"none"},
+	}
+}
+
+]]
+----------------------------------------------------------------------------------------------------------------
+-- Restrict functions
+
+--? @group WXP
+
+--? @shortdesc Applies restrictions for space marines.  You should call this at the begining of your mission for Player 1.
+--? @args Integer level
+--? @result Void
+function WXP_Restrict( level )
+--[[
+	if(Player_GetRaceName( playerId ) ~= "space_marine_race") then
+		error("Restrict_SpaceMarines can only be called for space marines!")
+	end
+	
+	_RestrictionPrivate.ApplyRestrictionsTable( playerId, level, _SpaceMarineRestrictions )
+]]
+end
+
+--[[ TO GET THE FOLLOWING EXAMPLE LOOK TO THE "Restrict.scar" IN THE W40K SCAR DIRECTORY! ]]

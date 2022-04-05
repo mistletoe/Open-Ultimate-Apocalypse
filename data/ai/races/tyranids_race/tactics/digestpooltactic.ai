@@ -1,0 +1,20 @@
+----------------------------------------
+-- File: 'digestpooltactic.ai'
+-- Edited by Gambit @ 09.07.2017
+
+class 'DigestPoolTactic' (BaseTactic)
+
+function DigestPoolTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Tyranids Digest Pool Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function DigestPoolTactic:DoAbilities()
+	-- Always try to release bunkered rippers, for now
+	if self.m_bBunker and self.base_ai:CanUnload() then
+		self.base_ai:DoUnload()
+	end
+end

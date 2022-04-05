@@ -1,0 +1,1618 @@
+-- -----------------------------------------------------------------
+-- Mission Name - NISLets and Intel Events
+--
+-- (c) 2005 Relic Entertainment
+-- -----------------------------------------------------------------
+
+-- OPENING NIS
+-- Reinforcement NIS [[mid nis]]
+-- CLOSING NIS
+
+EVENTS = {}
+
+
+-- -----------------------------------------------------------------
+--OPENING
+-- -----------------------------------------------------------------
+
+EVENTS.NIS_Opening = function()		
+
+	
+	--[[setting up race specific items for the nis]]
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+		
+		g_Nis_Blueprint = "chaos_squad_cultist"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_obliterator"
+		
+		g_Nis_Blueprint4 = "chaos_plasma_generator"		
+		
+	elseif humanplayer == "eldar_race" then
+		
+		g_Nis_Blueprint = "eldar_guardian_squad"
+		g_Nis_Blueprint2 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint3 = "eldar_squad_wraithlord"
+		
+		g_Nis_Blueprint4 = "eldar_warp_generator"		
+		
+	elseif humanplayer == "guard_race" then
+		
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+		
+		g_Nis_Blueprint4 = "guard_plasma_generator"		
+		
+	elseif humanplayer == "ork_race" then
+		
+		g_Nis_Blueprint = "ork_squad_slugga"	
+		g_Nis_Blueprint2 = "ork_squad_shoota_boy"
+		g_Nis_Blueprint3 = "ork_squad_armored_nob"
+		
+		g_Nis_Blueprint4 = "ork_generator"
+	
+	elseif humanplayer =="space_marine_race" then
+		
+		g_Nis_Blueprint = "space_marine_squad_scout"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_tactical"
+		
+		g_Nis_Blueprint4 = "space_marine_generator"
+	
+	elseif humanplayer == "tau_race" then
+		
+		g_Nis_Blueprint = "tau_pathfinder_squad"
+		g_Nis_Blueprint2 = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint3 = "tau_crisis_suit_squad"
+		
+		g_Nis_Blueprint4 = "tau_plasma_generator"		
+	
+	elseif humanplayer == "necron_race" then
+		
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_tomb_spyder_squad"
+		
+		g_Nis_Blueprint4 = "necron_plasma_generator"						
+		
+	end
+
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )	
+	
+	--[[hide the bonus unit effect]]
+	Player_RestrictAbility(g_Player3, "sp_dxp_unit_glow")
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+
+	--Silvey Polish 07/13/07 (fixed title)
+	Util_MissionTitle("$3900015")
+	
+	CTRL.Event_Delay( 4 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+	Fade_Start( 2.0, true )
+	
+	-------------------------------------------------
+	--Create Opening Actors
+	-------------------------------------------------	
+	--Commander Indrick Boreale
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_commander", "space_marine_squad_force_commander", "nis_opening_commander_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_commander"))
+	SGroup_FaceMarker("sg_opening_commander", "nis_opening_commander_face")
+	SGroup_SetHealthInvulnerable("sg_opening_commander", true)
+	Cmd_SetStance("sg_opening_commander", STANCE_CeaseFire)
+	
+	--Messenger to Commander Boreale
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_messenger", "space_marine_squad_scout", "nis_opening_messenger_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_messenger"))
+	SGroup_FaceMarker("sg_opening_messenger", "nis_opening_commander_spawn")
+	SGroup_SetHealthInvulnerable("sg_opening_messenger", true)
+	Cmd_SetStance("sg_opening_messenger", STANCE_CeaseFire)
+	
+	--marine rollcall
+	l_Marine_Rollcall = 14
+	for i = 1, l_Marine_Rollcall do
+		--Silvey Polish 07/13/07 (more units in back row)		
+		if i > 7 then
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_marinerolecall"..i, "space_marine_squad_tactical", "nis_opening_marine_spawn"..i, 4, 1)			
+		else
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_marinerolecall"..i, "space_marine_squad_tactical", "nis_opening_marine_spawn"..i, 1, 1)			
+		end
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_marinerolecall"..i))
+		SGroup_SetHealthInvulnerable("sg_opening_marinerolecall"..i, true)
+		
+		Cmd_SetStance("sg_opening_marinerolecall"..i, STANCE_CeaseFire)	
+		
+		--Silvey Polish 07/18/07 (Face squad leader for daily briefing)
+		if i < 4 or 
+		   (i > 7 and i < 11) then
+			SGroup_FaceMarker("sg_opening_marinerolecall"..i, "nis_opening_squadleader1")
+		else
+			SGroup_FaceMarker("sg_opening_marinerolecall"..i, "nis_opening_squadleader2")
+		end
+	end	
+	
+	--Silvey Polish 07/13/07
+	--knights
+	for i = 1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_knight"..i, "space_marine_squad_grey_knights", "nis_opening_knight"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_knight"..i))
+		SGroup_SetHealthInvulnerable("sg_opening_knight"..i, true)
+		SGroup_FaceMarker("sg_opening_knight"..i, "nis_opening_knight_facing")
+		Cmd_SetStance("sg_opening_knight"..i, STANCE_CeaseFire)	
+	end
+	
+	--Silvey Polish 07/18/07
+	--Chaplains
+	for i = 1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_squadleader"..i, "space_marine_squad_chaplain", "nis_opening_squadleader"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_squadleader"..i))
+		Cmd_SetStance("sg_opening_squadleader"..i, STANCE_CeaseFire)
+		Anim_EnableInfantryOffset("sg_opening_squadleader"..i, false)
+	end
+	SGroup_FaceMarker("sg_opening_squadleader1", "nis_opening_marine_spawn9")
+	SGroup_FaceMarker("sg_opening_squadleader2", "nis_opening_marine_spawn13")
+	
+	
+	---- Vehicles
+	--Silvey Polish 07/13/07 (more vehicles, puh-leeze)
+	for i = 1,2 do
+		-- Thunderhawks
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_thunderhawk"..i, "space_marine_squad_thunderhawk", "nis_opening_thunderhawk_land"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_thunderhawk"..i))
+		SGroup_FaceMarker("sg_opening_thunderhawk"..i, "nis_openiong_thunderhawk_face")
+	
+		--Whirlwinds
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_whirlwind"..i, "space_marine_squad_whirlwind", "nis_opening_whirlwind"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_whirlwind"..i))
+		SGroup_FaceMarker("sg_opening_whirlwind"..i, "nis_opening_knight2")
+		
+		-- Dreadnoughts
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_dreadnought"..i, "space_marine_squad_dreadnought", "nis_opening_dreadnought"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dreadnought"..i))
+		
+		
+	end
+	
+	SGroup_FaceMarker("sg_opening_dreadnought1", "nis_opening_dreadnought1_facing1")		
+	SGroup_FaceMarker("sg_opening_dreadnought2", "nis_opening_dreadnought2_facing1")		
+
+	--Predator
+	for i = 1,6 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_predator"..i, "space_marine_squad_predator", "nis_opening_predator"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_predator"..i))		
+	end
+		
+	--Land Speeders
+	for i = 1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_land_speeder"..i, "space_marine_squad_land_speeder", "nis_opening_land_speeder"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_land_speeder"..i))		
+	end
+	-------------------------------------------------
+	--END
+	-------------------------------------------------
+	
+	CTRL.CPath_Start("canim_start", "start", "end")
+	
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_thunderhawk1"), "sp_take_off" )
+	
+	--Silvey Polish 07/18/07
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_squadleader1"), "sp_talk" )
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_squadleader2"), "sp_talk" )
+	
+	CTRL.CPath_CutToPath("canim_commander06", "start", "end")
+		CTRL.SUB()
+		
+			--Silvey polish 07/16/07 (Added Land speeders)
+			CTRL.Event_Delay(3)			
+			CTRL.WAIT()
+			
+			for i = 1,3 do
+				Cmd_MoveToMarker("sg_opening_land_speeder"..i, "nis_opening_land_speeder_goto")
+			end
+			CTRL.Event_Delay(3)			
+			CTRL.WAIT()
+			
+			--Silvey Polish 07/13/07 (Moved animation to after wait period)
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_thunderhawk2"), "sp_land" )
+		CTRL.END()
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_messenger", "nis_opening_messenger_goto")
+
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACT.TacticalMarine, 5200054) -- Commander Boreale - enemy forces in our perimeter
+		CTRL.SUB()
+			--Silvey Polish 07/13/07 (Added sub and messenger talking animation)
+			SGroup_FaceMarker("sg_opening_commander", "nis_opening_messenger_goto")
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "sp_talk")
+			CTRL.WAIT()
+		CTRL.END()
+	CTRL.WAIT()
+	
+	--Silvey Polish 07/13/07
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "sp_default")
+	
+	CTRL.Actor_PlaySpeech(ACT.Thule, 5200055) -- Where?
+	CTRL.WAIT()
+	
+	SGroup_FaceMarker("sg_opening_dreadnought1", "nis_opening_dreadnought1_facing2")		
+	
+	CTRL.Actor_PlaySpeech(ACT.TacticalMarine, 5200056) --  Southern quadrant, but they were on the move. Current location unknown.
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(ACT.Thule, 5200057) --  There is no time to be lost. (Shouting) Men!
+		CTRL.SUB()
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			
+			SGroup_FaceMarker("sg_opening_commander", "nis_opening_marine_spawn4")
+			
+			--Silvey Polish 07/18/07
+			for i = 1, l_Marine_Rollcall do
+				SGroup_FaceMarker("sg_opening_marinerolecall"..i, "nis_opening_commander_spawn")
+				if i < 8 then
+					Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_marinerolecall"..i), "capture_strategic_point")
+				end
+			end
+			Cmd_MoveToMarker("sg_opening_squadleader1", "nis_opening_squadleader1_dst")
+			Cmd_MoveToMarker("sg_opening_squadleader2", "nis_opening_squadleader2_dst")			
+			
+			CPath_CutToPath("canim_commander02", "start", "end")
+			
+			--Silvey Polish 07/13/07
+			Cmd_MoveToMarker("sg_opening_messenger", "nis_opening_messenger_destination")
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "sp_talk")
+			
+			CTRL.Event_Delay(1.0)
+			CTRL.WAIT()			
+			SGroup_FaceMarker("sg_opening_squadleader1", "nis_opening_commander_spawn")
+			SGroup_FaceMarker("sg_opening_squadleader2", "nis_opening_commander_spawn")
+			
+			CTRL.Actor_PlaySpeech(ACT.Thule, 5200058) --  Marines – today the enemy is at our door. 
+			CTRL.WAIT()			
+			
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_squadleader1"), "capture_strategic_point" )
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_squadleader2"), "capture_strategic_point" )	
+			
+		CTRL.END()
+	CTRL.WAIT()
+		
+	CTRL.CPath_CutToPath("canim_commander03", "start", "end")
+		CTRL.SUB()	
+			
+			Actor_PlaySpeech(ACT.Thule, 5200059) --  We know our duty, and we will do it. We fight for our honor as Space Marines, we fight for the Imperium… we fight in the name of the Emperor! 
+			CTRL.Event_Delay(11)
+			CTRL.WAIT()
+			
+			SGroup_FaceMarker("sg_opening_dreadnought2", "nis_opening_dreadnought2_facing2")		
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "battlecry")			
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	
+	CTRL.CPath_CutToPath("canim_commander05", "start", "end")
+		CTRL.SUB()
+			Actor_PlaySpeech(  ACT.TacticalMarine, 5200060) --  Men Shouting			
+			--Silvey Polish 07/13/07
+			for i = 8, l_Marine_Rollcall do
+				-- Random Guys will cheer, but the same will always cheer (just in case)
+				--[[if World_GetRand(1,10) > 5 
+					or i == 6 
+					or i == 9 
+					or i == 2 
+					or i == 12 
+					then]]--
+					Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_marinerolecall"..i), "melee_aftermath")
+				--end
+			end
+
+			SGroup_FaceMarker("sg_opening_dreadnought1", "nis_opening_dreadnought1_facing1")		
+			CTRL.Event_Delay(3.0)
+			CTRL.WAIT()
+
+				for i = 1, l_Marine_Rollcall do					
+					Anim_StopSGroupAnim(SGroup_FromName("sg_opening_marinerolecall"..i), "melee_aftermath")
+				end			
+			
+			CTRL.Actor_PlaySpeech(ACT.Thule, 5200061) --  And if we die this day, we die in glory. We die heroes’ deaths … but we shall not die. No! We shall make our foes taste death and defeat. We shall raise the Emperor’s banner high! As you know…
+			CTRL.WAIT()			
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	
+	--Silvey Polish 07/13/07 (added sub and other, more interesting actions)
+	--Assault Squad
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_squad_assault", "space_marine_squad_assault", "nis_opening_assault_squad", 5, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_squad_assault"))
+	SGroup_FaceMarker("sg_opening_squad_assault", "mkr_sm_orbitalrelay")
+	SGroup_SetHealthInvulnerable("sg_opening_squad_assault", true)
+	
+	
+	--Apothecary
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_apothecary", "space_marine_squad_apothecary", "nis_opening_apothecary", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_apothecary"))
+	SGroup_FaceMarker("sg_opening_apothecary", "nis_opening_apothecary_destination")
+	SGroup_SetHealthInvulnerable("sg_opening_apothecary", true)
+	
+	--Scout
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_scout", "space_marine_squad_scout", "nis_opening_scout", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_scout"))
+	SGroup_FaceMarker("sg_opening_scout", "nis_opening_scout_destination")
+	SGroup_SetHealthInvulnerable("sg_opening_scout", true)
+	
+	-- One more Dreadnought
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_dreadnought3", "space_marine_squad_dreadnought", "nis_opening_dreadnought3", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dreadnought3"))
+	SGroup_FaceMarker("sg_opening_dreadnought3", "nis_opening_dreadnought_destination")		
+	
+	--Make stuff happen
+	Cmd_MoveToMarker("sg_opening_apothecary", "nis_opening_apothecary_destination")
+	Cmd_MoveToMarker("sg_opening_dreadnought3", "nis_opening_dreadnought_destination")	
+	
+	CTRL.Actor_PlaySpeech(ACT.Thule, 5200062) --  Most of our men are stationed in space, prepared for deep strike.
+		CTRL.SUB()
+			CPath_CutToPath("canim_relay", "start", "end")			
+			CTRL.Event_Delay(1.5)				
+			CTRL.WAIT()			
+			Cmd_JumpToMarker("sg_opening_squad_assault", "nis_opening_assault_squad_jump")			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_scout", "nis_opening_scout_destination")
+	
+	Actor_PlaySpeech(ACT.Thule, 5200063) --  We have prepared the approach to this base of operation, in case our enemies should be so bold and so foolish. We have placed numerous beacons, allowing for multiple, simultaneous, and devastating defensive deep strikes.
+	
+	CTRL.CPath_CutToPath("canim_beacon", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(7.5)
+			CTRL.WAIT()
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped01", "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "nis_opening_drop01", "basic_marker")), 4,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped01"))
+			Cmd_SetStance("sg_opening_dropped01", STANCE_Burn)
+			
+			CTRL.Event_Delay(1.5)
+			CTRL.WAIT()
+			
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped02", "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "nis_opening_drop02", "basic_marker")), 4,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped02"))
+			Cmd_SetStance("sg_opening_dropped02", STANCE_Burn)
+			
+			CTRL.Event_Delay(1.5)
+			CTRL.WAIT()
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped03", "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "nis_opening_drop03", "basic_marker")), 4,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped03"))
+			Cmd_SetStance("sg_opening_dropped03", STANCE_Burn)
+			
+						
+		CTRL.END()
+	CTRL.WAIT()	
+			
+	
+			--CTRL.Event_Delay(10.0)
+			--CTRL.WAIT()
+			
+	CTRL.CPath_CutToPath("canim_beacon01", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(5.0)
+			CTRL.WAIT()	
+			
+			Cmd_MoveToMarker("sg_opening_dropped01", "nis_opening_droppedmarines_goto1")
+			Cmd_MoveToMarker("sg_opening_dropped02", "nis_opening_droppedmarines_goto2")
+			Cmd_MoveToMarker("sg_opening_dropped03", "nis_opening_droppedmarines_goto3")
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	
+	
+	
+	--Silvey Polish 07/13/07 (changed unit to building so drop pods won't drop unit into view)
+	--unseen target
+	--Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_unseentarget", g_Nis_Blueprint2, "nis_opening_unseentarget", 4, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_unseentarget"))
+	--SGroup_SetHealthInvulnerable("sg_opening_unseentarget", true)
+	--SGroup_FaceMarker("sg_opening_unseentarget", "nis_opening_droppedmarines_goto1")
+	--Cmd_SetStance("sg_opening_unseentarget", STANCE_CeaseFire)
+	for i = 1,3 do
+		Entity_CreateBuildingMarker(g_Player1, "eg_opening_unseentarget"..i, g_Nis_Blueprint4, "nis_opening_unseentarget"..i, 1)		
+		EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_buildings"), EGroup_FromName("eg_opening_unseentarget"..i))
+	end	
+	
+	
+	--runner marines
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_droppedrunners", "space_marine_squad_tactical", "nis_opening_runnermarines_goto", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_droppedrunners"))
+	SGroup_SetHealthInvulnerable("sg_opening_droppedrunners", true)
+	SGroup_FaceMarker("sg_opening_droppedrunners", "nis_opening_runnermarines_goto")
+	Cmd_SetStance("sg_opening_droppedrunners", STANCE_Burn)	
+	
+	CTRL.CPath_CutToPath("canim_beacon02", "start", "end")
+		CTRL.SUB()
+			
+			--Silvey Polish 07/16/07 (Anybody who didn't get unloaded in time)
+			Cmd_MoveToMarker("sg_opening_dropped01", "nis_opening_droppedmarines_goto1")
+			Cmd_MoveToMarker("sg_opening_dropped02", "nis_opening_droppedmarines_goto2")
+			Cmd_MoveToMarker("sg_opening_dropped03", "nis_opening_droppedmarines_goto3")
+			
+			CTRL.Event_Delay(7)
+			CTRL.WAIT()
+			
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped04", "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "nis_opening_drop04", "basic_marker")), 1,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped04"))
+			Cmd_SetStance("sg_opening_dropped04", STANCE_Attack)
+			SGroup_SetHealthInvulnerable("sg_opening_dropped04", true)
+			CTRL.Event_Delay(1)
+			CTRL.WAIT() 
+			
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped05", "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "nis_opening_drop05", "basic_marker")), 1,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped05"))
+			Cmd_SetStance("sg_opening_dropped05", STANCE_Attack)
+			SGroup_SetHealthInvulnerable("sg_opening_dropped05", true)
+			CTRL.Event_Delay(1)
+			CTRL.WAIT() 
+			
+			Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_opening_dropped06", "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "nis_opening_drop06", "basic_marker")), 4,1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_dropped06"))
+			Cmd_SetStance("sg_opening_dropped06", STANCE_Attack)
+			SGroup_SetHealthInvulnerable("sg_opening_dropped06", true)
+			
+			--Silvey Polish 07/13/07
+			Cmd_MoveToMarker("sg_opening_dropped04", "nis_opening_runnermarines_goto")
+			Cmd_MoveToMarker("sg_opening_dropped06", "nis_opening_runnermarines_goto")
+			
+			Cmd_MoveToMarker("sg_opening_droppedrunners", "nis_opening_runnermarines_goto")
+		CTRL.END()
+	CTRL.WAIT()	
+	CTRL.CPath_CutToPath("canim_shoottheair", "start", "end")		
+			Cmd_MoveToMarker("sg_opening_dropped05", "nis_opening_dreadnought_goto")			
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_shoottheair02", "start", "end")		
+	CTRL.WAIT()
+	
+	CTRL.Fade_Start(1.0, false)
+	CTRL.WAIT()
+	
+	CPath_CutToPath("canim_commanderfinal", "start", "end")
+	
+	CTRL.Fade_Start(1.0, true)
+	CTRL.WAIT()
+	
+	--Silvey Polish 07/13/07
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "sp_talk")	
+	
+	
+	CTRL.Actor_PlaySpeech(ACT.Thule, 5200064) --We have named this maneuver Steel Rain. We will descend upon the foe, we will overwhelm them … we will leave none alive. Meanwhile, our tank lots and other ground troops will ensure the full defense of our headquarters.
+		CTRL.SUB()
+						
+			--Silvey Polish 07/13/07
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			for i = 1,6 do
+				SPath_Start("manim_predator_"..i, "start", "end", "sg_opening_predator"..i )				
+			end			
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_commanderfinal01", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			--Boreale:  We are the Space Marines! We are the Emperor’s fury!
+			CTRL.Actor_PlaySpeech(ACT.Thule, 5200065) 
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "battlecry")
+			CTRL.WAIT()
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 1 )
+		Fade_Start( 1, false )
+	CTRL.WAIT()
+	
+	
+	Anim_EnableInfantryOffset("sg_opening_squadleader1", true)
+	Anim_EnableInfantryOffset("sg_opening_squadleader2", true)
+	
+	--CPath_CutToPoint("canim_end", "start")
+	CPath_CutToPath("canim_end", "start", "end")
+	SGroup_DeSpawn("sg_opening_actors")
+	SGroup_DestroyAllSquads("sg_opening_actors")
+	SGroup_Destroy(SGroup_FromName("sg_opening_actors"))
+	EGroup_DeSpawn("eg_opening_buildings")
+	
+	CTRL.W40k_Letterbox( false, 2)
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+	
+	Fade_Start( 1, true )
+	
+	end
+
+--[[***********************************************************************************************************
+
+																										OUTRO/CLOSING
+																									
+***********************************************************************************************************]]--																									
+EVENTS.NIS_Closing = function()
+	
+	
+	--[[setting up race specific items for the nis]]
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+	
+		g_Nis_Blueprint = "chaos_marine_squad"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_predator"
+		
+	elseif humanplayer == "eldar_race" then
+	
+		g_Nis_Blueprint = "eldar_squad_banshees"
+		g_Nis_Blueprint2 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint3 = "eldar_squad_wraithlord"
+	
+	elseif humanplayer == "guard_race" then
+	
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+	
+	elseif humanplayer == "ork_race" then
+	
+		g_Nis_Blueprint = "ork_squad_nob"	
+		g_Nis_Blueprint2 = "ork_squad_nob"
+		g_Nis_Blueprint3 = "ork_squad_killa_kan"
+	
+	elseif humanplayer =="space_marine_race" then
+	
+		g_Nis_Blueprint = "space_marine_squad_tactical"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_tactical"
+	
+	elseif humanplayer == "tau_race" then
+	
+		g_Nis_Blueprint = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint2 = "tau_fire_warrior_squad"
+		g_Nis_Blueprint3 = "tau_hammerhead_gunship_squad"
+	
+	elseif humanplayer == "necron_race" then
+ 
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_heavy_destroyer_squad"
+		
+	elseif humanplayer =="dark_eldar_race" then
+		
+		g_Nis_Blueprint = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint2 = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint3 = "dark_eldar_squad_warrior"
+		
+	elseif humanplayer == "sisters_race" then
+		
+		g_Nis_Blueprint = "sisters_squad_battle_missionary"
+		g_Nis_Blueprint2 = "sisters_squad_battle_missionary"
+		g_Nis_Blueprint3 = "sisters_squad_battle_missionary"
+		
+	end
+	
+	--[[Cpu_EnableComponent(g_Player3, false, CT_Resourcing)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildUnits)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildAddOns)
+	Cpu_EnableComponent(g_Player3, false, CT_Tactics)]]
+	
+	--Cpu_Enable(g_Player2, false)	
+	--Cpu_Enable(g_Player3, false)
+	--Cpu_Enable(g_Player4, false)
+	
+	--[[turn off events]]
+	--Util_NIS_ToggleModifierEvents(g_Player1, false)
+	--Util_NIS_ToggleModifierEvents(g_Player2, false)
+	--Util_NIS_ToggleModifierEvents(g_Player3, false)
+	--Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	CTRL.Event_Delay( 4 )
+
+	Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+	Fade_Start( 2.0, true )
+
+	
+	--[[hide the bonus unit effect]]
+	--Player_RestrictAbility(g_Player1, "sp_dxp_unit_glow")
+	--Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	--Player_RestrictAbility(g_Player3, "sp_dxp_unit_glow")
+	--Player_RestrictAbility(g_Player4, "sp_dxp_unit_glow")
+	--Player_RestrictAbility(g_Player5, "sp_dxp_unit_glow")
+	--Player_RestrictAbility(g_Player6, "sp_dxp_unit_glow")
+	
+	--[[Remove all the buildings and units to clear the Nis scenes
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")]]
+	
+	
+	--[[create the player bodies
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies1, "mkr_actorS62")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies2, "mkr_actorS63")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies1, "mkr_actorS64")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies2, "mkr_actorS65")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies1, "mkr_actorS66")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies1, "mkr_actorS67")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies2, "mkr_actorS68")
+	Util_SpawnEntity("eg_Bodies", g_Player_Bodies1, "mkr_actorS69")]]
+
+	----------------------------------------------
+	--Shot One Spawns
+	----------------------------------------------
+	
+	--Marines For Shot1
+	for i = 1, 5 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_marineshot1"..i, "space_marine_squad_tactical", "nis_closing_marines_spawn"..i, 4, 1)
+		SGroup_FaceMarker("sg_closing_marineshot1"..i, "nis_closing_attackingarmy_spawn1")
+		Cmd_SetStance("sg_closing_marineshot1"..i, STANCE_Hold)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Actortac70"), 1), "space_marine_heavy_bolter_veteran", 1)
+	end
+	
+	--Landspeeder To Crash
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_landspeeder", "space_marine_squad_land_speeder_advance_sp", "nis_closing_speeder_spawn1", 1, 1)
+	SGroup_FaceMarker("sg_closing_landspeeder", "nis_closing_attackingarmy_spawn1")
+	--Cmd_SetStance("sg_closing_landspeeder", STANCE_CeaseFire)
+	
+	--Attacking Army Shot1
+	for i = 1, 3 do
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_attackersshot1"..i, g_Nis_Blueprint2, "nis_closing_attackingarmy_spawn"..i, 6, 1)
+		SGroup_FaceMarker("sg_closing_attackersshot1"..i, "nis_closing_marines_spawn1")
+		Cmd_SetStance("sg_closing_attackersshot1"..i, STANCE_Hold)
+	end
+	
+	--Attacking Vehicle
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_attackvehicle", g_Nis_Blueprint3, "nis_closing_attackingvehicle_spawn", 1, 1)
+	SGroup_FaceMarker("sg_closing_attackvehicle", "nis_closing_marines_spawn1")
+	Cmd_SetStance("sg_closing_attackvehicle", STANCE_Hold)
+	
+	---------------------------------------------
+	--Shot Two Spawns
+	---------------------------------------------
+	
+	--Attackers For Shot2
+	for i = 1, 3 do
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_attackershot2"..i, g_Nis_Blueprint2, "nis_closing_deepstrikekillers"..i, 8, 1)
+		SGroup_FaceMarker("sg_closing_attackershot2"..i, "nis_closing_deepstrikedie")
+		Cmd_SetStance("sg_closing_attackershot2"..i, STANCE_Hold)
+	end
+	
+	---------------------------------------------
+	--Start Outro
+	---------------------------------------------
+	
+	CTRL.CPath_Start("canim_start", "start", "end")
+	
+	CTRL.CPath_CutToPath("canim_out_shot1", "start","end")
+		CTRL.SUB()
+			CTRL.Event_Delay(4)
+			CTRL.WAIT()
+			Cmd_MoveToMarker("sg_closing_landspeeder", "nis_closing_speeder_goto1")
+			CTRL.Event_Delay(6)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_landspeeder"), "die")
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			Util_MarkerFX( "nis_closing_explosion1", "data:Art/Events/Guard/Weapons/IGOutroBoom.events")
+		CTRL.END()
+	CTRL.WAIT()
+	
+	Util_CreateSquadsAndDropPodIn(g_Player3 , "sg_closing_dropped1", "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "nis_closing_deepstrikedie", "basic_marker")), 6,1)
+	Cmd_SetStance("sg_closing_dropped1", STANCE_Burn)
+	
+	CTRL.CPath_CutToPath("canim_out_droppod", "start","end")
+		Cmd_MoveToMarker("sg_closing_attackershot22", "nis_closing_deepstrikekillers2_goto")
+	CTRL.WAIT()
+	
+	---------------------------------------------
+	--Shot Three Spawns
+	---------------------------------------------
+	
+	--Finale Commander
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_commander", "space_marine_squad_force_commander", "nis_closing_commander_spawn", 1, 1)
+	SGroup_FaceMarker("sg_closing_commander", "nis_closing_finaleattack_spawn2")
+	Cmd_SetStance("sg_closing_commander", STANCE_CeaseFire)
+	
+	--giving the force commander his wargear
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_greaves", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_halo", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_shoulders", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_teleporter", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_girdle", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_force_commander_gauntlets", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_power_sword_force_commander", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_closing_commander"), 1),"space_marine_bolt_pistol_combi_chaingun_forcecommander", 1)
+	
+	--Defenders1 For Shot3
+	for i = 1, 2 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_terminators"..i, "space_marine_squad_terminator", "nis_closing_terminators_spawn"..i, 2, 1)
+		SGroup_FaceMarker("sg_closing_terminators"..i, "nis_closing_finaleattack_spawn2")
+		Cmd_SetStance("sg_closing_terminators"..i, STANCE_Hold)
+	end
+	
+	--Devenders2 for Shot3
+	for i = 1, 4 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_bodyguards"..i, "space_marine_squad_tactical", "nis_closing_bodyguard_spawn"..i, 4, 1)
+		SGroup_FaceMarker("sg_closing_bodyguards"..i, "nis_closing_finaleattack_spawn2")
+		Cmd_SetStance("sg_closing_bodyguards"..i, STANCE_Hold)
+	end
+	
+	--Attackers For Shot3
+	for i = 1, 5 do
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_attackershot3"..i, g_Nis_Blueprint2, "nis_closing_finaleattack_spawn"..i, 6, 1)
+		SGroup_FaceMarker("sg_closing_attackershot3"..i, "nis_closing_commander_spawn")
+		Cmd_SetStance("sg_closing_attackershot3"..i, STANCE_Hold)
+	end
+	
+	CTRL.CPath_CutToPath("canim_out_finale", "start","end")
+		CTRL.SUB()
+			CTRL.Event_Delay(18)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_commander"), "battlecry")
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			--Cmd_SetStance("sg_closing_commander", STANCE_Hold)
+		CTRL.END()
+	CTRL.WAIT()
+	
+		--[[game is won]]
+	Fade_Start(4, false)
+		--World_SetTeamWin( g_Player1, "" )
+		--Rule_AddIntervalEx( Rule_GameOver,5,1 )
+	CTRL.WAIT()
+	
+end
+
+
+
+-------------------------------------------------
+--[[ Loss NIS ]]
+-------------------------------------------------
+
+EVENTS.NIS_Loss = function()
+	
+	
+	
+	
+	CTRL.W40k_Letterbox( true, 1)
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 5 )
+	CTRL.WAIT()
+	
+	CTRL.W40k_Letterbox( false, 1)
+	CTRL.WAIT()
+		
+	
+end
+
+
+-------------------------------------------------
+--[[ Space Marine Intro NIS NIS ]]
+-------------------------------------------------
+--this is for the intro movie and not the stronghold nis
+EVENTS.NIS_SM_Campaign_Intro = function()
+	
+	Cpu_EnableComponent(g_Player3, false, CT_Resourcing)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildUnits)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player3, false, CT_BuildAddOns)
+	Cpu_EnableComponent(g_Player3, false, CT_Tactics)
+	
+		
+	Cpu_Enable(g_Player2, false)	
+	Cpu_Enable(g_Player3, false)
+	Cpu_Enable(g_Player4, false)
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+
+	--[[Removing all the rules]]
+
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+	Rule_RemoveAll()
+	
+	--[[Give the relic to a neutral player so it remains on the map]]
+	EGroup_SetPlayerOwner("eg_Relic", g_Player5)
+	
+	
+	--[[Remove all the buildings and units to clear the Nis scenes]]
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+
+	
+	Entity_CreateBuildingMarker(g_Player2, "eg_C_Building1", "guard_infantry", "mkr_C_Building1", 1)
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Intro_Buildings"), EGroup_FromName("eg_C_Building1"))
+	
+	Entity_CreateBuildingMarker(g_Player2, "eg_C_Building2", "guard_infantry", "mkr_C_Building2", 1)
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Intro_Buildings"), EGroup_FromName("eg_C_Building2"))
+	
+	CTRL.Event_Delay( 3 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+
+	EGroup_SetPlayerOwner("eg_Relic", g_Player2)
+	
+	Fade_Start( 2.0, true )
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	CPath_Start("canim_C_SM_Intro1", "start", "start")
+	
+	
+		--force commander
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor3", "space_marine_squad_force_commander", "mkr_C_Spawn3", 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor3"))
+		SGroup_FaceMarker("sg_IntroActor3", "mkr_C_S3_Face")
+		
+		--Land raider
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor1", "space_marine_squad_land_raider", "mkr_C_Spawn1", 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor1"))
+		SGroup_FaceMarker("sg_IntroActor1", "mkr_C_S1_Face")
+		
+
+		for i = 4, 6 do
+		
+			--terminators
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor"..i, "space_marine_squad_terminator_assault", "mkr_C_Spawn"..i, 1, 5)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor"..i))
+			SGroup_FaceMarker("sg_IntroActor"..i, "mkr_C_S1_Face")
+				
+		end
+		
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Intro1b", "space_marine_squad_thunderhawk", "mkr_C_Plane2", 1, 1)
+			SGroup_FaceMarker("sg_Intro1b", "mkr_C_PlaneFace2")
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_Intro1b"), "sp_land")
+			
+			
+				--commissar	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor12", "guard_squad_commissar", "mkr_C_Spawn12", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor12"))
+				SGroup_FaceMarker("sg_IntroActor12", "mkr_C_S12_Face")	
+		--		Anim_PlaySGroupAnim(SGroup_FromName("sg_IntroActor12"), "default")
+				
+				--guardsmen	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor13", "guard_squad_guardsmen", "mkr_C_Spawn13", 1, 6)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor13"))
+				SGroup_FaceMarker("sg_IntroActor13", "mkr_C_S13_Face")	
+				
+				--guardsmen	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor14", "guard_squad_guardsmen", "mkr_C_Spawn14", 1, 6)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor14"))
+				SGroup_FaceMarker("sg_IntroActor14", "mkr_C_S14_Face")	
+
+				
+				--valkyrie	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor15", "npc_Valkyrie", "mkr_C_Spawn15", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor15"))
+				SGroup_FaceMarker("sg_IntroActor15", "mkr_C_S15_Face")	
+				Anim_PlaySGroupAnim(SGroup_FromName("sg_IntroActor15"), "default")
+				
+				
+				--command squad	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor16", "guard_squad_command_squad", "mkr_C_Spawn16", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor16"))
+				SGroup_FaceMarker("sg_IntroActor16", "mkr_C_S16_Face")	
+				
+				
+				--kasrkin squad	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor17", "guard_squad_kasrkin", "mkr_C_Spawn17", 1, 5)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor17"))
+				SGroup_FaceMarker("sg_IntroActor17", "mkr_C_S17_Face")	
+				
+				--kasrkin squad	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor18", "guard_squad_kasrkin", "mkr_C_Spawn18", 1, 5)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor18"))
+				SGroup_FaceMarker("sg_IntroActor18", "mkr_C_S18_Face")	
+				
+				--kasrkin squad	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor19", "guard_squad_kasrkin", "mkr_C_Spawn19", 1, 5)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor19"))
+				SGroup_FaceMarker("sg_IntroActor19", "mkr_C_S19_Face")	
+				
+				--sentinel squad	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor20", "guard_squad_sentinel", "mkr_C_Spawn20", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor20"))
+		
+		
+				--librarian	
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor21", "space_marine_squad_librarian", "mkr_C_Spawn21", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor21"))
+
+				--scout
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor22", "space_marine_squad_scout", "mkr_C_Spawn22", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor22"))
+				
+				--scout
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor23", "space_marine_squad_scout", "mkr_C_Spawn23", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor23"))
+				
+				--rhino
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor24", "space_marine_squad_rhino", "mkr_C_Spawn24", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor24"))
+				SGroup_FaceMarker("sg_IntroActor24", "mkr_C_S24_Face")	
+				
+				--rhino
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor25", "space_marine_squad_rhino", "mkr_C_Spawn25", 1, 1)
+				SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor25"))
+				SGroup_FaceMarker("sg_IntroActor25", "mkr_C_S25_Face")	
+			
+		CTRL.Event_Delay( 1 )
+		CTRL.WAIT()
+		
+	CTRL.Event_Delay( 24 )	
+		Actor_PlaySpeech(ACT.Varnus, 3550602 ) --The mailed fist of the Emperor arrived on Kronus in the form of the Blood Ravens chapter of Space Marines. Under the command of young Brother-Captain Davian Thule, they came to purge this long-ignored planet.
+			CTRL.SUB()
+			CTRL.Event_Delay( 1 )
+				
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Intro1", "space_marine_squad_thunderhawk", "mkr_C_Plane", 1, 1)
+					SGroup_FaceMarker("sg_Intro1", "mkr_C_PlaneFace")
+					Anim_PlaySGroupAnim(SGroup_FromName("sg_Intro1"), "sp_land")
+				
+				CTRL.WAIT()
+				
+					CPath_CutToPath("canim_C_SM_Intro1", "start", "end")
+					
+				CTRL.Event_Delay( 1 )
+				CTRL.WAIT()
+					
+					Cmd_MoveToMarker("sg_IntroActor1", "mkr_C_M1")
+					
+				CTRL.Event_Delay( 2 )
+				CTRL.WAIT()
+				
+					Cmd_MoveToMarker("sg_IntroActor4", "mkr_C_M4")
+					Cmd_MoveToMarker("sg_IntroActor5", "mkr_C_M5")
+					Cmd_MoveToMarker("sg_IntroActor6", "mkr_C_M6")
+					
+		
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor6b", "space_marine_squad_terminator_assault", "mkr_C_Spawn6", 1, 5)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor6b"))
+					SGroup_FaceMarker("sg_IntroActor6b", "mkr_C_S1_Face")
+					
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor2", "space_marine_squad_terminator_assault", "mkr_C_Spawn2", 1, 5)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor2"))
+					SGroup_FaceMarker("sg_IntroActor2", "mkr_C_S1_Face")
+					
+				
+					--firing marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor9", "space_marine_squad_tactical", "mkr_C_Spawn9", 1, 5)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor9"))
+					SGroup_FaceMarker("sg_IntroActor9", "mkr_C_S9_Face")
+					Cmd_SetMeleeStance("sg_IntroActor9", MSTANCE_Ranged)
+					Cmd_SetStance("sg_IntroActor9", STANCE_Attack)
+						
+		
+					--firing marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor8", "space_marine_squad_tactical", "mkr_C_Spawn8", 1, 5)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor8"))
+					SGroup_FaceMarker("sg_IntroActor8", "mkr_C_S9_Face")	
+					Cmd_SetMeleeStance("sg_IntroActor8", MSTANCE_Ranged)
+					Cmd_SetStance("sg_IntroActor8", STANCE_Attack)
+					
+					--firing terminators
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor7", "space_marine_squad_terminator", "mkr_C_Spawn7", 1, 5)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor7"))
+					SGroup_FaceMarker("sg_IntroActor7", "mkr_C_S9_Face")	
+					Cmd_SetMeleeStance("sg_IntroActor7", MSTANCE_Ranged)
+					Cmd_SetStance("sg_IntroActor7", STANCE_Attack)
+					
+					--firing heavy bolter marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor10", "space_marine_squad_tactical", "mkr_C_Spawn10", 1, 3)
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_IntroActor10"), 1), "space_marine_heavy_bolter_tactical",  3)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor10"))
+					SGroup_FaceMarker("sg_IntroActor10", "mkr_C_S9_Face")	
+					Cmd_SetMeleeStance("sg_IntroActor10", MSTANCE_Ranged)
+					Cmd_SetStance("sg_IntroActor10", STANCE_Attack)
+						
+				
+					--firing heavy bolter marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor10b", "space_marine_squad_tactical", "mkr_C_Spawn10b", 1, 1)
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_IntroActor10b"), 1), "space_marine_heavy_bolter_tactical",  1)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor10b"))
+					SGroup_FaceMarker("sg_IntroActor10b", "mkr_C_S9_Face")	
+					Cmd_SetMeleeStance("sg_IntroActor10b", MSTANCE_Ranged)
+					Cmd_SetStance("sg_IntroActor10b", STANCE_Attack)
+						
+					
+				CTRL.Event_Delay( 1 )
+				CTRL.WAIT()
+				
+					
+				
+					Util_CreateSquadsAtMarkerEx(g_Player1, "sg_IntroActor11", "space_marine_squad_tactical", "mkr_C_Spawn11", 1, 1)
+					SGroup_SetHealthInvulnerable("sg_IntroActor11", true)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor11"))
+					Cmd_SetStance("sg_IntroActor11", STANCE_CeaseFire)
+					
+				CTRL.Event_Delay( 1 )
+				CTRL.WAIT()
+					
+					Cmd_MoveToMarker("sg_IntroActor6b", "mkr_C_M6")
+					Cmd_MoveToMarker("sg_IntroActor2", "mkr_C_M2")
+			CTRL.END()
+	CTRL.WAIT()
+	
+		CTRL.Event_Delay( 27 )
+			Actor_PlaySpeech(ACT.Varnus, 3550603 ) --The Blood Ravens found a world infested with aliens and heretics and quickly invoked the Ordo Exterminatus, a complete cleansing of the world. They ordered the withdrawal of the Imperial Guard, but General Mauser refused to pull his men back. Unwilling to let this world fall to the many evils besetting it, the Blood Ravens had no choice but to treat the Guardsmen as traitors to be purged.
+		
+			CTRL.SUB()
+				
+				CPath_CutToPath("canim_C_SM_Intro2", "start", "start")
+				
+			
+				CTRL.Event_Delay( 1 )
+				CTRL.WAIT()
+				
+					CPath_CutToPath("canim_C_SM_Intro3", "start", "end")
+										
+			
+				CTRL.Event_Delay( 5 )
+				CTRL.WAIT()
+				
+					CPath_CutToPath("canim_C_SM_Intro4", "start", "end")
+								
+			
+				CTRL.Event_Delay( 4 )
+				CTRL.WAIT()
+			
+					CPath_CutToPath("canim_C_SM_Intro5", "start", "end")
+					
+					Cmd_MoveToMarker("sg_IntroActor20", "mkr_C_M20")
+					
+				
+				CTRL.Event_Delay( 2 )
+				CTRL.WAIT()
+					
+					--sentinel squad	
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor20b", "guard_squad_sentinel", "mkr_C_Spawn20", 1, 1)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor20b"))
+					Cmd_MoveToMarker("sg_IntroActor20b", "mkr_C_M20")
+					
+					
+				CTRL.Event_Delay( 3 )
+				CTRL.WAIT()
+					
+					--sentinel squad	
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor20c", "guard_squad_sentinel", "mkr_C_Spawn20", 1, 1)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor20c"))
+					Cmd_MoveToMarker("sg_IntroActor20c", "mkr_C_M20")
+					
+					SGroup_DeSpawn("sg_IntroActor7")
+					SGroup_DeSpawn("sg_IntroActor8")
+					SGroup_DeSpawn("sg_IntroActor9")
+					SGroup_DeSpawn("sg_IntroActor10")
+					SGroup_DeSpawn("sg_IntroActor10b")
+					SGroup_DeSpawn("sg_IntroActor11")
+					
+					SGroup_DeSpawn("sg_Intro1")
+					SGroup_DeSpawn("sg_Intro1b")
+										
+			CTRL.END()
+	
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 28 )
+		Actor_PlaySpeech(ACT.Varnus, 3550604 ) --These measures struck some as extreme and whispers began that the Blood Ravens, known for secrecy at the best of times, had much to hide on this world. When Captain Thule opted for a ground assault rather than orbital bombardment, it became clear that the Ravens’ scouts and Librarians were collecting ancient relics and hidden archives ahead of the battle force.
+			CTRL.SUB()
+		
+			
+				Cmd_MoveToMarker("sg_IntroActor21", "mkr_C_M21")
+				
+				CTRL.Event_Delay( 1 )
+				CTRL.WAIT()
+				
+					Cmd_MoveToMarker("sg_IntroActor22", "mkr_C_M22")
+					Cmd_MoveToMarker("sg_IntroActor23", "mkr_C_M23")
+					
+					CPath_CutToPath("canim_C_SM_Intro6", "start", "end")
+				
+				
+					--land raider
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor26", "space_marine_squad_land_raider", "mkr_C_Spawn26", 1, 1)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor26"))
+					SGroup_FaceMarker("sg_IntroActor26", "mkr_C_S26_Face")	
+					
+					
+					--tac marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor29", "space_marine_squad_tactical", "mkr_C_Spawn29", 1, 9)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor29"))
+					SGroup_FaceMarker("sg_IntroActor29", "mkr_C_S29_Face")	
+					
+					
+					--tac marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor30", "space_marine_squad_tactical", "mkr_C_Spawn30", 1, 9)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor30"))
+					SGroup_FaceMarker("sg_IntroActor30", "mkr_C_S30_Face")	
+					
+					--tac marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor31", "space_marine_squad_tactical", "mkr_C_Spawn31", 1, 9)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor31"))
+					SGroup_FaceMarker("sg_IntroActor31", "mkr_C_S31_Face")	
+					
+				
+					--terminator marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor34", "space_marine_squad_terminator", "mkr_C_Spawn34", 1, 9)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor34"))
+					SGroup_FaceMarker("sg_IntroActor34", "mkr_C_S34_Face")	
+					
+				CTRL.Event_Delay( 15 )
+				CTRL.WAIT()
+					
+					--terminator marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor49", "space_marine_squad_terminator", "mkr_C_Spawn49", 1, 4)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor49"))
+					Cmd_MoveToMarker("sg_IntroActor49", "mkr_C_M49")
+					
+					--terminator marines
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_IntroActor50", "space_marine_squad_terminator", "mkr_C_Spawn50", 1, 3)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Intro_Actors"), SGroup_FromName("sg_IntroActor34"))
+					Cmd_MoveToMarker("sg_IntroActor50", "mkr_C_M50")
+			
+				CTRL.Event_Delay( 5 )
+				CTRL.WAIT()
+	
+				Cmd_MoveToMarker("sg_IntroActor34", "mkr_C_M34")
+				Cmd_MoveToMarker("sg_IntroActor29", "mkr_C_M29")
+				Cmd_MoveToMarker("sg_IntroActor30", "mkr_C_M30")
+				Cmd_MoveToMarker("sg_IntroActor31", "mkr_C_M31")
+	--			Cmd_MoveToMarker("sg_IntroActor32", "mkr_C_M32")
+				
+				CTRL.Event_Delay( 2 )
+				CTRL.WAIT()
+				
+				Cmd_MoveToMarker("sg_IntroActor26", "mkr_C_M26")
+				
+			
+			CTRL.END()
+
+	CTRL.WAIT()
+
+	CTRL.Event_Delay( 15 )	
+		Actor_PlaySpeech(ACT.Varnus, 3550605 ) --In the end, only the war’s victors would be left to decide the justice of the matter.
+		
+		
+		
+	CTRL.WAIT()
+	
+	--[[destroying squads]]
+	SGroup_DestroyAllSquads("sg_All_C_Intro_Actors")
+	SGroup_Destroy(SGroup_FromName("sg_All_C_Intro_Actors"))
+
+	--[[destroying buildings]]
+	EGroup_DestroyAllEntities("eg_All_C_Intro_Buildings")
+	EGroup_Destroy(EGroup_FromName("eg_All_C_Intro_Buildings"))
+	
+	CTRL.W40k_Letterbox( false, 2)
+	
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+		
+	
+end
+
+-------------------------------------------------------------------
+--[[ Space Marine Campaign Outro  NIS ]]
+-------------------------------------------------------------------
+
+EVENTS.NIS_SM_Campaign_Outro2 = function()
+	
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+
+	--[[Removing all the rules]]
+
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+	Rule_RemoveAll()
+	
+	
+	
+	--[[Remove all the buildings and units to clear the Nis scenes]]
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+
+	
+	
+	CTRL.Event_Delay( 3 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+
+	
+	Fade_Start( 2.0, true )
+	
+
+	--[[respawning items]]
+	--fire
+	EGroup_ReSpawn("eg_SM_C_Outro1")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro1"))
+	
+	--Guard, ork, space marine bodies
+	EGroup_ReSpawn("eg_SM_C_Outro2")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro2"))
+	
+	--fire and debris
+	EGroup_ReSpawn("eg_SM_C_Outro3")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_C_Outro_Buildings"), EGroup_FromName("eg_SM_C_Outro3"))
+	
+	--despawning walls that are in the way
+	EGroup_DeSpawn("eg_SM_C_Outro4")
+	
+	--group of space marines in rows
+	SGroup_ReSpawn("sg_SM_C_Outro1")
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_SM_C_Outro1"))
+	
+	SGroup_ReSpawn("sg_SM_C_Outro2")
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_SM_C_Outro2"))
+	
+	SGroup_ReSpawn("sg_SM_C_Outro3")
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_SM_C_Outro3"))
+	
+	
+	--[[creating actors]]
+	--space marine
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor1", "space_marine_squad_tactical", "mkr_C_Spawn35", 1, 3)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor1"))
+	
+	--land raider
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor2", "space_marine_squad_land_raider", "mkr_C_Spawn36", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor2"))
+	SGroup_FaceMarker("sg_Outro_Actor2", "mkr_C_S36_Face")
+	
+	--whirlwind
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor3", "space_marine_squad_whirlwind", "mkr_C_Spawn37", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor3"))
+		SGroup_FaceMarker("sg_Outro_Actor3", "mkr_C_S37_Face")
+	
+	--space marine
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor4", "space_marine_squad_tactical", "mkr_C_Spawn38", 1, 2)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor4"))
+	
+	--rhinos
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor5", "space_marine_squad_rhino", "mkr_C_Spawn39", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor5"))
+	
+	--rhinos
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor14", "space_marine_squad_predator", "mkr_C_Spawn48", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor14"))
+	
+
+	--space marine commander
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor6", "space_marine_squad_force_commander", "mkr_C_Spawn40", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor6"))
+	SGroup_FaceMarker("sg_Outro_Actor6", "mkr_C_S40_Face")
+	
+	--space marine terminator
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor7", "space_marine_squad_terminator", "mkr_C_Spawn41", 1, 6)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor7"))
+
+	--rhinos
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor8", "space_marine_squad_rhino", "mkr_C_Spawn42", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor8"))
+	
+	--rhinos
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor9", "space_marine_squad_rhino", "mkr_C_Spawn43", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor9"))
+	
+	--thunderhawk
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor10", "space_marine_squad_thunderhawk", "mkr_C_Spawn44", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor10"))
+	SGroup_FaceMarker("sg_Outro_Actor10", "mkr_C_S44_Face")
+	
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+		Cmd_MoveToMarker("sg_Outro_Actor2", "mkr_C_M36")
+		
+		
+	
+		--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	
+	CTRL.Event_Delay( 15 )
+		
+		CPath_Start("canim_C_SM_Outro1", "start", "end")
+		
+		Actor_PlaySpeech(ACT.Varnus, 3550672 ) --After many long and bloody battles, the Blood Ravens finally completed their purge of the Planet Kronus. The Battle Barge Litany of Fury remained in close orbit, imposing a strict prohibition on any visits to the world, while the fifth company maintained the Castellum Incorruptus in North Vandea.
+		
+		--force commander
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor12", "space_marine_squad_force_commander", "mkr_C_Spawn46", 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor12"))
+		SGroup_FaceMarker("sg_Outro_Actor12", "mkr_C_S46_Face")
+		
+		--space marine
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor13", "space_marine_squad_tactical", "mkr_C_Spawn47", 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor13"))
+		SGroup_FaceMarker("sg_Outro_Actor13", "mkr_C_S47_Face")
+		
+	CTRL.WAIT()
+
+	
+	CTRL.Event_Delay( 1 )
+		
+		Cmd_MoveToMarker("sg_Outro_Actor7", "mkr_C_M41")
+		Cmd_MoveToMarker("sg_Outro_Actor9", "mkr_C_M43")
+		Cmd_MoveToMarker("sg_Outro_Actor8", "mkr_C_M42")
+	
+	CTRL.WAIT()
+
+		
+		SGroup_FaceMarker("sg_SM_C_Outro1", "mkr_Mob_Face")
+		SGroup_FaceMarker("sg_SM_C_Outro2", "mkr_Mob_Face2")
+						
+	
+	CTRL.Event_Delay( 7 )
+		CTRL.SUB()
+			CPath_CutToPath("canim_C_SM_Outro2", "start", "end")
+			
+			CTRL.Event_Delay( 2 )
+			CTRL.WAIT()
+			
+				Cmd_MoveToMarker("sg_Outro_Actor3", "mkr_C_M37")
+			
+			CTRL.Event_Delay( 2 )
+			CTRL.WAIT()
+			
+				Cmd_MoveToMarker("sg_Outro_Actor14", "mkr_C_M48")
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+		CTRL.Event_Delay( 17 )
+			Actor_PlaySpeech(ACT.Varnus, 3550673 ) --The Imperial Guard’s segmentum command lodged protest for the Blood Ravens actions, reporting them to the Inquisition. The Blood Ravens successfully defended their actions, proving that General Mauser had acted without authority and should have withdrawn from Kronus. 
+			CTRL.SUB()
+				
+				CPath_CutToPath("canim_C_SM_Outro3", "start", "end")
+				Anim_PlaySGroupAnim(SGroup_FromName("sg_Outro_Actor10"), "sp_land")
+			
+				CTRL.Event_Delay( 8 )
+				CTRL.WAIT()
+				
+				CPath_CutToPath("canim_C_SM_Outro4", "start", "end")
+				
+				CTRL.Event_Delay( 7 )
+				CTRL.WAIT()
+				
+					--inquisitor
+					Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Outro_Actor11", "guard_squad_inquisitor", "mkr_C_Spawn45", 1, 1)
+					SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_C_Outro_Buildings"), SGroup_FromName("sg_Outro_Actor11"))
+					SGroup_FaceMarker("sg_Outro_Actor11", "mkr_C_S45_Face")
+								
+			
+			CTRL.END()
+		CTRL.WAIT()
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 30 )
+		Actor_PlaySpeech(ACT.Varnus, 3550674 ) --Nevertheless, the Inquisition kept a watchful eye on the chapter, for the rumors of hoarded relics never fully abated. Likewise, many in the Guard's command structure never forgot the blood shed on Kronus.
+			CTRL.SUB()
+			
+				CTRL.Event_Delay( 2 )
+				CTRL.WAIT()
+				
+				CPath_CutToPath("canim_C_SM_Outro5", "start", "end")
+				
+				
+				CTRL.Event_Delay( 8 )
+				CTRL.WAIT()
+				
+				Actor_PlaySpeech(ACT.Varnus, 3550675 )  --And indeed, the darkest time in the chapter’s history began soon after the war’s end.
+					
+				
+			CTRL.END()
+		CTRL.WAIT()
+	CTRL.WAIT()
+
+	
+	CTRL.Event_Delay( 2 )
+	CTRL.WAIT()
+	
+	--[[respawning stuff]]
+	EGroup_ReSpawn("eg_SM_C_Outro4")
+	
+	--[[destroying buildings]]
+	EGroup_DestroyAllEntities("eg_All_C_Outro_Buildings")
+	EGroup_Destroy(EGroup_FromName("eg_All_C_Outro_Buildings"))
+	
+	--[[destroying units]]
+	SGroup_DestroyAllSquads("sg_All_C_Outro_Buildings")
+	SGroup_Destroy(SGroup_FromName("sg_All_C_Outro_Buildings"))
+	
+	CTRL.W40k_Letterbox( false, 2)
+	
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+		
+	
+end
+
+
+
+-------------------------------------------------------------------
+--[[ Space Marine Campaign Nislet ]]
+-------------------------------------------------------------------
+
+EVENTS.NIS_SM_Nislet1 = function()
+	
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+
+	--[[Removing all the rules]]
+
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+	Rule_RemoveAll()
+	
+	
+	
+	--[[Remove all the buildings and units to clear the Nis scenes]]
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+
+	
+	
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_Nislet_Terminator", "space_marine_squad_scout", "mkr_Nislet_Spawn", 1, 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Nislet_Terminator"), 1), "space_marine_sniper_rifle", 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_SM_Nislet"), SGroup_CreateIfNotFound("sg_Nislet_Terminator"))
+	SGroup_FaceMarker("sg_Nislet_Terminator", "mkr_Nislet_Target")
+	
+	
+	CTRL.Event_Delay( 3 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+	
+	Fade_Start( 2.0, true )
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+			
+	
+			
+	CTRL.Event_Delay( 60 )
+		CTRL.SUB()
+		
+			CPath_Start("canim_SM_Nislet1", "start", "start")
+		
+			CTRL.Event_Delay( 1 )
+			CTRL.WAIT()
+		
+		CTRL.END()
+	CTRL.WAIT()
+			
+
+
+	--[[destroy all squads]]
+	SGroup_DestroyAllSquads("sg_All_SM_Nislet")
+	SGroup_Destroy(SGroup_FromName("sg_All_SM_Nislet"))
+	
+	CTRL.W40k_Letterbox( false, 2)
+	
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+		
+	
+end
+-----------------------------------------------------------------
+-----------------------------------------------------------------
+-----------------------------------------------------------------

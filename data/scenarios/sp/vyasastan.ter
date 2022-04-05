@@ -1,0 +1,104 @@
+Model = "Vyasastan"
+Planet = "Kaurava_I"
+
+Name = "$3900009"
+Description = "$3900091"
+TerrainDescription = "$3900092"
+History = 
+{
+"$3900093",
+"$3900094",
+"$3900095",
+"$3900096",
+"$3900097",
+"$3900098",
+"$3900099",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "5P_Vyasastan"
+MissionFileAttackingConquered = "5P_Vyasastan"
+MissionFileDefending = "5P_Vyasastan"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Kaurav_City",
+	--"Eastern_Kauravia",
+	"Shakun_Coast",
+	"Sama_Desert",
+	"Dussala_Precinct",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_possessed_marine_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_scout_advance_sp", 
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_tankbusta_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_sentinel_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_vypers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_crisis_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_flayed_one_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_missionary_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_incubus_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 2
+
+OwnerPrimary = "guard_race"
+OwnerSecondary = "sisters_race"
+
+StartingResourceBonus = 0.0

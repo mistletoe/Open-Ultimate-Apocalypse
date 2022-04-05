@@ -1,0 +1,2995 @@
+-------------------------------------------------
+--[[ IMPORTS -- This is neccesary to use all the functions of SCAR]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[ GAME SETUP ]]
+-------------------------------------------------
+
+--[[ the OnGameSetup() function is mandatory! -- Here you should setup all your global variables, which can be used in any function.]]
+function OnGameSetup()
+
+--[[Tweak these variables to change difficulty]]
+-- global timers
+g_SpawnDreadnoughtTimer = 350 -- 280
+g_SpawnDefilerTimer = 270
+g_SpawnShrineDaemonTimer = 180
+g_MainBaseAttackTimer = 335 -- (320) spawns units to attack the players main base every X second
+g_MainBaseAttackTierTimer = 575 -- 400 tiers up so more/bigger units attack the players base every X seconds
+g_RecaptureLPTimer = 306 -- send out some chaos marines to retake lp's
+g_ResearchTimer = 425 -- fake research tiers are upgraded every X seconds
+g_SpawnHereticAndRepairSideBaseTimer = 18 -- heretic is spawned, turned on forced labor, and commanded to repair buildings in the dreadnaught base every X seconds -> CANNOT BE < 10
+g_ShrineTierTimer = 350
+g_RhinoCount_BalanceTweak = 2
+g_WanderUnitAttackInterval = 8 -- every X squads, send one to the player.
+g_BloodThirsterFlyCoolDown = 45 -- bloodthirster can't fly again for X seconds after flying somewhere
+g_SpawnBloodthirsterFodderMaxTimer = 200 -- 200 max amount of time for another blood thirster fodder dude to spawn and run to a statue
+g_SpawnBloodthirsterFodderMinTimer = 30 -- (NOT USED RIGHT NOW) min amount of time for another blood thirster fodder dude to spawn and run to a statue
+g_PingShrinesEveryXSeconds = 200 -- ping the living shrines every X seconds
+g_OblitAndHorrorInPlayerBaseCooldown = 700 -- oblits and horrors can only drop in player bases every X seconds
+g_CityDBreachedTimer = 700 -- the patrols start out if the city isnt breached by this time
+
+-- fake population
+g_MaxCultist = 4
+g_MaxZerker = 1
+g_MaxHorror = 2
+g_MaxPosd = 1
+g_MaxObliterator = 1
+g_MaxPrince = 1
+g_MaxBloodThirster = 1
+g_MaxSorcerer = 1
+g_MaxDefilers = 3
+g_MaxDreadnoughts = 2
+g_MaxHereticPop = 6
+g_MaxPredator = 2
+g_MaxSpaceMarine = 3
+g_MaxRaptor = 3
+g_MaxCapturePop = 3
+
+--debug stuff
+g_Debug = false -- turns debug mode off and on.  (turns on and off fog of war)
+
+-- other global variables (DO NOT MODIFY)
+g_ChaosStormLevel = "chaos_warp_storm_1"
+g_ChaosStormDamageLevel = "chaos_warp_storm_damage_1"
+t_Shrines = {1, 2, 3, 4, 5}
+g_TotalShrines = 5
+g_CultistCounter = 0
+g_ZerkerCounter = 0
+g_HorrorCounter = 0
+g_PosdCounter = 0
+g_ObliteratorCounter = 0
+g_PrinceCounter = 0
+g_WanderCounter = 0
+g_PBACounter = 0
+g_BloodThirsterCounter = 0
+g_SorcererCounter = 0
+t_ShrineBoom = {false, false, false, false, false}
+g_DefilerCounter = 0
+g_DreadnoughtCounter = 0
+g_DNWanderCounter = 0
+g_HereticCounter = 0
+g_BuildTurretFlag = false
+g_BaseAttackTier = 1
+g_RaptorCounter = 0
+g_SpaceMarineCounter = 0
+g_PredatorCounter = 0
+g_EmptyRhinos = 0
+g_CaptureCounter = 0
+g_ResearchCounter = 0
+g_DefilerWanderCounter = 0
+g_ForcedLaborFlag = false
+g_RightDNBaseFlag = false
+g_LeftDNBaseFlag = false
+g_FrontDNBaseFlag = false
+g_ShrineTier = 1
+g_WanderUnitAttackCount = 0
+g_JumpFlag = true
+g_CounterDisplay = 100
+g_SecondaryObjectiveFlag = false
+t_ShrineIE={false, false, false, false, false}
+t_ShrinesAlive ={true, true, true, true, true}
+g_ping_obj_shrine = {0,0,0,0,0}
+g_InitialAttack = true
+g_OblitAndHorrorOKToDropFlag = true
+g_OblitAndHorrorCooldown = 0
+g_OblitAndHorrorCounter = 0
+g_FirstRecapture = true
+g_GlobalAttackPos = 0
+g_CityDBreachedCounter = 0
+g_PrimaryObjectives = 0
+g_SecondaryObjectives = 0
+-- generator markers start at 0
+g_bonus_gen_counter = 0
+-- turrer markers start at 6
+g_bonus_turret_counter = 6
+
+--[[defining the name of the player's faction]]
+if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+	factionname = "$3950214"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+	factionname = "$3950219"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+	factionname = "$3950215"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+	factionname = "$3950213"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+	factionname = "$3950224"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+	factionname = "$3950217"
+	colorscheme = "default_5"
+elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+	factionname = "$3950223"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+	factionname = "$3950220"
+	colorscheme = "default_1"
+elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+	factionname = "$3900048"
+	colorscheme = "default_2"
+end
+g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 0)
+Misc_PlayerTeamColor(g_Player1, colorscheme)
+	
+--setting up the upgrades for the commander
+MetaMap_UpdatePlayerWargear(g_Player1)
+
+g_Player2 = Setup_Player(1, "$3950214", "chaos_marine_race", 1) -- wander
+g_Player3 = Setup_Player(2, "$3950214", "chaos_marine_race", 1) -- bloodthirster
+g_Player4 = Setup_Player(3, "$3950214", "chaos_marine_race", 1) -- stealth
+g_Player5 = Setup_Player(4, "$3950214", "chaos_marine_race", 1) -- defilers
+g_Player6 = Setup_Player(5, "$3950214", "chaos_marine_race", 1) -- air units
+g_Player7 = Setup_Player(6, "$3950214", "chaos_marine_race", 1) -- nowander
+g_Player8 = Setup_Player(7, "$3950214", "chaos_marine_race", 1) -- stealthseeing cultists
+Misc_PlayerTeamColor(g_Player2, "default_0")
+Misc_PlayerTeamColor(g_Player3, "default_0")
+Misc_PlayerTeamColor(g_Player4, "default_0")
+Misc_PlayerTeamColor(g_Player5, "default_0")
+Misc_PlayerTeamColor(g_Player6, "default_0")
+Misc_PlayerTeamColor(g_Player7, "default_0")
+Misc_PlayerTeamColor(g_Player8, "default_0")
+	
+end
+
+--[[ the OnGameRestore() function is mandatory!, this will only get called after loading a game ]]
+function OnGameRestore()
+end
+
+--[[This function runs first, here you can setup anything you want to happen before the game starts.]]
+function OnInit()
+
+	Rule_AddOneShot(Rule_CreateChaosBases, 0)
+	-- so lame.
+	OrientateShrines()
+	
+	--NIS_Setup()
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Opening )
+	end
+
+	Rule_PresetAI()
+	
+	--[[ Start Gameplay]]
+	Rule_Add( Rule_GameStart )
+	
+	--[[Define Objective: Below is what lua script calls a blueprint, but is better known in C as a struct.  This is a variable that contains other variables that can be referenced with dot notation (ie: Objective_Destroy_PowerGen.title_id will return 7000200)]]
+	Objective_DestroyStronghold = {title_id = 3950022, short_desc_id = 3950023 , help_tip_id =3950023}
+	Objective_DestroyDefilerBase = {title_id = 3950024, short_desc_id = 3950025 , help_tip_id =3950025}
+	Objective_DestroyDreadnaughtBase = {title_id = 3950026, short_desc_id = 3950027 , help_tip_id =3950027}
+	Objective_DestroyShrines = {title_id = 3950028, short_desc_id = 3950029 , help_tip_id =3950029}
+
+	
+end
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+-------------------------------------------------
+--[[ PRESET AI ]]
+-------------------------------------------------
+
+function Rule_PresetAI()
+	
+	--[[This function is called from OnInit() and start or stop the AI.]]
+	
+	Cpu_Enable(g_Player2, false)
+	Cpu_SetDifficulty(g_Player2,   AD_Standard)
+	Cpu_Enable(g_Player3, false)
+	Cpu_SetDifficulty(g_Player3,   AD_Standard)
+	Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4,   AD_Standard)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5,   AD_Insane)
+	Cpu_Enable(g_Player6, false)
+	Cpu_SetDifficulty(g_Player5,   AD_Insane)
+	Cpu_Enable(g_Player7, false)
+	Cpu_SetDifficulty(g_Player5,   AD_Insane)
+	Cpu_Enable(g_Player8, false)
+	Cpu_SetDifficulty(g_Player5,   AD_Insane)
+	--[[Cpu_EnableComponent(g_Player5, true, CT_Attacking)
+	Cpu_EnableComponent(g_Player5, true, CT_Tactics)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player5, false, CT_Defending)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildUnits)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildAddOns)
+	Cpu_EnableComponent(g_Player5, false, CT_Resourcing)]]
+	
+	--[[Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4, AD_Standard)
+	Cpu_EnableComponent(g_Player4, false, CT_Attacking)
+	Cpu_EnableComponent(g_Player4, false, CT_Tactics)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5, AD_Standard)
+	Player_RestrictSquad(g_Player5, "necron_lord_squad")
+	Cpu_Enable(g_Player6, false)
+	Cpu_SetDifficulty(g_Player6, AD_Standard)
+	
+	Cpu_EnableComponent(g_Player5, false, CT_Attacking)
+	Cpu_EnableComponent(g_Player5, false, CT_Tactics)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player4, false, CT_Resourcing)]]
+	
+end
+
+-------------------------------------------------
+--[[ MUSIC -- Called from Rule_GameStart()]]
+-------------------------------------------------
+
+function Rule_Start_Music()
+	
+	--[[Starts the music]]
+	t_Chaos_stronghold_music = {"MU_IG_STR_Chaos_perc_str", "MU_IG_STR_Chaos",
+	"MU_IG_STR_Chaos_perc", "MU_IG_STR_Chaos_perc_brass"}
+	
+	Playlist_Manager( PC_Music, t_Chaos_stronghold_music, true, true , {2, 4})
+	
+	
+	--[[Set ambient sounds]]
+	t_Chaos_stronghold_ambient = {"Ambience_ChaosCorruption1", "Ambience_ChaosCorruption2"}
+	
+	Playlist_Manager( PC_Ambient, t_Chaos_stronghold_ambient, true, true , {5, 15})
+	
+end
+
+
+-------------------------------------------------
+--[[ START PLAY ]]
+-------------------------------------------------
+
+function Rule_GameStart()
+	
+	if Event_IsAnyRunning() == false then
+		
+		if g_Debug == true then
+			FOW_RevealAll()
+		end
+		
+		--[[ Set resources for both players ]]
+		Player_SetAllResources(g_Player1, 1000, 300, 20)
+		
+		-- Set Difficulty Level
+		DifficultyLevel()
+		
+		-- Timer
+		Rule_UI_Game_Timer()
+		
+		--Music
+		Rule_AddOneShot(Rule_Start_Music, 0)
+		
+		-- Create Bases
+		Rule_AddOneShot(Rule_CreatePlayerBases, 0)	
+		
+		
+		-- Objectives
+		
+		-- Gameplay Rules
+		Rule_AddInterval(MainBaseAttackTier, g_MainBaseAttackTierTimer)
+		Rule_AddInterval(MainBaseAttack, g_MainBaseAttackTimer)
+		Rule_AddInterval(RecaptureLP, g_RecaptureLPTimer)
+		Rule_AddInterval(Rule_GrantResearch, g_ResearchTimer)
+		Rule_AddInterval(HereticSpawnAndRepair, g_SpawnHereticAndRepairSideBaseTimer)
+		Rule_AddInterval(ShrineTier, g_ShrineTierTimer)
+		
+		--Initial/Setup
+		Rule_AddInterval(CityDefenseBreached, 1)
+		Rule_AddInterval(InitialAttack, 10)
+		Rule_AddOneShot(SpawnStealthyMarines, 5)
+		Rule_AddOneShot(SpawnDefilerBaseDefenseForce, 5)
+		Rule_AddOneShot(SpawnDreadnaughtBaseDefenseForce, 6)
+		Rule_AddOneShot(SpawnInitialDreadnoughts, 5)
+		Rule_AddOneShot(SpawnSorcererAttack, 5)
+		Rule_AddInterval(ChaosStorm, 5)
+		Rule_AddInterval(ChaosSpellLevel, 1)
+		Rule_AddInterval(Wander, 30)
+		Rule_AddInterval(AttackPlayerbaseFromMarker, 2)
+		Rule_AddInterval(StartSpawningSorcerers, 5)
+		Rule_AddInterval(FlyBloodThirsterToShrines, 1)
+		Rule_Add(ShrineDeath)
+		Rule_AddInterval(UpdateShrines, 1)
+		Rule_AddInterval(SlagDepositTrap, 1)
+		Rule_AddInterval(DreadnoughtPatrol, 20)
+		Rule_AddOneShot(SpawnRhinos, 10)
+		Rule_AddOneShot(LoadRhinos, 15)
+		Rule_AddInterval(RhinoAttack, 30)	
+		Rule_AddInterval(DefilerBaseDefenseAttack, 1)
+		Rule_AddInterval(DreadnaughtBaseDefenseAttack, 1)
+		Rule_AddInterval(DefilerBaseDefenseAttGround, 8)
+		Rule_AddInterval(SpawnMainBaseDefenseForce, 2)
+		Rule_AddInterval(CheckForDefilerKill, 1)
+		Rule_AddInterval(CheckForDreadnaughtKill, 1)
+		Rule_AddInterval(Rule_Objective_DestroyStronghold, 3)
+		Rule_AddInterval(SorcererAttack, 1)
+		Rule_AddInterval(SpawnChaosLord, 1)
+		Rule_AddInterval(StartSecondaryObjectives, 2)
+		Rule_AddInterval(SpawnCityEntranceDefenseForce, 8)
+		Rule_AddInterval(EnterMainBaseEarlyIE, 1)
+		Rule_AddInterval(FinalFightIE, 10)
+		Rule_AddInterval(DaemonsFromShrineIE, 2)
+		Rule_AddInterval(ShrineIEs, 1)
+		Rule_AddInterval(Lose, 10)
+		Rule_AddInterval(CheckShrinesForSorcerer, 1)
+		Rule_AddInterval(IntelligentlyMoveAttacks, 5)
+		
+		--end the game if you complete objectives
+		--Rule_AddInterval(CompleteScenario, 10)
+		
+		
+		--[[ Clean up -- Since we did Rule_Add(Rule_GameStart) it was attempting to run this function every frame, but now that it has finished running, we don't need it to run anymore.]]
+		Rule_Remove(Rule_GameStart)
+	end
+
+end
+
+function OrientateShrines()
+	EPath_Start("shrine1", "shrine1_1", "shrine1_2", "eg_Shrine1")
+	EPath_Start("shrine2", "shrine2_1", "shrine2_2", "eg_Shrine2")
+	EPath_Start("shrine3", "shrine3_1", "shrine3_2", "eg_Shrine3")
+	EPath_Start("shrine4", "shrine4_1", "shrine4_2", "eg_Shrine4")	
+end
+
+-- Create and Initially Show the Game Timer
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates and shows the Game Timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--[[Drops down buildings at markers, to create the SM bases around the map]]
+function Rule_CreateChaosBases()
+
+	--[[MainBase]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosHQ", "chaos_hq", "mkr_mainbase_hq", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseBarracks", "chaos_temple", "mkr_mainbase_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseMachinePit", "chaos_machine_pit", "mkr_mainbase_machinepit", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseSC", "chaos_sacrificial_circle", "mkr_mainbase_sacrificialcircle", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseDP", "chaos_greater_sacrificial_circle", "mkr_mainbase_daemonpit", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseArmory", "chaos_armoury", "mkr_mainbase_armory", 1)
+	EGroup_ForceAddOn("eg_ChaosHQ", "chaos_hq_addon_2")
+
+
+	for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseGenerator"..i, "chaos_plasma_generator", "mkr_mainbase_powergen"..i, 1)
+	end
+	for i=1,6 do
+		--Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseTurret"..i, "chaos_turret_bolter", "mkr_mainbase_turret"..i, 1)
+		--EGroup_ForceAddOn("eg_ChaosMainBaseTurret"..i, "chaos_turret_addon")
+	end
+	
+	--[[Side Base1]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseHQ", "chaos_hq", "mkr_sidebase_hq", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseBarracks", "chaos_temple", "mkr_sidebase_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseMachinePit1", "chaos_machine_pit", "mkr_sidebase_machinepit1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseMachinePit2", "chaos_machine_pit", "mkr_sidebase_machinepit2", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseArmory", "chaos_armoury", "mkr_sidebase_armory", 1)
+	for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBaseTurret"..i, "chaos_turret_bolter", "mkr_sidebase_turret"..i, 1)
+		EGroup_ForceAddOn("eg_ChaosSideBaseTurret"..i, "chaos_turret_addon")
+	end
+	
+
+	--[[Side Base2]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building1", "chaos_hq", "mkr_sidebase2_hq", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building2", "chaos_temple", "mkr_sidebase2_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building3", "chaos_machine_pit", "mkr_sidebase2_machinepit3", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building4", "chaos_machine_pit", "mkr_sidebase2_machinepit4", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building5", "chaos_machine_pit", "mkr_sidebase2_machinepit5", 1)
+	for i=6,11 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Building"..i, "chaos_turret_bolter", "mkr_sidebase2_turret"..i-5, 1)
+		Chance = World_GetRand(1,10)
+		if Chance >= 5 then
+			EGroup_ForceAddOn("eg_ChaosSideBase2Building"..i, "chaos_turret_addon")
+		end
+	end
+	
+	--[[Backbase]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2MachinePit1", "chaos_machine_pit", "mkr_backbase_machinepit", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosSideBase2Barracks", "chaos_temple", "mkr_backbase_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosMainBaseSC", "chaos_sacrificial_circle", "mkr_backbase_sacrificialcircle", 1)
+	
+	--[[Random Turrets / Mines Around the Map]]
+	for i=1,18 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_RandomTurret"..i, "chaos_turret_bolter", "mkr_random_turret"..i, 1)
+		EGroup_ForceAddOn("eg_RandomTurret"..i, "chaos_turret_addon")
+	end
+	-- spawn 12 stealth squads around the map
+	-- spawn 3 predators
+	
+	-- give the AI all of the strategic points, and put upgraded listening posts on them
+	--[[Strategic Points]]
+	for i = 1,6 do
+		EGroup_SetPlayerOwner("eg_LP"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_ListeningPosts"..i, "chaos_listening_post", EGroup_GetPosition("eg_LP"..i), 1)
+		EGroup_ForceAddOn("eg_ListeningPosts"..i, "chaos_list_post_addon_1")
+		EGroup_ForceAddOn("eg_ListeningPosts"..i, "chaos_list_post_addon_2")
+	end
+	
+	--[[Relic]]
+	EGroup_SetPlayerOwner("eg_Relic", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_RelicPost", "chaos_listening_post", EGroup_GetPosition("eg_Relic"), 1)
+	EGroup_ForceAddOn("eg_RelicPost", "chaos_list_post_addon_1")
+	EGroup_ForceAddOn("eg_RelicPost", "chaos_list_post_addon_2")
+	
+	--[[Chaos Storm Anchor]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_ChaosStorm", "chaos_warp_storm_source", "mkr_chaos_storm_anchor", 1)
+	
+	--[[ Mines ]]
+	for i=1,12 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_Mine"..i, "chaos_mine_field", "mkr_mine"..i, 1)
+	end
+	
+	--[[Detectors]]
+	for i=1,19 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_Detector"..i, "chaos_detector", "mkr_detector"..i, 1)
+	end
+end
+
+function Rule_CreatePlayerBases()
+
+	local Race
+	local Player
+
+	Race = MetaMap_GetPlayerNRaceName(0)
+	Player = g_Player1
+
+	if Race == "chaos_marine_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "chaos_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "chaos_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"chaos_armoury",
+		"chaos_listening_post",
+		"chaos_mine_field",
+		"chaos_plasma_generator",
+		"chaos_thermo_plasma_generator",
+		"chaos_turret_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "guard_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "guard_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "guard_squad_enginseer", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"guard_listening_post",
+		"guard_mines",
+		"guard_plasma_generator",
+		"guard_tactica",
+		"guard_thermo_plasma",
+		"guard_turret_heavy_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "ork_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "ork_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "ork_squad_grot", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"ork_bigger_generator",
+		"ork_generator",
+		"ork_gork_totem",
+		"ork_mine_field",
+		"ork_pile_o_guns",
+		"ork_waagh_banner"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "space_marine_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "space_marine_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "space_marine_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"space_marine_armoury",
+		"space_marine_generator",
+		"space_marine_listening_post",
+		"space_marine_mine_field",
+		"space_marine_turret_bolter",
+		"space_marine_thermo_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "tau_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "tau_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "tau_builder_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"tau_listening_post",
+		"tau_research_building",
+		"tau_shrine_of_kauyon",
+		"tau_shrine_of_montka",
+		"tau_shrine_of_purpose",
+		"tau_thermoplasma_generator",
+		"tau_turret_sp",	
+		"tau_plasma_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "necron_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "monolith", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "necron_builder_scarab_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"necron_listening_post",
+		"necron_summoning_core",
+		"necron_plasma_generator",
+		"necron_energy_core",
+		"necron_greater_summoning_core",
+		"necron_forbidden_archive",
+		"necron_thermoplasma_generator",
+		"necron_turret"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "eldar_squad_bonesinger", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"eldar_advanced_warp_generator",
+		"eldar_listening_post",
+		"eldar_mine_field",
+		"eldar_soul_shrine",
+		"eldar_support_platform_scatterlaser",
+		"eldar_warp_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "dark_eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "dark_eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "dark_eldar_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"dark_eldar_haemonculus_laboratory",
+		"dark_eldar_listening_post",
+		"dark_eldar_plasma_generator",
+		"dark_eldar_slave_caravel",
+		"dark_eldar_soul_cage",
+		"dark_eldar_thermo_plasma"		
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "sisters_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "sisters_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "sisters_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"sisters_thermo_plasma",
+		"sisters_plasma_generator",
+		"sisters_turret_flamer",
+		"sisters_holy_reliquary",
+		"sisters_listening_post",
+		"sisters_mines",
+		"sisters_sanctuary"
+		}
+		
+		t_unit_exceptions = {}
+		
+	end
+	
+	t_blueprintbonus = {}
+	
+	MetaMap_GetRaceStartingSquadsList(MetaMap_GetPlayerNRaceName(0), t_blueprintbonus)	
+
+	for j = 1,  table.getn(t_blueprintbonus) do
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_Bonus"..j, t_blueprintbonus[j], "mkr_Player_Builder", 1)
+		
+	end
+	
+
+--[[TODO: Remove! DEBUG USE ONLY!]]
+	if g_Debug == true then
+		EGroup_SetHealthInvulnerable("eg_Player_HQ", true)
+	end
+	
+	ForwardBases()
+end
+
+
+function ForwardBases()
+
+	--determine race specific blueprints to be looked for when creating forward base
+	if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		
+		g_bonus_generator = "chaos_plasma_generator"
+		g_bonus_turret = "chaos_turret_bolter"
+		g_bonus_barracks = "chaos_temple"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "chaos_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+		
+		g_bonus_generator = "eldar_warp_generator"
+		g_bonus_turret = "eldar_support_platform_scatterlaser"
+		g_bonus_barracks = "eldar_aspect_portal"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "eldar_soul_shrine"
+		
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		
+		g_bonus_generator = "guard_plasma_generator"
+		g_bonus_turret = "guard_turret_heavy_bolter"
+		g_bonus_barracks = "guard_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "guard_tactica"
+		
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		
+		g_bonus_generator = "ork_generator"
+		g_bonus_turret = "ork_waagh_banner"
+		g_bonus_barracks = "ork_boy_hut"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "ork_pile_o_guns"
+		
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		
+		g_bonus_generator = "space_marine_generator"
+		g_bonus_turret = "space_marine_turret_bolter"
+		g_bonus_barracks = "space_marine_barracks"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "space_marine_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		
+		g_bonus_generator = "tau_plasma_generator"
+		g_bonus_turret = 0  --tau have no turrets, so zero is simply a filler value to establish the variable instead of writting cutom checks for tau later.  0 will never be a value fed in by code, so it simply allows the algorithm to function in a standadrd manner for all races.
+		g_bonus_barracks = "tau_barracks"
+		g_bonus_barracks2 = "tau_kroot_nest"
+		g_bonus_research = "tau_research_building"
+		
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		
+		g_bonus_generator = "sisters_plasma_generator"
+		g_bonus_turret = "sisters_turret_flamer"
+		g_bonus_barracks = "sisters_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "sisters_sanctuary"
+		
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		
+		g_bonus_generator = "dark_eldar_plasma_generator"
+		g_bonus_turret = "dark_eldar_slave_caravel"
+		g_bonus_barracks = "dark_eldar_hall_of_blood"
+		g_bonus_barracks2 = "dark_eldar_skimmer_shop"
+		g_bonus_research = "dark_eldar_haemonculus_laboratory"
+		
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		
+		g_bonus_generator = "necron_plasma_generator"
+		g_bonus_turret = "necron_turret"
+		g_bonus_barracks = "necron_summoning_core"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "necron_forbidden_archive"
+		
+	end
+
+	--Add in any bonus buildings made availible if the player has purchased them via owning Hyperion peaks province
+	t_blueprintEntitybonus = {}
+
+	
+	-- Always builds the building (prevents crashes and speeds things up)
+	function user_CreateBuilding(p_PlayerID, p_EGroupID, p_MarkerName, p_Blueprint)
+		l_EntityID = Entity_Create(p_Blueprint, p_PlayerID, Marker_GetPosition(Marker_FromName(p_MarkerName, "basic_marker" )))
+		EGroup_Add(EGroup_CreateIfNotFound(p_EGroupID), l_EntityID)
+		Entity_Spawn(l_EntityID)                        
+	end
+
+	MetaMap_GetAttackingRaceStartingEntitiesList(t_blueprintEntitybonus)
+
+	for j=1,table.getn(t_blueprintEntitybonus) do
+		
+		if t_blueprintEntitybonus[j] == g_bonus_generator then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_gen_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next generator will then spawn at the correct marker after this one
+			g_bonus_gen_counter = g_bonus_gen_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_turret then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_turret_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next turret will then spawn at the correct marker after this one
+			g_bonus_turret_counter = g_bonus_turret_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks then
+			--fixed marker spawn based on Phil's table.  Only one barracks is spawned, always at marker 10
+			--Necron intentionally spawn a summoning core in place of a barracks due to the monolith doubling as their barracks.
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement10", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_research then
+			--fixed marker spawn based on Phil's table.  Only one research building is spawned, always at marker 11
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement11", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks2 then
+			--This will only be used to spawn the kroot nest when the player is Tau, otherwise it will be passed over due to g_bonus_barracks2 being a dummy value.
+			--fixed marker spawn based on Phil's table.  Only one kroot nest is spawned, always at marker 13
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement13", t_blueprintEntitybonus[j])
+		end
+	end
+end
+
+
+function DifficultyLevel()
+	local StrongholdStrength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetDefendingTerritoryIndex())
+	
+	if StrongholdStrength == 10 or StrongholdStrength == 11 or StrongholdStrength == 12 then
+		g_Difficulty = 1
+	elseif StrongholdStrength == 13 or StrongholdStrength == 14 or StrongholdStrength == 15 then
+		g_Difficulty = 2
+	elseif  StrongholdStrength == 16 or StrongholdStrength == 17 then
+		g_Difficulty = 3
+	end
+end
+
+function PopCheck(Counter, SGroup, MaxPop)
+
+	local Pop = 0
+	
+	for i=0,Counter do
+			if SGroup_Exists(SGroup..i) and SGroup_Count(SGroup..i) > 0 then
+				
+				Pop = Pop + SGroup_Count(SGroup..i)
+				
+			end
+	end
+	
+	
+	if Pop < math.floor(MaxPop) then
+		return true
+	else
+		return false
+	end
+
+end
+
+function ChaosStorm()
+	
+	--constantly recast the chaos storm ability, this skill is removed when all shrines are killed by calling the removal of this function
+	Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_ChaosStorm"), 1), g_ChaosStormLevel,
+	Marker_GetPosition(Marker_FromName("mkr_mainbase_area", "basic_marker")))
+	
+	Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_ChaosStorm"), 1), g_ChaosStormDamageLevel,
+	Marker_GetPosition(Marker_FromName("mkr_mainbase_area", "basic_marker")))
+	
+	--World_FXEvent("data:Art/Events/dxp3_sp/chaos_storm_temp", Marker_GetPosition(Marker_FromName("mkr_mainbase_area", "basic_marker")))
+
+end
+
+function ChaosSpellLevel()
+	local Count = 0
+	for i=1,5 do
+		if EGroup_Exists("eg_Shrine"..i) and EGroup_Count("eg_Shrine"..i) > 0 then
+			Count = Count + 1
+		end
+	end
+	
+	if Count == 5 then
+		g_ChaosStormLevel = "chaos_warp_storm_1"
+		g_ChaosStormDamageLevel = "chaos_warp_storm_damage_1"
+	elseif Count == 4 then
+		g_ChaosStormLevel = "chaos_warp_storm_2"
+		g_ChaosStormDamageLevel = "chaos_warp_storm_damage_2"
+	elseif Count == 3 then
+		g_ChaosStormLevel = "chaos_warp_storm_3"
+		g_ChaosStormDamageLevel = "chaos_warp_storm_damage_3"
+	elseif Count == 2 then
+		g_ChaosStormLevel = "chaos_warp_storm_4"
+		g_ChaosStormDamageLevel = "chaos_warp_storm_damage_4"
+	elseif Count == 1 then
+		g_ChaosStormLevel = "chaos_warp_storm_5"
+		g_ChaosStormDamageLevel = "chaos_warp_storm_damage_5"
+	elseif Count == 0 then
+		Rule_Remove(ChaosStorm)
+		Rule_Remove(ChaosSpellLevel)
+	end
+	
+end
+
+
+
+function UpdateShrines()
+
+	if g_TotalShrines > 0 then
+		-- loop through all possible shrines
+		for i=1,5 do
+			-- if a shrine doesnt exist
+			if EGroup_Exists("eg_Shrine"..i) and EGroup_Count("eg_Shrine"..i) == 0 then
+				--loop through the table of existing shrines, and see if it is there
+				for j=1,g_TotalShrines do
+					-- if it does exist in the array
+					if t_Shrines[j] == i then
+						--take a point from the end of the list and move it into its slot and decrement the global shrines
+						--print("before -- ")
+						PrintArray()
+						t_Shrines[j] = t_Shrines[g_TotalShrines]
+						g_TotalShrines = g_TotalShrines - 1
+						--print("after -- ")
+						PrintArray()
+						--print("total shrines -- "..g_TotalShrines)
+					end
+				end
+			end
+		end
+	else
+		Rule_Remove(UpdateShrines)
+	end
+
+end
+
+function PrintArray()
+	--[[
+	if g_TotalShrines >= 1 then
+		print("{")
+		for j=1,g_TotalShrines do
+			print(t_Shrines[j] .. ", ")
+		end	
+		print("}")
+	end
+	]]
+end
+
+function ShrineTier()
+	if g_ShrineTier < 5 then
+		g_ShrineTier = g_ShrineTier + 1
+	end
+end
+
+function SpawnDaemonsAtShrines()
+	
+	if g_TotalShrines >= 1 then
+		
+		local SpawnPoint = t_Shrines[ World_GetRand(1, g_TotalShrines ) ]	
+		local Chance = 1
+		if g_ShrineTier == 1 then
+			Chance = World_GetRand(1,4)
+		elseif g_ShrineTier == 2 then
+			Chance = World_GetRand(1,6)
+		elseif g_ShrineTier == 3 then
+			Chance = World_GetRand(1,8)
+		elseif g_ShrineTier == 4 then
+			Chance = World_GetRand(1,10)
+		elseif g_ShrineTier == 5 then
+			Chance = World_GetRand(1,11)
+		end
+		
+		
+		if Chance >= 1 and Chance <= 4 then
+			-- cultist
+			SGroup = "sg_Cultist"
+			Counter = g_CultistCounter
+			Blueprint = "chaos_squad_cultist" 
+			SquadNum = World_GetRand(8, 10)
+			MaxPop = g_MaxCultist
+		elseif Chance == 5 or Chance == 6 then
+			-- khorne beserkers
+			SGroup = "sg_Zerker"
+			Counter = g_ZerkerCounter
+			Blueprint = "chaos_squad_khorne_berserker"
+			SquadNum =  World_GetRand(7, 8)
+			MaxPop = g_MaxZerker
+		elseif Chance == 7 or Chance == 8 then
+			-- horrors
+			SGroup = "sg_Horror"
+			Counter = g_HorrorCounter
+			Blueprint = "chaos_squad_horror"
+			SquadNum =  5
+			MaxPop = g_MaxHorror
+		elseif Chance == 9 or Chance == 10 then
+			-- possessed squad
+			SGroup = "sg_Posd"
+			Counter = g_PosdCounter
+			Blueprint = "chaos_squad_possessed_marine"
+			SquadNum =  8
+			MaxPop = g_MaxPosd
+		elseif Chance == 11 then
+			-- obliterator
+			SGroup = "sg_Obliterator"
+			Counter = g_ObliteratorCounter
+			Blueprint = "chaos_squad_obliterator"
+			SquadNum =  World_GetRand(4, 5)
+			MaxPop = g_MaxObliterator
+		end
+		
+		if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists("eg_Shrine"..SpawnPoint) and EGroup_Count("eg_Shrine"..SpawnPoint) > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, "mkr_shrine"..SpawnPoint, 1, SquadNum)
+			if SpawnPoint == 1 then
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_wander9")
+			elseif SpawnPoint == 2 then
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_wander8")
+			elseif SpawnPoint == 3 then
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_wander1")
+			elseif SpawnPoint == 4 then
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_wander4")
+			elseif SpawnPoint == 5 then
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_wander1")
+			end
+		end	
+		
+		if Blueprint == "chaos_squad_cultist" then
+			g_CultistCounter = g_CultistCounter + 1
+		elseif Blueprint == "chaos_squad_khorne_berserker" then
+			g_ZerkerCounter = g_ZerkerCounter + 1
+		elseif Blueprint == "chaos_squad_horror" then
+			g_HorrorCounter = g_HorrorCounter + 1
+		elseif Blueprint == "chaos_squad_possessed_marine" then
+			g_PosdCounter = g_PosdCounter + 1
+		elseif Blueprint == "chaos_squad_obliterator" then
+			g_ObliteratorCounter = g_ObliteratorCounter + 1
+		elseif Blueprint == "chaos_squad_daemon_prince" then
+			g_PrinceCounter = g_PrinceCounter + 1
+		end
+	end
+	
+
+end
+
+function Wander()
+	g_WanderCounter = g_WanderCounter + 1
+	-- player 2
+	for i=1,8 do
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_wander"..i) then
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_WanderSquad"..i.."Counter"..g_WanderCounter, "mkr_wander"..i)
+			if g_TotalShrines > 0 then
+				Cmd_AttackMoveMarker("sg_WanderSquad"..i.."Counter"..g_WanderCounter, "mkr_wander"..i+1)
+			else
+				Cmd_AttackMoveMarker("sg_WanderSquad"..i.."Counter"..g_WanderCounter, "mkr_mainbase_area")
+			end
+		end
+	end
+	
+	-- player  2
+	if Player_AreSquadsNearMarker(g_Player2, "mkr_wander9") then
+		Player_GetAllSquadsNearMarker(g_Player2, "WanderAttackSquad"..g_WanderCounter, "mkr_wander9")
+		g_WanderUnitAttackCount = g_WanderUnitAttackCount + SGroup_Count("WanderAttackSquad"..g_WanderCounter)
+		if g_WanderUnitAttackCount >= g_WanderUnitAttackInterval then
+			g_WanderUnitAttackCount = 0
+			local Chance = World_GetRand(1,10)
+			if Chance < 5 then
+				Cmd_AttackMoveMarker("WanderAttackSquad"..g_WanderCounter, "mkr_playerbase_attack1")
+			elseif Chance >= 5 then
+				Cmd_AttackMoveMarker("WanderAttackSquad"..g_WanderCounter, "mkr_playerbase_attack2")
+			end
+		else
+			Cmd_AttackMoveMarker("WanderAttackSquad"..g_WanderCounter, "mkr_wander1")
+		end
+		
+	end
+		
+	-- player 5
+	for i=1,3 do
+		if Player_AreSquadsNearMarker(g_Player5, "mkr_attmovemarker"..i) then
+			Player_GetAllSquadsNearMarker(g_Player5, "sg_P5WanderSquad"..i.."Counter"..g_WanderCounter, "mkr_attmovemarker"..i)
+			Cmd_AttackMoveMarker("sg_P5WanderSquad"..i.."Counter"..g_WanderCounter, "mkr_attmovemarker"..i+1)
+		end
+	end
+	
+	-- player 5
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_attmovemarker4") then
+		Player_GetAllSquadsNearMarker(g_Player5, "P5WanderAttackSquad"..g_WanderCounter, "mkr_attmovemarker4")
+		SGroup_SetPlayerOwner("P5WanderAttackSquad"..g_WanderCounter, g_Player2)
+		local Chance = World_GetRand(1,10)
+		if Chance == 1 or Chance == 2 then
+			Cmd_AttackMoveMarker("P5WanderAttackSquad"..g_WanderCounter, "mkr_playerbase_attack1")
+		elseif Chance == 3 or Chance == 4 then
+			Cmd_AttackMoveMarker("P5WanderAttackSquad"..g_WanderCounter, "mkr_playerbase_attack2")
+		elseif Chance >= 5 and Chance <= 10 then
+			Cmd_AttackMoveMarker("P5WanderAttackSquad"..g_WanderCounter, "mkr_wander1")
+		end
+	end
+
+	
+end
+
+function AttackPlayerbaseFromMarker()
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_playerbase_attack"..i) then
+			g_PBACounter = g_PBACounter + 1
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_PlayerbaseAttack"..g_PBACounter, "mkr_playerbase_attack"..i)
+			--Cmd_AttackMoveMarker("sg_PlayerbaseAttack"..g_PBACounter, "mkr_Player_HQ")
+			Cmd_AttackMovePos("sg_PlayerbaseAttack"..g_PBACounter, g_GlobalAttackPos)
+		end
+	end
+end
+
+function StartSpawningSorcerers()
+	if g_TotalShrines == 4 then
+		Player_GrantResearch(g_Player2, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player3, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player4, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player5, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player6, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player7, "chaos_bloodthirster_research")
+		Player_GrantResearch(g_Player8, "chaos_bloodthirster_research")
+		Rule_Remove(StartSpawningSorcerers)
+		Rule_AddInterval(SpawnSorcerer, g_SpawnBloodthirsterFodderMaxTimer)
+	end
+end
+
+
+function SpawnSorcerer()
+	if EGroup_Exists("eg_ChaosHQ") and EGroup_Count("eg_ChaosHQ") > 0 and PopCheck(g_BloodThirsterCounter, "sg_BloodThirster", g_MaxBloodThirster) and g_TotalShrines > 0 then
+		g_BloodThirsterCounter = g_BloodThirsterCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_BloodThirster"..g_BloodThirsterCounter, "chaos_squad_aspiring_champion_sp_dxp3", "mkr_mainbase_hq", 1, 1)
+		Cmd_MoveToMarker("sg_BloodThirster"..g_BloodThirsterCounter, "mkr_shrine"..t_Shrines[ World_GetRand(1, g_TotalShrines ) ])
+	end
+end
+
+function CheckShrinesForSorcerer()
+	-- if the sorcerer makes it to its shrine, spawn the bloodthirster
+	if SGroup_Exists("sg_BloodThirster"..g_BloodThirsterCounter) and SGroup_Count("sg_BloodThirster"..g_BloodThirsterCounter) > 0 then
+		for i=1,5 do
+			if Prox_AnySquadNearMarker("sg_BloodThirster"..g_BloodThirsterCounter, "mkr_shrine"..i) then
+				Cmd_Possesion("sg_BloodThirster"..g_BloodThirsterCounter)
+			end
+		end
+	end
+end
+
+function FlyBloodThirsterToShrines()
+	if SGroup_Exists("sg_BloodThirster"..g_BloodThirsterCounter) and SGroup_Count("sg_BloodThirster"..g_BloodThirsterCounter) > 0 then
+		for i=1,4 do
+			if EGroup_Exists("eg_Shrine"..i) and EGroup_Count("eg_Shrine"..i) > 0 and Player_AreSquadsNearMarker(g_Player1, "mkr_shrinearea"..i) and g_JumpFlag == true then
+				g_JumpFlag = false
+				Cmd_JumpToMarker("sg_BloodThirster"..g_BloodThirsterCounter, "mkr_shrinearea"..i)
+				Rule_Remove(FlyBloodThirsterToShrines)
+				Rule_AddInterval(BloodThirsterCantFly,g_BloodThirsterFlyCoolDown)
+			elseif Player_AreSquadsNearMarker(g_Player1, "mkr_attmovemarker"..i) == true and g_JumpFlag == true then
+				g_JumpFlag = false
+				Cmd_JumpToMarker("sg_BloodThirster"..g_BloodThirsterCounter, "mkr_attmovemarker"..i)
+				Rule_Remove(FlyBloodThirsterToShrines)
+				Rule_AddInterval(BloodThirsterCantFly, g_BloodThirsterFlyCoolDown)
+			end
+		end
+	end
+end
+
+function BloodThirsterCantFly()
+	g_JumpFlag = true
+	Rule_Remove(BloodThirsterCantFly)
+	Rule_AddInterval(FlyBloodThirsterToShrines, 1)	
+end
+
+function ShrineDeath()
+	for i=1,5 do
+		if EGroup_Exists("eg_Shrine"..i) and EGroup_GetAvgHealth("eg_Shrine"..i) == 0 and t_ShrineBoom[i] == false then
+			World_FXEvent("data:Art/Events/dxp3_sp/mark_of_khorne", Marker_GetPosition(Marker_FromName("mkr_shrine"..i, "basic_marker")))
+			t_ShrineBoom[i] = true
+			SpawnDaemonsFromDeadShrine(i)
+			if Objective_Exists(Objective_DestroyShrines.title_id) == true then
+				Objective_PingRemove(Objective_DestroyShrines.title_id, g_ping_obj_shrine[i])
+			end
+		end
+	end
+end
+
+function SpawnDaemonsFromDeadShrine(SpawnPoint)
+	
+	local LoopNum = 0
+	if SpawnPoint == 5 then
+		LoopNum = 2
+	else
+		LoopNum = 3
+	end
+	
+	SGroup_Create("ShrineSpawn"..SpawnPoint)
+	for i=1,LoopNum do
+		local Chance = World_GetRand(1,7)
+		if Chance == 1 or Chance == 2 then
+			-- khorne beserkers
+			SGroup = "sg_ZerkerShrine"
+			Counter = g_ZerkerCounter
+			Blueprint = "chaos_squad_khorne_berserker"
+			SquadNum =  World_GetRand(7, 8)
+		elseif Chance == 3 or Chance == 4 then
+			-- horrors
+			SGroup = "sg_HorrorShrine"
+			Counter = g_HorrorCounter
+			Blueprint = "chaos_squad_horror"
+			SquadNum =  5
+		elseif Chance == 5 or Chance == 6 then
+			-- possessed squad
+			SGroup = "sg_PosdShrine"
+			Counter = g_PosdCounter
+			Blueprint = "chaos_squad_possessed_marine"
+			SquadNum =  8
+		elseif Chance == 7 then
+			-- obliterator
+			SGroup = "sg_ObliteratorShrine"
+			Counter = g_ObliteratorCounter
+			Blueprint = "chaos_squad_obliterator"
+			SquadNum =  World_GetRand(4, 5)
+		end
+		
+		--if PopCheck(Counter, SGroup, MaxPop) == true then
+		Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, "mkr_shrine"..SpawnPoint, 1, SquadNum)
+		Util_CreateSquadsAtMarkerEx(g_Player8, "SeeingEyeCultists", "chaos_squad_cultist", "mkr_shrine"..SpawnPoint, 1, World_GetRand(5,8))
+		SGroup_AddGroup("ShrineSpawn"..SpawnPoint, SGroup..Counter)
+		--end	
+		
+		if Blueprint == "chaos_squad_cultist" then
+			g_CultistCounter = g_CultistCounter + 1
+		elseif Blueprint == "chaos_squad_khorne_berserker" then
+			g_ZerkerCounter = g_ZerkerCounter + 1
+		elseif Blueprint == "chaos_squad_horror" then
+			g_HorrorCounter = g_HorrorCounter + 1
+		elseif Blueprint == "chaos_squad_possessed_marine" then
+			g_PosdCounter = g_PosdCounter + 1
+		elseif Blueprint == "chaos_squad_obliterator" then
+			g_ObliteratorCounter = g_ObliteratorCounter + 1
+		elseif Blueprint == "chaos_squad_daemon_prince" then
+			g_PrinceCounter = g_PrinceCounter + 1
+		end
+	end
+	
+	if SpawnPoint == 1 then
+		Cmd_AttackMoveMarker("ShrineSpawn"..SpawnPoint, "mkr_wander9")
+	elseif SpawnPoint == 2 then
+		Cmd_AttackMoveMarker("ShrineSpawn"..SpawnPoint, "mkr_wander8")
+	elseif SpawnPoint == 3 then
+		Cmd_AttackMoveMarker("ShrineSpawn"..SpawnPoint, "mkr_wander1")
+	elseif SpawnPoint == 4 then
+		Cmd_AttackMoveMarker("ShrineSpawn"..SpawnPoint, "mkr_wander4")
+	elseif SpawnPoint == 5 then
+		Cmd_AttackMoveMarker("ShrineSpawn"..SpawnPoint, "mkr_wander1")
+	end
+	
+end
+
+function SpawnStealthyMarines()
+	
+	Player_GrantResearch(g_Player4, "chaos_cultist_sight_research")
+	Player_GrantResearch(g_Player4, "chaos_infiltration_research")
+	Player_GrantResearch(g_Player4, "chaos_infiltration_marine_research")
+	Player_GrantResearch(g_Player4, "chaos_accuracy_upgrade_research")
+	Player_GrantResearch(g_Player4, "chaos_accuracy_upgrade_research_2")
+	Player_GrantResearch(g_Player4, "chaos_commander_health_research_1")
+	Player_GrantResearch(g_Player4, "chaos_commander_health_research_2")
+	Player_GrantResearch(g_Player4, "chaos_health_upgrade_research")
+	Player_GrantResearch(g_Player4, "chaos_health_upgrade_research_2")
+	Player_GrantResearch(g_Player4, "chaos_power_research_1")
+	Player_GrantResearch(g_Player4, "chaos_power_research_2")
+	Player_GrantResearch(g_Player4, "chaos_ranged_skill_research")
+	Player_GrantResearch(g_Player4, "chaos_champion_melee_research_1")
+	Player_GrantResearch(g_Player4, "chaos_champion_melee_research_2")
+	Player_GrantResearch(g_Player8, "chaos_cultist_sight_research")
+	
+	for i=1,12 do
+		local RandomChance = World_GetRand(1,10)
+		local StealthSquads = 1
+		
+		if RandomChance > 8 then
+			StealthSquads = 2
+		else
+			StealthSquads = 1
+		end
+		Util_CreateSquadsAtMarkerEx(g_Player4, "sg_StealthMarines"..i, "chaos_marine_squad", "mkr_stealth"..i, StealthSquads, 10)
+		SGroup_AddLeaders("sg_StealthMarines"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_StealthMarines"..i), 1),"chaos_heavy_bolter_tactical", 4)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_StealthMarines"..i), 1),"chaos_plasma_gun_tactical", 3)
+		--Cmd_SetStance("sg_StealthMarines"..i, STANCE_StandGround)
+		Cmd_SetMeleeStance("sg_StealthMarines"..i, MSTANCE_Ranged)
+	end
+end
+
+function SlagDepositTrap()
+	
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_specialattackboundary") and EGroup_Exists("eg_ChaosHQ") and EGroup_Count("eg_ChaosHQ") > 0 then
+		Rule_AddOneShot(TrapIE, 1)
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SpecialAttackHorror"..i, "chaos_squad_horror", "mkr_mainbase_hq", 1, 5)
+			SGroup_DeSpawn("sg_SpecialAttackHorror"..i)
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_SpecialAttackHorror"..i), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_random_horror"..i, "basic_marker")))
+		end
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SpecialAttackObliterator"..i, "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+			SGroup_DeSpawn("sg_SpecialAttackObliterator"..i)
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_SpecialAttackObliterator"..i), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_random_obliterator"..i, "basic_marker")))
+		end
+		Util_CreateSquadsAtMarkerEx(g_Player8, "SeeingEyeCultists", "chaos_squad_cultist", "mkr_mainbase_hq", 1, World_GetRand(5,8))
+		Cmd_AttackMoveMarker("SeeingEyeCultists", "mkr_random_obliterator1")
+		Rule_Remove(SlagDepositTrap)
+		Rule_AddInterval(MoveTrapDudes, 120)
+	end
+end
+
+function MoveTrapDudes()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_specialattackdrop") == false and Player_AreSquadsNearMarker(g_Player2, "mkr_specialattackdrop") == true then
+		Player_GetAllSquadsNearMarker(g_Player2, "sg_SpecialAttackDudes", "mkr_specialattackdrop")
+		Cmd_AttackMoveMarker("sg_SpecialAttackDudes","mkr_wander2")		
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_specialattackdrop") == true and Player_AreSquadsNearMarker(g_Player2, "mkr_specialattackdrop") == false then
+		-- send an attack squad to the area from the main base
+		if EGroup_Exists("eg_ChaosMainBaseBarracks") and EGroup_Count("eg_ChaosMainBaseBarracks") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player5, "sg_SlagAttack", "chaos_marine_squad", "mkr_mainbase_barracks", 2, 10)
+			SGroup_AddLeaders("sg_SlagAttack")
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttack"), 1),"chaos_plasma_gun_tactical", 5)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttack"), 1),"chaos_heavy_bolter_tactical", 5)
+		end
+		if EGroup_Exists("eg_ChaosMainBaseMachinePit") and EGroup_Count("eg_ChaosMainBaseMachinePit") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player5, "sg_SlagAttackTanks", "chaos_squad_predator", "mkr_mainbase_machinepit", 1, 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_autocannon_predator_improved", 2)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"haos_heavy_bolter_predator_r_improved", 2)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_heavy_bolter_predator_l_improved", 2)			
+		end
+		Cmd_AttackMoveMarker("sg_SlagAttack","mkr_specialattackdrop")
+		Cmd_AttackMoveMarker("sg_SlagAttackTanks","mkr_specialattackdrop")
+		Rule_Remove(MoveTrapDudes)
+	end
+end
+
+
+function SpawnDefilers()
+	local Chance = World_GetRand(1,2)
+	-- if the side base is alive spawn defilers
+	if EGroup_Exists("eg_ChaosSideBaseHQ") and EGroup_Count("eg_ChaosSideBaseHQ") > 0 and EGroup_Exists("eg_ChaosSideBaseMachinePit"..Chance) and EGroup_Count("eg_ChaosSideBaseMachinePit"..Chance) > 0 and PopCheck(g_DefilerCounter, "sg_Defiler", g_MaxDefilers) == true and g_SecondaryObjectiveFlag == true then
+		g_DefilerCounter = g_DefilerCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player5, "sg_Defiler"..g_DefilerCounter, "chaos_squad_defiler", "mkr_sidebase_machinepit"..Chance, 1, 1)
+		Cmd_AttackMoveMarker("sg_Defiler"..g_DefilerCounter, "mkr_attmovemarker1")
+	end
+end
+
+function SpawnDreadnoughts()
+	local Chance = World_GetRand(3,5)
+	if EGroup_Exists("eg_ChaosSideBase2Building1") and EGroup_Count("eg_ChaosSideBase2Building1") > 0 and EGroup_Exists("eg_ChaosSideBase2Building"..Chance) and
+	EGroup_Count("eg_ChaosSideBase2Building"..Chance) > 0 and PopCheck(g_DreadnoughtCounter, "sg_Dreadnoughts", g_MaxDreadnoughts) == true and g_SecondaryObjectiveFlag == true then
+		
+		g_DreadnoughtCounter = g_DreadnoughtCounter + 1
+		if g_TotalShrines > 0 then
+			local pos = 0
+			local Duty = World_GetRand(1,2)
+			if Duty == 1 then
+				for i=1,5 do
+					if Player_AreSquadsNearMarker(g_Player1, "mkr_shrinearea"..i) then
+						pos = i
+					end
+				end
+				if pos > 0 then
+					Util_CreateSquadsAtMarkerEx(g_Player7, "sg_Dreadnoughts"..g_DreadnoughtCounter, "chaos_squad_hell_talon", "mkr_sidebase2_machinepit"..Chance, 1, 1)
+					Cmd_AttackMoveMarker("sg_Dreadnoughts"..g_DreadnoughtCounter, "mkr_shrinearea"..pos)
+				else
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Dreadnoughts"..g_DreadnoughtCounter, "chaos_squad_hell_talon", "mkr_sidebase2_machinepit"..Chance, 1, 1)
+					Cmd_AttackMoveMarker("sg_Dreadnoughts"..g_DreadnoughtCounter, "mkr_wander1")
+				end
+			elseif Duty == 2 then
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Dreadnoughts"..g_DreadnoughtCounter, "chaos_squad_hell_talon", "mkr_sidebase2_machinepit"..Chance, 1, 1)
+				Cmd_AttackMoveMarker("sg_Dreadnoughts"..g_DreadnoughtCounter, "mkr_wander1")
+			end
+		else
+			Util_CreateSquadsAtMarkerEx(g_Player7, "sg_Dreadnoughts"..g_DreadnoughtCounter, "chaos_squad_hell_talon", "mkr_sidebase2_machinepit"..Chance, 1, 1)
+			Cmd_AttackMoveMarker("sg_Dreadnoughts"..g_DreadnoughtCounter, "mkr_mainbase_area")
+		end
+	end
+end
+
+function DreadnoughtPatrol()
+
+	g_DNWanderCounter = g_DNWanderCounter + 1
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player6, "mkr_dreadnoughtpatrol"..i) then
+			Player_GetAllSquadsNearMarker(g_Player6, "sg_DNWanderSquad"..i.."Counter"..g_DNWanderCounter, "mkr_dreadnoughtpatrol"..i)
+			if g_TotalShrines > 0 then
+				if i == 1 then
+					Cmd_AttackMoveMarker("sg_DNWanderSquad"..i.."Counter"..g_DNWanderCounter, "mkr_dreadnoughtpatrol2")
+				else
+					Cmd_AttackMoveMarker("sg_DNWanderSquad"..i.."Counter"..g_DNWanderCounter, "mkr_dreadnoughtpatrol1")
+				end
+			else
+				Cmd_AttackMoveMarker("sg_DNWanderSquad"..i.."Counter"..g_DNWanderCounter, "mkr_mainbase_area")
+			end
+		end
+	end
+end
+
+function SpawnInitialDreadnoughts()
+	-- eh, lets spawn a couple predators on the map too :)
+	for i=1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player6, "sg_RandomPredators"..i, "chaos_squad_predator", "mkr_random_predator"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+		SGroup_FaceMarker("sg_RandomPredators"..i, "mkr_faceme"..i)
+	end
+end
+
+function MainBaseAttackTier()
+	if g_BaseAttackTier < 6 then
+		g_BaseAttackTier = g_BaseAttackTier + 1
+	end
+end
+
+function MainBaseAttack()
+
+	local AmountSpawned = 1
+	
+	if g_Difficulty == 1 then
+		if g_BaseAttackTier == 1 then
+			AmountSpawned = 1
+		elseif g_BaseAttackTier == 2 then
+			AmountSpawned = 2
+		elseif g_BaseAttackTier == 3 then
+			AmountSpawned = 3
+		elseif g_BaseAttackTier == 4 then
+			AmountSpawned = 3
+		elseif g_BaseAttackTier == 5 then
+			AmountSpawned = 4
+		elseif g_BaseAttackTier == 6 then
+			AmountSpawned = 4
+		end
+	elseif g_Difficulty == 2 then
+		if g_BaseAttackTier == 1 then
+			AmountSpawned = 1
+		elseif g_BaseAttackTier == 2 then
+			AmountSpawned = 2
+		elseif g_BaseAttackTier == 3 then
+			AmountSpawned = 3
+		elseif g_BaseAttackTier == 4 then
+			AmountSpawned = 3
+		elseif g_BaseAttackTier == 5 then
+			AmountSpawned = 4
+		elseif g_BaseAttackTier == 6 then
+			AmountSpawned = 5
+		end
+	elseif g_Difficulty == 3 then
+		if g_BaseAttackTier == 1 then
+			AmountSpawned = 1
+		elseif g_BaseAttackTier == 2 then
+			AmountSpawned = 2
+		elseif g_BaseAttackTier == 3 then
+			AmountSpawned = 3
+		elseif g_BaseAttackTier == 4 then
+			AmountSpawned = 4
+		elseif g_BaseAttackTier == 5 then
+			AmountSpawned = 5
+		elseif g_BaseAttackTier == 6 then
+			AmountSpawned = 5
+		end
+	end
+	
+	for i=1, AmountSpawned do
+		local Chance = 0
+		if i== 1 then
+			Chance = World_GetRand(1,6)
+		elseif i==2 then
+			Chance = World_GetRand(1,6)
+		elseif i==3 then
+			Chance = World_GetRand(1,7)
+		elseif i==4 then
+			Chance = World_GetRand(1,8)
+		elseif i==5 then
+			Chance = 7
+		elseif i==6 then
+			Chance = World_GetRand(1,8)
+		end
+		
+		if Chance == 1 or Chance == 2 then
+			-- cultist
+			SGroup = "sg_Cultist"
+			Counter = g_CultistCounter
+			Blueprint = "chaos_squad_cultist" 
+			SquadNum = World_GetRand(8, 10)
+			MaxPop = g_MaxCultist
+			Building = "eg_ChaosHQ"
+			SpawnMarker = "mkr_mainbase_hq"
+		elseif Chance == 3 or Chance == 4 then
+			-- raptor
+			SGroup = "sg_Raptor"
+			Counter =g_RaptorCounter
+			Blueprint = "chaos_squad_raptor"
+			SquadNum =  World_GetRand(8,10)
+			MaxPop = g_MaxRaptor
+			Building = "eg_ChaosMainBaseBarracks"
+			SpawnMarker = "mkr_mainbase_barracks"
+		elseif Chance == 5 or Chance == 6 then
+			-- space marine
+			SGroup = "sg_SpaceMarine"
+			Counter = g_SpaceMarineCounter
+			Blueprint = "chaos_marine_squad"
+			SquadNum =  World_GetRand(8, 10)
+			MaxPop = g_MaxSpaceMarine
+			Building = "eg_ChaosMainBaseBarracks"
+			SpawnMarker = "mkr_mainbase_barracks"
+		elseif Chance == 7 or Chance == 8 then
+			-- predator
+			SGroup = "sg_Predator"
+			Counter = g_PredatorCounter
+			Blueprint = "chaos_squad_predator"
+			SquadNum =  1
+			MaxPop = g_MaxPredator
+			Building = "eg_ChaosMainBaseMachinePit"
+			SpawnMarker = "mkr_mainbase_machinepit"
+		end
+		
+		if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, SpawnMarker, 1, SquadNum)
+			if SGroup_Exists(SGroup..Counter) and SGroup_CountSpawned(SGroup..Counter) > 0 then
+				if g_BaseAttackTier > 3 then
+					if Blueprint == "chaos_squad_cultist" then
+						local Chance = World_GetRand(1,10)
+						if Chance >= 2 then
+							SGroup_AddLeaders(SGroup..Counter)
+						end
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_plasma_gun_cultist", World_GetRand(2,3))
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_grenade_launcher", World_GetRand(2,3))
+					elseif Blueprint == "chaos_squad_raptor" then
+						local Chance = World_GetRand(1,10)
+						if Chance >= 3 then
+							SGroup_AddLeaders(SGroup..Counter)
+						end
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_flamer_raptor", World_GetRand(2,3))
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_chainsword_raptor", World_GetRand(2,3))
+					elseif Blueprint == "chaos_marine_squad" then
+						local Chance = World_GetRand(1,10)
+						if Chance >= 3 then
+							SGroup_AddLeaders(SGroup..Counter)
+						end
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_tactical", World_GetRand(2,3))
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_plasma_gun_tactical", World_GetRand(2,3))
+					end
+				end
+				if g_BaseAttackTier > 6 then
+					if Blueprint == "chaos_squad_predator" then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_autocannon_predator_improved", 1)
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+					end			
+				end
+				
+				RandomPoint = World_GetRand(1,2)
+				
+				
+				-- sorcerer special stuff
+				if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 and Prox_AnySquadNearMarker("sg_SorcererAttack", "mkr_mainbase_area") and Blueprint == "chaos_marine_squad" then
+					--SGroup_SetPlayerOwner(SGroup..Counter, g_Player7)
+					SGroup_SetPlayerOwner("sg_SorcererAttack", g_Player2)
+					Cmd_AttachSquads(SGroup..Counter, "sg_SorcererAttack")
+				end
+				
+				Cmd_AttackMoveMarker(SGroup..Counter, "mkr_playerbase_attack"..RandomPoint)
+				
+				if Blueprint == "chaos_squad_cultist" then
+					g_CultistCounter = g_CultistCounter + 1
+				elseif Blueprint == "chaos_squad_raptor" then
+					g_RaptorCounter = g_RaptorCounter + 1
+				elseif Blueprint == "chaos_marine_squad" then
+					g_SpaceMarineCounter = g_SpaceMarineCounter + 1
+				elseif Blueprint == "chaos_squad_predator" then
+					g_PredatorCounter = g_PredatorCounter + 1
+				elseif Blueprint == "chaos_squad_daemon_prince" then
+					g_PrinceCounter = g_PrinceCounter + 1
+				end
+			end			
+		end	
+	end
+end
+
+function InitialAttack()
+	if g_Difficulty == 1 then
+		MainBaseAttack()
+		MainBaseAttack()
+	elseif g_Difficulty == 2 then
+		MainBaseAttack()
+		MainBaseAttack()
+		MainBaseAttack()
+	elseif g_Difficulty == 3 then
+		MainBaseAttack()
+		MainBaseAttack()
+		MainBaseAttack()
+		MainBaseAttack()
+	end
+	g_InitialAttack = false
+	Rule_Remove(InitialAttack)
+end
+
+function SpawnRhinos()
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_Rhino"..i, "chaos_squad_rhino_sp_dxp3", "mkr_rhino"..i, 1, 1)
+	end
+	Player_GrantResearch(g_Player7, "chaos_smoke_launcher_research")
+end
+
+
+function LoadRhinos()
+	
+	for i=1,g_RhinoCount_BalanceTweak do
+		-- spawn the 3 sets of guys, load them into rhino..i
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_RhinoPosessed"..i, "chaos_squad_possessed_marine", "mkr_rhino"..i, 1, World_GetRand(5,8))
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_RhinoSpaceMarines"..i, "chaos_marine_squad", "mkr_rhino"..i, 1, World_GetRand(5,8))
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_RhinoZerkers"..i, "chaos_squad_khorne_berserker", "mkr_rhino"..i, 1, World_GetRand(4,6))
+	end
+
+	Rule_AddOneShot(PutUnitsInRhinos, 5)
+end
+
+function PutUnitsInRhinos()
+	for i=1,g_RhinoCount_BalanceTweak do
+		Cmd_EnterTransport("sg_RhinoPosessed"..i, "sg_Rhino".. i)
+		Cmd_EnterTransport("sg_RhinoSpaceMarines"..i, "sg_Rhino".. i)
+		Cmd_EnterTransport("sg_RhinoZerkers"..i, "sg_Rhino".. i)
+	end
+end
+
+function RhinoAttack()
+	if EGroup_Exists("eg_Relic") and EGroup_IsCapturedByPlayer("eg_Relic", g_Player1, true) then
+		Util_StartIntel(EVENTS.IE_RelicAttack)
+		for i=1,g_RhinoCount_BalanceTweak do
+			Cmd_MoveToMarker("sg_Rhino"..i, "mkr_rhino_dest"..i)
+		end
+		
+		if EGroup_Exists("eg_ChaosSideBase2Barracks") and EGroup_Count("eg_ChaosSideBase2Barracks") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player8, "SeeingEyeCultistsRhinoAttack", "chaos_squad_cultist", "mkr_backbase_barracks", 1, World_GetRand(5,8))
+			Cmd_AttackMoveMarker("SeeingEyeCultistsRhinoAttack", "mkr_rhino_dest1")
+		end
+		
+		Rule_Remove(RhinoAttack)
+		Rule_AddInterval(GetDudesOutOfRhinos, 1)
+	end	
+end
+
+function GetDudesOutOfRhinos()
+	for i=1,g_RhinoCount_BalanceTweak do
+		if SGroup_Exists("sg_Rhino"..i)  and Prox_AnySquadNearMarker("sg_Rhino"..i, "mkr_rhino_dest"..i) then -- alternatively, could use: Marker_InProximity(Marker_FromName("mkr_player_mainBase_HQ","basic_marker"), SGroup_GetPosition("sg_spotter_HQ"..i))
+			Cmd_EmptyTransport("sg_Rhino"..i, SGroup_GetPosition("sg_Rhino"..i))
+			Cmd_CastAbilityPos("sg_Rhino"..i, "chaos_smoke_launchers", Marker_GetPosition(Marker_FromName("mkr_smokescreen"..i, "basic_marker")))
+			g_EmptyRhinos = g_EmptyRhinos + 1
+		end
+	end
+	
+	local Count = 0
+	for i=1,g_RhinoCount_BalanceTweak do
+		if SGroup_Exists("sg_Rhino"..i) and SGroup_Count("sg_Rhino"..i) == 0 then
+			Count = Count + 1
+		end
+	end
+	
+	if Count == g_RhinoCount_BalanceTweak then
+		Rule_Remove(GetDudesOutOfRhinos)
+	end
+end
+
+
+function RecaptureLP()
+
+	local Random = World_GetRand(1,10)
+	if Random >= 6 then
+		local Count = 0
+		local table_LP = {}
+		for i=1,7 do
+			if i <= 6 then
+				lp = "eg_LP"..i
+			else
+				lp = "eg_Relic"
+			end				
+			if EGroup_IsCapturedByPlayer(lp, g_Player1, true) == true then
+				Count = Count + 1
+				table_LP[Count] = lp
+			end
+		end
+		
+		if table.getn(table_LP) > 0 then
+			g_CapturePointPoint = table_LP[World_GetRand(1,table.getn(table_LP))]
+			if PopCheck(g_CaptureCounter, "sg_CaptureDudes", 3) then
+				-- 1st squad
+				g_CaptureCounter = g_CaptureCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player7, "sg_CaptureDudes"..g_CaptureCounter, "chaos_marine_squad", "mkr_mainbase_barracks", 1, World_GetRand(8,10))
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_CaptureDudes"..g_CaptureCounter), 1),"chaos_plasma_gun_tactical", World_GetRand(3,4))
+				SGroup_AddLeaders("sg_CaptureDudes"..g_CaptureCounter)
+				
+				if g_Difficulty >= 2 then
+					-- 2nd squad
+					g_CaptureCounter = g_CaptureCounter + 1
+					Util_CreateSquadsAtMarkerEx(g_Player7, "sg_CaptureDudes"..g_CaptureCounter, "chaos_marine_squad", "mkr_mainbase_barracks", 1, World_GetRand(8,10))
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_CaptureDudes"..g_CaptureCounter), 1),"chaos_plasma_gun_tactical", World_GetRand(3,4))
+					SGroup_AddLeaders("sg_CaptureDudes"..g_CaptureCounter)
+				end
+				
+			end
+			
+			-- loop through, att move everyone to the point
+			for i=1,g_CaptureCounter do
+				if SGroup_Exists("sg_CaptureDudes"..i) and SGroup_Count("sg_CaptureDudes"..i) > 0 then
+					Cmd_AttackMovePos("sg_CaptureDudes"..i, EGroup_GetPosition(g_CapturePointPoint))
+				end
+			end
+			
+		end
+	end
+	
+	if g_FirstRecapture == true then
+		g_FirstRecapture = false
+		Rule_AddInterval(ForceCapture, 5)
+	end
+end
+
+function ForceCapture()
+	-- loop through all markers
+	for i=1,7 do
+		if i <= 6 then
+			lp = "eg_LP"..i
+			mkr = "mkr_lp"..i
+		else
+			lp = "eg_Relic"
+			mkr = "mkr_reliclp"
+		end		
+		-- loop through all capture guys
+		for j=1,g_CaptureCounter do
+			if SGroup_Exists("sg_CaptureDudes"..j) and SGroup_Count("sg_CaptureDudes"..j) > 0 then
+				if Prox_AnySquadNearMarker("sg_CaptureDudes"..j, mkr) and EGroup_IsCapturedByPlayer(lp, g_Player1, true) == true then
+					Cmd_Capture("sg_CaptureDudes"..j, lp)
+				end
+			end
+		end
+	end
+end
+
+function SpawnDefilerBaseDefenseForce()
+	
+	SGroup_Create("sg_DefilerBaseDefense")
+	-- raptors
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefenseRaptors"..i, "chaos_squad_raptor", "mkr_raptordefense"..i, 1, 10)
+		SGroup_AddLeaders("sg_DefilerDefenseRaptors"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefenseRaptors"..i), 1),"chaos_flamer_raptor", 4)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseRaptors"..i)
+	end
+	
+	-- possessed marines
+	--[[for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefenseMarines"..i, "chaos_squad_possessed_marine", "mkr_marinedefense"..i, 1, 10)
+		SGroup_AddLeaders("sg_DefilerDefenseMarines"..i)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseMarines"..i)
+	end]]
+	
+	-- space marines
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefenseMarines"..i, "chaos_marine_squad", "mkr_marinedefense"..i, 1, 10)
+		SGroup_AddLeaders("sg_DefilerDefenseMarines"..i)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseMarines"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefenseMarines"..i), 1),"chaos_heavy_bolter_tactical", World_GetRand(2,3))
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefenseMarines"..i), 1),"chaos_plasma_gun_tactical", World_GetRand(2,3))
+	end
+	
+	-- horrors
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefenseHorrors"..i, "chaos_squad_horror", "mkr_horrordefense"..i, 1, 5)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseHorrors"..i)
+	end
+	
+	-- predators
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefensePredators"..i, "chaos_squad_predator", "mkr_predatordefense"..i, 1, 1)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefensePredators"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+	end
+	
+	-- defiler wanderers
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DefilerDefenseDefilers"..i, "chaos_squad_defiler", "mkr_defilerdefense"..i, 1, 1)
+		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseDefilers"..i)
+	end
+end
+
+function DefilerBaseDefenseAttack()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_defilerbase") then
+		for i=1,1 do
+			-- deep strike obliterators (5)
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefenseObliterators"..i, "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+			SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefenseObliterators"..i)
+			SGroup_DeSpawn("sg_DefilerDefenseObliterators"..i)
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_DefilerDefenseObliterators"..i), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_obliteratordefense"..i, "basic_marker")))
+		end	
+		
+		for i=1,3 do
+			if SGroup_Exists("sg_DefilerDefenseRaptors"..i) and SGroup_Count("sg_DefilerDefenseRaptors"..i) > 0 then
+				Cmd_JumpToMarker("sg_DefilerDefenseRaptors"..i, "mkr_raptordefense_jump"..i)
+			end
+		end
+		
+		Rule_Remove(DefilerBaseDefenseAttack)
+		Rule_Remove(DefilerBaseDefenseAttGround)
+		Rule_AddOneShot(AttackWithMainForce, 5)
+	end
+end
+
+function AttackWithMainForce()
+	if SGroup_Exists("sg_DefilerBaseDefense") and SGroup_Count("sg_DefilerBaseDefense") > 0 then
+		Cmd_AttackMoveMarker("sg_DefilerBaseDefense", "mkr_defilerdefenseattmovemarker")
+	end
+	Rule_AddInterval(DidPlayerDie, 1)
+end
+
+function DefilerBaseDefenseAttGround()
+	for i=1,3 do
+		local Point = World_GetRand(1,8)
+		if SGroup_Exists("sg_DefilerDefenseDefilers"..i) and SGroup_Count("sg_DefilerDefenseDefilers"..i) > 0 then
+			Cmd_AttackGroundMarker("sg_DefilerDefenseDefilers"..i, "mkr_defiler_attackground"..Point)
+			-- MAYBE USE THIS COMMAND?:
+			--Util_AttackGroundMarkerRandomRadius
+		end
+	end
+end
+
+function DidPlayerDie()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_wruplayer1") == false and Player_AreSquadsNearMarker(g_Player1, "mkr_defilerbase") == false then
+		if SGroup_Exists("sg_DefilerBaseDefense") and SGroup_Count("sg_DefilerBaseDefense") > 0 then
+			Cmd_AttackMoveMarker("sg_DefilerBaseDefense", "mkr_pullback")
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_wruplayer1") == true then
+		if SGroup_Exists("sg_DefilerBaseDefense") and SGroup_Count("sg_DefilerBaseDefense") > 0 then
+			Cmd_AttackMoveMarker("sg_DefilerBaseDefense", "mkr_defilerdefenseattmovemarker")
+		end
+	end
+end
+
+function HereticSpawnAndRepair()
+	local Count = 1
+	local t_DamagedBuildings = {}
+	for i=1,11 do
+		if EGroup_GetAvgHealth("eg_ChaosSideBase2Building"..i) < 1 then
+			t_DamagedBuildings[Count] = i
+			Count = Count + 1
+		end
+	end
+
+	if table.getn(t_DamagedBuildings) > 0 then
+		Point = "eg_ChaosSideBase2Building"..t_DamagedBuildings[World_GetRand(1,table.getn(t_DamagedBuildings))]
+		if PopCheck(g_HereticCounter, "sg_Heretic", g_MaxHereticPop) and EGroup_Exists("eg_ChaosSideBase2Building1") and EGroup_Count("eg_ChaosSideBase2Building1") > 0 then
+			g_HereticCounter = g_HereticCounter + 1
+			Util_CreateSquadsAtMarkerEx(g_Player7, "sg_Heretic"..g_HereticCounter, "chaos_squad_slave", "mkr_sidebase2_hq", 1, 1)
+			Command_SquadEntity(g_Player7, "sg_Heretic"..g_HereticCounter, SCMD_Repair, Point)
+			if g_ForcedLaborFlag == false then
+				Rule_AddOneShot(TurnOnForcedLabor, 8)
+				g_ForcedLaborFlag = true
+			end
+		end
+	end
+end
+
+function TurnOnForcedLabor()
+	if SGroup_Exists("sg_Heretic"..g_HereticCounter) and SGroup_Count("sg_Heretic"..g_HereticCounter) > 0 then
+		Cmd_CastAbilitySelf("sg_Heretic"..g_HereticCounter,"chaos_forced_labor")
+		g_ForcedLaborFlag = false
+	end
+end
+
+function SpawnDreadnaughtBaseDefenseForce()
+	
+	SGroup_Create("sg_DreadnaughtBaseDefense")
+	-- space marines
+	for i=1,4 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseMarines"..i, "chaos_marine_squad", "mkr_dreadnaughtdefense_marines"..i, 1, 10)
+		SGroup_AddLeaders("sg_DreadnaughtDefenseMarines"..i)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseMarines"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefenseMarines"..i), 1),"chaos_heavy_bolter_tactical", World_GetRand(2,3))
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefenseMarines"..i), 1),"chaos_plasma_gun_tactical", World_GetRand(2,3))
+	end
+	
+	-- horrors
+	for i=1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseHorrors"..i, "chaos_squad_horror", "mkr_dreadnaughtdefense_horrors"..i, 1, 5)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseHorrors"..i)
+	end
+	
+	-- predators
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefensePredators"..i, "chaos_squad_predator", "mkr_dreadnaughtdefense_predator"..i, 1, 1)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefensePredators"..i)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+	end
+	
+	--dreadnoughts
+	for i=1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseDreadnaughts"..i, "chaos_squad_hell_talon", "mkr_dreadnaughtdefense_dn"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefenseDreadnaughts"..i), 1),"chaos_multi_melta_dreadnought", 1)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseDreadnaughts"..i)
+	end
+end
+
+function DreadnaughtBaseDefenseAttack()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_dreadnaughtbase_right") and g_RightDNBaseFlag == false then
+		-- deep strike obliterators (5)
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseObliterators1", "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseObliterators1")
+		SGroup_DeSpawn("sg_DreadnaughtDefenseObliterators1")
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_DreadnaughtDefenseObliterators1"), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_dreadnaughtdefense_obliterators3", "basic_marker")))
+		g_RightDNBaseFlag = true
+	end
+
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_dreadnaughtbase_left") and g_LeftDNBaseFlag == false then
+		-- deep strike obliterators (5)
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseObliterators2", "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseObliterators2")
+		SGroup_DeSpawn("sg_DreadnaughtDefenseObliterators2")
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_DreadnaughtDefenseObliterators2"), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_dreadnaughtdefense_obliterators2", "basic_marker")))
+		g_LeftDNBaseFlag = true
+	end
+	
+	--[[
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_dreadnaughtbase_front") and g_FrontDNBaseFlag == false then
+		-- deep strike obliterators (5)
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefenseObliterators3", "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefenseObliterators3")
+		SGroup_DeSpawn("sg_DreadnaughtDefenseObliterators3")
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_DreadnaughtDefenseObliterators3"), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_dreadnaughtdefense_obliterators1", "basic_marker")))
+		g_FrontDNBaseFlag = true
+	end	]]
+	
+	if g_FrontDNBaseFlag == true and g_LeftDNBaseFlag == true and g_RightDNBaseFlag == true then
+		Rule_Remove(DreadnaughtBaseDefenseAttack)
+	end
+end
+
+function SpawnMainBaseDefenseForce()
+
+	if g_TotalShrines <= 1 then
+		SGroup_Create("sg_MainBaseDefense")
+		-- possessed marines
+		for i=1,1 do -- 2
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefensePosdMarines"..i, "chaos_squad_possessed_marine", "mkr_mainbase_possessed"..i, 1, 10)
+			SGroup_AddLeaders("sg_MainDefensePosdMarines"..i)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefensePosdMarines"..i)
+		end
+		
+		-- space marines
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefenseMarines"..i, "chaos_marine_squad", "mkr_mainbase_marines"..i, 1, 10)
+			SGroup_AddLeaders("sg_MainDefenseMarines"..i)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseMarines"..i)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefenseMarines"..i), 1),"chaos_heavy_bolter_tactical", World_GetRand(2,3))
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefenseMarines"..i), 1),"chaos_plasma_gun_tactical", World_GetRand(2,3))
+		end
+		
+		-- horrors
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefenseHorrors"..i, "chaos_squad_horror", "mkr_mainbase_horrors"..i, 1, 5)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseHorrors"..i)
+		end
+		
+		-- predators
+		for i=1,1 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefensePredators"..i, "chaos_squad_predator", "mkr_mainbase_predators"..i, 1, 1)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefensePredators"..i)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+		end
+		
+		-- defiler
+		for i=1,1 do
+			Util_CreateSquadsAtMarkerEx(g_Player7, "sg_MainDefenseMains"..i, "chaos_squad_defiler", "mkr_mainbase_defilers"..i, 1, 1)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseMains"..i)
+		end
+		
+		-- cultists
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player8, "sg_MainDefenseCultists"..i, "chaos_squad_cultist", "mkr_mainbase_cultists"..i, 1, 10)
+			SGroup_AddLeaders("sg_MainDefenseCultists"..i)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseCultists"..i)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefenseCultists"..i), 1),"chaos_plasma_gun_cultist", World_GetRand(2,3))
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefenseCultists"..i), 1),"chaos_grenade_launcher", World_GetRand(2,3))
+		end
+		
+		for i=1,1 do -- 2
+			-- deep strike obliterators (5)
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefenseObliterators"..i, "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseObliterators"..i)
+			SGroup_DeSpawn("sg_MainDefenseObliterators"..i)
+			Squad_DeepStrikeToPos(SGroup_FromName("sg_MainDefenseObliterators"..i), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName("mkr_mainbase_obliterators"..i, "basic_marker")))
+		end	
+		
+		-- zerkers
+		for i=1,1 do -- 2
+			Util_CreateSquadsAtMarkerEx(g_Player7, "sg_MainDefenseZerker"..i, "chaos_squad_khorne_berserker", "mkr_mainbase_zerkers"..i, 1, 8)
+			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefenseZerker"..i)
+		end
+		
+		Rule_Remove(SpawnMainBaseDefenseForce)
+	end
+end
+
+function CheckForDefilerKill()
+	-- add the objective if
+	-- any defiler is killed
+	for i=1, g_DefilerCounter do
+		if SGroup_Exists("sg_Defiler"..i) and SGroup_Count("sg_Defiler"..i) == 0 then
+			Rule_AddInterval(Rule_Objective_DestroyDefilerBase, 1)
+			Rule_Remove(CheckForDefilerKill)
+			return
+		end
+	end
+	-- the player is anywhere near the base
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_wruplayer"..i) == true then
+			Rule_AddInterval(Rule_Objective_DestroyDefilerBase, 1)
+			Rule_Remove(CheckForDefilerKill)
+			return
+		end
+	end
+	-- or if the hq is dmged at all
+	if EGroup_Exists("eg_ChaosSideBaseHQ") and EGroup_Count("eg_ChaosSideBaseHQ") > 0 and EGroup_IsUnderAttack("eg_ChaosSideBaseHQ", true) then
+		Rule_AddInterval(Rule_Objective_DestroyDefilerBase, 1)
+		Rule_Remove(CheckForDefilerKill)
+		return
+	end
+end
+
+function Rule_Objective_DestroyDefilerBase()
+
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Exists("eg_ChaosSideBaseHQ") and EGroup_Count("eg_ChaosSideBaseHQ") == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyDefilerBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyDefilerBase)
+		Objective_PingRemove(Objective_DestroyDefilerBase.title_id, g_ping_obj)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyDefilerBase.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyDefilerBase, false)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyDefilerBase.title_id, "mkr_sidebase_hq", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_sidebase_hq", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			Objective_ShowScreen()
+			Rule_AddOneShot(DefilerIE, 10)
+		end
+	end
+end
+
+function CheckForDreadnaughtKill()
+	for i=1,5 do
+		if SGroup_Exists("sg_Dreadnoughts"..i) and SGroup_Count("sg_Dreadnoughts"..i) == 0 then
+			Rule_AddInterval(Rule_Objective_DestroyDreadnaughtBase, 1)
+			Rule_Remove(CheckForDreadnaughtKill)
+			return true
+		elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyDreadnaughtBase.title_id) == false and Player_AreSquadsNearMarker(g_Player1, "mkr_dreadnaughtarea") then
+			Rule_AddInterval(Rule_Objective_DestroyDreadnaughtBase, 1)
+			Rule_Remove(CheckForDreadnaughtKill)
+			return true
+		end
+	end
+end
+
+function Rule_Objective_DestroyDreadnaughtBase()
+
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Exists("eg_ChaosSideBase2Building1") and EGroup_Count("eg_ChaosSideBase2Building1") == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyDreadnaughtBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyDreadnaughtBase)
+		Objective_PingRemove(Objective_DestroyDreadnaughtBase.title_id, g_ping_obj)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyDreadnaughtBase.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyDreadnaughtBase, false)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyDreadnaughtBase.title_id, "mkr_sidebase2_hq", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_sidebase2_hq", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			Objective_ShowScreen()
+			Rule_AddOneShot(DreadnoughtIE, 10)
+		end
+	end
+end
+
+function Rule_Objective_DestroyStronghold()
+
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Exists("eg_ChaosHQ") and EGroup_Count("eg_ChaosHQ") == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyStronghold.title_id )
+		Rule_Remove( Rule_Objective_DestroyStronghold)
+		Objective_PingRemove(Objective_DestroyStronghold.title_id, g_ping_obj)
+		Rule_AddOneShot(CompleteScenario, 10)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyStronghold.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyStronghold, true)
+			Rule_AddInterval(Rule_ShrineObjective, 13)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyStronghold.title_id, "mkr_mainbase_hq", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_mainbase_hq", false, "default")
+			Objective_SetDefaultPrimary(g_PrimaryObjectives)
+			g_PrimaryObjectives = g_PrimaryObjectives + 1
+			Rule_AddOneShot(IntroIE, 20)
+		end
+	end
+end
+
+function Rule_ShrineObjective()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and g_TotalShrines == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyShrines.title_id )
+		Rule_Remove( Rule_ShrineObjective)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyShrines.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Objective_SubAdd(Objective_DestroyShrines, Objective_DestroyStronghold.title_id)
+			for i=1,5 do
+				g_ping_obj_shrine[i] = Objective_PingMarker(Objective_DestroyShrines.title_id, "mkr_shrine"..i, true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_shrine"..i, false, "default")
+			end
+			Objective_SetDefaultPrimary(g_PrimaryObjectives)
+			g_PrimaryObjectives = g_PrimaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			--CreateCounter()
+			--Rule_AddInterval(Display_ChaosStormPower, 1)
+			Rule_AddInterval(PingShrinesEveryXSeconds, g_PingShrinesEveryXSeconds)
+		end
+	end
+	
+end
+
+function CreateCounter()
+
+	UI_ShowCountDXP("ChaosStorm", g_Player1, 3950030, g_CounterDisplay )
+	
+end
+
+function Display_ChaosStormPower()
+	
+	if g_TotalShrines == 5 then
+		g_CounterDisplay = 100
+	elseif g_TotalShrines == 4 then
+		g_CounterDisplay =  91
+	elseif g_TotalShrines == 3 then
+		g_CounterDisplay = 82
+	elseif g_TotalShrines == 2 then
+		g_CounterDisplay = 69
+	elseif g_TotalShrines == 1 then
+		g_CounterDisplay = 42
+	elseif g_TotalShrines == 0 then
+		g_CounterDisplay = 0
+		if EGroup_Exists("eg_ChaosHQ") and EGroup_Count("eg_ChaosHQ") == 0 then
+			Rule_Remove(Display_ChaosStormPower)
+			UI_HideCount( "ChaosStorm" )
+			return Display
+		end
+	end
+	UI_ShowCountUpdateDxp("ChaosStorm", g_CounterDisplay, 3950030)
+end
+
+function PingShrinesEveryXSeconds()
+	for i=1,5 do
+		if EGroup_Exists("eg_Shrine"..i) and EGroup_GetAvgHealth("eg_Shrine"..i) > 0 then
+			Ping_Marker("mkr_shrine"..i, false, "default")
+		end
+	end
+end
+
+
+function CompleteScenario()
+	Rule_RemoveAll()
+	-- JOSH: uncomment the lines in this function to make the closing nis play.
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Closing )
+	end
+	Rule_AddInterval(CompleteScenarioWin, 1)
+end
+
+function CompleteScenarioWin()
+	if Event_IsAnyRunning() == false then
+		World_SetGameOver() 	
+	end
+end
+
+
+function SpawnSorcererAttack()
+	Player_GrantResearch(g_Player2, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player3, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player4, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player5, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player6, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player7, "chaos_sorcerer_research_1")
+	Player_GrantResearch(g_Player8, "chaos_sorcerer_research_1")
+	
+	Player_GrantResearch(g_Player2, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player3, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player4, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player5, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player6, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player7, "chaos_sorcerer_research_2")
+	Player_GrantResearch(g_Player8, "chaos_sorcerer_research_2")
+	
+	Util_CreateSquadsAtMarkerEx(g_Player7, "sg_SorcererAttack", "chaos_squad_sorcerer_sp_dxp3", "mkr_sorcerer", 1, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player7, "sg_SorcererAttackSquad", "chaos_squad_khorne_berserker", "mkr_sorcerer", 1, 8)
+	--Cmd_AttachSquads("sg_SorcererAttackSquad", "sg_SorcererAttack")
+end
+
+function SorcererAttack()
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_sorcererattack"..i) then
+			Util_StartIntel(EVENTS.IE_SorcererAmbush)
+			if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+				Player_GetAllSquadsNearMarker(g_Player1, "sg_SquadsNearSorcerer", "mkr_sorcererattack"..i)
+				Cmd_CastAbilitySGroup("sg_SorcererAttack", "chaos_chains_of_torment", "sg_SquadsNearSorcerer")
+				Rule_AddOneShot(CastSpell1, 3)
+				Rule_Remove(SorcererAttack)
+				return
+			elseif SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") == 0 then
+				Rule_Remove(SorcererAttack)
+				return
+			end
+		end
+	end
+end
+
+function CastSpell1()
+	if SGroup_Exists("sg_SquadsNearSorcerer") and SGroup_Count("sg_SquadsNearSorcerer") > 0 then
+		if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+			Cmd_CastAbilityPos("sg_SorcererAttack", "chaos_corruption", SGroup_GetPosition("sg_SquadsNearSorcerer"))
+			Rule_AddOneShot(CastSpell2, 3)
+		end
+	end
+end
+
+function CastSpell2()
+	if SGroup_Exists("sg_SquadsNearSorcerer") and SGroup_Count("sg_SquadsNearSorcerer") > 0 then
+		if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+			Cmd_CastAbilityPos("sg_SorcererAttack", "chaos_doombolt", SGroup_GetPosition("sg_SquadsNearSorcerer"))
+			Rule_AddOneShot(TeleportOut, 4)
+		end
+	end
+end
+
+function TeleportOut()
+	if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+		Cmd_JumpToMarker("sg_SorcererAttack", "mkr_mainbase_barracks")
+		Rule_Remove(TeleportOut)	
+		Rule_AddInterval(UseSkillsOnPlayerBase, 1)
+	end
+end
+
+function UseSkillsOnPlayerBase()
+	for i=1,2 do
+		if Prox_AnySquadNearMarker("sg_SorcererAttack", "mkr_playerbase_attack"..i) then
+			if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+					Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerBaseUnits", "mkr_playerbase_area"..i)
+					if SGroup_Exists("sg_PlayerBaseUnits") and SGroup_CountSpawned("sg_PlayerBaseUnits") > 0 then
+						SGroup_Create("sg_PlayerBaseSorcererTarget")
+						SGroup_Add("sg_PlayerBaseSorcererTarget",SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_PlayerBaseUnits"), World_GetRand(1, SGroup_Count("sg_PlayerBaseUnits"))))
+						Cmd_CastAbilitySGroup("sg_SorcererAttack", "chaos_chains_of_torment", "sg_PlayerBaseSorcererTarget")
+						Rule_AddOneShot(CastSpell1_Playerbase, 3)
+						Rule_Remove(UseSkillsOnPlayerBase)
+						return true
+					end
+			end		
+		end
+	end
+end
+
+function CastSpell1_Playerbase()
+	if SGroup_Exists("sg_PlayerBaseSorcererTarget") and SGroup_Count("sg_PlayerBaseSorcererTarget") > 0 then
+		if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+			Cmd_CastAbilityPos("sg_SorcererAttack", "chaos_corruption", SGroup_GetPosition("sg_PlayerBaseSorcererTarget"))
+			Rule_AddOneShot(CastSpell2_Playerbase, 3)
+		end
+	end
+end
+
+function CastSpell2_Playerbase()
+	if SGroup_Exists("sg_PlayerBaseSorcererTarget") and SGroup_Count("sg_PlayerBaseSorcererTarget") > 0 then
+		if SGroup_Exists("sg_SorcererAttack") and SGroup_Count("sg_SorcererAttack") > 0 then
+			Cmd_CastAbilityPos("sg_SorcererAttack", "chaos_doombolt", SGroup_GetPosition("sg_PlayerBaseSorcererTarget"))
+		end
+	end
+end
+
+function SpawnChaosLord()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_shrinearea2") then
+		Util_StartIntel(EVENTS.IE_LordAmbush)
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_LordAttack", "chaos_squad_lord", "mkr_mainbase_barracks", 1, 1)
+		Cmd_AttackMoveMarker("sg_LordAttack", "mkr_shrinearea2")
+		Rule_Remove(SpawnChaosLord)
+		Rule_AddInterval(DaemonPrince, 1)
+	end
+end
+
+function DaemonPrince()
+	if Prox_AllSquadsNearMarker("sg_LordAttack", "mkr_shrinearea2") or SGroup_GetAvgHealth("sg_LordAttack") < .9 then
+		if SGroup_Exists("sg_LordAttack") and SGroup_Count("sg_LordAttack") > 0 then
+			Player_GrantResearch(g_Player2, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player3, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player4, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player5, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player6, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player7, "chaos_daemon_prince_research")
+			Player_GrantResearch(g_Player8, "chaos_daemon_prince_research")
+			
+			Player_GrantResearch(g_Player2, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player3, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player4, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player5, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player6, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player7, "chaos_lord_research_1")
+			Player_GrantResearch(g_Player8, "chaos_lord_research_1")
+			
+			Player_GrantResearch(g_Player2, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player3, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player4, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player5, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player6, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player7, "chaos_lord_research_2")
+			Player_GrantResearch(g_Player8, "chaos_lord_research_2")
+			
+			Cmd_Possesion("sg_LordAttack")
+			Rule_Remove(DaemonPrince)
+			Rule_AddInterval(DaemonPrincePowers, 6)
+		end		
+	end
+end
+
+function DaemonPrincePowers()
+	if SGroup_Exists("sg_LordAttack") and SGroup_Count("sg_LordAttack") > 0 then
+		if SGroup_Exists("sg_LordAttackSquad") and SGroup_Count("sg_LordAttackSquad") > 0 then
+			Cmd_CastAbilitySelf("sg_LordAttack", "chaos_daemon_strength_daemon_prince")
+			Rule_Remove(DaemonPrincePowers)
+			Rule_AddInterval(DaemonPrincePowers2, 7)
+		end
+	end
+end
+
+function DaemonPrincePowers2()
+	if SGroup_Exists("sg_LordAttack") and SGroup_Count("sg_LordAttack") > 0 then
+		Cmd_CastAbilitySelf("sg_LordAttack", "chaos_fear_roar")
+		Rule_AddInterval(DaemonPrinceWander, 10)
+		Rule_AddInterval(DaemonPrinceDefenseWander, 10)
+		Rule_Remove(DaemonPrincePowers2)
+	end
+end
+
+function DaemonPrinceWander()
+	if SGroup_Exists("sg_LordAttack") and SGroup_Count("sg_LordAttack") > 0 then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_shrinearea2") == false and EGroup_Exists("eg_Shrine2") and EGroup_Count("eg_Shrine2") == 0 then
+			SGroup_SetPlayerOwner("sg_LordAttack", g_Player2)
+			Cmd_AttackMoveMarker("sg_LordAttack", "mkr_wander8")
+			Rule_Remove(DaemonPrinceWander)
+		end
+	end
+end
+
+function DaemonPrinceDefenseWander()
+	if SGroup_Exists("sg_LordAttackSquad") and SGroup_Count("sg_LordAttackSquad") > 0 then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_shrinearea2") == false and EGroup_Exists("eg_Shrine2") and EGroup_Count("eg_Shrine2") == 0 then
+			SGroup_SetPlayerOwner("sg_LordAttackSquad", g_Player2)
+			Cmd_AttackMoveMarker("sg_LordAttackSquad", "mkr_wander8")
+			Rule_Remove(DaemonPrinceDefenseWander)
+		end
+	end
+end
+
+function StartSecondaryObjectives()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_cityentrance") then
+		Rule_AddOneShot(EnterCity, 5)
+		Rule_AddOneShot(CityMusing, 240)
+		Rule_AddInterval(Obliterator_Horrors, 1)
+		g_SecondaryObjectiveFlag = true
+		Rule_Remove(StartSecondaryObjectives)
+	end
+end
+
+function SpawnCityEntranceDefenseForce()
+
+	SGroup_CreateIfNotFound("sg_CityD")
+	-- space marines
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_CityDefenseMarines"..i, "chaos_marine_squad", "mkr_cityentrance_marines"..i, 1, 10)
+		SGroup_AddLeaders("sg_CityDefenseMarines"..i)
+		SGroup_AddGroup("sg_CityD", "sg_CityDefenseMarines"..i)
+	end
+	
+	-- cultists
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player6, "sg_CityDefenseCultists"..i, "chaos_squad_cultist", "mkr_cityentrance_cultists"..i, 1, 10)
+		SGroup_AddLeaders("sg_CityDefenseCultists"..i)
+		SGroup_AddGroup("sg_CityD", "sg_CityDefenseCultists"..i)
+	end
+	
+	-- raptors
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_CityDefenseRaptors"..i, "chaos_squad_raptor", "mkr_cityentrance_raptors"..i, 1, 10)
+		SGroup_AddLeaders("sg_CityDefenseRaptors"..i)
+		SGroup_AddGroup("sg_CityD", "sg_CityDefenseRaptors"..i)
+	end
+	
+	Rule_AddInterval(CityDefenseRage, 2)
+	Rule_Remove(SpawnCityEntranceDefenseForce)
+	
+end
+
+function CityDefenseBreached()
+	local flag = false
+	g_CityDBreachedCounter = g_CityDBreachedCounter + 1
+	if g_CityDBreachedCounter >= g_CityDBreachedTimer then
+		flag = true
+	end
+	
+	if (SGroup_Exists("sg_CityD") and SGroup_Count("sg_CityD") <= 1) or flag == true or EGroup_IsCapturedByPlayer("eg_LP1", g_Player1, true) then
+		Rule_AddInterval(SpawnDefilers, g_SpawnDefilerTimer)
+		Rule_AddInterval(SpawnDreadnoughts, g_SpawnDreadnoughtTimer)
+		Rule_AddInterval(SpawnDaemonsAtShrines, g_SpawnShrineDaemonTimer)
+		Rule_Remove(CityDefenseBreached)
+	end
+end
+
+function CityDefenseRage()
+	for i=1,2 do
+		if SGroup_Exists("sg_CityDefenseMarines"..i) and SGroup_Count("sg_CityDefenseMarines"..i) > 0 and SGroup_GetAvgHealth("sg_CityDefenseMarines"..i) < .92 and SGroup_HasLeader("sg_CityDefenseMarines"..i, true) then
+			Cmd_CastAbilitySelf("sg_CityDefenseMarines"..i, "chaos_furious_rage")
+		end
+	end
+	
+	for i=1,2 do
+		if SGroup_Exists("sg_CityDefenseCultists"..i) and SGroup_Count("sg_CityDefenseCultists"..i) > 0 and SGroup_GetAvgHealth("sg_CityDefenseCultists"..i) < .92 and SGroup_HasLeader("sg_CityDefenseCultists"..i, true) then
+			Cmd_CastAbilitySelf("sg_CityDefenseCultists"..i, "chaos_furious_rage")
+		end
+	end
+	
+	for i=1,1 do
+		if SGroup_Exists("sg_CityDefenseRaptors"..i) and SGroup_Count("sg_CityDefenseRaptors"..i) > 0 and SGroup_GetAvgHealth("sg_CityDefenseRaptors"..i) < .92 and SGroup_HasLeader("sg_CityDefenseRaptors"..i, true) then
+			Cmd_CastAbilitySelf("sg_CityDefenseRaptors"..i, "chaos_furious_rage")
+		end
+	end
+end
+
+
+function Rule_GrantResearch()
+	
+	if g_ResearchCounter == 0 then
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_01_manreaper_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_02_accursed_crozius_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_03_plasma_pistol_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_04_melta_gun_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_05_helm_of_lorgar_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_06_daemonic_armor_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_07_daemonic_gauntlets_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_08_runic_boots_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_09_banner_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_10_daemonic_ascension_research")
+		Player_GrantResearch(g_Player2, "chaos_wargear_upgrade_research")
+		
+	end
+	
+	g_ResearchCounter = g_ResearchCounter + 1
+	
+	if g_ResearchCounter == 1 then
+		Player_GrantResearch(g_Player2, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player3, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player4, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player5, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player6, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player7, "chaos_accuracy_upgrade_research")
+		Player_GrantResearch(g_Player8, "chaos_accuracy_upgrade_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player3, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player4, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player5, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player6, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player7, "chaos_max_weapons_research")
+		Player_GrantResearch(g_Player8, "chaos_max_weapons_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player3, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player4, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player5, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player6, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player7, "chaos_frag_grenade_research")
+		Player_GrantResearch(g_Player8, "chaos_frag_grenade_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player3, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player4, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player5, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player6, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player7, "chaos_move_through_cover_research")
+		Player_GrantResearch(g_Player8, "chaos_move_through_cover_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player3, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player4, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player5, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player6, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player7, "chaos_purge_the_weak")
+		Player_GrantResearch(g_Player8, "chaos_purge_the_weak")
+		
+		Player_GrantResearch(g_Player2, "chaos_research")
+		Player_GrantResearch(g_Player3, "chaos_research")
+		Player_GrantResearch(g_Player4, "chaos_research")
+		Player_GrantResearch(g_Player5, "chaos_research")
+		Player_GrantResearch(g_Player6, "chaos_research")
+		Player_GrantResearch(g_Player7, "chaos_research")
+		Player_GrantResearch(g_Player8, "chaos_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player3, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player4, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player5, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player6, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player7, "chaos_berserker_fear_research")
+		Player_GrantResearch(g_Player8, "chaos_berserker_fear_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player3, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player4, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player5, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player6, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player7, "chaos_plasma_pistol_research")
+		Player_GrantResearch(g_Player8, "chaos_plasma_pistol_research")
+		
+		
+	elseif g_ResearchCounter ==2 then
+		Player_GrantResearch(g_Player2, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player3, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player4, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player5, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player6, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player7, "chaos_champion_melee_research_1")
+		Player_GrantResearch(g_Player8, "chaos_champion_melee_research_1")
+		
+		Player_GrantResearch(g_Player2, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player3, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player4, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player5, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player6, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player7, "chaos_health_upgrade_research")
+		Player_GrantResearch(g_Player8, "chaos_health_upgrade_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_projectiles")
+		Player_GrantResearch(g_Player3, "chaos_projectiles")
+		Player_GrantResearch(g_Player4, "chaos_projectiles")
+		Player_GrantResearch(g_Player5, "chaos_projectiles")
+		Player_GrantResearch(g_Player6, "chaos_projectiles")
+		Player_GrantResearch(g_Player7, "chaos_projectiles")
+		Player_GrantResearch(g_Player8, "chaos_projectiles")
+		
+	elseif g_ResearchCounter ==3 then
+		Player_GrantResearch(g_Player2, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player3, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player4, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player5, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player6, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player7, "chaos_accuracy_upgrade_research_2")
+		Player_GrantResearch(g_Player8, "chaos_accuracy_upgrade_research_2")
+		
+		Player_GrantResearch(g_Player2, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player3, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player4, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player5, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player6, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player7, "chaos_commander_health_research_1")
+		Player_GrantResearch(g_Player8, "chaos_commander_health_research_1")
+		
+		Player_GrantResearch(g_Player2, "chaos_power_research_1")
+		Player_GrantResearch(g_Player3, "chaos_power_research_1")
+		Player_GrantResearch(g_Player4, "chaos_power_research_1")
+		Player_GrantResearch(g_Player5, "chaos_power_research_1")
+		Player_GrantResearch(g_Player6, "chaos_power_research_1")
+		Player_GrantResearch(g_Player7, "chaos_power_research_1")
+		Player_GrantResearch(g_Player8, "chaos_power_research_1")
+		
+		Player_GrantResearch(g_Player2, "chaos_cultist_sight_research")
+		Player_GrantResearch(g_Player3, "chaos_cultist_sight_research")
+		Player_GrantResearch(g_Player4, "chaos_cultist_sight_research")
+		Player_GrantResearch(g_Player5, "chaos_cultist_sight_research")
+		Player_GrantResearch(g_Player6, "chaos_cultist_sight_research")
+		Player_GrantResearch(g_Player7, "chaos_cultist_sight_research")
+		
+	elseif g_ResearchCounter ==4 then
+		Player_GrantResearch(g_Player2, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player3, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player4, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player5, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player6, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player7, "chaos_health_upgrade_research_2")
+		Player_GrantResearch(g_Player8, "chaos_health_upgrade_research_2")
+		
+	elseif g_ResearchCounter ==5 then
+		Player_GrantResearch(g_Player2, "chaos_power_research_2")
+		Player_GrantResearch(g_Player3, "chaos_power_research_2")
+		Player_GrantResearch(g_Player4, "chaos_power_research_2")
+		Player_GrantResearch(g_Player5, "chaos_power_research_2")
+		Player_GrantResearch(g_Player6, "chaos_power_research_2")
+		Player_GrantResearch(g_Player7, "chaos_power_research_2")
+		Player_GrantResearch(g_Player8, "chaos_power_research_2")
+		
+		Player_GrantResearch(g_Player2, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player3, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player4, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player5, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player6, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player7, "chaos_ranged_skill_research")
+		Player_GrantResearch(g_Player8, "chaos_ranged_skill_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player3, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player4, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player5, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player6, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player7, "chaos_champion_melee_research_2")
+		Player_GrantResearch(g_Player8, "chaos_champion_melee_research_2")
+		
+	elseif g_ResearchCounter ==6 then
+		Player_GrantResearch(g_Player2, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player3, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player4, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player5, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player6, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player7, "chaos_commander_health_research_2")
+		Player_GrantResearch(g_Player8, "chaos_commander_health_research_2")
+		
+		Player_GrantResearch(g_Player2, "chaos_raptor_research")
+		Player_GrantResearch(g_Player3, "chaos_raptor_research")
+		Player_GrantResearch(g_Player4, "chaos_raptor_research")
+		Player_GrantResearch(g_Player5, "chaos_raptor_research")
+		Player_GrantResearch(g_Player6, "chaos_raptor_research")
+		Player_GrantResearch(g_Player7, "chaos_raptor_research")
+		Player_GrantResearch(g_Player8, "chaos_raptor_research")
+		
+	elseif g_ResearchCounter ==7 then
+		Player_GrantResearch(g_Player2, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player3, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player4, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player5, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player6, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player7, "chaos_furious_charge_research")
+		Player_GrantResearch(g_Player8, "chaos_furious_charge_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player3, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player4, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player5, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player6, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player7, "chaos_possessed_daemon_fire_research")
+		Player_GrantResearch(g_Player8, "chaos_possessed_daemon_fire_research")
+		
+	elseif g_ResearchCounter ==8 then
+		Player_GrantResearch(g_Player2, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player3, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player4, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player5, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player6, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player7, "chaos_possessed_daemon_flight_research")
+		Player_GrantResearch(g_Player8, "chaos_possessed_daemon_flight_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player3, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player4, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player5, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player6, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player7, "chaos_possessed_daemon_talons_research")
+		Player_GrantResearch(g_Player8, "chaos_possessed_daemon_talons_research")
+		
+		Player_GrantResearch(g_Player2, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player3, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player4, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player5, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player6, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player7, "chaos_possessed_daemon_visage_research")
+		Player_GrantResearch(g_Player8, "chaos_possessed_daemon_visage_research")		
+		
+	elseif g_ResearchCounter ==9 then
+		Player_GrantResearch(g_Player2, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player3, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player4, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player5, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player6, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player7, "chaos_possessed_daemon_mutation_research")
+		Player_GrantResearch(g_Player8, "chaos_possessed_daemon_mutation_research")
+		
+		--[[Player_GrantResearch(g_Player2, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player3, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player4, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player5, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player6, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player7, "chaos_infiltration_marine_research")
+		Player_GrantResearch(g_Player8, "chaos_infiltration_marine_research")]]
+		
+		--[[Player_GrantResearch(g_Player2, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player3, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player4, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player5, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player6, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player7, "chaos_infiltration_research")
+		Player_GrantResearch(g_Player8, "chaos_infiltration_research")]]
+		
+	elseif g_ResearchCounter ==10 then
+		Rule_Remove(Rule_GrantResearch)
+	end	
+end
+
+function Obliterator_Horrors()
+	-- cooldown
+	if g_OblitAndHorrorOKToDropFlag == false then
+		g_OblitAndHorrorCooldown = g_OblitAndHorrorCooldown + 1
+		if g_OblitAndHorrorCooldown >= g_OblitAndHorrorInPlayerBaseCooldown then
+			g_OblitAndHorrorOKToDropFlag = true
+			g_OblitAndHorrorCooldown = 0
+		end
+	end
+	
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_playerbase_area"..i) then
+			for j=1,g_OblitAndHorrorCounter do
+				if SGroup_Exists("sg_PlayerBaseHorror"..j) and SGroup_Count("sg_PlayerBaseHorror"..j) then
+					if Prox_AnySquadNearMarker("sg_PlayerBaseHorror"..j, "mkr_playerbase_area"..i) then
+						--Cmd_AttackMoveMarker("sg_PlayerBaseHorror"..j, "mkr_Player_HQ")
+						Cmd_AttackMovePos("sg_PlayerBaseHorror"..j, g_GlobalAttackPos)
+					end
+				end
+				if SGroup_Exists("sg_PlayerBaseOblit"..j) and SGroup_Count("sg_PlayerBaseOblit"..j) then
+					if Prox_AnySquadNearMarker("sg_PlayerBaseOblit"..j, "mkr_playerbase_area"..i) then
+						--Cmd_AttackMoveMarker("sg_PlayerBaseOblit"..j, "mkr_Player_HQ")
+						Cmd_AttackMovePos("sg_PlayerBaseOblit"..j, g_GlobalAttackPos)
+					end
+				end
+			end
+		end
+	end
+	
+	-- hmm, if the p2 units are in the area for a long time, this check is going to eventually pass... rethink this one
+	if World_GetRand(1,10) > 8 then
+		if (Player_AreSquadsNearMarker(g_Player2, "mkr_playerbase_area1") or Player_AreSquadsNearMarker(g_Player2, "mkr_playerbase_area2")) and g_OblitAndHorrorOKToDropFlag == true then
+			g_OblitAndHorrorOKToDropFlag = false
+			SGroup_CreateIfNotFound("sg_P2SquadsInPlayerBase1")
+			SGroup_CreateIfNotFound("sg_P2SquadsInPlayerBase2")
+			SGroup_Clear("sg_P2SquadsInPlayerBase1")
+			SGroup_Clear("sg_P2SquadsInPlayerBase2")
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_P2SquadsInPlayerBase1", "mkr_playerbase_area1")
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_P2SquadsInPlayerBase2", "mkr_playerbase_area2")
+			
+			local Drop = ""
+			if SGroup_Count("sg_P2SquadsInPlayerBase1") > SGroup_Count("sg_P2SquadsInPlayerBase2") then
+				Drop = "mkr_playerbase_area1"
+			else
+				Drop = "mkr_playerbase_area2"
+			end
+			
+			if g_Difficulty == 2 then
+				-- horrors
+				if PopCheck(g_OblitAndHorrorCounter, "sg_PlayerBaseHorror", 1) then
+					g_OblitAndHorrorCounter = g_OblitAndHorrorCounter + 1
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_PlayerBaseHorror"..g_OblitAndHorrorCounter, "chaos_squad_horror", "mkr_mainbase_hq", 1, 5)
+					SGroup_DeSpawn("sg_PlayerBaseHorror"..g_OblitAndHorrorCounter)
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_PlayerBaseHorror"..g_OblitAndHorrorCounter), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName(Drop, "basic_marker")))
+				end
+			elseif g_Difficulty == 3 then
+				-- horrors and obliterators
+				if PopCheck(g_OblitAndHorrorCounter, "sg_PlayerBaseHorror", 1) then
+					g_OblitAndHorrorCounter = g_OblitAndHorrorCounter + 1
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_PlayerBaseHorror"..g_OblitAndHorrorCounter, "chaos_squad_horror", "mkr_mainbase_hq", 1, 5)
+					SGroup_DeSpawn("sg_PlayerBaseHorror"..g_OblitAndHorrorCounter)
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_PlayerBaseHorror"..g_OblitAndHorrorCounter), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName(Drop, "basic_marker")))
+				end
+				if PopCheck(g_OblitAndHorrorCounter, "sg_PlayerBaseOblit", 1) then
+					g_OblitAndHorrorCounter = g_OblitAndHorrorCounter + 1
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_PlayerBaseOblit"..g_OblitAndHorrorCounter, "chaos_squad_obliterator", "mkr_mainbase_hq", 1, 5)
+					SGroup_DeSpawn("sg_PlayerBaseOblit"..g_OblitAndHorrorCounter)
+					Squad_DeepStrikeToPos(SGroup_FromName("sg_PlayerBaseOblit"..g_OblitAndHorrorCounter), "chaos_sacrificial_circle", Marker_GetPosition(Marker_FromName(Drop, "basic_marker")))
+				end
+			elseif g_Difficulty == 1 then
+				Rule_Remove(Obliterator_Horrors)
+				return
+			end
+		end
+	end
+end
+
+function IntelligentlyMoveAttacks()
+	if EGroup_Exists("eg_Player_HQ") and EGroup_Count("eg_Player_HQ") == 0 then
+		-- find the next HQ to attack
+		Race = MetaMap_GetPlayerNRaceName(0)
+		if Race == "chaos_marine_race" then
+			hqbp = "chaos_hq"
+		elseif Race == "guard_race" then
+			hqbp = "guard_hq"
+		elseif Race == "ork_race" then	
+			hqbp = "ork_hq"
+		elseif Race == "space_marine_race" then
+			hqbp = "space_marine_hq"
+		elseif Race == "tau_race" then
+			hqbp = "tau_hq"
+		elseif Race == "necron_race" then
+			hqbp = "monolith"
+		elseif Race == "eldar_race" then
+			hqbp = "eldar_hq"
+		elseif Race == "dark_eldar_race" then
+			hqbp = "dark_eldar_hq"
+		elseif Race == "sisters_race" then
+			hqbp = "sisters_hq"
+		end
+		Player_GetEntities( g_Player1 )
+		if EGroup_Exists("__Player1000Entities") and EGroup_CountSpawned("__Player1000Entities") > 0 then
+			EGroup_CreateIfNotFound("eg_targettemp")
+			EGroup_CreateIfNotFound("eg_GlobalAttackTarget")
+			EGroup_Clear("eg_targettemp")
+			EGroup_Clear("eg_GlobalAttackTarget")
+			Util_GetEntitiesByBP( "__Player1000Entities", "eg_targettemp", hqbp )
+			if EGroup_Exists("eg_targettemp") and EGroup_Count("eg_targettemp") > 0 then
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_targettemp"), 1))
+			end
+			if EGroup_Exists("eg_GlobalAttackTarget") and EGroup_Count("eg_GlobalAttackTarget") > 0 then
+				-- pick the first item in the egroup to attack 
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			else
+				-- search for another building to attack
+				EGroup_Clear("eg_GlobalAttackTarget")
+				local Rand = World_GetRand(1,EGroup_CountSpawned("__Player1000Entities"))
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("__Player1000Entities"), Rand))
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			end
+		else
+			-- the player should lose if they have no entities left
+			Lose()
+		end
+	else
+		g_GlobalAttackPos = EGroup_GetPosition("eg_Player_HQ")
+	end
+end
+
+function Lose()
+	if Player_HasBuildingsExcept(g_Player1, t_building_exceptions) == false then
+		if Player_HasSquadsExcept(g_Player1, t_unit_exceptions ) == false then
+			Rule_RemoveAll()
+			Fade_Start(4, false)
+			World_SetTeamWin( g_Player2, "" )
+			Rule_AddIntervalEx( GameOver,5,1 )
+		end
+	end
+end
+
+function GameOver()
+	World_SetGameOver()
+end
+
+--[[(((((((((((((IE's)))))))))))))]]
+
+function IntroIE()
+	if MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_Intro)
+	else
+		Util_StartIntel(EVENTS.IE_Intro)
+	end	
+end
+
+function EnterMainBaseEarlyIE()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_area") and g_TotalShrines >= 1 then
+		Util_StartIntel(EVENTS.IE_EnterMainBaseEarly)
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+			Util_StartIntel(EVENTS.IE_Necron_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+			Util_StartIntel(EVENTS.IE_SM_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_DontEnterCityEarly)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_DontEnterCityEarly)
+		end
+		Rule_Remove(EnterMainBaseEarlyIE)
+	end
+end
+
+function ShrineIEs()
+	if g_TotalShrines == 4 and t_ShrineIE[4] == false then
+		t_ShrineIE[4] = true
+		Util_StartIntel(EVENTS.IE_Shrine_FirstKill)
+	elseif g_TotalShrines == 2 and t_ShrineIE[2] == false then
+		t_ShrineIE[2] = true
+		Util_StartIntel(EVENTS.IE_Shrine_ThirdKill)
+	elseif g_TotalShrines == 1 and t_ShrineIE[1] == false then
+		t_ShrineIE[1] = true
+		Util_StartIntel(EVENTS.IE_Shrine_FourthKill)
+	elseif g_TotalShrines == 0 and t_ShrineIE[3] == false then
+		t_ShrineIE[3] = true
+		Util_StartIntel(EVENTS.IE_Shrine_FifthKill)
+		Rule_Remove(ShrineIEs)
+	end
+end
+
+function DefilerIE()
+	Util_StartIntel(EVENTS.IE_Defiler_FirstKill)
+end
+
+function DreadnoughtIE()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_FirstAirKill)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_FirstAirKill)
+	end
+end
+
+function TrapIE()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_CornerAmbush)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_CornerAmbush)
+	end
+end
+
+function EnterCity()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_EnterCity)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_EnterCity)
+	end
+end
+
+function CityMusing()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_Muses)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_Muses)
+	end
+end
+
+function DaemonsFromShrineIE()
+	local flag = false
+	for i=1,5 do
+		if EGroup_Exists("eg_Shrine"..i) and EGroup_Count("eg_Shrine"..i) > 0 then
+			if EGroup_GetAvgHealth("eg_Shrine"..i) < 1 then
+				Rule_Remove(DaemonsFromShrineIE)
+				flag = true
+			end
+		end
+	end
+	
+	if flag == true then
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+			Util_StartIntel(EVENTS.IE_Necron_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+			Util_StartIntel(EVENTS.IE_SM_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_SeeFirstShrine)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_SeeFirstShrine)
+		end
+	end
+end
+
+function FinalFightIE()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_area") then
+		if g_TotalShrines == 0 then
+			Util_StartIntel(EVENTS.IE_FinalFight)
+			Rule_Remove(FinalFightIE)
+		end
+	end
+end

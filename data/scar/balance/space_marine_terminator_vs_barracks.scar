@@ -1,0 +1,32 @@
+-------------------------------------------------
+--IMPORTS
+-------------------------------------------------
+import("ScarUtil.scar")
+import("BalanceTool.scar")
+
+function OnInit()
+	load_out_table =
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	g_Player1 = World_GetPlayerAt(0)
+	g_Player2 = World_GetPlayerAt(1)
+	
+	local marker = Marker_FromName( "marker1", "basic_marker" )
+	local pos = Marker_GetPosition( marker )
+	local entity = Entity_Create( "space_marine_barracks", g_Player1, pos )
+	Entity_Spawn( entity ) 
+	
+	local sgroup = Balance_CreateSquadsAtMarkerByResource( g_Player2, "foogroup", "space_marine_squad_terminator", load_out_table, "marker2", 10000, 10000 )
+	Command_Squad( g_Player2, sgroup, SCMD_StanceMelee )
+end
+
+Balance_SetInit( OnInit )

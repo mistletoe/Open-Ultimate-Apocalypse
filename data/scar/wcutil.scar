@@ -1,0 +1,251 @@
+----------------------------------------------------------------------------------------------------------------
+-- WCUtil.scar
+--  Holds common functions for win conditions
+--	
+--
+-- (c) 2004 Relic Entertainment Inc.
+import("ScarUtil.scar")
+
+--[[
+SettingsTable = 
+{
+	----------------------------------------------------------------------------------------------------------------
+	(REQUIRED)
+	----------------------------------------------------------------------------------------------------------------
+	-- name for victory function
+	g_wc_name = "strategicobjective",
+	
+	--global variable, the percentage of points that must be held
+	-- NOTE: this value must be > 50
+	g_percent = 51,
+	
+	-- global variable, amount of time in seconds the points must be held for
+	g_timeLimit = 480,
+		
+	--
+	g_spoint_ebp = "strategic_objective_struct",
+	
+	-- # of seconds to player vital countdown sounds before game over
+	g_vital_countdown_time = 15,
+	
+	-- sound files
+	g_victory_sound = "", -- sound played when you win
+	g_defeated_sound = "", -- sound played when you lose
+	g_victory_countdown_started_sound = "",
+	g_240sec_warning_sound = "",
+	g_120sec_warning_sound = "",
+	g_countdown_sound = "",
+		
+	-- strategic point accesors
+	GetCurrentStrategicPoints = function( playerId )
+		return Player_GetNumStrategicObjectives ( playerId )
+	end,	
+	
+	GetTotalStrategicPoints = function( )
+		return World_GetNumStrategicObjectives( )
+	end,
+	
+	----------------------------------------------------------------------------------------------------------------
+	(OPTIONAL)
+	----------------------------------------------------------------------------------------------------------------
+	-- event handlers 
+	OnCountdownStart = function( winningTeamNum )
+	
+	end
+	
+	-- called every second a team has held a point
+	-- allows you to spawn event cue warnings at 240 secs, 120 secs, 60 secs etc
+	OnTimeRemainingWarning = function( winningTeamNum, secsHeld )
+	
+	end
+}
+--]]
+
+-- returns filled out team table
+function WCUtil_InitTeamTable( )
+	local T = {}
+	
+	local j = World_GetPlayerCount()
+	for i = 1, j do
+	
+		local playerId = World_GetPlayerAt( i-1 )
+		local teamId = Player_GetTeam( playerId ) + 1
+		
+		T[teamId] = {}
+		T[teamId].secs_held			=1
+		T[teamId].percent_held	=0
+		T[teamId].is_valid_team	=0
+		T[teamId].first_player		=0
+	end
+	
+	return T
+end
+
+-- MUST be called every second
+function WCUtil_CheckStrategicPoints( TeamTable, SettingsTable )
+	
+	-- validate params
+	if( TeamTable == nil ) then error("TeamTable is nil") end
+	if( SettingsTable == nil ) then error("SettingsTable is nil") end
+
+	-- validate TeamTable table
+	if( TeamTable[0] ~= nil ) then
+		-- the SCAR save/load code doesnt support tables indexed by zero or negative numbers
+		error( "Invalid table index. Table must be indexed starting at 1")
+	end
+	
+	-- total number of players
+	local count = World_GetPlayerCount()
+
+	-- clear all team info that are going to be updated
+	for k, v in pairs( TeamTable ) do		
+		v.percent_held=0
+		v.is_valid_team=0
+		v.first_player=nil
+	end
+		
+	--iterates through all of the player slots to see if they're holding/have held an obj for the required amount of time for its team
+	for i = 1, count do
+		
+		local playerId = World_GetPlayerAt(i-1)
+		local teamId = Player_GetTeam(playerId) + 1
+		
+		-- make sure an entry exists in the TeamTable table (it's possible for players to be assigned new team numbers through diplomacy)
+		if( TeamTable[teamId] == nil ) then
+			-- create a new entry for this team
+			TeamTable[teamId] = {}
+			TeamTable[teamId].secs_held=1
+			TeamTable[teamId].percent_held=0
+		end
+		
+		
+		--accumulate the percent of strategy points held by team		
+		local playerPercent = (SettingsTable.GetCurrentStrategicPoints(playerId)/SettingsTable.GetTotalStrategicPoints())*100
+		TeamTable[teamId].percent_held = TeamTable[teamId].percent_held + playerPercent
+		TeamTable[teamId].is_valid_team = 1
+		
+		if( TeamTable[teamId].first_player == nil ) then
+			TeamTable[teamId].first_player = playerId
+		end
+		
+		--if( playerPercent > 40 ) then
+			--print( "Player:"..Player_GetID(playerId).."  Team:"..teamId.."  Points:"..SettingsTable.GetCurrentStrategicPoints(playerId).."/"..SettingsTable.GetTotalStrategicPoints(playerId).."   Percent:"..playerPercent.." -- "..SettingsTable.g_wc_name )		
+		--end
+		
+	end	
+	
+	-- validate percentage
+	if( SettingsTable.g_percent <= 50 ) then
+		error("script cannot handle win percentages less than or equal to 50")
+	end
+	
+	local winningTeam = nil
+	local winningTeamNum = nil
+	
+	-- iterates through each TEAM slot to see if they are holding/have held a point for the requirement amount of time
+	for teamkey, teamtable in pairs( TeamTable ) do	
+
+		if  teamtable.is_valid_team == 1 and teamtable.percent_held >= SettingsTable.g_percent then 
+			
+			teamtable.secs_held = teamtable.secs_held + 1
+			
+			-- check if there is already a winner
+			if( winningTeam ) then
+				-- we will be the winner if we've held longer
+				if( teamtable.secs_held > winningTeam.secs_held  ) then
+					-- we are now the winning team
+					winningTeam = teamtable
+					winningTeamNum = teamkey
+				end
+			else
+				winningTeam = teamtable
+				winningTeamNum = teamkey
+			end
+			
+		else
+			teamtable.secs_held = 1
+			g_vital_objective_timer = 15
+		end
+		
+	end
+	
+	--
+	-- there was a winning team last frame and now there is not 
+	if( SettingsTable.g_lastWinningTeam ~= nil and winningTeam == nil ) then
+		-- hide win countdown
+		Taskbar_HideStrategicUITimer( SettingsTable.g_spoint_ebp )
+	end
+	
+	--
+	-- there was not a winning team last frame and now there is
+	if( SettingsTable.g_lastWinningTeam == nil and winningTeam ~= nil ) then
+		if( SettingsTable.OnCountdownStart ~= nil ) then	SettingsTable.OnCountdownStart( winningTeamNum ) end
+	end
+	
+	--
+	-- there is a winning team 
+	if( winningTeam ~= nil ) then
+		-- update win countdown timer text
+		local secsRemaining = SettingsTable.g_timeLimit - winningTeam.secs_held
+		if( secsRemaining < 0 ) then secsRemaining = 0 end
+		Taskbar_SetStrategicUITimer( SettingsTable.g_spoint_ebp, winningTeam.first_player, secsRemaining )
+		
+		-- call secs held event
+		if( SettingsTable.OnTimeRemainingWarning ~= nil ) then	SettingsTable.OnTimeRemainingWarning( winningTeamNum, SettingsTable.g_timeLimit - winningTeam.secs_held ) end
+		
+		--15 sec warning, , fails if g-timelimit < 15
+		if winningTeam.secs_held >= (SettingsTable.g_timeLimit - SettingsTable.g_vital_countdown_time) then			
+			Sound_Play( SettingsTable.g_countdown_sound )			
+		end
+	
+		--player has won
+		if winningTeam.secs_held >= SettingsTable.g_timeLimit then
+			--print("WCUtil_CheckStrategicPoints -- Team "..teamName.." has won")
+			
+			if( Misc_GetLocalPlayerID() ~= -1 and Player_GetTeam( Player_FromId(Misc_GetLocalPlayerID())) == winningTeamNum ) then
+				Sound_Play( SettingsTable.g_victory_sound )
+			end
+			
+			World_SetTeamWin( winningTeam.first_player, SettingsTable.g_wc_name );
+			World_SetGameOver();
+			
+		end
+		
+	end
+	
+	--
+	SettingsTable.g_lastWinningTeam = winningTeam
+	
+end
+
+-- checks all player players and kills any that are totally annihilated
+function WCUtil_Rule_CheckTotalAnnihilate( )
+	
+	for i = 0, (World_GetPlayerCount( )-1) do
+		local player = World_GetPlayerAt( i )
+		
+		if Player_IsAlive( player ) then
+--			print( "check total annih" )
+			if Player_IsAnnihilated( player ) then
+				
+				-- check if local player is defeated
+				if( Misc_GetLocalPlayerID() == Player_GetID(player) ) then
+					Sound_Play( "speech/ui/60523" )
+				end
+				
+				-- set the player to lose and kill the player
+				World_SetPlayerLose( player, "annihilate" )
+			end
+		end
+	end
+	
+	Util_CheckOneTeamLeft( "annihilate")
+	
+end
+
+-- adds the WCUtil_Rule_CheckTotalAnnihalte if it doesnt already exist
+function WCUtil_AddCheckTotalAnnhilate( )
+	if Rule_Exists( WCUtil_Rule_CheckTotalAnnihilate ) == false then
+		Rule_AddInterval( WCUtil_Rule_CheckTotalAnnihilate, 2.0 )
+	end
+end

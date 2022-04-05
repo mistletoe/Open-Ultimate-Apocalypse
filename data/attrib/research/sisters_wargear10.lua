@@ -1,0 +1,44 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint10.lua]])
+GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_canoness]]
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_1"]["research_name"] = [[research\sisters_wargear01.lua]]
+GameData["requirements"]["required_2"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_2"]["research_name"] = [[research\sisters_wargear04.lua]]
+GameData["requirements"]["required_3"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_3"]["research_name"] = [[research\sisters_wargear05.lua]]
+GameData["requirements"]["required_4"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_4"]["research_name"] = [[research\sisters_wargear06.lua]]
+GameData["requirements"]["required_5"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_5"]["research_name"] = [[research\sisters_wargear07.lua]]
+GameData["requirements"]["required_6"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_6"]["research_name"] = [[research\sisters_wargear08.lua]]
+GameData["requirements"]["required_7"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_7"]["research_name"] = [[research\sisters_wargear09.lua]]
+GameData["requirements"]["required_8"] = Reference([[requirements\required_human_player_metamap_game.lua]])
+GameData["requirements"]["required_8"]["is_display_requirement"] = false
+GameData["requirements"]["required_8"]["is_human_player_in_a_metamap_game"] = false
+GameData["requirements"]["required_9"] = Reference([[requirements\required_structure.lua]])
+GameData["requirements"]["required_9"]["is_display_requirement"] = true 
+GameData["requirements"]["required_9"]["structure_name"] = [[ebps\races\sisters\structures\sisters_hq.lua]]
+GameData["requirements"]["required_10"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_10"]["research_name"] = [[research\sisters_wargear02.lua]]
+GameData["requirements"]["required_11"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_11"]["research_name"] = [[research\sisters_wargear03.lua]]
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["faith"] = 200
+GameData["time_cost"]["cost"]["souls"] = 0
+GameData["time_cost"]["time_seconds"] = 1
+GameData["ui_hotkey_name"] = [[hotkey_k]]
+GameData["ui_index_hint"] = 16
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+--REPLACE_ME
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$4000029]] -- Emperor's Blessing: The blessing of the Emperor takes the form of an aura of ever-burning flame, punishing those who defy his Blessed Ones.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$4000030]] -- Requires all other wargear.
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$18210589]] -- - Requires - Hero: Level 3
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[sisters_icons\sisters_wargear10]]
+--REPLACE_ME
+GameData["ui_info"]["screen_name_id"] = [[$4000028]] -- Emperor's Blessing

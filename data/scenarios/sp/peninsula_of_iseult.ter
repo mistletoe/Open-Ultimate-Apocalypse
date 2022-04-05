@@ -1,0 +1,227 @@
+Model = "Peninsula_of_Iseult"
+Planet = "Kaurava_IV"
+
+Name = "$3900034"
+Description = "$3900333"
+TerrainType = "$2852202"
+TerrainDescription = "$3900334"
+
+History = 
+{
+	"$3900335",
+	"$3900336",
+	"$3900223",
+	"$3900337",
+	"$3900338",
+	"$3900339",
+	"$3900340",
+	"$3900341",
+	"$3900342",
+	"$3900343",
+	"$3900344",
+}
+
+Nuggets = 
+{
+	{
+		Race = "guard_race",
+		Title = "", --"$3550310",
+		Text =
+		{
+			"$5100117",
+			"$2850018",
+			"$5100118",
+		},
+		Speech =
+		{
+			5100117,
+			5100118,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550610",
+		Text =
+		{
+			"$5100119",
+			"$2850018",
+			"$5100120",
+		},
+		Speech =
+		{
+			5100119,
+			5100120,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550610",
+		Text =
+		{
+			"$5100121",
+			"$2850018",
+			"$5100122",
+		},
+		Speech =
+		{
+			5100121,
+			5100122,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550210",
+		Text =
+		{
+			"$5100123",
+			"$2850018",
+			"$5100124",
+		},
+		Speech =
+		{
+			5100123,
+			5100124,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550410",
+		Text =
+		{
+			"$5100132",
+			"$2850018",
+			"$5100133",
+		},
+		Speech =
+		{
+			5100132,
+			5100133,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550510",
+		Text =
+		{
+			"$5100127",
+			"$2850018",
+			"$5100128",
+		},
+		Speech =
+		{
+			5100127,
+			5100128,
+		}
+	},
+
+	{
+		Race = "tau_race",
+		Title = "", --"$3550710",
+		Text =
+		{
+			"$5100130",
+			"$2850018",
+			"$5100131",
+		},
+		Speech =
+		{
+			5100130,
+			5100131,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550610",
+		Text =
+		{
+			"$5100125",
+			"$2850018",
+			"$5100126",
+		},
+		Speech =
+		{
+			5100125,
+			5100126,
+		}
+	},	
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100075",
+		"$2851718",
+		"$5100076",
+		"$2851718",
+		"$5100077",
+	},
+	Speech =
+	{
+		5100075,
+		--5100076,
+		--5100077,
+	},
+}
+
+
+
+MissionFileAttacking = "Stronghold_Chaos_Marines"
+MissionFileAttackingConquered = "8P_Peninsula of Iseult_Attack_Skirmish"
+MissionFileDefending = "8P_Peninsula of Iseult"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = .75
+
+NeighborTerritories = 
+{
+	--"Riwalin",
+	"Gurmuns_Pass",
+	"Tristram_Plains",
+}
+
+VictoryBonusSquads =
+{
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "chaos_marine_race"
+OwnerSecondary = "chaos_marine_race"
+
+KeyLocationAbility =
+{
+	ID = "ignore_supplylines",
+	Name = "$3900075",
+	HelpText =
+	{
+		"$3900432",
+		"$3900433",
+		"$3900434",
+	},
+  CommanderScreenName = "$3900486",
+	CommanderScreenHelpText =
+	{
+		"$3900487",
+		"$3900488",
+		"$3900432",
+		"$3900433",
+		"$3900434",
+	},
+  CommanderScreenLostName = "$3900486",
+	CommanderScreenLostHelpText =
+	{
+		"$3900487",
+		"$3900489",
+	}  
+}
+
+StartingResourceBonus = 0.0

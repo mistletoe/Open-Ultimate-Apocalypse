@@ -1,0 +1,59 @@
+Model = "Jalaganda_Lowlands"
+Planet = "Kaurava_I"
+
+Name = "$3900014"
+Description = "$3900127"
+TerrainDescription = "$3900128"
+History = 
+{
+"$3900129",
+"$3900130",
+"$3900131",
+"$3900132",
+"$3900133",
+"$3900134",
+"$3900158",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "8P_Jalaganda_Lowlands"
+MissionFileAttackingConquered = "8P_Jalaganda_Lowlands"
+MissionFileDefending = "8P_Jalaganda_Lowlands"
+
+SkirmishWinConditions =
+{
+	"StrategicObjective",
+	"GameTimer",	
+}
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Kaurav_City",
+	"Sama_Desert",
+	"Dussala_Precinct",
+	"Irridene",
+	"Tristram_Plains",
+}
+
+VictoryBonusSquads =
+{
+}
+
+Stronghold = false
+WarpGate = true
+ScriptedMission = false
+
+PlanetaryRequisition = 25
+StartingMilitaryStrength = 4
+
+OwnerPrimary = "guard_race"
+OwnerSecondary = "sisters_race"
+
+StartingResourceBonus = 0.0

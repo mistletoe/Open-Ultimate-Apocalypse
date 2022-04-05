@@ -1,0 +1,55 @@
+----------------------------------------------------------------------------------------------------------------
+-- Helper functions to keep the camera shake uniform
+-- (c) 2003 Relic Entertainment Inc.
+
+--
+-- These values are all pretty close to the same values that the FX artists use.
+--
+-- Feel free to tweak them if they're not good enough
+--
+
+--? @group Camera
+
+--? @shortdesc Trigger a small camera shake
+--? @result Void
+--? @args ScarPosition epicentre, Real duration
+function CameraShake_Small( epicentre, duration )
+	Camera_Shake( 
+		epicentre, 
+		duration, 
+		0.05, 	-- intesity
+		35.0, 	-- radius
+		3.0		-- falloff
+	)
+end
+
+--? @shortdesc Trigger a regular camera shake
+--? @result Void
+--? @args ScarPosition epicentre, Real duration
+function CameraShake_Medium( epicentre, duration )
+	Camera_Shake( 
+		epicentre, 
+		duration, 
+		0.1, 		-- intesity
+		25.0, 	-- radius
+		0.1		-- falloff
+	)
+end
+
+--? @shortdesc Trigger a crazy big camera shake
+--? @result Void
+--? @args ScarPosition epicentre, Real duration
+function CameraShake_Large( epicentre, duration )
+	Camera_Shake( 
+		epicentre, 
+		duration, 
+		0.25, 		-- intesity
+		50.0, 		-- radius
+		0.1			-- falloff
+	)
+end
+
+
+
+
+

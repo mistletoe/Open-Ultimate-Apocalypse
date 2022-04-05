@@ -1,0 +1,224 @@
+----------------------------------------------------------------------------------------------------------------
+-- Cpu player scar helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+--? @group CpuInterface
+
+
+--? @shortdesc Set a build order table for the cpu_player
+--? @extdesc
+--? An example build table:\n
+--?	local build_table =\n
+--?	{\n
+--?		{"space_marine_squad_servitor", 1, 5},\n
+--?		{"space_marine_squad_scout", 2, 3}\n
+--?	}\n
+--? The first number in each entry is the starting value -- the lowest number gets built first\n
+--? The second number is the increment that happens each time the unit is built\n
+--? NOTE: Setting build demand table clobbers the class preferences
+--? @result Void
+--? @args PlayerID cpu_player, Table build_table
+function Cpu_SetBuildTable( cpu_player, build_table )
+
+	for i in build_table do
+		Cpu_SetBuildDemand( cpu_player, build_table[i][1], build_table[i][2], build_table[i][3] )
+	end
+
+end
+
+--? @shortdesc Set limits to the buildings that an AI can build
+--? @extdesc
+--? An example buildings table:\n
+--?	local buildings_table =\n
+--?	{\n
+--?		{"space_marine_vehicle_building", 2},\n
+--?		{"space_marine_listening_post", 1}\n
+--?	}\n
+--? The first argument is the building name, the second is the number of those buildings the AI can build
+--? @args PlayerID cpu_player, Table buildings_table
+--? @result Void
+function Cpu_SetBuildingLimitsTable( cpu_player, buildings_table )
+	for i in buildings_table do
+		Cpu_SetBuildingLimit( cpu_player, buildings_table[i][1], buildings_table[i][2] )
+	end
+end
+
+--? @shortdesc Lock an SGroup from the cpuplayer
+--? @args PlayerID cpu_player, SGroup sgroup
+--? @result Void
+function Cpu_LockSGroup( cpu_player, sgroup )
+
+	local lock = function( sgroupid, itemindex, squadID )
+	
+		if World_GetPlayerIndex( Squad_GetPlayerOwner( squadID ) ) ~= World_GetPlayerIndex( cpu_player ) then
+			error( Squad_GetBaseUnitName( squadID )..": "..Squad_GetGameID( squadID ).." not owned by cpuplayer: "..tostring( Player_GetID ) )
+		end
+		
+		Cpu_LockSquad( cpu_player, Squad_GetGameID( squadID ) )
+	end
+	
+	SGroup_ForEach( sgroup, lock )
+
+end
+
+--? @shortdesc Lock an EGroup from the cpuplayer
+--? @extdesc
+--? NOTE: Only use this for strategic points and buildings! It won't work for anything else
+--? @args PlayerID cpu_player, EGroup egroup
+--? @result Void
+function Cpu_LockEGroup( cpu_player, egroup )
+
+	local lock = function( egroupid, itemindex, entityID )
+		Cpu_LockEntity( cpu_player, Entity_GetGameID( entityID ) )
+	end
+	
+	EGroup_ForEach( egroup, lock )
+
+end
+
+--? @shortdesc Lock an SGroup from all cpuplayers
+--? @args SGroup sgroup
+--? @result Void
+function Cpu_LockSGroupAcrossPlayers( sgroup )
+
+	local lock = function( sgroupid, itemindex, squadID )
+	
+		local player_count = World_GetPlayerCount()
+		for i = 0, player_count - 1 do
+		
+			local cpu_player = World_GetPlayerAt( i )
+			if Cpu_IsCpuPlayer( cpu_player ) and Cpu_IsEnabled( cpu_player ) then
+				Cpu_LockSquad( cpu_player, Squad_GetGameID( squadID ) )
+			end
+		end
+		
+	end
+	
+	SGroup_ForEach( sgroup, lock )
+
+end
+
+
+--? @shortdesc Lock an EGroup from all cpuplayers
+--? @extdesc
+--? NOTE: Only use this for strategic points and buildings! It won't work for anything else
+--? @args EGroup egroup
+--? @result Void
+function Cpu_LockEGroupAcrossPlayers( egroup )
+
+	local count = World_GetPlayerCount()
+	local lock = function( egroupid, itemindex, entityID )
+	
+		for i = 0, count-1 do
+		
+			local player = World_GetPlayerAt( i )
+			if Cpu_IsCpuPlayer( player ) and Cpu_IsEnabled( player ) then
+				Cpu_LockEntity( player, Entity_GetGameID( entityID ) )
+			end
+		
+		end
+			
+	end
+	
+	EGroup_ForEach( egroup, lock )
+
+end
+
+--? @shortdesc Unlock an SGroup from the cpuplayer
+--? @args PlayerID cpu_player, SGroup sgroup
+--? @result Void
+function Cpu_UnlockSGroup( cpu_player, sgroup )
+
+	local unlock = function( sgroupid, itemindex, squadID )
+
+		if World_GetPlayerIndex( Squad_GetPlayerOwner( squadID ) ) ~= World_GetPlayerIndex( cpu_player ) then
+			error( Squad_GetBaseUnitName( squadID )..": "..Squad_GetGameID( squadID ).." not owned by cpuplayer: "..tostring( Player_GetID ) )
+		end
+		
+		Cpu_UnlockSquad( cpu_player, Squad_GetGameID( squadID ) )
+	end
+	
+	SGroup_ForEach( sgroup, unlock )
+
+end
+
+--? @shortdesc Unlock an EGroup from the cpuplayer
+--? @extdesc
+--? NOTE: Only use this for strategic points and buildings! It won't work for anything else
+--? @args PlayerID cpu_player, EGroup egroup
+--? @result Void
+function Cpu_UnlockEGroup( cpu_player, egroup )
+
+	local lock = function( egroupid, itemindex, entityID )
+		Cpu_UnlockEntity( cpu_player, Entity_GetGameID( entityID ) )
+	end
+	
+	EGroup_ForEach( egroup, lock )
+
+end
+
+--? @shortdesc Lock an SGroup from all cpuplayers
+--? @args SGroup sgroup
+--? @result Void
+function Cpu_UnlockSGroupAcrossPlayers( sgroup )
+
+	local player_count = World_GetPlayerCount()
+	local lock = function( sgroupid, itemindex, squadID )
+	
+		for i = 0, player_count - 1 do
+			
+			local cpu_player = World_GetPlayerAt( i )
+			if Cpu_IsCpuPlayer( cpu_player ) and Cpu_IsEnabled( cpu_player ) then
+				if World_GetPlayerIndex( Squad_GetPlayerOwner( squadID ) ) == i then
+					Cpu_UnlockSquad( cpu_player, Squad_GetGameID( squadID ) )
+				end
+			end
+		end
+		
+	end
+	
+	SGroup_ForEach( sgroup, lock )
+
+end
+
+--? @shortdesc Lock an EGroup from all cpuplayers
+--? @extdesc
+--? NOTE: Only use this for strategic points and buildings! It won't work for anything else
+--? @args EGroup egroup
+--? @result Void
+function Cpu_UnlockEGroupAcrossPlayers( egroup )
+
+	local count = World_GetPlayerCount()
+	local lock = function( egroupid, itemindex, entityID )
+	
+		for i = 0, count-1 do
+		
+			local player = World_GetPlayerAt( i )
+			if Cpu_IsCpuPlayer( player ) and Cpu_IsEnabled( player ) then
+				Cpu_UnlockEntity( player, Entity_GetGameID( entityID ) )
+			end
+		
+		end
+			
+	end
+	
+	EGroup_ForEach( egroup, lock )
+
+end
+
+--? @shortdesc Set the difficulty without worrying if the Cpu is enabled or not
+--? @extdesc	If you set the difficulty on a Cpu that's disabled, it'll crash. This should take care of that.
+--? NOTE: You can always use the regular one, this is only if you don't know or may not know
+--? @args PlayerID cpu_player, Integer difficulty_setting
+--? @result Void
+function Cpu_SetDifficultyForDummies( cpu_player, difficulty_setting )
+
+	if not Cpu_IsEnabled(cpu_player) then
+		Cpu_Enable(cpu_player, true)
+		Cpu_SetDifficulty( cpu_player, difficulty_setting )
+		Cpu_Enable(cpu_player, false)
+	else
+		Cpu_SetDifficulty( cpu_player, difficulty_setting )
+	end
+
+end

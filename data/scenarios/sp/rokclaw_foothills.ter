@@ -1,0 +1,113 @@
+Model = "Rokclaw_Foothills"
+Planet = "Kaurava_II"
+
+Name = "$3900021"
+Description = "$3900218"
+TerrainDescription = "$3900219"
+History = 
+{
+	"$3900220",
+	"$3900221",
+	"$3900222",
+	"$3900223",
+	"$3900224",
+	"$3900225",
+	"$3900223",
+	"$3900227",
+	"$3900228",
+	"$3900223",
+	"$3900224",
+	"$3900225",
+	"$3900223",
+	"$3900229",
+	"$3900230",
+	"$3900231",
+	"$3900232",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "4p_Rokclaw_Foothills"
+MissionFileAttackingConquered = "4p_Rokclaw_Foothills"
+MissionFileDefending = "4p_Rokclaw_Foothills"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Forgotten_Isles",
+	"Trivian_Groves",
+	"Rokclaw_Mountains",
+	"Nan_Yanoi",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_horror_hg_dxp3",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_assault_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_killa_kan_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_assassin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_wraithlord_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_fire_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_pariah_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_celestian_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_wych_leader_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 2
+
+OwnerPrimary = "tau_race"
+OwnerSecondary = "ork_race"
+
+StartingResourceBonus = 0.0

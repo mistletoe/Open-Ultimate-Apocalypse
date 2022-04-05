@@ -1,0 +1,141 @@
+----------------------------------------------------------------------------------------------------------------
+-- Control Area Win Condtition
+--
+--	Player wins after holding a set percentage of the maps strategic points for an amount of time
+--
+-- (c) 2003 Relic Entertainment Inc.
+import("ScarUtil.scar")
+import("WCUtil.scar")
+
+--addinit function
+function ControlArea()
+
+	-- wait 0.5 secs before adding this rule. this is so it is not executed
+	-- on the same frame as the other win conditions
+	Rule_AddOneShot( ControlArea_AddMainRule, 0.50 )
+	
+	if _CASettingsTable.g_numPoints > 0 then
+		-- create a new objective
+		local obj_table_P3 = { title_id = 60008, short_desc_id = 60308, help_tip_id = 60308 }
+		Objective_Add( obj_table_P3, 1 )
+		
+		-- put all players into a global team table
+		_CATeamTable = WCUtil_InitTeamTable()
+		
+		-- add rules
+		Rule_AddOneShot( CARule_EnableControlAreaUI, 0 )		-- execute on first sim frame
+	end
+	
+end
+
+function ControlArea_AddMainRule()
+	
+	if _CASettingsTable.g_numPoints > 0 then
+		Rule_AddInterval(CARule_CheckStrategyPoints, 1);	-- MUST be called once per second
+		
+		-- add the total annihlation check so game doest keep going if all enemies are totally annihlated (this is different than regular annihilate)
+		WCUtil_AddCheckTotalAnnhilate() 
+	end
+	
+end
+
+
+_CASettingsTable =
+{
+	----------------------------------------------------------------------------------------------------------------
+	-- (CUSTOM)
+	----------------------------------------------------------------------------------------------------------------
+	-- total number of strategy points in the level
+	g_numPoints =  World_GetNumStrategicPoints(),
+	
+	----------------------------------------------------------------------------------------------------------------
+	-- (REQUIRED)
+	----------------------------------------------------------------------------------------------------------------
+	-- name for victory function
+	g_wc_name = "controlarea",
+	
+	--global variable, the percentage of points that must be held
+	-- NOTE: this value must be > 50
+	g_percent = 66,
+	
+	-- global variable, amount of time in seconds the points must be held for
+	g_timeLimit = 480,
+		
+	--
+	g_spoint_ebp = "strategic_point_flag",
+	
+	-- # of seconds to player vital countdown sounds before game over
+	g_vital_countdown_time = 15,
+	
+	-- sound files
+	g_victory_sound = "speech/ui/60516",
+	g_defeated_sound = "speech/ui/60527",
+	g_countdown_sound = "Count_down_beep",
+		
+	-- strategic point accesors
+	GetCurrentStrategicPoints = function( playerId )
+		return Player_GetNumStrategicPoints( playerId )
+	end,	
+	
+	GetTotalStrategicPoints = function( )
+		return _CASettingsTable.g_numPoints
+	end,
+		
+	----------------------------------------------------------------------------------------------------------------
+	-- (OPTIONAL)
+	----------------------------------------------------------------------------------------------------------------
+	-- event handlers
+	OnCountdownStart = function( winningTeamNum )
+		-- trigger event cue item
+		EventCue_DoEvent( "warning", "speech/ui/60500", "$60450", Loc_FormatText1( 60452, Loc_ConvertNumber( winningTeamNum ) ) )
+	end,
+	
+	-- called every second a team has held a point
+	-- allows you to spawn event cue warnings at 240 secs, 120 secs, 60 secs etc
+	OnTimeRemainingWarning = function( winningTeamNum, secsHeld )		
+		-- trigger event cue items at 4 minutes and 2 minutes and trigger sounds at other times
+		if secsHeld == (60*6) then
+			Sound_Play("speech/ui/60509")
+		end
+		if secsHeld == (60*5) then
+			Sound_Play("speech/ui/60510")
+		end
+		if secsHeld == (60*4) then			
+			EventCue_DoEvent( "warning", "speech/ui/60511", "$60454", Loc_FormatText1( 60456, Loc_ConvertNumber( winningTeamNum ) ) )
+		end
+		if secsHeld == (60*3) then
+			Sound_Play("speech/ui/60512")
+		end
+		if secsHeld == (60*2) then
+			EventCue_DoEvent( "warning", "speech/ui/60513", "$60458", Loc_FormatText1( 60460, Loc_ConvertNumber( winningTeamNum ) ) )
+		end
+		if secsHeld == (60) then
+			Sound_Play("speech/ui/60514")
+		end
+		if secsHeld == (30) then
+			Sound_Play("speech/ui/60515")
+		end
+	end,
+}
+
+-- turn on UI
+function CARule_EnableControlAreaUI()
+
+	Taskbar_EnableStrategicUI( _CASettingsTable.g_spoint_ebp, true )
+	
+end
+
+-- executed every second to check points
+function CARule_CheckStrategyPoints()
+
+	WCUtil_CheckStrategicPoints( _CATeamTable, _CASettingsTable )
+	
+end
+
+-- register init function with scar
+Scar_AddInit(ControlArea)
+
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------

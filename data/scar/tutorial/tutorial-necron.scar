@@ -1,0 +1,2968 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Necron Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_Necron_Start()
+
+	Rule_AddOneShot(Rule_Necron_Selection, 0)
+	Rule_AddOneShot(Rule_Restrictions, 0)
+    Rule_AddInterval(Rule_Necron_SquadCap, 10)
+	Rule_AddInterval(Rule_Necron_SquadLimit, 10)
+	Rule_AddInterval(Rule_Necron_LowPower, 10)
+
+
+end
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Builder Scarab
+-- 3	Build Generator
+-- 4	Capture Point
+-- 5	Build Listening Post
+-- 6	Build Necron Warriors
+-- 7	Reinforce Necron Warriors
+-- 8	Health (skipped if tutorial has been played before)
+-- 9	Morale (skipped if tutorial has been played before)
+-- 10	Build Necron Lord
+-- 11	Build Summoning Core
+-- 12	Awaken Monolith
+-- 13	Build Flayed Ones
+-- 14	Deploy Flayed Ones
+-- 15	Build Forbidden Archive
+-- 16	Research Phylactery
+-- 17	Take Cover
+-- 18	Capture Points
+-- 19	Capture Critical Location
+-- 20	Capture Relic
+-- 21	Build Greater Summoning Core
+-- 22  Build Tomb Spyder
+-- 23  Engage Monolith
+-- 24  Build Energy Core
+-- 25 Restore Monolith
+-- 26  Research Resurrection Orb
+-- 27  Summon Nightbringer
+-- 28	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 1 - Selection
+
+function Rule_Necron_Selection()
+
+	-- Define Objective
+	
+	obj_Selection = {title_id = 1100670, short_desc_id = 1100671, help_tip_id = 1100670 } -- Select the HQ
+
+	Tut_Player1GetAll()
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Check to see if the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true) then
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_Necron_Selection)
+		Util_StartIntel(EVENTS.IE_Necron_Selection)
+	
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_SelectionCheck, 0)
+
+	-- If they do have it selected
+	else
+	
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Necron_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Necron_SelectionCheck()
+
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+	
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false) then
+	
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_SelectionCheck)
+		Rule_AddInterval(Rule_Necron_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Necron_SelectionDone()
+
+	if (Event_IsAnyRunning() == false) then
+	
+		Rule_Remove(Rule_Necron_SelectionDone)
+		Rule_AddOneShot(Rule_Necron_BuildScarab, 0)
+		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 2 - Build Builder Scarab
+
+function Rule_Necron_BuildScarab()
+
+	-- Define Objective
+	obj_BuildScarab = { title_id = 1100673, short_desc_id = 1100674, help_tip_id = 1100673 }	-- Build a Scarab Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a scarab squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScarab , true, EVENTS.IE_Necron_BuildScarab)
+		Util_StartIntel(EVENTS.IE_Necron_BuildScarab)
+		
+		-- Ping the HQ
+		ping_BuildScarab = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_BuildScarabDoing, 0)
+		
+	-- if they already have a scarab squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScarab , true)
+		Tut_Util_ObjectiveComplete(obj_BuildScarab.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildScarab_Complete)
+		
+		-- Ping scarab squad once
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildScarabDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildScarabDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildScarab_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildScarabDoing)
+		Rule_AddInterval(Rule_Necron_BuildScarabCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildScarabCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a scarab squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildScarab.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildScarab_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildScarab)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildScarabCheck)
+		Rule_AddInterval(Rule_Necron_BuildScarabDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildScarabDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildScarabDone)
+		Rule_AddOneShot(Rule_Necron_BuildGenerator, 0) 
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+--  Necron Lesson 3 - Build Generator
+
+
+function Rule_Necron_BuildGenerator()
+	
+	-- Define Objective
+	obj_BuildGenerator = { title_id = 1100685, short_desc_id = 1100686, help_tip_id = 1100685 }	-- Build a Plasma Generator
+	
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have four Generators
+	if Tut_EGBlueprintCheck2("eg_Player1All", blueprint.generator, 4, true) ~= true and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Necron_BuildGenerator)
+		Util_StartIntel(EVENTS.IE_Necron_BuildGenerator)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_BuildGenerator)
+		Rule_AddInterval(Rule_Necron_BuildGeneratorDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildGenerator
+		Rule_Remove(Rule_Necron_BuildGenerator)
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- else if the do have four Generators already...
+	elseif Tut_EGBlueprintCheck2("eg_Player1All", blueprint.generator, 4, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildGenerator_Complete)
+		
+		-- Ping the Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildGenerator)
+		Rule_AddInterval(Rule_Necron_BuildGeneratorDone, 0)		
+	end	
+end
+
+function Rule_Necron_BuildGeneratorDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildGenerator_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Necron_BuildGeneratorCheck, 0)
+		
+		--this table needs the same number of entries as there are generators that need to be built. Currently 4
+		t_Generator = {false, false, false, false}
+		
+	end
+
+end
+
+function Rule_Necron_BuildGeneratorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck2("eg_Player1All", blueprint.generator, 4, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildGenerator_Complete)
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+			Util_StartIntel(EVENTS.IE_Necron_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Necron_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildGeneratorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildGeneratorDone)
+		Rule_AddOneShot(Rule_Necron_CapturePoint, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 4 - Capture Point
+
+function Rule_Necron_CapturePoint()
+	
+	-- Define Objective
+	obj_CapturePoint = { title_id = 1100676, short_desc_id = 1100677, help_tip_id = 1100676 }	-- Capture a Strategic Point
+
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 200
+	
+	
+	-- need to do this check in reverse because function checks greater than or equal to (which if the player has 1, is greater than 0)
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Necron_CapturePoint)
+		Util_StartIntel(EVENTS.IE_Necron_CapturePoint)
+		
+		-- Ping points and infantry
+		Tut_PingBlueprint(blueprint.builder, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Necron_CapturePointDoing, 0)	
+		
+	end
+	
+end
+
+function Rule_Necron_CapturePointDoing()
+
+	Tut_Player1GetAll()
+	
+	if (Cmd_IsCapturing("sg_Player1All", false) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_CapturePoint_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_CapturePointDoing)
+		Rule_AddInterval(Rule_Necron_CapturePointCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_CapturePointCheck()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_CapturePointCheck)
+		Rule_AddInterval(Rule_Necron_CapturePointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_CapturePointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_CapturePointDone)
+		Rule_AddOneShot(Rule_Necron_BuildPost, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+--  Necron Lesson 5 - Build Listening Post
+
+function Rule_Necron_BuildPost()
+	
+	-- Define Objective
+	obj_BuildPost = { title_id = 1100682, short_desc_id = 1100683, help_tip_id = 1100682 }	-- Build a Listening Post
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) 
+		and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) 
+		and Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Necron_BuildPost)
+		Util_StartIntel(EVENTS.IE_Necron_BuildPost)
+		
+		-- Ping the captured flag and the Servitor
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Necron_BuildPost)
+		Rule_AddInterval(Rule_Necron_BuildPostDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildPost
+		Rule_Remove(Rule_Necron_BuildPost)
+		
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- esle if they do somehow have a post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildPost_Doing)
+		
+		-- Ping Looping = true, Non = false
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildPost)
+		Rule_AddInterval(Rule_Necron_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildPostDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildPost_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildPostDoing)
+		Rule_AddInterval(Rule_Necron_BuildPostCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildPostCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildPostCheck)
+		Rule_AddInterval(Rule_Necron_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildPostDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildPostDone)
+		Rule_AddOneShot(Rule_Necron_BuildWarrior, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 6 - Build a Necron Warrior 
+
+function Rule_Necron_BuildWarrior()
+
+	-- Define Objective
+	obj_BuildWarrior = { title_id = 1100688, short_desc_id = 1100689, help_tip_id = 1100688 }	-- Build a Necron Warrior Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a warrior squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWarrior , true, EVENTS.IE_Necron_BuildWarrior)
+		Util_StartIntel(EVENTS.IE_Necron_BuildWarrior)
+		
+		-- Ping the HQ
+		ping_BuildWarrior = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_BuildWarriorDoing, 0)
+		Rule_AddInterval(Rule_Necron_BuildWarriorCheck, 0)
+		
+	-- if they already have a necron warrior squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWarrior , true)
+		Tut_Util_ObjectiveComplete(obj_BuildWarrior.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildWarrior_Complete)
+		
+		-- Ping necron warriors once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildWarriorDone, 0)
+
+		
+	end
+	
+end
+
+function Rule_Necron_BuildWarriorDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildWarrior_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildWarriorDoing)
+		
+		
+	end
+	
+end
+
+function Rule_Necron_BuildWarriorCheck()
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a stealth team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildWarrior.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildWarrior_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildWarrior)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildWarriorCheck)
+		Rule_AddInterval(Rule_Necron_BuildWarriorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildWarriorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildWarriorDone)
+		Rule_AddOneShot(Rule_Necron_Reinforce, 0) 
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 7 - Reinforce
+
+function Rule_Necron_Reinforce()
+
+	-- Define Objective
+	obj_Reinforce = { title_id = 1100691, short_desc_id = 1100692, help_tip_id = 1100691 }	-- Reinforce your Necron Warrior Squad
+	
+	Tut_Player1GetAll()
+
+	-- Intel Event
+	Tut_Util_ObjectiveCreate(obj_Reinforce , true, EVENTS.IE_Necron_Reinforce)
+	Util_StartIntel(EVENTS.IE_Necron_Reinforce)
+	
+	-- Ping the Necron Warrior
+	Tut_PingBlueprint(blueprint.basic_infantry, false)
+	Flash_ReinforcementButton(RT_Trooper, blueprint.basic_infantry, "", true, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Necron_ReinforceDoing, 0)
+	
+end
+
+function Rule_Necron_ReinforceDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't stealth teams
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.basic_infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsReinforcing("sg_Player1All", false)) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_Reinforce_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_ReinforceDoing)
+		Rule_AddInterval(Rule_Necron_ReinforceCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_ReinforceCheck()
+
+	
+	Tut_Player1GetAll()
+
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.basic_infantry) == true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_Reinforce_Complete)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ReinforceCheck)
+		Rule_AddInterval(Rule_Necron_ReinforceDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_ReinforceDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_ReinforceDone)
+		Rule_AddOneShot(Rule_Necron_Health, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 8 - Health
+
+function Rule_Necron_Health()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Necron_Health)
+		Rule_AddInterval(Rule_Necron_HealthDone, 0)
+	else
+		Rule_AddOneShot(Rule_Necron_Morale, 0)
+	end
+	
+end
+
+function Rule_Necron_HealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_HealthDone)
+		Rule_AddOneShot(Rule_Necron_Morale, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 9 - Morale
+
+function Rule_Necron_Morale()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Necron_Morale)
+		Rule_AddInterval(Rule_Necron_MoraleDone, 0)
+	else
+		Rule_AddOneShot(Rule_Necron_BuildCommander, 0)
+	end
+	
+end
+
+function Rule_Necron_MoraleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_MoraleDone)
+		
+		Player_UnRestrictSquad(g_Player1, "necron_lord_squad")
+		Rule_AddOneShot(Rule_Necron_BuildCommander, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 10 - Build Necron Lord 
+
+function Rule_Necron_BuildCommander()
+	
+	Player_UnRestrictSquad(g_Player1, "necron_lord_squad")
+	-- Define Objective
+	obj_BuildCommander = { title_id = 1100694, short_desc_id = 1100695, help_tip_id = 1100694 }	-- Build a Necron Lord
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have a Necron Lord...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.hq, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Necron_BuildCommander)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Necron_BuildCommander)
+		Rule_AddInterval(Rule_Necron_BuildCommanderDoing, 0)
+		
+	-- else if they have the Necron Lord...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCommander_Doing)
+		
+		-- Ping the Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildCommander)
+		Rule_AddInterval(Rule_Necron_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildCommanderDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildCommander_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Necron_BuildCommanderCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildCommanderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Necron_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Player_UnRestrictAddOn(g_Player1, "addon_necron_hq_1")
+		Rule_Remove(Rule_Necron_BuildCommanderDone)
+		Rule_AddOneShot(Rule_Necron_BuildBarracks, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 11 - Build Summoning Core
+
+function Rule_Necron_BuildBarracks()
+	
+	-- Define Objective
+	obj_BuildBarracks = { title_id = 1100697, short_desc_id = 1100698, help_tip_id = 1100697 }	-- Build a barracks
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Necron_BuildBarracks)
+		Util_StartIntel(EVENTS.IE_Necron_BuildBarracks)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_BuildBarracks)
+		Rule_AddInterval(Rule_Necron_BuildBarracksDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildBarracks
+		Rule_Remove(Rule_Necron_BuildBarracks)
+		
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildBarracks_Complete)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildBarracks)
+		Rule_AddInterval(Rule_Necron_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildBarracksDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildBarracks_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Necron_BuildBarracksCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildBarracksCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Necron_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildBarracksDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Necron_BuildAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 12 - Research Awaken Monolith
+
+function Rule_Necron_BuildAddon()
+	
+	-- Define Objective
+	obj_BuildAddon = { title_id = 1100700, short_desc_id = 1100701, help_tip_id = 1100700 }	-- Upgrade the Monolith
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the HQ already
+	if Tut_AddonIsDone(blueprint.hq_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true, EVENTS.IE_Necron_BuildAddon)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon)
+		
+		-- Ping the HQ
+		t_BuildAddon = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Necron_BuildAddon)
+		Rule_AddInterval(Rule_Necron_BuildAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon_Complete)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildAddon)
+		Rule_AddInterval(Rule_Necron_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildAddonDoing)
+		Rule_AddInterval(Rule_Necron_BuildAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildAddon)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildAddonCheck)
+		Rule_AddInterval(Rule_Necron_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildAddonDone)
+		Rule_AddOneShot(Rule_Necron_BuildInfantry, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 13 - Build Flayed Ones 
+
+function Rule_Necron_BuildInfantry()
+
+	-- Define Objective
+	obj_BuildInfantry = { title_id = 1100703, short_desc_id = 1100704, help_tip_id = 1100703 }	-- Build Flayed Ones
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a fire warrior team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true, EVENTS.IE_Necron_BuildInfantry)
+		Util_StartIntel(EVENTS.IE_Necron_BuildInfantry)
+		
+		-- Ping the HQ
+		ping_BuildInfantry = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_BuildInfantryDoing, 0)
+		
+	-- if they already have a fire warrior squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true)
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildInfantry_Complete)
+		
+		-- Ping fire warrior team once
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildInfantryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildInfantryDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildInfantry_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildInfantryDoing)
+		Rule_AddInterval(Rule_Necron_BuildInfantryCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildInfantryCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a fire warrior team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildInfantry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildInfantry)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildInfantryCheck)
+		Rule_AddInterval(Rule_Necron_BuildInfantryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildInfantryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildInfantryDone)
+		Rule_AddOneShot(Rule_Necron_BuildArchive, 0) 
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 15 - Build a Forbidden Archive
+
+function Rule_Necron_BuildArchive()
+	
+	-- Define Objective
+	obj_BuildArchive = { title_id = 1100709, short_desc_id = 1100710, help_tip_id = 1100709 }	-- Build a Forbidden Archive
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Forbidden Archive...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArchive , true, EVENTS.IE_Necron_BuildArchive)
+		Util_StartIntel(EVENTS.IE_Necron_BuildArchive)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_BuildArchive)
+		Rule_AddInterval(Rule_Necron_BuildArchiveDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildArchive
+		Rule_Remove(Rule_Necron_BuildArchive)
+		
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- Else if they do have a Forbidden Archive already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArchive, true)
+		Tut_Util_ObjectiveComplete(obj_BuildArchive.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildArchive_Complete)
+		
+		-- Ping the Path
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildArchive)
+		Rule_AddInterval(Rule_Necron_BuildArchiveDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildArchiveDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true) then
+
+		Util_StartIntel(EVENTS.IE_Necron_BuildArchive_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildArchiveDoing)
+		Rule_AddInterval(Rule_Necron_BuildArchiveCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildArchiveCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildArchive.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildArchive_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildArchiveCheck)
+		Rule_AddInterval(Rule_Necron_BuildArchiveDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildArchiveDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildArchiveDone)
+		Rule_AddOneShot(Rule_Necron_ResearchPhylactery, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 16 - Research Phylactery
+
+function Rule_Necron_ResearchPhylactery()
+	
+	-- Define Objective
+	obj_BuildResearchPhylactery = { title_id = 1100712, short_desc_id = 1100713, help_tip_id = 1100712 }	-- Research Phylactery
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have phylactery...
+	if Tut_ResearchIsDone( g_Player1, blueprint.phylactery, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchPhylactery , true, EVENTS.IE_Necron_ResearchPhylactery)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchPhylactery)
+		
+		-- Ping the Archive
+		ping_ResearchPhylactery = Tut_PingBlueprint(blueprint.research_facility, true)
+		Flash_ProductionButton(PQ_Research, blueprint.phylactery, true, true)
+				
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_ResearchPhylactery)
+		Rule_AddInterval(Rule_Necron_ResearchPhylacteryCheck, 0)
+			
+	-- Else if they do have phylactery already...
+	elseif Tut_ResearchIsDone( g_Player1, blueprint.phylactery, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchPhylactery , true)
+		Tut_Util_ObjectiveComplete(obj_BuildResearchPhylactery.title_id)
+		
+		-- Ping the Archive
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchPhylactery)
+		Rule_AddInterval(Rule_Necron_ResearchPhylacteryDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_Necron_ResearchPhylacteryCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_ResearchIsDone( g_Player1, blueprint.phylactery, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildResearchPhylactery.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchPhylactery_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		Tut_PingBlueprintStop(ping_ResearchPhylactery)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchPhylacteryCheck)
+		Rule_AddInterval(Rule_Necron_ResearchPhylacteryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_ResearchPhylacteryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_ResearchPhylacteryDone)
+		Rule_AddOneShot(Rule_Necron_PointCount, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 17 - Take Cover
+
+function Rule_Necron_TakeCover()
+	
+	-- Define Objective
+	obj_TakeCover = { title_id = 1100270, short_desc_id = 1100271, help_tip_id = 1100270 }	-- Take Cover
+
+	Tut_Player1GetAll()
+	
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+	
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- choose the closest cover
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			if currDistance < closestDist then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Necron_TakeCover)
+		Util_StartIntel(EVENTS.IE_Necron_TakeCover)
+		
+		-- Ping the Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Necron_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_TakeCoverCheck()
+	
+	Tut_Player1GetAll()
+	for i = 1, 9 do
+		if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..i) then
+			
+			-- Complete Objective and Intel Event
+			Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+			Util_StartIntel(EVENTS.IE_Necron_TakeCover_Complete)
+			
+			-- Stop Looping Ping
+			Ping_Stop(ping_TakeCover)
+			
+			-- Triggers the next lesson
+			Rule_Remove(Rule_Necron_TakeCoverCheck)
+			Rule_AddInterval(Rule_Necron_TakeCoverDone, 0)
+			
+		end
+	end
+end
+
+function Rule_Necron_TakeCoverDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_TakeCoverDone)
+		Rule_AddOneShot(Rule_Necron_PointCount, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 18 - Capture points
+
+function Rule_Necron_PointCount()
+	
+	-- Define Objective
+	obj_PointCount = { title_id = 1100280, short_desc_id = 1100281, help_tip_id = 1100280 }	-- Capture and Secure more Strategic Points
+
+	Tut_Player1GetAll()
+
+	-- if they haven't got three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false) then
+		
+		print("order to capture and build" )
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Necron_PointCount)
+		Util_StartIntel(EVENTS.IE_Necron_PointCount)
+		
+		-- Ping Looping = true, Non = false
+		t_PointCount = Tut_PingBlueprint(blueprint.builder, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Necron_PointCountDoing, 0)
+		
+	-- if they've got a load of points already
+	else
+		print("already capture and build" )
+		--Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_PointCount_Complete)
+		
+		-- Ping the posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_PointCountDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Necron_PointCountDoing()
+
+	Tut_Player1GetAll()
+
+	-- when you capture three points, mention building listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_PointCount_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_PointCountDoing)
+		Rule_AddInterval(Rule_Necron_PointCountCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_PointCountCheck()
+	
+	Tut_Player1GetAll()
+	
+	if Tut_PointsCaptured(g_Player1, 1, 3) and Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true) then
+		print("completed capture and build" )
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_PointCountCheck)
+		Rule_AddInterval(Rule_Necron_PointCountDone, 0)
+		
+	end
+
+end
+
+function Rule_Necron_PointCountDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_PointCountDone)
+		Rule_AddOneShot(Rule_Necron_CaptureCriticalPoint, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 19 - Capture Critical Point
+
+function Rule_Necron_CaptureCriticalPoint()
+	
+	-- Define Objective
+	obj_CaptureCriticalPoint = { title_id = 1100290, short_desc_id = 1100291, help_tip_id = 1100290 }		-- Capture a Critical Location
+
+	Tut_Player1GetAll()
+	
+	-- Check they don't have a Critical Point already...
+	if Tut_PointsCaptured(g_Player1, 2, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Necron_CaptureCriticalPoint)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Necron_CaptureCriticalPointCheck, 0)
+		
+	-- If they have already...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureCriticalPoint_Complete)
+		
+		-- Ping the critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_CaptureCriticalPointCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		--Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Necron_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_CaptureCriticalPointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Necron_CaptureRelic, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 20 - Capture Relic
+
+function Rule_Necron_CaptureRelic()
+	
+	-- Define Objective
+	obj_CaptureRelic = { title_id = 1100300, short_desc_id = 1100301, help_tip_id = 1100300 }	-- Capture a Relic
+	
+	Tut_Player1GetAll()
+
+	-- if they don't have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Necron_CaptureRelic)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the Next Rule
+		Rule_AddInterval(Rule_Necron_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_CaptureRelicCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 3, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Necron_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_CaptureRelicDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_CaptureRelicDone)
+		Rule_AddOneShot(Rule_Necron_BuildMech, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 21 - Build Greater Summoning Core
+
+function Rule_Necron_BuildMech()
+
+	-- Define Objective
+	obj_BuildMech = { title_id = 1100715, short_desc_id = 1100716, help_tip_id = 1100715 }	-- Build a Greater Summoning Core
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true, EVENTS.IE_Necron_BuildMech)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMech)
+		
+		-- Ping the Builder Scarab
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_BuildMech)
+		Rule_AddInterval(Rule_Necron_BuildMechDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildMech
+		Rule_Remove(Rule_Necron_BuildMech)
+		
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMech_Doing)
+		
+		-- Ping the Greater Summoning Core
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildMech)
+		Rule_AddInterval(Rule_Necron_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildMechDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildMech_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildMechDoing)
+		Rule_AddInterval(Rule_Necron_BuildMechCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildMechCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMech_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildMechCheck)
+		Rule_AddInterval(Rule_Necron_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildMechDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildMechDone)
+		Rule_AddOneShot(Rule_Necron_BuildSpyder, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 22 - Build a Tomb Spyder 
+
+function Rule_Necron_BuildSpyder()
+
+	-- Define Objective
+	obj_BuildSpyder = { title_id = 1100718, short_desc_id = 1100719, help_tip_id = 1100718 }	-- Build a Tomb Spyder
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Spyder already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.walker, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSpyder , true, EVENTS.IE_Necron_BuildSpyder)
+		Util_StartIntel(EVENTS.IE_Necron_BuildSpyder)
+		
+		-- Ping the Monolith
+		ping_BuildSpyder = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.walker, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_BuildSpyderDoing, 0)
+		
+	-- if they already have a Tomb Spyder
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSpyder , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSpyder.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildSpyder_Complete)
+		
+		-- Ping Spyder once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildSpyderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildSpyderDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.walker, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildSpyder_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildSpyderDoing)
+		Rule_AddInterval(Rule_Necron_BuildSpyderCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildSpyderCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Skyray already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.walker, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildSpyder.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildSpyder_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildSpyder)
+		Tut_PingBlueprint(blueprint.walker, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildSpyderCheck)
+		Rule_AddInterval(Rule_Necron_BuildSpyderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildSpyderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Player_UnRestrictAddOn(g_Player1, "addon_necron_hq_2")
+
+		Rule_Remove(Rule_Necron_BuildSpyderDone)
+		Rule_AddOneShot(Rule_Necron_BuildAddon2, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 23 - Research Engage Monolith
+
+function Rule_Necron_BuildAddon2()
+	
+	-- Define Objective
+	obj_BuildAddon2 = { title_id = 1100721, short_desc_id = 1100722, help_tip_id = 1100721 }	-- Upgrade the Monolith
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the HQ already
+	if Tut_AddonIsDone(blueprint.hq_addon2, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon2 , true, EVENTS.IE_Necron_BuildAddon2)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon2)
+		
+		-- Ping the HQ
+		t_BuildAddon2 = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon2, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Necron_BuildAddon2)
+		Rule_AddInterval(Rule_Necron_BuildAddon2Doing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.hq_addon2, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon2 , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAddon2.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon2_Complete)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildAddon2)
+		Rule_AddInterval(Rule_Necron_BuildAddon2Done, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildAddon2Doing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon2, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon2_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon2, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildAddon2Doing)
+		Rule_AddInterval(Rule_Necron_BuildAddon2Check, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildAddon2Check()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.hq_addon2, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAddon2.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildAddon2_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildAddon2)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildAddon2Check)
+		Rule_AddInterval(Rule_Necron_BuildAddon2Done, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildAddon2Done()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildAddon2Done)
+		Rule_AddOneShot(Rule_Necron_BuildCore, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 24 - Build Energy Core
+
+function Rule_Necron_BuildCore()
+
+	-- Define Objective
+	obj_BuildCore = { title_id = 1100724, short_desc_id = 1100725, help_tip_id = 1100724 }	-- Build an Energy Core
+
+	Tut_Player1GetAll()
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.core, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCore , true, EVENTS.IE_Necron_BuildCore)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCore)
+		
+		-- Ping the Builder Scarab
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.core, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_BuildCore)
+		Rule_AddInterval(Rule_Necron_BuildCoreDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Necron_BuildCore
+		Rule_Remove(Rule_Necron_BuildCore)
+		
+		Rule_Add(Rule_Necron_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.core, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCore , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCore.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCore_Doing)
+		
+		-- Ping the Energy Core
+		Tut_PingBlueprint(blueprint.core, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildCore)
+		Rule_AddInterval(Rule_Necron_BuildCoreDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildCoreDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.core) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildCore_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.core, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildCoreDoing)
+		Rule_AddInterval(Rule_Necron_BuildCoreCheck, 0)
+		
+	end
+
+end
+
+function Rule_Necron_BuildCoreCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.core, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCore.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildCore_Complete)
+		
+		-- Ping the Energy Core
+		Tut_PingBlueprint(blueprint.core, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildCoreCheck)
+		Rule_AddInterval(Rule_Necron_BuildCoreDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildCoreDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildCoreDone)
+		Rule_AddOneShot(Rule_Necron_ResearchRes, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 26 - Research Resurrection Orb
+
+function Rule_Necron_ResearchRes()
+	
+	-- Define Objective
+	obj_BuildResearchRes = { title_id = 1100730, short_desc_id = 1100731, help_tip_id = 1100730 }	-- Research Resurrection Orb
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have the orb...
+	if Tut_ResearchIsDone( g_Player1, blueprint.res, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchRes , true, EVENTS.IE_Necron_ResearchRes)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchRes)
+		
+		-- Ping the Archive
+		ping_ResearchRes = Tut_PingBlueprint(blueprint.research_facility, true)
+		Flash_ProductionButton(PQ_Research, blueprint.res, true, true)
+				
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_ResearchRes)
+		Rule_AddInterval(Rule_Necron_ResearchResCheck, 0)
+			
+	-- Else if they do have an orb already...
+	elseif Tut_ResearchIsDone( g_Player1, blueprint.res, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchRes , true)
+		Tut_Util_ObjectiveComplete(obj_BuildResearchRes.title_id)
+		
+		-- Ping the Archive
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchRes)
+		Rule_AddInterval(Rule_Necron_ResearchResDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_Necron_ResearchResCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_ResearchIsDone( g_Player1, blueprint.res, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildResearchRes.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchRes_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.reseach_facility, false)
+		Tut_PingBlueprintStop(ping_ResearchRes)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchResCheck)
+		Rule_AddInterval(Rule_Necron_ResearchResDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_ResearchResDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Player_UnRestrictAddOn(g_Player1, "addon_necron_hq_3")
+		Rule_Remove(Rule_Necron_ResearchResDone)
+		Rule_AddOneShot(Rule_Necron_BuildMonolith, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 26 - Restore Monolith
+
+function Rule_Necron_BuildMonolith()
+
+	-- Define Objective
+	obj_BuildMonolith = { title_id = 1100727, short_desc_id = 1100728, help_tip_id = 1100727 }	-- Restore the Monolith
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have the Monolith already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.monolith, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMonolith , true, EVENTS.IE_Necron_BuildMonolith)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMonolith)
+		
+		-- Ping the Monolith
+		ping_BuildMonolith = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.monolith, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Necron_BuildMonolithDoing, 0)
+		
+	-- if they already have a Monolith
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMonolith , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMonolith.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMonolith_Complete)
+		
+		-- Ping Monolith once
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildMonolithDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildMonolithDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.monolith, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Necron_BuildMonolith_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Necron_BuildMonolithDoing)
+		Rule_AddInterval(Rule_Necron_BuildMonolithCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildMonolithCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Monolith already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.monolith, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMonolith.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildMonolith_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildMonolith)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildMonolithCheck)
+		Rule_AddInterval(Rule_Necron_BuildMonolithDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildMonolithDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildMonolithDone)
+		
+		-- SoulStorm: Skip to End of Tutorial:
+		Rule_AddOneShot(Rule_TutorialComplete, 0)		
+		
+		-- Soulstorm: Cut The Nightbringer Out of the Tutorial since added deciever & renamed the skill so tutorial no longer accurate 
+		--Rule_AddOneShot(Rule_Necron_ResearchNightbringer, 0)		
+	end	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 28 - Research Essence of the Nightbringer
+
+function Rule_Necron_ResearchNightbringer()
+	
+	-- Define Objective
+	obj_BuildResearchNightbringer = { title_id = 1100736, short_desc_id = 1100737, help_tip_id = 1100736 }	-- Research Essence of the Nightbringer
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have the research...
+	if Tut_ResearchIsDone( g_Player1, blueprint.night, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchNightbringer , true, EVENTS.IE_Necron_ResearchNightbringer)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchNightbringer)
+		
+		-- Ping the Energy Core
+		ping_ResearchNightbringer = Tut_PingBlueprint(blueprint.core, true)
+		Flash_ProductionButton(PQ_Research, blueprint.night, true, true)
+				
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Necron_ResearchNightbringer)
+		Rule_AddInterval(Rule_Necron_ResearchNightbringerCheck, 0)
+			
+	-- Else if they do have the research already...
+	elseif Tut_ResearchIsDone( g_Player1, blueprint.night, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchNightbringer , true)
+		Tut_Util_ObjectiveComplete(obj_BuildResearchNightbringer.title_id)
+		
+		-- Ping the Energy Core
+		Tut_PingBlueprint(blueprint.core, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchNightbringer)
+		Rule_AddInterval(Rule_Necron_ResearchNightbringerDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_Necron_ResearchNightbringerCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_ResearchIsDone( g_Player1, blueprint.night, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildResearchNightbringer.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_ResearchNightbringer_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_ResearchNightbringer)
+		Tut_PingBlueprint(blueprint.core, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_ResearchNightbringerCheck)
+		Rule_AddInterval(Rule_Necron_ResearchNightbringerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_ResearchNightbringerDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_ResearchNightbringerDone)
+		Rule_AddOneShot(Rule_Necron_BuildNightbringer, 0)
+
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Lesson 29 - Summon Nightbringer
+
+function Rule_Necron_BuildNightbringer()
+	
+	-- Define Objective
+	obj_BuildNightbringer = { title_id = 1100733, short_desc_id = 1100734, help_tip_id = 1100733 }	-- Summon the Nightbringer
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have the proper materials...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.nightbringer, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildNightbringer , true, EVENTS.IE_Necron_BuildNightbringer)
+		Util_StartIntel(EVENTS.IE_Necron_BuildNightbringer)
+		
+		-- Ping the Lord
+		ping_BuildNightbringer = Tut_PingBlueprint(blueprint.commander, true)
+		Flash_OtherButton("command_possess", 0,1,1)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Necron_BuildNightbringerCheck, 0) 
+		
+	-- else if they have the Nightbringer already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.nightbringer, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildNightbringer , true)
+		Tut_Util_ObjectiveComplete(obj_BuildNightbringer.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildNightbringer_Complete)
+		
+		-- Ping the Nightbringer
+		Tut_PingBlueprint(blueprint.nightbringer, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Necron_BuildNightbringerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildNightbringerCheck()
+
+	Tut_Player1GetAll()
+	
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.nightbringer, 1, true) then
+		
+		-- Complete Objective and Intel Event
+ 		Tut_Util_ObjectiveComplete(obj_BuildNightbringer.title_id)
+		Util_StartIntel(EVENTS.IE_Necron_BuildNightbringer_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildNightbringer)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Necron_BuildNightbringerCheck)
+		Rule_AddInterval(Rule_Necron_BuildNightbringerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Necron_BuildNightbringerDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Necron_BuildNightbringerDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Necron Hint A1 - Squad Cap Reached
+
+function Rule_Necron_SquadCap()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap ~= maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Necron_SquadCap)
+			Tut_PingBlueprint(blueprint.builder, false)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.barracks, true, true)
+			
+			Rule_Remove(Rule_Necron_SquadCap)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Hint A2 - Squad Limit Reached
+
+function Rule_Necron_SquadLimit()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap == maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Necron_SquadLimit)
+			
+			Rule_Remove(Rule_Necron_SquadLimit)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Hint A4 - Low Power
+
+function Rule_Necron_LowPower()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Power) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Necron_LowPower)
+			
+			Rule_Remove(Rule_Necron_LowPower)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Necron Hint A5 - No Builder Unit
+
+function Rule_Necron_NoBuilder()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			Util_StartIntel(EVENTS.IE_Necron_NoBuilder)
+			
+			Rule_Remove(Rule_Necron_NoBuilder)
+			Rule_AddInterval(Rule_Necron_NoBuilderDone,0)
+			
+		end
+		
+	end
+
+end
+
+-- once the player has a builder, continue where we left off
+function Rule_Necron_NoBuilderDone()
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+		Rule_Add( g_tutorialRuleState )
+			
+		Rule_Remove(Rule_Necron_NoBuilderDone)
+			
+	end
+		
+end
+
+
+function Rule_Restrictions()
+
+	Player_RestrictResearch(g_Player1, "necron_chronometron_research")
+	Player_RestrictResearch(g_Player1, "necron_lightning_field_research")
+	Player_RestrictResearch(g_Player1, "necron_phase_shifter_research")
+	Player_RestrictResearch(g_Player1, "necron_solar_pulse_research")
+	Player_RestrictResearch(g_Player1, "necron_veil_of_darkness_research")	
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_1")
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_2")
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_3")
+	
+	Player_RestrictSquad(g_Player1, "necron_lord_squad")
+
+
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--~ EVENTS = {}
+
+--  Selection
+
+EVENTS.IE_Necron_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103075 )   -- To select a unit or structure, simply click on it with the left mouse button. Go to your base and select the Dormant Monolith.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500074)  -- Congratulations! You have just learned how to select units and structures in the game.
+	CTRL.WAIT()
+end
+
+-- Build a Builder Scarab
+
+EVENTS.IE_Necron_BuildScarab = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103090)	-- Select your Dormant Monolith and look for the Builder Scarab icon located in the lower-right corner of the screen. Click this button now.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildScarab_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101084 )	-- Take note of the small bar that is gradually filling up. This Progress Bar gives you an indication of how close something is to being ready.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildScarab_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103092 )	-- Excellent! You now have a Builder Scarab. Builder Scarabs are the Necron builder unit. Any time you wish to build a new structure, you must use a Builder Scarab drone.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103100 )	-- Your main objective when playing the Necrons is to revive your Monolith, a mobile fortress that begins each game dormant and buried in the sands.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103101 )	-- As you build secondary structures, you can revive your Monolith and gain access to more and more powerful units. 
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_Necron_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103110 )	-- Almost all Necron units, structures and upgrades require Power to function. Building a Plasma Generator will supply you with the Power you need to raise your deathless army.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103111 )	-- Select your Builder Scarab and build a Plasma Generator.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101125 )	-- The more Plasma Generators you have, the faster you will build up the Power Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103113 )	-- You now have Power! Plasma Generators will continue to produce Power at a constant rate. Note that there is a limit to how many Plasma Generators can be built per Monolith.
+	CTRL.WAIT()
+end
+
+-- Capture Point
+
+EVENTS.IE_Necron_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103130 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103132 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+CTRL.WAIT()
+
+end
+
+EVENTS.IE_Necron_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103131 )	-- Capturing Strategic Points denies them from the enemy. Other races use Strategic Points to generate resources, so capturing points can hamper their efforts.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101098 )	-- Capturing a Strategic Point takes time. Do not move the capturing squad away from the Strategic Point until the progress bar is full. Otherwise, you will not take control of the Strategic Point.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103134 )	-- Excellent! The point is ours!
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_Necron_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103140 )	-- Select the Builder Scarab and build a Tower of Impending Doom on the captured Strategic Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103141 )	-- The Tower of Impending Doom fortifies your hold of a Strategic Point, which accelerates the speed at which you build units and structures and research upgrades.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103142 )	-- Excellent! The point is now protected from enemy retaliation. Note that the Necron Time Modifier indicator on the top right of your screen has increased. You should continue to build Towers on all your captured Strategic Points.
+	CTRL.WAIT()
+end
+
+
+-- Control Zones
+EVENTS.IE_Necron_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101193 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103121 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101195 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101196 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Necron Warriors
+EVENTS.IE_Necron_BuildWarrior = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103160 )	-- Select your Dormant Monolith and build a Necron Warrior Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildWarrior_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103161 )	-- Necron Warriors are your basic infantry unit. They wield powerful gauss weapons and are very cheap to produce, but are quite slow-moving.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildWarrior_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103162 )	-- Excellent. You have built a squad of Necron Warriors.
+	CTRL.WAIT()
+end
+
+-- Reinforce Necron Warriors
+EVENTS.IE_Necron_Reinforce = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101143 )	-- Now we should focus on bringing our squads to full strength by reinforcing them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103171 )	-- Reinforcing is the act of calling in additional troops to bring your squad to maximum combat effectiveness. Select a Necron Warrior Squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101145 )	-- Click the Reinforce Squad button to add one new unit to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_Reinforce_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103173 )	-- You can Reinforce during battle, in the event that a Necron Warrior falls to the enemy.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101147  )	-- You can click the Reinforce Squad button multiple times to bring the squad to full strength.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_Reinforce_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103175)	-- Congratulations! You have Reinforced your Necron Warrior Squad.
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_Necron_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101153 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101155 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101156 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_Necron_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101162 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101163 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101164 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101165 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101166 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101167 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101168 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101169 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- Build Lord
+EVENTS.IE_Necron_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103220 )	-- Like most races, Necrons can build a single hero unit to lead their entire force. This leader is the Necron Lord, and ancient and powerful servant of the C'tan.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103221 )	-- Select the Dormant Monolith and build the Necron Lord now. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103222 )	-- The Necron Lord is one of your most powerful units and can receive a variety of upgrades and special abilities. You'll notice that the Necron Lord's inactive body is already in pieces near your Monolith.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildCommander_Complete = function()
+	--CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103223 )	-- Congratulations! You have finished building the Necron Lord. Note that the Necron Lord's existing body has reanimated rather than emerging from the Monolith. If the Necron Lord is later killed in battle, you can reanimate his body where it fell by building the unit again.
+	CTRL.WAIT()
+end
+
+
+-- Build Summoning Core
+EVENTS.IE_Necron_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103240 )	-- Select a Builder Scarab squad and build a Summoning Core now.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103241 )	-- You must build the Summoning Core in order to access more powerful units and to begin the revival of your Monolith. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103242 )	-- Excellent, the Summoning Core is now operational. We are ready to begin awakening the Monolith.
+	CTRL.WAIT()
+end
+
+
+-- Awaken Monolith
+EVENTS.IE_Necron_BuildAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103250 )	-- Select the Dormant Monolith and click on the Awaken Monolith icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103251 )	-- As the Monolith Awakens, it emerges from the sands and more of its ancient systems become operational. More powerful units become available.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103252 )	-- Excellent! Your Monolith is now Awakened. Further upgrades will be necessary to make the Monolith completely operational.
+	CTRL.WAIT()
+end
+
+-- Build Flayed Ones
+EVENTS.IE_Necron_BuildInfantry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103260 )	-- Select the Awakened Monolith and build a Flayed Ones squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildInfantry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103261 )	-- Flayed Ones are powerful melee units that are now available to add to our Necron army.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildInfantry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103262 )	-- Excellent. Your squad of Flayed Ones is now ready.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103270 )	-- You'll notice that the Flayed Ones haven't appeared on the battlefield yet. Indeed, these units can be deployed anywhere your units can see, even in the midst of your enemies.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103271 )	-- Select your Awakened Monolith. Notice the Flayed Ones icon in the display at the bottom center of your screen. This means a squad is ready to be deployed.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103272 )	-- Left-click on the squad icon and then left-click anywhere on the map you have revealed.
+	CTRL.WAIT()
+end
+
+-- Build A Forbidden Archives
+EVENTS.IE_Necron_BuildArchive = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103280 )	-- Select a squad of Builder Scarabs and build a Forbidden Archive.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildArchive_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103281 )	-- The Forbidden Archive allows you to research upgrades for your Necron Lord, making him even more powerful.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildArchive_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103282 )	-- Excellent! The Forbidden Archive is ready.
+	CTRL.WAIT()
+end
+
+-- Research Phylactery
+EVENTS.IE_Necron_ResearchPhylactery = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103290 )	-- Select the Forbidden Archive. You'll notice several different icons on the left side of your screen. Each represents a possible upgrade to the Necron Lord.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103291 )	-- Some icons are grayed out, meaning that research isn't available yet.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103292 )	-- Although there are many different upgrades available, you can never research more than three over the course of a single battle. So you need to choose your upgrades carefully.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103293 )	-- For this tutorial we'll choose the Phylactery upgrade. Click on its icon now.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_ResearchPhylactery_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103294 )	-- Excellent. The Necron Lord is now equipped with a Phylactery. A swarm of small scarabs surround him making him harder to hit and confounding his opponents.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103295 )	-- If you select the Necron Lord, you'll notice that the Phylactery icon has now appeared in the upgrades area.
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_Necron_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101273 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101274 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101275 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101276 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101277 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101278 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_Necron_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103230 )	-- Reviving your Monolith and summoning forces can be a long process if your Time Modifier is low. To raise your modifier, capture and secure more Strategic Points.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103231 )	-- Explore the map around your base with your squads and capture any Strategic Points you encounter using your Builder Scarabs. To complete this objective you must Capture 3 Strategic Points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103232 )	-- Make sure to also use your Builder Scarabs to build Towers of Impending Doom on any captured Strategic Points. This fortifies them against your enemies and increases your Time Modifier.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103233 )	-- You may wish to build more Builder Scarab squads from your Monolith and reinforce those squads to help capture and fortify these points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103234 )	-- Excellent! You have captured 3 Strategic Points and built Towers on them. Taking and holding Strategic Points is key to defeating your enemies.
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_Necron_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101293 )	-- You can capture Critical Locations just like Strategic Points. In some multiplayer games, capturing and holding one or more of these Critical Locations can win you the game! You also get Requisition from any Critical Locations you control.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101294 )	-- Use a squad to capture a Critical Location. Critical Locations are points on the map that represent locations of critical strategic importance. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101295 )	-- Excellent! You've captured a Critical Location. Note that Critical Locations cannot have Listening Posts built on them. You must find other ways to hold them.
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_Necron_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101303 )	-- Holding Relics gives you access to your army's best units and vehicles. Hold on to them to ensure you have access to your best technology!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101304 )	-- Use a squad to capture a Relic. Relics are sacred points of great value. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101305 )	-- Excellent! You have captured a Relic. You can build Listening Posts to fortify captured Relics. You can also capture your opponent's Relics to deny them access to their best units and technology.
+	CTRL.WAIT()
+end
+
+-- Build a Greater Summoning Core
+EVENTS.IE_Necron_BuildMech = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103330 )	-- Select your Builder Scarab and build a Greater Summoning core.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildMech_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103331 )	-- Just like the Summoning Core, the Greater Summoning Core helps more of the Monolith's systems activate and allows you to build more powerful units.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103332 )	-- Many of these new units are large skimmers that serve the function in a Necron army that tanks and other vehicles do in other race's forces. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildMech_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103333)  -- Excellent! You now have a Greater Summoning Core.
+	CTRL.WAIT()
+end
+
+-- Build a Tomb Spyder
+
+EVENTS.IE_Necron_BuildSpyder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103340 )	-- Select your Monolith and build a Tomb Spyder.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildSpyder_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103341 )	-- Tomb Spyders are large skimmers with powerful melee attacks. They also have the ability to spawn additional Necron units. Like the Necron Lord, Tomb Spyders activate from their broken forms on the battlefield rather than emerging from the Monolith.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildSpyder_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103342 )	-- Excellent! You now have a Tomb Spyder.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103343 )	-- Note that your Monolith can only support a finite number of heavy units like the Tomb Spyder. This limit is known as the Vehicle Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103344 )	-- Once you have reached your maximum, you cannot build any more heavy units. You can increase your Vehicle Cap by upgrading your Monolith, just like Squad Cap.
+	CTRL.WAIT()
+end
+
+-- Engage Monolith
+EVENTS.IE_Necron_BuildAddon2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103360 )	-- The Monolith is ready to have more of its systems reactivated. Select the Monolith and click the Engaged Monolith icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildAddon2_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103361 )	-- An Engaged Monolith allows you to spawn the most powerful Necron units and research powerful upgrades for your Necron Lord.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildAddon2_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103362 )	-- Excellent! Your Monolith is now engaged and almost ready to take to the field.
+	CTRL.WAIT()
+end
+
+-- Build Energy Core
+
+EVENTS.IE_Necron_BuildCore = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103370 )	-- Select your Builder Scarab and build an Energy Core
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildCore_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103371 )	-- This is the last component needed to bring the mighty Monolith back to full functionality. It also allows your Necron Lord to assume the terrible Essence of the Nightbringer.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildCore_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103372 )	-- Excellent! You now have an Energy Core.
+	CTRL.WAIT()
+end
+
+-- Restore Monolith
+EVENTS.IE_Necron_BuildMonolith = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103380 )	-- The time has finally come to completely restore the Monolith, making it into the most powerful unit on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103381 )	-- Select the Monolith a click on the Restored Monolith icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildMonolith_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103382 )	-- Once restored, the Monolith will become a mobile fortress with incredible firepower. Although it moves slowly, the Monolith can also teleport from one point to another, passing over enemy defenses with ease.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_BuildMonolith_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103383 )	-- Excellent. The Monolith is restored and ready to lay waste to the enemy.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103384 )	-- Although mobile, the Monolith still functions as your headquarters, producing units as normal.
+	CTRL.WAIT()
+end
+
+
+-- Research Resurrection Orb
+EVENTS.IE_Necron_ResearchRes = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103390 )	-- Select the Forbidden Archive and research the Resurrection Orb.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_ResearchRes_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103391 )	-- Excellent. Your Necron Lord now wield the Resurrection Orb, a powerful artifact that allows you to raise fallen Necrons.
+	CTRL.WAIT()
+end
+
+-- Research Essence of the Nightbringer
+EVENTS.IE_Necron_ResearchNightbringer = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103410 )	-- Beyond the upgrades from the Forbidden Archive, the Necron Lord is also able to channel to essence of his mighty Star God, the Nightbringer.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103412 )	-- The Nightbringer is the original deity of the Necrontyr, the race who became the Necrons. It is to feed his endless appetite that the Necrons purge the living.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103411 )	-- Select the Energy Core and research the Essence of the Nightbringer.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_ResearchNightbringer_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103415 )	-- EExcellent! The Necron Lord is now ready to take on the Essence of the Nightbringer.
+	CTRL.WAIT()
+end
+
+-- Summon the Nightbringer
+EVENTS.IE_Necron_BuildNightbringer = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103416	 )	-- Now select your Necron Lord. Notice that a new icon has appeared allowing him to summon the Nightbringer. Click this icon now.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Necron_BuildNightbringer_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103413 )	-- Excellent! The Necron Lord has transformed, taking on the essence of the Nightbringer.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103414	 )	-- This effect will only last a short time, but while it does, you may lay waste to your opponents.
+	CTRL.WAIT()
+end
+
+-- Squad Cap Warnings
+EVENTS.IE_Necron_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103500 )	-- To increase the number of squads you can field, you need to further upgrade your Monolith.
+	CTRL.WAIT()
+end
+EVENTS.IE_Necron_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101441 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101452 )	-- If you have invested unwisely, you can press the 'Delete' button on your keyboard to terminate unwanted squads.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+
+EVENTS.IE_Necron_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103510 )	-- Remember, Plasma Generators produce the Power Resource. Use your Builder Scarabs to build more generators to increase your Power supply.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101443 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101444 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101445 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+
+EVENTS.IE_Necron_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103520 )	-- In order to further establish your base you need a Builder Scarab.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103521 )	-- Select your Monolith and build a Builder Scarab.
+	CTRL.WAIT()
+end
+
+-- Tutorial Complete
+
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103530 )	-- Use your restored Monolith to exterminate the enemy.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103531 )	-- Build infantry and heavy squads to support your fortress, cutting down scores of enemies.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103532 )	-- Research upgrades at the Forbidden Archive to make your Necron Lord a mighty force in his own right.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1103533 )	-- Take this battlefield, and the next, and the next after that. The fight will never end until the whole galaxy has been purged of life.
+	CTRL.WAIT()
+end
+

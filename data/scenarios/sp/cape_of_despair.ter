@@ -1,0 +1,99 @@
+Model = "Cape_of_Despair"
+Planet = "Kaurava_III"
+
+Name = "$3900030"
+Description = "$3900295"
+TerrainType = "$2851002"
+TerrainDescription = "$3900296"
+History = 
+{
+"$3900297",
+"$3900223",
+"$3900298",
+"$3900223",
+"$3900299",
+"$3900223",
+"$3900300",
+}
+
+MissionFileAttacking = "4P_Cape_of_Despair"
+MissionFileAttackingConquered = "4P_Cape_of_Despair"
+MissionFileDefending = "4P_Cape_of_Despair"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	"Principian_Badlands",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_obliterator_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_dreadnought_hellfire_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_bad_dok_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_kasrkin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_vypers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_skyray_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_destroyer_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_repentia_mistress_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_raider_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "eldar_race"
+OwnerSecondary = "necron_race"
+
+StartingResourceBonus = 0.0

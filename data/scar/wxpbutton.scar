@@ -1,0 +1,165 @@
+----------------------------------------------------------------------------------------------------------------
+-- Button helper functions
+-- (c) 2005 Relic Entertainment Inc.
+
+--? @group Util
+
+--? @shortdesc Create and Ability Button
+--? @result ButtonID
+--? @args LuaConfig::RefTable textureTable, LuaConfig::RefTable tooltipTable, Boolean enabled
+--? @extdesc Must pass in a table of tga file references and localized string numbers.\n
+--? Example:\n
+--? \tlocal table1 = {"command_icons/stance_burn", "command_icons/stance_hold", "command_icons/stance_cease"}\n
+--? \t"command_icons/stance_burn" = enabled icon, "command_icons/stance_hold" = disabled icon, "command_icons/stance_cease" = mouseover icon\n
+--? \tlocal table2 = { "$830050", "$830051"}\n
+--? \t"$830050" = title, "$830051" = description\n\n
+--? \tg_buttonID1 = Util_SGroupAbilityButton_Create(table1, table2, false)\n
+-- creator: degnan
+function Util_AbilityButton_Create(textureTable, tipTable, boolean)
+
+	local buttonID = Button_AddAbility(false, boolean, false)
+	Button_SetTextures(buttonID, textureTable[1], textureTable[2], textureTable[3])
+	Button_SetTooltip(buttonID, tipTable[1], tipTable[2])
+	
+	return buttonID
+	
+end
+
+--? @shortdesc Create and Modal Ability Button
+--? @result ButtonID
+--? @args LuaConfig::RefTable, textureTable, LuaConfig::RefTable tooltipTable, Boolean enabled
+--? @extdesc Must pass in a table of tga file references and localized string numbers.\n
+--? Example:\n
+--? \tlocal table1 = {"command_icons/stance_burn", "command_icons/stance_hold", "command_icons/stance_cease"}\n
+--? \t"command_icons/stance_burn" = enabled icon, "command_icons/stance_hold" = disabled icon, "command_icons/stance_cease" = mouseover icon\n
+--? \tlocal table2 = { "$830050", "$830051"}\n
+--? \t"$830050" = title, "$830051" = description\n\n
+--? \tg_buttonID1 = Util_SGroupAbilityButton_Create(table1, table2, false)\n
+-- creator: degnan
+function Util_AbilityButton_CreateModal(textureTable, tipTable, boolean1)
+
+	local buttonID = Button_AddAbility(false, boolean1, true)
+	Button_SetTextures(buttonID, textureTable[1], textureTable[2], textureTable[3])
+	Button_SetTooltip(buttonID, tipTable[1], tipTable[2])
+	
+	return buttonID
+	
+end
+
+--? @shortdesc Create and Scar Button
+--? @result ButtonID
+--? @args String widgetName, LuaConfig::RefTable, textureTable, LuaConfig::RefTable tooltipTable, Boolean visible, Boolean enabled
+--? @extdesc Must pass in a valid widget name and table of tga file references and localized string numbers.\n
+--? Example:\n
+--? \tlocal table1 = {"command_icons/stance_burn", "command_icons/stance_hold", "command_icons/stance_cease"}\n
+--? \tlocal table2 = { "$830050", "$830051"}\n\n
+--? \tcurrent acceptible widget names include : "btn_ScarUI"\n\n
+--? \tg_buttonID1 = Util_ScarButton_Create("btn_ScarUI", table1, table2, true, false)\n
+-- creator: degnan
+function Util_ScarButton_Create(widgetName, textureTable, tipTable, boolean1, boolean2)
+
+	local buttonID = Button_Add(widgetName,boolean1, boolean2, false)
+	Button_SetVisible(buttonID, boolean1)
+	Button_SetTextures(buttonID, textureTable[1], textureTable[2], textureTable[3])
+	Button_SetTooltip(buttonID, tipTable[1], tipTable[2])
+	
+	return buttonID
+	
+end
+
+--? @shortdesc Add an Ability Button that you want on an SGROUP to the Visibility Manager
+--? @extdesc The function Util_SGroupAbilityButton_ManageVisible() must be added after this function is called for anything to happen.
+--? @result Void
+--? @args ButtonID button, String sgroupname
+-- creator: degnan
+function Util_SGroupAbilityButton_Add2Manager(buttonID, sgroupName)
+
+	Button_VisibilityAddSGroup(buttonID, sgroupName)
+
+end
+
+function Util_SGroupAbilityButton_ManageVisible()
+
+	-- Dead function
+	
+end
+
+--? @shortdesc Forces an update of all buttons in both the SGroup and EGroup button visibility managers
+--? @extdesc Calling this function should not be needed in most cases, and should be avoided because of performance overheads.
+function Util_ButtonManagerUpdateAll()
+
+	Button_VisibilityUpdateAll()
+
+end
+
+--? @shortdesc Remove an Ability Button from the SGroup Visibility Manager
+--? @extdesc This will remove the button from the manager and hide it if it is visible.
+--? @result Void
+--? @args ButtonID button
+-- creator: degnan
+function Util_SGroupAbilityButton_Remove(buttonID)
+	
+	Button_VisibilityRemove(buttonID)
+
+end
+
+--? @shortdesc Add an Ability Button that you want on an EGROUP to the Visibility Manager
+--? @extdesc The function Util_EGroupAbilityButton_ManageVisible() must be added after this function is called for anything to happen.
+--? @result Void
+--? @args ButtonID button, String egroupname
+-- creator: degnan
+function Util_EGroupAbilityButton_Add2Manager(buttonID, egroupName)
+
+	Button_VisibilityAddEGroup(buttonID, egroupName)
+
+end
+
+function Util_EGroupAbilityButton_ManageVisible()
+
+	-- Dead function
+	
+end
+
+--? @shortdesc Remove an Ability Button from the EGroup Visibility Manager
+--? @extdesc This will remove the button from the manager and hide it if it is visible.
+--? @result Void
+--? @args ButtonID button
+-- creator: degnan
+function Util_EGroupAbilityButton_Remove(buttonID)
+	
+	Button_VisibilityRemove(buttonID)
+
+end
+
+--? @shortdesc Add an Ability Button that you want in the No Selection Visibility Manager
+--? @extdesc The function Util_NoSelectionAbilityButton_ManageVisible() must be added after this function is called for anything to happen.
+--? @result Void
+--? @args ButtonID button
+-- creator: degnan
+function Util_NoSelectionAbilityButton_Add2Manager(buttonID)
+
+	Button_VisibilityAddNoSelection(buttonID)
+
+end
+
+--? @shortdesc Manages the visibility of Ability Buttons conditional on the user having NO selection made.
+--? @extdesc This function should be added once with Rule_Add() or Rule_AddDelay() in order to avoid lag between having no selection and the button appearing.
+--? @result Void
+--? @args Void
+-- creator: degnan
+function Util_NoSelectionAbilityButton_ManageVisible()
+
+	-- Dead function
+	
+end
+
+--? @shortdesc Remove an Ability Button from the No Selection Visibility Manager
+--? @extdesc This will remove the button from the manager and hide it if it is visible.
+--? @result Void
+--? @args ButtonID button
+-- creator: degnan
+function Util_NoSelectionAbilityButton_Remove(buttonID)
+	
+	Button_VisibilityRemove(buttonID)
+
+end

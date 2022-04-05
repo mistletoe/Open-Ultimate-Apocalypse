@@ -1,0 +1,30 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\required_structure.lua]])
+GameData["requirements"]["required_1"]["structure_name"] = [[daemon_gift_circle]]
+GameData["requirements"]["required_2"] = Reference([[requirements\required_research_either.lua]])
+GameData["requirements"]["required_2"]["research_name_either"] = [[research\daemons_research_favored1.lua]]
+GameData["requirements"]["required_2"]["research_name_or"] = [[research\daemons_research_favored2.lua]]
+GameData["requirements"]["required_10"] = Reference([[requirements\required_research_either.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["requirements"]["required_10"]["research_name_either"] = [[research\daemons_research_favored1.lua]]
+GameData["requirements"]["required_10"]["research_name_or"] = [[research\daemons_research_favored2.lua]]
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["power"] = 100
+GameData["time_cost"]["cost"]["requisition"] = 100
+GameData["time_cost"]["time_seconds"] = 50
+GameData["ui_hotkey_name"] = [[hotkey_h]]
+GameData["ui_index_hint"] = 18
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$95651]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$16000406]] -- 
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$16000410]] -- 
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[chaos_icons/fraggrenadesresearch_icon]]
+GameData["ui_info"]["screen_name_id"] = [[$16000403]] -- - Executes a small radius of lightning strikes and unleashes a volley of meteors!
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["override_help_text_list"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["ui_info"]["use_override_table_for_non_requisition_races"] = nil

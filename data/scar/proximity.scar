@@ -1,0 +1,401 @@
+----------------------------------------------------------------------------------------------------------------
+-- Proximity helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+import("GroupCallers.scar")
+
+----------------------------------------------------------------------------------------------------------------
+-- Types
+PROX_SHORTEST = 0
+PROX_LONGEST = 1
+PROX_CENTER = 2
+
+----------------------------------------------------------------------------------------------------------------
+-- Private implementation
+
+_Prox_Private = {
+
+	-- check if all or any items in a group are in proximity of a point ( groupcaller should either be SGroupCaller or EGroupCaller)
+	GroupNearPoint = function ( groupId, point, prox, all, groupcaller )
+		
+		local CheckItemNearPoint = function ( groupid, itemindex, itemid )
+			
+			return World_PointPointProx( point, groupcaller.GetItemPosition( itemid ), prox )
+			
+		end
+			
+		local result = groupcaller.ForEachAllOrAny( groupId, all, CheckItemNearPoint )
+		return result
+		
+	end,
+	
+	-- check if all or any items in a group are near another group
+	GroupNearGroup = function( group1, groupcaller1, group2, groupcaller2, prox, all)
+		
+		local CheckGroupNearGroup = function( groupid, itemindex, itemid )
+			
+			local itempos1 = groupcaller1.GetItemPosition( itemid )
+			
+			-- check if group2 is near itempos1
+			return _Prox_Private.GroupNearPoint( group2, itempos1, prox, all, groupcaller2 )
+			
+		end
+		
+		local result = groupcaller1.ForEachAllOrAny( group1, all, CheckGroupNearGroup )
+		return result
+	
+	end,
+	
+	-- returns the distance between 2 groups centers
+	GroupToGroupProxCenter = function( groupId1, groupcaller1, groupId2, groupcaller2 )
+		return World_DistancePointToPoint(	groupcaller1.GetPosition( groupId1), groupcaller2.GetPosition( groupId2 ) )
+	end,
+	
+	-- returns the closest or furthest distance between two groups
+	GroupToGroupProx = function( groupId1, groupcaller1, groupId2, groupcaller2, closest)				
+		local distance = 0
+		if( closest ) then distance = 9999999 end -- set distance to a really big number
+			
+		local CheckDistance = function( groupid, itemindex, itemid )
+		
+			local itempos = groupcaller1.GetItemPosition( itemid )
+			
+			local dist = groupcaller2.GetDistanceToPoint( groupId2, itempos, closest )
+			
+			if( closest ) then 
+				if( dist < distance ) then distance = dist end
+			else
+				if( dist > distance ) then distance = dist end
+			end
+			
+		end
+			
+		groupcaller1.ForEach( groupId1, CheckDistance )
+			
+		return distance
+	end
+}
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Exported implementation
+
+--? @group Proximity
+
+
+--? @shortdesc Returns the distance between two squad groups. use checktype PROX_SHORTEST, PROX_LONGEST, or PROX_CENTER.
+--? @extdesc
+--? If check is PROX_SHORTEST this will return the shortest distance between the two groups.\n
+--? If check is PROX_LONGEST this will return the longest distance between the two groups.\n
+--? If check is PROX_CENTER this will return the distance between the two groups centers.\n
+--? @args String groupname1, String groupname2, ProxType checktype
+--? @result Real
+
+function Prox_SGroupSGroup(groupname1, groupname2, checktype)
+	if( checktype == PROX_CENTER ) then
+		return _Prox_Private.GroupToGroupProxCenter( 
+			SGroup_FromName( groupname1 ), SGroupCaller,
+			SGroup_FromName( groupname2 ), SGroupCaller
+		)
+	else
+		return _Prox_Private.GroupToGroupProx(
+			SGroup_FromName( groupname1 ), SGroupCaller,
+			SGroup_FromName( groupname2 ), SGroupCaller,
+			(checktype == PROX_SHORTEST)
+		)
+	end	
+end
+
+
+--? @shortdesc Returns the distance between two entity groups. use checktype PROX_SHORTEST, PROX_LONGEST, or PROX_CENTER.
+--? @extdesc
+--? If check is PROX_SHORTEST this will return the shortest distance between the two groups.\n
+--? If check is PROX_LONGEST this will return the longest distance between the two groups.\n
+--? If check is PROX_CENTER this will return the distance between the two groups centers.\n
+--? @args String groupname1, String groupname2, ProxType checktype
+--? @result Real
+function Prox_EGroupEGroup(groupname1, groupname2, checktype)
+	if( checktype == PROX_CENTER ) then
+		return _Prox_Private.GroupToGroupProxCenter( 
+			EGroup_FromName( groupname1 ), EGroupCaller,
+			EGroup_FromName( groupname2 ), EGroupCaller
+		)
+	else
+		return _Prox_Private.GroupToGroupProx(
+			EGroup_FromName( groupname1 ), EGroupCaller,
+			EGroup_FromName( groupname2 ), EGroupCaller,
+			(checktype == PROX_SHORTEST)
+		)
+	end	
+end
+
+
+--? @shortdesc Returns the distance between an entity group and a squad group.  use checktype PROX_SHORTEST, PROX_LONGEST, or PROX_CENTER.
+--? @extdesc
+--? If check is PROX_SHORTEST this will return the shortest distance between the two groups.\n
+--? If check is PROX_LONGEST this will return the longest distance between the two groups.\n
+--? If check is PROX_CENTER this will return the distance between the two groups centers.\n
+--? @args String egroupname, String sgroupname, ProxType checktype
+--? @result Real
+function Prox_EGroupSGroup(egroupname, sgroupname, checktype)
+	if( checktype == PROX_CENTER ) then
+		return _Prox_Private.GroupToGroupProxCenter( 
+			EGroup_FromName( egroupname ), EGroupCaller,
+			SGroup_FromName( sgroupname ), SGroupCaller
+		)
+	else
+		return _Prox_Private.GroupToGroupProx(
+			EGroup_FromName( egroupname ), EGroupCaller,
+			SGroup_FromName( sgroupname ), SGroupCaller,
+			(checktype == PROX_SHORTEST)
+		)
+	end	
+end
+
+
+--? @shortdesc Returns the distance between a marker and an entity group.  use checktype PROX_SHORTEST, PROX_LONGEST, or PROX_CENTER.
+--? @extdesc
+--? If check is PROX_SHORTEST this will return the shortest distance between the two groups.\n
+--? If check is PROX_LONGEST this will return the longest distance between the two groups.\n
+--? If check is PROX_CENTER this will return the distance between the two groups centers.\n
+--? @args String markername, String egroupname, ProxType checktype
+--? @result Real
+function Prox_MarkerEGroup(markername, egroupname, checktype)
+	if( checktype == PROX_CENTER ) then
+		return World_DistancePointToPoint(
+			EGroup_GetPosition( EGroup_FromName( egroupname ) ),
+			Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+		)
+	else
+		return World_DistanceEGroupToPoint(
+			EGroup_FromName( egroupname ),
+			Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ),
+			(checktype == PROX_SHORTEST)
+		)
+	end	
+end
+
+
+--? @shortdesc Returns the distance between a marker and a squad group.  use checktype PROX_SHORTEST, PROX_LONGEST, or PROX_CENTER.
+--? @extdesc
+--? If check is PROX_SHORTEST this will return the shortest distance between the two groups.\n
+--? If check is PROX_LONGEST this will return the longest distance between the two groups.\n
+--? If check is PROX_CENTER this will return the distance between the two groups centers.\n
+--? @args String markername, String sgroupname, ProxType checktype
+--? @result Real
+function Prox_MarkerSGroup(markername, sgroupname, checktype)
+	if( checktype == PROX_CENTER ) then
+		return World_DistancePointToPoint(
+			SGroup_GetPosition( SGroup_FromName( sgroupname ) ),
+			Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+		)
+	else
+		return World_DistanceSGroupToPoint(
+			SGroup_FromName( sgroupname ),
+			Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ),
+			(checktype == PROX_SHORTEST)
+		)
+	end	
+end
+
+
+--? @shortdesc Returns true if ALL squads in a group are in proximity to a marker.
+--? @extdesc
+--? The proximity of a marker can only be set in the mission editor.
+--? @args String groupname, String markername
+--? @result Boolean
+function Prox_AllSquadsNearMarker(groupname, markername)
+	local markerId = Marker_FromName( markername, "basic_marker" )
+	
+	return _Prox_Private.GroupNearPoint(
+				SGroup_FromName( groupname ),
+				Marker_GetPosition( markerId ),
+				Marker_GetProximity( markerId ),
+				true,
+				SGroupCaller
+			)
+end
+
+
+--? @shortdesc Returns true if ANY squads from a group are in proximity to a marker.
+--? @extdesc
+--? The proximity of a marker can only be set in the mission editor.
+--? @args String groupname, String markername
+--? @result Boolean
+function Prox_AnySquadNearMarker(groupname, markername)
+	local markerId = Marker_FromName( markername, "basic_marker" )
+	
+	return _Prox_Private.GroupNearPoint(
+				SGroup_FromName( groupname ),
+				Marker_GetPosition( markerId ),
+				Marker_GetProximity( markerId ),
+				false,
+				SGroupCaller
+			)
+end
+
+
+--? @shortdesc Returns true if ALL entities in a group are in proximity to a marker.
+--? @extdesc
+--? The proximity of a marker can only be set in the mission editor.
+--? @args String groupname, String markername
+--? @result Boolean
+function Prox_AllEntitiesNearMarker(groupname, markername)
+	local markerId = Marker_FromName( markername, "basic_marker" )
+	
+	return _Prox_Private.GroupNearPoint(
+				EGroup_FromName( groupname ),
+				Marker_GetPosition( markerId ),
+				Marker_GetProximity( markerId ),
+				true,
+				EGroupCaller
+			)
+end
+
+
+--? @shortdesc Returns true if ANY entity from a group are in proximity to a marker.
+--? @extdesc
+--? The proximity of a marker can only be set in the mission editor.
+--? @args String groupname, String markername
+--? @result Boolean
+function Prox_AnyEntityNearMarker(groupname, markername)
+	local markerId = Marker_FromName( markername, "basic_marker" )
+	
+	return _Prox_Private.GroupNearPoint(
+				EGroup_FromName( groupname ),
+				Marker_GetPosition( markerId ),
+				Marker_GetProximity( markerId ),
+				false,
+				EGroupCaller
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players squads are in proximity of a given squad group.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId, String sgroupname, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerSquadsInProximityOfSquads(playerId, sgroupname, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetSquads( playerId ), SGroupCaller,
+					SGroup_FromName( sgroupname), SGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players squads are in proximity of a given entity group.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId, String sgroupname, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerSquadsInProximityOfEntities(playerId, egroupname, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetSquads( playerId ), SGroupCaller,
+					EGroup_FromName(egroupname), EGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players entities are in proximity of a given squad group.
+--? @extdesc Set "all" to true to check that ALL entities are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId, String sgroupname, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerEntitiesInProximityOfSquads(playerId, sgroupname, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetEntities( playerId ), EGroupCaller,
+					SGroup_FromName( sgroupname), SGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players squads are in proximity of a given players squads.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId1, PlayerID playerId2, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerSquadsInProximityOfPlayerSquads(playerId1, playerId2, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetSquads( playerId1 ), SGroupCaller,
+					Player_GetSquads( playerId2 ), SGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players squads are in proximity of a given players entities.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId1, PlayerID playerId2, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerSquadsInProximityOfPlayerEntities(playerId1, playerId2, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetSquads( playerId1 ), SGroupCaller,
+					Player_GetEntities( playerId2 ), EGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players entities are in proximity of a given squad group.
+--? @extdesc Set "all" to true to check that ALL entities are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId1, PlayerID playerId2, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerEntitiesInProximityOfPlayerSquads(playerId1, playerId2, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetEntities( playerId1 ), EGroupCaller,
+					Player_GetSquads( playerId2 ), SGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY players squads are in proximity of a given entity group.
+--? @extdesc Set "all" to true to check that ALL entities are in proximity, or set "all" to false to check for ANY.
+--? @args PlayerID playerId, String egroupname, Real proximity, Boolean all
+--? @result Boolean
+function Prox_PlayerEntitiesInProximityOfEntities(playerId, egroupname, proximity, all)
+	return _Prox_Private.GroupNearGroup( 
+					Player_GetEntities( playerId ), EGroupCaller,
+					EGroup_FromName(egroupname), EGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY squads are in proximity of a given squad group.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args String sgroupname1, String sgroupname2, Real proximity, Boolean all
+--? @result Boolean
+function Prox_SquadsInProximityOfSquads( sgroupname1, sgroupname2, proximity, all )
+	return _Prox_Private.GroupNearGroup( 
+					SGroup_FromName( sgroupname1 ), SGroupCaller,
+					SGroup_FromName( sgroupname2 ), SGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY squads are in proximity of a given entity group.
+--? @extdesc Set "all" to true to check that ALL squads are in proximity, or set "all" to false to check for ANY.
+--? @args String sgroupname, String egroupname, Real proximity, Boolean all
+--? @result Boolean
+function Prox_SquadsInProximityOfEntities( sgroupname, egroupname, proximity, all )
+	return _Prox_Private.GroupNearGroup( 
+					SGroup_FromName( sgroupname ), SGroupCaller,
+					EGroup_FromName( egroupname ), EGroupCaller,
+					proximity, all
+			)
+end
+
+
+--? @shortdesc Checks if ALL or ANY entities are in proximity of a given entity group.
+--? @extdesc Set "all" to true to check that ALL entities are in proximity, or set "all" to false to check for ANY.
+--? @args String egroupname1, String egroupname2, Real proximity, Boolean all
+--? @result Boolean
+function Prox_EntitiesInProximityOfEntities( egroupname1, egroupname2, proximity, all )
+	return _Prox_Private.GroupNearGroup( 
+					EGroup_FromName( egroupname1 ), EGroupCaller,
+					EGroup_FromName( egroupname2 ), EGroupCaller,
+					proximity, all
+			)
+end

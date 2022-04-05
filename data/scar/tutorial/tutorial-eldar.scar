@@ -1,0 +1,3042 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Eldar Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_Eldar_Start()
+	Rule_AddOneShot(Rule_Eldar_Selection, 0)
+
+--~ 	Rule_AddInterval(Rule_Eldar_SquadCap, 10)
+	Rule_AddInterval(Rule_Eldar_SquadLimit, 10)
+	Rule_AddInterval(Rule_Eldar_LowResource, 10)
+	Rule_AddInterval(Rule_Eldar_LowPower, 10)
+end
+
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Guardian Squad
+-- 3	Capture Point
+-- 4	Build Bonesinger
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Barracks
+-- 8	Build Rangers
+-- 9	Reinforce 
+-- 10	Health (skipped if tutorial has been played before)
+-- 11	Build Farseer
+-- 12	Attach Farseer
+-- 13	Morale (skipped if tutorial has been played before)
+-- 14	Aspect Stones
+-- 15	Build Banshees
+-- 16	Build Dark Reapers
+-- 17	Mobility
+-- 18	Build Webway Gate
+-- 19	Build Armoury
+-- 20	Build Warp Spiders
+-- 21	Build Vehicle Shop
+-- 22	Take Cover (skipped if tutorial has been played before)
+-- 23	Capture Points
+-- 24	Capture Critical Location
+-- 25	Capture Relic
+-- 26	Mobilize for War
+-- 27	Build Avatar
+-- 28	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 1 - Selection
+
+function Rule_Eldar_Selection()
+
+	-- Define Objective
+	obj_Selection = { title_id = 502070, short_desc_id = 502071, help_tip_id = 502070 }		-- Select the Stronghold
+
+	Tut_Player1GetAll()
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+	
+	-- Check to see if the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection , true, EVENTS.IE_Eldar_Selection)
+		Util_StartIntel(EVENTS.IE_Eldar_Selection)
+		
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Eldar_SelectionCheck, 0)
+		
+	-- If they do have it selected
+	else
+		
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Eldar_SelectionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_SelectionCheck()
+	
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+	
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_Selection_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_SelectionCheck)
+		Rule_AddInterval(Rule_Eldar_SelectionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_SelectionDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_SelectionDone)
+		Rule_AddOneShot(Rule_Eldar_BuildScout, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 2 - Build Scout 
+
+function Rule_Eldar_BuildScout()
+
+	-- Define Objective
+	obj_BuildScout = { title_id = 502100, short_desc_id = 502101, help_tip_id = 502100 }	-- Build a Scout Marine Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a scout marine already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScout , true, EVENTS.IE_Eldar_BuildScout)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildScout)
+		
+		-- Ping the HQ
+		ping_BuildScout = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Eldar_BuildScoutDoing, 0)
+		
+	-- if they already have a scout
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScout , true)
+		Tut_Util_ObjectiveComplete(obj_BuildScout.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildScout_Complete)
+		
+		-- Ping scouts once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_BuildScoutDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildScoutDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildScout_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildScoutDoing)
+		Rule_AddInterval(Rule_Eldar_BuildScoutCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildScoutCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a scout marine already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildScout.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildScout_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildScout)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildScoutCheck)
+		Rule_AddInterval(Rule_Eldar_BuildScoutDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildScoutDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildScoutDone)
+		Rule_AddOneShot(Rule_Eldar_CapturePoint, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 3 - Capture Point
+
+function Rule_Eldar_CapturePoint()
+	
+	-- Define Objective
+	obj_CapturePoint = { title_id = 502110, short_desc_id = 502111, help_tip_id = 502110 }	-- Capture a Strategic Point
+
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 200
+	
+	-- need to do this check in reverse because function checks greater than or equal to (which if the player has 1, is greater than 0)
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Eldar_CapturePoint)
+		Util_StartIntel(EVENTS.IE_Eldar_CapturePoint)
+		
+		-- Ping points and infantry
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Eldar_CapturePointDoing, 0)
+		
+	
+	
+		
+	end
+	
+end
+
+function Rule_Eldar_CapturePointDoing()
+
+	Tut_Player1GetAll()
+	
+	if (Cmd_IsCapturing("sg_Player1All", false) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_CapturePoint_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_CapturePointDoing)
+		Rule_AddInterval(Rule_Eldar_CapturePointCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_CapturePointCheck()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_CapturePointCheck)
+		Rule_AddInterval(Rule_Eldar_CapturePointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_CapturePointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_CapturePointDone)
+		Rule_AddOneShot(Rule_Eldar_BuildServitor, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 4 - Build Servitor
+
+function Rule_Eldar_BuildServitor()
+	
+	-- Define Objective
+	obj_BuildServitor = { title_id = 502120, short_desc_id = 502121, help_tip_id = 502120 }	-- Build a Servitor
+
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have a Servitor...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildServitor , true, EVENTS.IE_Eldar_BuildServitor)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildServitor)
+		
+		-- Ping the HQ
+		ping_BuildServitor = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Eldar_BuildServitorDoing, 0)
+		
+	-- else if they DO have a Servitor already...
+	else
+		
+		-- Create/Complete Objective and give a quick Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildServitor , true)
+		Tut_Util_ObjectiveComplete(obj_BuildServitor.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildServitor_Doing)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_BuildServitorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildServitorDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildServitor_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildServitorDoing)
+		Rule_AddInterval(Rule_Eldar_BuildServitorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildServitorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildServitor.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildServitor_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildServitor)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildServitorCheck)
+		Rule_AddInterval(Rule_Eldar_BuildServitorDone,0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildServitorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildServitorDone)
+		Rule_AddInterval(Rule_Eldar_BuildPost, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 5 - Build Listening Post
+
+function Rule_Eldar_BuildPost()
+	
+	-- Define Objective
+	obj_BuildPost = { title_id = 502130, short_desc_id = 502131, help_tip_id = 502130 }	-- Build a Listening Post
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) 
+		and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) 
+		and Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Eldar_BuildPost)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildPost)
+		
+		-- Ping the captured flag and the Servitor
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildPost)
+		Rule_AddInterval(Rule_Eldar_BuildPostDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildPost
+		Rule_Remove(Rule_Eldar_BuildPost)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+	
+	-- esle if they do somehow have a post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildPost_Doing)
+		
+		-- Ping Looping = true, Non = false
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildPost)
+		Rule_AddInterval(Rule_Eldar_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildPostDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildPost_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildPostDoing)
+		Rule_AddInterval(Rule_Eldar_BuildPostCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildPostCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildPostCheck)
+		Rule_AddInterval(Rule_Eldar_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildPostDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildPostDone)
+		Rule_AddInterval(Rule_Eldar_BuildGenerator, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 6 - Build Generator
+
+function Rule_Eldar_BuildGenerator()
+	
+	-- Define Objective
+	obj_BuildGenerator = { title_id = 502220, short_desc_id = 502221, help_tip_id = 502220 }	-- Build a Plasma Generator
+	
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Eldar_BuildGenerator)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildGenerator)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_BuildGenerator)
+		Rule_AddInterval(Rule_Eldar_BuildGeneratorDoing,0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildGenerator
+		Rule_Remove(Rule_Eldar_BuildGenerator)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+		
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildGenerator_Complete)
+		
+		-- Ping the Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildGenerator)
+		Rule_AddInterval(Rule_Eldar_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildGeneratorDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildGenerator_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Eldar_BuildGeneratorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildGeneratorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildGenerator_Complete)
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+			Util_StartIntel(EVENTS.IE_Eldar_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Eldar_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildGeneratorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Eldar_BuildBarracks, 0)
+
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 7 - Build Barracks
+
+function Rule_Eldar_BuildBarracks()
+	
+	-- Define Objective
+	obj_BuildBarracks = { title_id = 502140, short_desc_id = 502141, help_tip_id = 502140 }	-- Build a Chapel-Barracks
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Eldar_BuildBarracks)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBarracks)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_BuildBarracks)
+		Rule_AddInterval(Rule_Eldar_BuildBarracksDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildBarracks
+		Rule_Remove(Rule_Eldar_BuildBarracks)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBarracks_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildBarracks)
+		Rule_AddInterval(Rule_Eldar_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildBarracksDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBarracks_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Eldar_BuildBarracksCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildBarracksCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Eldar_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildBarracksDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildBarracksDone)
+		Rule_AddInterval(Rule_Eldar_BuildMarines, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 8 - Build Marines
+
+function Rule_Eldar_BuildMarines()
+	
+	-- Define Objective
+	obj_BuildMarines = { title_id = 502150, short_desc_id = 502151, help_tip_id = 502150 }	-- Build a Space Marine Squad
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMarines , true, EVENTS.IE_Eldar_BuildMarines)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildMarines)
+		
+		-- Ping the Barracks
+		ping_BuildMarines = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildMarines)
+		Rule_AddInterval(Rule_Eldar_BuildMarinesCheck, 0) -- goes straight to the "check" function rather than via the "doing" function
+		
+	-- else if they have some Marines already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMarines , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildMarines_Complete)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildMarines)
+		Rule_AddInterval(Rule_Eldar_BuildMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildMarinesDoing() -- Not used (no speech for it!)
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildMarines_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildMarinesDoing)
+		Rule_AddInterval(Rule_Eldar_BuildMarinesCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildMarinesCheck()
+
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildMarines_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildMarines)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildMarinesCheck)
+		Rule_AddInterval(Rule_Eldar_BuildMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildMarinesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildMarinesDone)
+		Rule_AddOneShot(Rule_Eldar_ReinforceMarines, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 9 - Reinforce Marines
+
+function Rule_Eldar_ReinforceMarines()
+
+	-- Define Objective
+	obj_ReinforceMarines = { title_id = 502230, short_desc_id = 502231, help_tip_id = 502230 }	-- Reinforce your Space Marine Squad
+	
+	Tut_Player1GetAll()
+
+	-- Intel Event
+	Tut_Util_ObjectiveCreate(obj_ReinforceMarines , true, EVENTS.IE_Eldar_ReinforceMarines)
+	Util_StartIntel(EVENTS.IE_Eldar_ReinforceMarines)
+	
+	-- Ping the Marines
+	Tut_PingBlueprint(blueprint.infantry, false)
+	Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Eldar_ReinforceMarinesDoing, 0)
+	
+end
+
+function Rule_Eldar_ReinforceMarinesDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Marines
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsReinforcing("sg_Player1All", false)) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_ReinforceMarines_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_ReinforceMarinesDoing)
+		Rule_AddInterval(Rule_Eldar_ReinforceMarinesCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_ReinforceMarinesCheck()
+
+	
+	Tut_Player1GetAll()
+
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_ReinforceMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_ReinforceMarines_Complete)
+		
+		-- Stop Looping Ping
+		-- Tut_PingBlueprintStop(ping_Marines)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_ReinforceMarinesCheck)
+		Rule_AddInterval(Rule_Eldar_ReinforceMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_ReinforceMarinesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_ReinforceMarinesDone)
+		Rule_AddOneShot(Rule_Eldar_Health, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 10 - Health
+
+function Rule_Eldar_Health()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Eldar_Health)
+		Rule_AddInterval(Rule_Eldar_HealthDone, 0)
+	else
+		Rule_AddOneShot(Rule_Eldar_BuildCommander, 0)
+	end
+	
+end
+
+function Rule_Eldar_HealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_HealthDone)
+		Rule_AddInterval(Rule_Eldar_BuildCommander, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 11 - Build Commander
+
+function Rule_Eldar_BuildCommander()
+	
+	-- Define Objective
+	obj_BuildCommander = { title_id = 502160, short_desc_id = 502161, help_tip_id = 502160 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Eldar_BuildCommander)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildCommander)
+		Rule_AddInterval(Rule_Eldar_BuildCommanderDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildCommander_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildCommander)
+		Rule_AddInterval(Rule_Eldar_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildCommanderDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildCommander_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Eldar_BuildCommanderCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildCommanderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Eldar_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildCommanderDone)
+		Rule_AddInterval(Rule_Eldar_AttachCommander, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 12 - Attach Farseer
+
+function Rule_Eldar_AttachCommander()
+
+	-- Define Objective
+	obj_AttachCommander = { title_id = 502170, short_desc_id = 502171, help_tip_id = 502170 }	-- Attach your Force Commander to a Squad
+	
+	Tut_Player1GetAll()
+	
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_AttachCommander , true, EVENTS.IE_Eldar_AttachCommander)
+		Util_StartIntel(EVENTS.IE_Eldar_AttachCommander)
+		
+		-- Ping the Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		Flash_OtherButton("attach_modal", 0, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_AttachCommander)
+		Rule_AddInterval(Rule_Eldar_AttachCommanderCheck, 0)
+	end
+	
+end
+
+function Rule_Eldar_AttachCommanderCheck()
+
+	Tut_Player1GetAll()
+	local attached = false
+	
+	local FilterList = function(gID, idx, sID)
+		if (Squad_IsAttached(sID) == true) then	
+			if (Squad_GetAttachedBlueprintName(sID) == blueprint.commander) then
+				attached = true		-- set a flag
+				g_tut_squad = sID	-- save the ID to check later
+			else
+				SGroup_Remove(gID, sID)
+			end
+		else
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (attached == true) then
+		
+		-- Intel Event
+--~ 		Util_StartIntel(EVENTS.IE_Eldar_AttachCommander_Complete)
+
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Eldar_AttachCommanderCheck)
+		Rule_AddInterval(Rule_Eldar_AttachCommanderCheck2, 0)
+		
+	end	
+
+end
+
+function Rule_Eldar_AttachCommanderCheck2()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		-- Intel Event
+		Tut_Util_ObjectiveComplete(obj_AttachCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_AttachCommander_Complete2)		
+		
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Eldar_AttachCommanderCheck2)
+		Rule_AddInterval(Rule_Eldar_AttachCommanderDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Eldar_AttachCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_AttachCommanderDone)
+		Rule_AddOneShot(Rule_Eldar_Morale, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13 - Morale
+
+function Rule_Eldar_Morale()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Eldar_Morale)
+		Rule_AddInterval(Rule_Eldar_MoraleDone, 0)
+	else
+		Rule_AddOneShot(Rule_Eldar_AspectStones, 0)
+	end
+	
+end
+
+function Rule_Eldar_MoraleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_MoraleDone)
+		Rule_AddOneShot(Rule_Eldar_AspectStones, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13a - Aspect Stones
+
+function Rule_Eldar_AspectStones()
+	
+		Util_StartIntel(EVENTS.IE_Eldar_AspectStones)
+		Rule_AddInterval(Rule_Eldar_AspectStonesDone, 0)
+	
+end
+
+function Rule_Eldar_AspectStonesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_AspectStonesDone)
+		Rule_AddInterval(Rule_Eldar_BuildBanshees, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13b - Build Banshees
+
+function Rule_Eldar_BuildBanshees()
+	
+	-- Define Objective
+	obj_BuildBanshees = { title_id = 502540, short_desc_id = 502541, help_tip_id = 502540 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.banshees, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBanshees , true, EVENTS.IE_Eldar_BuildBanshees)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBanshees)
+		
+		-- Ping the Barracks
+		ping_BuildBanshees = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonbanshees, true, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.banshees, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildBanshees)
+		Rule_AddInterval(Rule_Eldar_BuildBansheesDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.banshees, 1, true) or Tut_AddonIsDone(blueprint.addonbanshees, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBanshees , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBanshees.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBanshees_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.banshees, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildBanshees)
+		Rule_AddInterval(Rule_Eldar_BuildBansheesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildBansheesDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.banshees, mylist) == true) or ( Prod_DoesListContainAddOn( blueprint.addonbanshees, mylist ) == true ) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBanshees_Doing)
+		
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildBansheesDoing)
+		Rule_AddInterval(Rule_Eldar_BuildBansheesCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildBansheesCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.banshees, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBanshees.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildBanshees_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBanshees)
+		Tut_PingBlueprint(blueprint.banshees, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildBansheesCheck)
+		Rule_AddInterval(Rule_Eldar_BuildBansheesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildBansheesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildBansheesDone)
+		Rule_AddInterval(Rule_Eldar_BuildDarkReapers, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13c - Build Dark Reapers
+
+function Rule_Eldar_BuildDarkReapers()
+	
+	-- Define Objective
+	obj_BuildDarkReapers = { title_id = 502550, short_desc_id = 502551, help_tip_id = 502550 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.darkreapers, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildDarkReapers , true, EVENTS.IE_Eldar_BuildDarkReapers)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildDarkReapers)
+		
+		-- Ping the Barracks
+		ping_BuildDarkReapers = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addondarkreapers, true, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.darkreapers, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildDarkReapers)
+		Rule_AddInterval(Rule_Eldar_BuildDarkReapersDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.darkreapers, 1, true) or Tut_AddonIsDone(blueprint.addondarkreapers, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildDarkReapers , true)
+		Tut_Util_ObjectiveComplete(obj_BuildDarkReapers.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildDarkReapers_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.darkreapers, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildDarkReapers)
+		Rule_AddInterval(Rule_Eldar_BuildDarkReapersDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildDarkReapersDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.darkreapers, mylist) == true) or ( Prod_DoesListContainAddOn( blueprint.addondarkreapers, mylist ) == true ) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildDarkReapers_Doing)
+		
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildDarkReapersDoing)
+		Rule_AddInterval(Rule_Eldar_BuildDarkReapersCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildDarkReapersCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.darkreapers, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildDarkReapers.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildDarkReapers_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildDarkReapers)
+		Tut_PingBlueprint(blueprint.darkreapers, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildDarkReapersCheck)
+		Rule_AddInterval(Rule_Eldar_BuildDarkReapersDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildDarkReapersDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildDarkReapersDone)
+		Rule_AddInterval(Rule_Eldar_BuildWebwayGate, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 6a - Build Webway Gate
+
+function Rule_Eldar_BuildWebwayGate()
+	
+	-- Define Objective
+	obj_BuildWebwayGate = { title_id = 502520, short_desc_id = 502521, help_tip_id = 502520 }	-- Build a Chapel-Barracks
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.webwaygate, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWebwayGate , true, EVENTS.IE_Eldar_BuildWebwayGate)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWebwayGate)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.webwaygate, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_BuildWebwayGate)
+		Rule_AddInterval(Rule_Eldar_BuildWebwayGateDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildWebwayGate
+		Rule_Remove(Rule_Eldar_BuildWebwayGate)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.webwaygate, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWebwayGate , true)
+		Tut_Util_ObjectiveComplete(obj_BuildWebwayGate.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWebwayGate_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.webwaygate, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildWebwayGate)
+		Rule_AddInterval(Rule_Eldar_BuildWebwayGateDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildWebwayGateDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.webwaygate) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWebwayGate_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.webwaygate, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildWebwayGateDoing)
+		Rule_AddInterval(Rule_Eldar_BuildWebwayGateCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildWebwayGateCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.webwaygate, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildWebwayGate.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWebwayGate_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.webwaygate, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildWebwayGateCheck)
+		Rule_AddInterval(Rule_Eldar_BuildWebwayGateDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildWebwayGateDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildWebwayGateDone)
+		Rule_AddOneShot(Rule_Eldar_Mobility, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 2a - Mobility
+
+function Rule_Eldar_Mobility()
+	
+	Util_StartIntel(EVENTS.IE_Eldar_Mobility)
+	Rule_AddInterval(Rule_Eldar_MobilityDone, 0)
+	
+end
+
+function Rule_Eldar_MobilityDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_MobilityDone)
+		Rule_AddInterval(Rule_Eldar_BuildArmoury, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 14 - Build Armoury
+
+function Rule_Eldar_BuildArmoury()
+	
+	-- Define Objective
+	obj_BuildArmoury = { title_id = 502180, short_desc_id = 502181, help_tip_id = 502180 }	-- Build an Armoury
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArmoury , true, EVENTS.IE_Eldar_BuildArmoury)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildArmoury)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_BuildArmoury)
+		Rule_AddInterval(Rule_Eldar_BuildArmouryDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildArmoury
+		Rule_Remove(Rule_Eldar_BuildArmoury)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArmoury , true)
+		Tut_Util_ObjectiveComplete(obj_BuildArmoury.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildArmoury_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildArmoury)
+		Rule_AddInterval(Rule_Eldar_BuildArmouryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildArmouryDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildArmoury_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildArmouryDoing)
+		Rule_AddInterval(Rule_Eldar_BuildArmouryCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildArmouryCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildArmoury.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildArmoury_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildArmouryCheck)
+		Rule_AddInterval(Rule_Eldar_BuildArmouryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildArmouryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildArmouryDone)
+		Rule_AddOneShot(Rule_Eldar_TakeCover, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 19 - Take Cover
+
+function Rule_Eldar_TakeCover()
+	
+	-- Define Objective
+	obj_TakeCover = { title_id = 502310, short_desc_id = 502311, help_tip_id = 502310 }	-- Take Cover
+
+	Tut_Player1GetAll()
+	
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- choose the closest cover
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			if currDistance < closestDist then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Eldar_TakeCover)
+		Util_StartIntel(EVENTS.IE_Eldar_TakeCover)
+		
+		-- Ping the Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Eldar_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_TakeCoverCheck()
+	
+	Tut_Player1GetAll()
+
+	if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..coverMarker) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_TakeCover_Complete)
+		
+		-- Stop Looping Ping
+		Ping_Stop(ping_TakeCover)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_TakeCoverCheck)
+		Rule_AddInterval(Rule_Eldar_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_TakeCoverDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_TakeCoverDone)
+		Rule_AddOneShot(Rule_Eldar_PointCount, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 20 - Point Count
+
+function Rule_Eldar_PointCount()
+	
+	-- Define Objective
+	obj_PointCount = { title_id = 502250, short_desc_id = 502251, help_tip_id = 502250 }	-- Capture and Secure more Strategic Points
+
+	Tut_Player1GetAll()
+
+	-- if they haven't got three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Eldar_PointCount)
+		Util_StartIntel(EVENTS.IE_Eldar_PointCount)
+		
+		-- Ping Looping = true, Non = false
+		t_PointCount = Tut_PingBlueprint(blueprint.infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Eldar_PointCountDoing, 0)
+		
+	-- if they've got a load of points already
+	else
+		
+		--Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , false)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_PointCount_Complete)
+		
+		-- Ping the posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_PointCountDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Eldar_PointCountDoing()
+
+	Tut_Player1GetAll()
+
+	-- when you capture three points, mention building listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_PointCount_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_PointCountDoing)
+		Rule_AddInterval(Rule_Eldar_PointCountCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_PointCountCheck()
+	
+	Tut_Player1GetAll()
+	
+	if Tut_PointsCaptured(g_Player1, 1, 3) and Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_PointCountCheck)
+		Rule_AddInterval(Rule_Eldar_PointCountDone, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_PointCountDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_PointCountDone)
+		Rule_AddOneShot(Rule_Eldar_CaptureCriticalPoint, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 21 - Capture Critical Point
+
+function Rule_Eldar_CaptureCriticalPoint()
+	
+	-- Define Objective
+	obj_CaptureCriticalPoint = { title_id = 502260, short_desc_id = 502261, help_tip_id = 502260 }		-- Capture a Critical Location
+
+	Tut_Player1GetAll()
+	
+	-- Check they don't have a Critical Point already...
+	if Tut_PointsCaptured(g_Player1, 2, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Eldar_CaptureCriticalPoint)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Eldar_CaptureCriticalPointCheck, 0)
+		
+	-- If they have already...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureCriticalPoint_Complete)
+		
+		-- Ping the critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_CaptureCriticalPointCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		--Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Eldar_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_CaptureCriticalPointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Eldar_CaptureRelic, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 22 - Capture Relic
+
+function Rule_Eldar_CaptureRelic()
+	
+	-- Define Objective
+	obj_CaptureRelic = { title_id = 502270, short_desc_id = 502271, help_tip_id = 502270 }	-- Capture a Relic
+	
+	Tut_Player1GetAll()
+
+	-- if they don't have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Eldar_CaptureRelic)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the Next Rule
+		Rule_AddInterval(Rule_Eldar_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Eldar_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_CaptureRelicCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 3, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Eldar_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_CaptureRelicDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_CaptureRelicDone)
+		Rule_AddInterval(Rule_Eldar_BuildShop, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 23 - Build Vehicle Shop
+
+function Rule_Eldar_BuildShop()
+
+	-- Define Objective
+	obj_BuildShop = { title_id = 502280, short_desc_id = 502281, help_tip_id = 502280 }	-- Build a Machine Cult
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildShop , true, EVENTS.IE_Eldar_BuildShop)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildShop)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_BuildShop)
+		Rule_AddInterval(Rule_Eldar_BuildShopDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Eldar_BuildShop
+		Rule_Remove(Rule_Eldar_BuildShop)
+		
+		Rule_Add(Rule_Eldar_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildShop , true)
+		Tut_Util_ObjectiveComplete(obj_BuildShop.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildShop_Doing)
+		
+		-- Ping the Machine Shop
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildShop)
+		Rule_AddInterval(Rule_Eldar_BuildShopDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildShopDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildShop_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildShopDoing)
+		Rule_AddInterval(Rule_Eldar_BuildShopCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildShopCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildShop.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildShop_Complete)
+		
+		-- Ping the Machine Shop
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildShopCheck)
+		Rule_AddInterval(Rule_Eldar_BuildShopDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildShopDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildShopDone)
+		Rule_AddInterval(Rule_Eldar_BuildWarpSpiders, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13d - Build Warp Spiders
+
+function Rule_Eldar_BuildWarpSpiders()
+	
+	-- Define Objective
+	obj_BuildWarpSpiders = { title_id = 502560, short_desc_id = 502561, help_tip_id = 502560 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.warpspiders, 1, false) and Tut_AddonIsDone(blueprint.addonwarpspiders, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWarpSpiders , true, EVENTS.IE_Eldar_BuildWarpSpiders)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWarpSpiders)
+		
+		-- Ping the Barracks
+		ping_BuildWarpSpiders = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonwarpspiders, true, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.warpspiders, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildWarpSpiders)
+		Rule_AddInterval(Rule_Eldar_BuildWarpSpidersDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.warpspiders, 1, true) or Tut_AddonIsDone(blueprint.addonwarpspiders, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildWarpSpiders , true)
+		Tut_Util_ObjectiveComplete(obj_BuildWarpSpiders.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWarpSpiders_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.warpspiders, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildWarpSpiders)
+		Rule_AddInterval(Rule_Eldar_BuildWarpSpidersDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildWarpSpidersDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.warpspiders, mylist) == true) or ( Prod_DoesListContainAddOn( blueprint.addonwarpspiders, mylist ) == true ) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWarpSpiders_Doing)
+		
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+--~ 		Flash_ProductionButton(PQ_Squad, blueprint.banshees, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildWarpSpidersDoing)
+		Rule_AddInterval(Rule_Eldar_BuildWarpSpidersCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildWarpSpidersCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.warpspiders, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildWarpSpiders.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildWarpSpiders_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildWarpSpiders)
+		Tut_PingBlueprint(blueprint.warpspiders, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildWarpSpidersCheck)
+		Rule_AddInterval(Rule_Eldar_BuildWarpSpidersDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildWarpSpidersDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildWarpSpidersDone)
+		Rule_AddInterval(Rule_Eldar_ResearchMobilize, 0)
+		
+	end
+	
+end
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 14a - Research Mobilize for War
+
+function Rule_Eldar_ResearchMobilize()
+	
+	-- Define Objective
+	obj_BuildResearchMobilize = { title_id = 502200, short_desc_id = 502201, help_tip_id = 502200 }	-- Build an Armoury
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_ResearchIsDone( g_Player1, blueprint.mobilizeforwarresearch, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchMobilize , true, EVENTS.IE_Eldar_ResearchMobilize)
+		Util_StartIntel(EVENTS.IE_Eldar_ResearchMobilize)
+		
+		-- Ping the Barracks
+		ping_ResearchMobilize = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Research, blueprint.mobilizeforwarresearch, true, true)
+				
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Eldar_ResearchMobilize)
+		Rule_AddInterval(Rule_Eldar_ResearchMobilizeCheck, 0)
+			
+	-- Else if they do have a Barracks already...
+	elseif Tut_ResearchIsDone( g_Player1, blueprint.mobilizeforwarresearch, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchMobilize , true)
+		Tut_Util_ObjectiveComplete(obj_BuildResearchMobilize.title_id)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_ResearchMobilize)
+		Rule_AddInterval(Rule_Eldar_ResearchMobilizeDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_Eldar_ResearchMobilizeCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_ResearchIsDone( g_Player1, blueprint.mobilizeforwarresearch, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildResearchMobilize.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_ResearchMobilize_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		Tut_PingBlueprintStop(ping_ResearchMobilize)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_ResearchMobilizeCheck)
+		Rule_AddInterval(Rule_Eldar_ResearchMobilizeDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_ResearchMobilizeDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_ResearchMobilizeDone)
+		Rule_AddInterval(Rule_Eldar_BuildAvatar,0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Lesson 13d - Build Avatar
+
+function Rule_Eldar_BuildAvatar()
+	
+	-- Define Objective
+	obj_BuildAvatar = { title_id = 502580, short_desc_id = 502581, help_tip_id = 502580 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.avatar, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAvatar , true, EVENTS.IE_Eldar_BuildAvatar)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildAvatar)
+		
+		-- Ping the Barracks
+--[[		Flash_ProductionButton(PQ_AddOn, blueprint.addonwarpspiders, true, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addondarkreapers, true, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonbanshees, true, true)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonfireprism, true, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonvyper, true, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonwraithlord, true, true)]]	
+
+		Flash_ProductionButton(PQ_Squad, blueprint.avatar, true, true)
+		Flash_ProductionButton(PQ_Research, blueprint.annihilate, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Eldar_BuildAvatar)
+		Rule_AddInterval(Rule_Eldar_BuildAvatarDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.avatar, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAvatar , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAvatar.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildAvatar_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.avatar, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildAvatar)
+		Rule_AddInterval(Rule_Eldar_BuildAvatarDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildAvatarDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.avatar, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Eldar_BuildAvatar_Doing)
+		
+--[[		Flash_ProductionButton(PQ_AddOn, blueprint.addonwarpspiders, false, false)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addondarkreapers, false, false)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonbanshees, false, false)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonfireprism, false, false)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonvyper, false, false)
+		Flash_ProductionButton(PQ_AddOn, blueprint.addonwraithlord, false, false)]]	
+		Flash_ProductionButton(PQ_Squad, blueprint.avatar, false, false)
+		Flash_ProductionButton(PQ_Research, blueprint.annihilate, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Eldar_BuildAvatarDoing)
+		Rule_AddInterval(Rule_Eldar_BuildAvatarCheck, 0)
+		
+	end
+
+end
+
+function Rule_Eldar_BuildAvatarCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.avatar, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAvatar.title_id)
+		Util_StartIntel(EVENTS.IE_Eldar_BuildAvatar_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.avatar, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Eldar_BuildAvatarCheck)
+		Rule_AddInterval(Rule_Eldar_BuildAvatarDone, 0)
+		
+	end
+	
+end
+
+function Rule_Eldar_BuildAvatarDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Eldar_BuildAvatarDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Eldar Hint A1 - Squad Cap Reached
+
+function Rule_Eldar_SquadCap()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap ~= maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Eldar_SquadCap)
+			Flash_ProductionButton(PQ_Research, "squad_cap_research", true, true)
+			
+			Rule_Remove(Rule_Eldar_SquadCap)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Hint A2 - Squad Limit Reached
+
+function Rule_Eldar_SquadLimit()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap == maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Eldar_SquadLimit)
+			
+			Rule_Remove(Rule_Eldar_SquadLimit)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Hint A3 - Low Resource
+
+function Rule_Eldar_LowResource()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Eldar_LowResource)
+			
+			Rule_Remove(Rule_Eldar_LowResource)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Hint A4 - Low Power
+
+function Rule_Eldar_LowPower()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Power) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Eldar_LowPower)
+			
+			Rule_Remove(Rule_Eldar_LowPower)
+			
+		end
+		
+	end
+
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Eldar Hint A5 - No Builder Unit
+
+function Rule_Eldar_NoBuilder()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			Util_StartIntel(EVENTS.IE_Eldar_NoBuilder)
+			
+			Rule_Remove(Rule_Eldar_NoBuilder)
+			Rule_AddInterval(Rule_Eldar_NoBuilderDone,0)
+			
+		end
+		
+	end
+
+end
+
+-- once the player has a builder, continue where we left off
+function Rule_Eldar_NoBuilderDone()
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+		Rule_Add( g_tutorialRuleState )
+			
+		Rule_Remove(Rule_Eldar_NoBuilderDone)
+			
+	end
+		
+end
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--[[ Win Warnings ]]
+
+function Rule_ObjectiveChecker()
+	local num = World_GetNumStrategicObjectives()
+	if Player_GetNumStrategicObjectives(g_Player1) > (num*0.5) then
+	
+		Util_StartIntel(EVENTS.IE_ObjectiveWin)
+	
+	end
+
+end
+
+function Rule_ControlAreaChecker()
+	local num = World_GetNumStrategicPoints()
+	if  Player_GetNumStrategicPoints(g_Player1) > (num*0.5) then
+	
+		Util_StartIntel(EVENTS.IE_StrategicPointWin)
+	
+	end
+
+end
+
+function Rule_AnnihilateChecker()
+
+	--[[Set g_Player2]]
+	if g_Player2 == nil and Tut_GetLocalPlayerIndex() == 1 then
+		g_Player2 = World_GetPlayerAt(0)
+	elseif g_Player2 == nil and Tut_GetLocalPlayerIndex() == 0 then
+		g_Player2 = World_GetPlayerAt(1)
+	end
+	
+	local armycount = 0
+	
+	local CountArmourTypes = function( sgroupid, itemindex, squadID )
+		if Squad_HasArmourType( squadID, "tp_infantry_med" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_high" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_low" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_heavy_med" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_heavy_high" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_low" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_med" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_high" ) or 
+			Squad_HasArmourType( squadID, "tp_commander" ) then
+			
+			armycount = armycount+1
+		end
+    end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), CountArmourTypes)
+ 
+	if  armycount >= 4 then
+	
+		local race = Player_GetRaceName(g_Player2)
+		if race == "space_marine_race" then
+			P2blueprint = marine
+		elseif race == "ork_race" then
+			P2blueprint = ork
+		elseif race == "eldar_race" then
+			P2blueprint = eldar
+		elseif race == "chaos_marine_race" then
+			P2blueprint = chaos
+		end
+		
+		--[[EGROUP]]
+		PingHQ = function( egroupid, itemindex, entityID )
+	
+			if Entity_GetBlueprintName(entityID) == P2blueprint.hq then
+				local pos = Entity_GetPosition(entityID)
+				local pingID = Ping_Position(pos, false,"attack")
+			else
+				return false
+			end
+			
+		end
+		
+		EGroup_AddGroup(EGroup_CreateIfNotFound("eg_Player2All"), Player_GetEntities(g_Player2))
+		EGroup_ForEach(EGroup_FromName("eg_Player2All"), PingHQ)
+	
+		Util_StartIntel(EVENTS.IE_Attack)
+	
+	end
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--~ EVENTS = {}
+
+-- Selection
+EVENTS.IE_Eldar_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502073 )	-- To select a unit or structure, simply click on it with the left mouse button. Go to your base and select the Stronghold. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_Selection_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502074 )	-- Congratulations! You have just learned how to select units and structures in the game.
+	CTRL.WAIT()
+end
+
+
+-- Build Scout
+EVENTS.IE_Eldar_BuildScout = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502103 )	-- Select your Stronghold and look for the Scout Marine Squad icon located in the lower-right corner of the screen. Click this button now.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildScout_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502104 )	-- Take note of the small bar that is gradually filling up. This Progress Bar gives you an indication of how close something is to being ready.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildScout_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502105 )	-- Excellent! You now have a Scout Marine Squad.
+	CTRL.WAIT()
+end
+
+
+-- Capture Point
+EVENTS.IE_Eldar_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502114 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502115 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502113 )	-- Order the Scout Marine Squad to capture a Strategic Point by right-clicking on the Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502114 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502115 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502116 )	-- Capturing a Strategic Point takes time. Do not move the capturing squad away from the Strategic Point until the progress bar is full. Otherwise, you will not take control of the Strategic Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502117 )	-- Excellent! The point is ours! You must continue to capture Strategic Points to get more Requisition Resource, which allows you to build more units and structures.
+	CTRL.WAIT()
+end
+
+
+-- Build Servitor
+EVENTS.IE_Eldar_BuildServitor = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502123 )	-- Select your Stronghold and build a Servitor.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildServitor_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502124 )	-- Servitors are required to build additional structures. Servitors are always available from the Stronghold. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildServitor_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502125 )	-- The Servitor has arrived! Servitors are the Space Marines' builder unit. Any time you wish to build a new structure, you must use a Servitor.
+	CTRL.WAIT()
+end
+
+
+-- Build Listening Post
+EVENTS.IE_Eldar_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502133 )	-- Select the Servitor and build a Listening Post on the captured Strategic Point. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502134 )	-- The Listening Post fortifies your hold of a Strategic Point, increasing your Requisition rate at the same time.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502135 )	-- Excellent! The point is now protected from enemy retaliation. You should continue to build Listening Posts on all your captured Strategic Points.
+	CTRL.WAIT()
+end
+
+
+-- Build Generator
+EVENTS.IE_Eldar_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502224 )	-- Some structures, vehicles, and research require Power to function. Building a Plasma Generator will supply you with the Power you need to keep your force going.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502223 )	-- Select your Servitor and build a Plasma Generator.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502225 )	-- The more Plasma Generators you have, the faster you will build up the Power Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502226 )	-- You now have Power! Plasma Generators will continue to produce Power at a constant rate. Note that there is a limit to how many Plasma Generators can be built per Stronghold.
+	CTRL.WAIT()
+end
+
+
+-- Control Zones
+EVENTS.IE_Eldar_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101193 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101194 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101195 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101196 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+
+-- Build Barracks
+EVENTS.IE_Eldar_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502143 )	-- Select your Servitor and build a Chapel-Barracks structure.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502144 )	-- The Chapel-Barracks is the structure where you can build more advanced Space Marine infantry units.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502145 )	-- Excellent, the Chapel-Barracks is finished. 
+	CTRL.WAIT()
+end
+
+
+-- Build Marines
+EVENTS.IE_Eldar_BuildMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502153 )	-- Select your Chapel-Barracks and build a Space Marine Squad. These elite warriors will form the core of your military force.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502154 )	-- Excellent! Space Marine Squads are your all-purpose fighting force. They are powerful and resilient and, with research, can be upgraded to counter almost any threat. They can also capture Strategic Points!
+	CTRL.WAIT()
+end
+
+
+-- Reinforce Marines
+EVENTS.IE_Eldar_ReinforceMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502234 )	-- Reinforcing is the act of calling in additional troops to bring your squad to maximum combat effectiveness.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502233 )	-- Select a Space Marine Squad. Click the Reinforce Squad button to add one new unit to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_ReinforceMarines_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502235 )	-- You can Reinforce during battle, in the event that a brother Space Marine falls to the enemy. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502236 )	-- You can click the Reinforce Squad button multiple times to bring the squad to full strength.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_ReinforceMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502237 )	-- Congratulations! You have Reinforced your Space Marine Squad. 
+	CTRL.WAIT()
+end
+
+
+-- Health
+EVENTS.IE_Eldar_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502330 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502331 )	-- Remember, a squad takes damage as a whole. When enough damage has been inflicted on the squad, a unit will die.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502332 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502333 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.WAIT()
+end
+
+
+-- Take Cover
+EVENTS.IE_Eldar_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502313 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502314 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502315 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502316 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502317 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502318 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+
+-- Build Commander
+EVENTS.IE_Eldar_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502163 )	-- Select the Chapel-Barracks and build a Force Commander. The Force Commander acts as a hero for your army.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502164 )	-- The Force Commander is a veteran of thousands of battles, and his combat prowess is unrivalled. He will lead your force to victory.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502165 )	-- Excellent! The Force Commander has arrived. The Force Commander cannot capture points but is a skilled warrior who can be upgraded with powerful abilities.
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502167 )	-- The Space Marines' other commander unit will become available as you build more facilities and unlock more research.
+	CTRL.WAIT()
+end
+
+
+-- Attach Commander
+EVENTS.IE_Eldar_AttachCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502173 )	-- Select your Force Commander and click the Attach button. Now, select a Space Marine Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_AttachCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502174 )	-- Notice how when the Force Commander joins the squad, they rearrange themselves to make room for their esteemed leader.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502175 )	-- This Space Marine Squad is greatly enhanced by the addition of the Force Commander, but he can also fight effectively on his own. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_AttachCommander_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502176 )	-- To detach the leader from this squad, simply select the squad, then click the Detach icon. It is located in the same place as the Attach icon.
+	CTRL.WAIT()
+end
+
+
+-- Morale
+EVENTS.IE_Eldar_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502320 )	-- Very good! You are mastering advanced concepts that will help you to annihilate your enemies!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502321 )	-- Select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502322 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502323 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502324 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502325 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. Also, certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502326 )	-- Morale can be an effective tool against your enemies.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502327 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502328 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+
+-- Build Addon
+EVENTS.IE_Eldar_BuildAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502183 )	-- Select the Stronghold and click the Monastery Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502184 )	-- We must upgrade the Stronghold to a Monastery to gain access to Squad Leaders and other powerful research options and structures. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502185 )	-- Leaders are highly skilled warriors that can be added to some Space Marine squads. You will need strong leaders if you are to defeat your enemies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502186 )	-- The Monastery is complete! You can now add Sergeants to some of your Space Marine squads. 
+	CTRL.WAIT()
+end
+
+
+-- Build Leader
+EVENTS.IE_Eldar_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502193 )	-- Select a Space Marine Squad and click the Add Leader: Sergeant icon.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502194 )	-- Sergeants are valiant leaders that improve the combat ability and morale of the squad they are part of.  They will inspire your Marines to greater feats of heroism. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502195 )	-- Excellent! Your Sergeant has arrived. Note that your Sergeants are part of the squad and cannot leave it. 
+	CTRL.WAIT()
+end
+
+
+-- Build Armoury
+EVENTS.IE_Eldar_BuildArmoury = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502183 )	-- Select your Bonesinger and build a Soul Shrine. This is how you advance the Eldar technology level. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildArmoury_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502184 )	-- The Soul Shrine is a research facility. Building it allows you to unlock a great number of new units and abilities.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildArmoury_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502185 )	-- Excellent! The Soul Shrine is complete. This signifies the Eldar are ready for the next stage of their preparations for war.
+	CTRL.WAIT()
+end
+
+
+-- Upgrade Weaponry
+EVENTS.IE_Eldar_UpgradeWeaponry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502213 )	-- Select your Space Marine Squad and click the Upgrade: Heavy Bolter icon to upgrade a squad member.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_UpgradeWeaponry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502214 )	-- Notice a Heavy Bolter appears in one of your squad member's hands. This procedure can be performed with any of the available weapon upgrades.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502215 )	-- Initially you can only upgrade 2 units of your total squad with heavy weapons. By doing further research at the Armoury you can unlock the capability to upgrade more.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_UpgradeWeaponry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502216 )	-- Excellent. You have upgraded your Space Marine Squad. You can upgrade your squads anywhere on the battlefield to weapons that are well suited to counter your enemy.
+	CTRL.WAIT()
+end
+
+
+-- Build More Marines
+EVENTS.IE_Eldar_BuildMoreMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502243 )	-- Select your Chapel-Barracks and build another Space Marine Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildMoreMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502248 )	-- Excellent! You have built a Space Marine Squad and brought it to full strength. To mount an effective attack, you should try to have several Space Marine Squads, fully Reinforced to maximum strength and Upgraded with special weapons and a Sergeant.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502244 )	-- Your field base has supplies and logistics to support a finite number of squads. The number of squads you can support at any given time is called your Squad Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502245 )	-- You can see your current Squad Cap in the Resource Area at the top of your screen.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502246 )	-- Once you have reached your maximum Squad Cap, you will not be able to call in any additional squads, so it's very important to keep an eye on this as you're building up your forces. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502247 )	-- You can increase your Squad Cap by building certain structures and researching upgrades, but there is always a maximum beyond which you cannot go.
+	CTRL.WAIT()
+end
+
+
+-- Point Count
+EVENTS.IE_Eldar_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502254 )	-- The best way to make sure you have enough Requisition Resource is to capture and secure Strategic Points.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502253 )	-- Explore the map around your base with your Space Marine Squads and capture any Strategic Points you encounter along the way. To complete this objective you must Capture 3 Strategic Points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502256 )	-- Make sure you use your Servitor to build Listening Posts on any captured Strategic Points. This fortifies them against your enemies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502257 )	-- Excellent! You have captured 3 Strategic Points and built Listening Posts on them. Taking and holding Strategic Points is key to defeating your enemies.
+	CTRL.WAIT()
+end
+
+
+-- Capture Objective
+EVENTS.IE_Eldar_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502264 )	-- You can capture Critical Locations just like Strategic Points. In some multiplayer games, capturing and holding one or more of these Critical Locations can win you the game! You also get Requisition from any Critical Locations you control.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502263 )	-- Use a squad to capture a Critical Location. Critical Locations are points on the map that represent locations of critical strategic importance. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502265 )	-- Excellent! You've captured a Critical Location. Note that Critical Locations cannot have Listening Posts built on them. You must find other ways to hold them.
+	CTRL.WAIT()
+end
+
+
+-- Capture Relic
+EVENTS.IE_Eldar_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502274 )	-- Holding Relics gives you access to your army's best units and vehicles. Hold on to them to ensure you have access to your best technology!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502273 )	-- Use a squad to capture a Relic. Relics are sacred points of great value. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502275 )	-- Excellent! You have captured a Relic. You can build Listening Posts to fortify captured Relics. You can also capture your opponent's Relics to deny them access to their best units and technology.
+	CTRL.WAIT()
+end
+
+
+-- Build Shop
+EVENTS.IE_Eldar_BuildShop = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502283 )	-- Use your Servitor to build a Machine Cult.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildShop_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502284 )	-- Just like the Chapel-Barracks is used to build infantry units, the Machine Cult is used to build vehicles. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502285 )	-- Vehicles are tough and nearly impervious to the attacks of non-upgraded infantry. They are a fundamental part of your army, and can carry powerful support weapons.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildShop_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502287)	-- Excellent! You now have a Machine Cult. You can build powerful vehicles from this building.
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502286 )	-- Note that your field base can only support a finite number of vehicles. This limit is known as the Vehicle Cap. Just like Squad Cap, once you have reached your maximum, you cannot build any more vehicles. You can research technology at your Stronghold that will increase your Vehicle Cap.
+	CTRL.WAIT()
+end
+
+
+-- Squad Cap Warnings
+EVENTS.IE_Eldar_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502290 )	-- To increase the number of squads you can field in Dawn of War, you click on the research items located on your Stronghold.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502291 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them. If you have invested unwisely, you can press the 'Delete' button on your keyboard to terminate unwanted squads.
+	CTRL.WAIT()
+end
+
+
+-- Low Resource Warnings
+EVENTS.IE_Eldar_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502370 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502350 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502352 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502351 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+EVENTS.IE_Eldar_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502126 )	-- In order to further establish your base you need a Bonesinger. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502123 )	-- Select your Webway Assembly and build a Bonesinger. 
+	CTRL.WAIT()
+end
+
+-- Build Webway Gates
+EVENTS.IE_Eldar_BuildWebwayGate = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502523 )	-- 	Select a Bonesinger and build a Webway Gate.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildWebwayGate_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502524 )	-- 	Eldar depend on Webway Gates for many reasons: they expand the Control Zone, they add to the Squad and Vehicle Cap, and they allow for the fast relocation of infantry squads
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildWebwayGate_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502525 )	-- 	Excellent! The Webway Gate is finished. You must build Webway Gates to support your army.
+	CTRL.WAIT()
+end
+
+-- AspectStones
+EVENTS.IE_Eldar_AspectStones = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502530 )	-- 	If you select the Aspect Portal you will notice several different types of Add-on's, called Aspect Stones.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502531 )	-- 	Certain special Eldar infantry squad types must be unlocked by researching these Aspect Stones
+	CTRL.WAIT()
+end
+
+-- Build Banshees
+EVENTS.IE_Eldar_BuildBanshees = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502543 )	-- 	Let's build a Howling Banshee Squad. Select the Aspect Portal and research the Banshee Aspect Stone Add-on. When the research is finished, you can build a Howling Banshee Squad.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildBanshees_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502544 )	-- 	The Howling Banshees are terrifying close-combat specialists that can tie up and decimate even the mighty Space Marines.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildBanshees_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502545 )	-- 	Excellent! The Howling Banshee Squad is complete. Howling Banshees are perfect for close combat against enemy infantry. 
+	CTRL.WAIT()
+end
+
+-- Build Dark Reapers
+EVENTS.IE_Eldar_BuildDarkReapers = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502553 )	-- Let's build a Dark Reaper Squad. Select the Aspect Portal and research the Reaper Aspect Stone Add-on. When the research is finished, you can build a Dark Reaper Squad.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildDarkReapers_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101480 )	-- The Dark Reapers are deadly long-range marksmen that excel at killing heavily armoured infantry like the mighty Space Marines.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildDarkReapers_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101481 )	--	Excellent! Dark Reapers are ideal for ranged attacks on heavy infantry like Space Marine Squads and Terminators.
+	CTRL.WAIT()
+end
+
+-- Build Warp Spiders
+EVENTS.IE_Eldar_BuildWarpSpiders = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502563 )	-- 	Let's build a Warp Spider Squad from the Aspect Portal by researching the Warp Spider Aspect Stone Add-on and then building a Warp Spider Squad
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildWarpSpiders_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502564 )	-- 	The Warp Spiders have powerful teleporters integrated into their armour that allow them to teleport quickly about the map.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101482 )	-- 	In addition to the Warp Spider Squads' main use as a light infantry counter, they can be upgraded to handle vehicles and destroy buildings.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildWarpSpiders_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101483 )	--		Excellent! Warp Spider Squads are best at dealing death to light infantry like Ork Slugga Boyz and Cultists.
+	CTRL.WAIT()
+end
+
+-- Build Avatar
+EVENTS.IE_Eldar_BuildAvatar = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101486 )	-- 		Let's build an Avatar. You must first research all of the Aspect Stone Add-ons on the Aspect Portal and Support Portal. When that is complete, select the Aspect Portal and build the Avatar. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildAvatar_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502585 )	-- 		The Avatar costs a significant amount of resources but is well worth it for its strength in combat. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_BuildAvatar_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502586 )	--			Excellent! The Avatar is finished. The Avatar is the Eldar's ultimate living weapon. It will destroy all in its path. Go forth and conquer.
+	CTRL.WAIT()
+end
+
+-- Research Mobilize For War
+EVENTS.IE_Eldar_ResearchMobilize = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101484 )	-- 		To reach the stage where we can build vehicles, we must first research Mobilize for War located on the Soul Shrine.
+	CTRL.WAIT()
+end
+EVENTS.IE_Eldar_ResearchMobilize_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101485 )	--			Excellent! The research is complete. You now have access to the Eldar vehicle structure.
+	CTRL.WAIT()
+end
+
+-- eldar mobility
+EVENTS.IE_Eldar_Mobility = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502570 )	-- 			The Eldar are a very mobile race.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502571 )	-- 				Many Eldar infantry have the Fleet of Foot ability that grants them greater speed over long distances.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502572 )	-- 				Most Eldar vehicles, the Warp Spider Squads, and even the Webway Gates allow for various forms of Jumping and Teleportation. The Eldar excel at moving quickly around the battlefield.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tutorial_Complete2 = function()
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502300 )	-- 			Congratulations! You've completed the learning session of the tutorial. 
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502301 )	-- 			It is time to put what you have learned to work. Take control of the force and build up your strength so you can crush your enemy!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502302 )	-- 			Use infantry units to capture Strategic Points, and Bonesingers to build Listening Shrines on them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502303 )	-- 			Continue to build structures, and carry out research that will increase your effectiveness in battle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502304 )	-- 	 		Build additional squads and vehicles. Make sure you research upgrades that will increase both your Squad Cap and Vehicle Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 502305 )	-- 	 		Take this battlefield, and the next, and the next after that. The fight will never end until your enemies are crushed.
+	CTRL.WAIT()
+end
+
+
+
+
+
+
+

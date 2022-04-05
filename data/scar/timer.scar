@@ -1,0 +1,105 @@
+----------------------------------------------------------------------------------------------------------------
+-- Timer helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+----------------------------------------------------------------------------------------------------------------
+-- Private data
+_TimerTable = {}
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Functions
+
+--? @group Timer
+
+--? @shortdesc Start a timer with the specified id, taking the required period ( in seconds )
+--? @args Integer timerId, Real period
+--? @result Void
+function Timer_Start(id,period)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	
+	_TimerTable[id] = { p=period,tr=period,t=World_GetGameTime() }
+--~ 	print("Timer "..id.." STARTED with period: "..period)
+end
+
+--? @shortdesc Add the amount of time to the specified timer
+--? @args Integer timerId, Real period
+--? @result Void
+function Timer_Add(id,period)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	
+	if(_TimerTable[id] ~= nil) then
+--~ 		print("(Timer " ..id.. " has ended)")
+--~ 	else
+		_TimerTable[id].p = _TimerTable[id].p + period
+	end
+end	
+
+--? @shortdesc Pause the specified timer.
+--? @args Integer timerId
+--? @result Void
+function Timer_Pause(id)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	
+	if (_TimerTable[id].t ~= 0)  then
+--~ 		print("Timer "..id.." PAUSING now")
+		_TimerTable[id].tr = math.max(0, _TimerTable[id].p - (World_GetGameTime() - _TimerTable[id].t))
+		_TimerTable[id].t = 0
+		_TimerTable[id].p = _TimerTable[id].tr;
+--~ 	else
+--~ 		print("Timer "..id.." PAUSE called (timer already paused)")
+	end
+	
+end
+
+--? @shortdesc Get the remaining time for the specified timer.
+--? @args Integer timerId
+--? @result Void
+function Timer_GetRemaining(id) 
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	
+	if (_TimerTable[id] == nil) then
+--~ 		print("(Timer "..id.." has ended)")
+		return 0
+	end
+	if (_TimerTable[id].t ~= 0) then
+		_TimerTable[id].tr = math.max(0, _TimerTable[id].p - (World_GetGameTime() - _TimerTable[id].t))
+	end
+	return _TimerTable[id].tr
+end 
+
+--? @shortdesc Resume the specified timer.
+--? @args Integer timerId
+--? @result Void
+function Timer_Resume(id)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	if (_TimerTable[id] ~= nil)  then
+		_TimerTable[id].t = World_GetGameTime()
+--~ 		print("Timer "..id.." RESUME called")
+--~ 	else
+--~ 		print("Timer "..id.." RESUME called (for an ended timer)")
+	end
+end
+
+--? @shortdesc Display (in the console) the amount of time remaining in the specified timer.
+--? @args Integer timerId
+--? @result Void
+function Timer_Display(id)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+	
+	if (_TimerTable[id] == nil)  then
+--~ 		print("Timer "..id.." -- ".." [timer has been ended]")
+		return
+	end
+	dispTime =  SU_Timer_GetRemaining(id)
+--~ 	print("Timer "..id.." -- "..dispTime)
+end
+
+--? @shortdesc Stop the specified timer.
+--? @args Integer timerId
+--? @result Void
+function Timer_End(id)
+	if id <= 0 then error("invalid timerId; needs to be greater than zero") end
+--~ 	print("Timer "..id.." END called")
+	_TimerTable[id]=nil
+end

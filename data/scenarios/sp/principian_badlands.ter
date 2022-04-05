@@ -1,0 +1,104 @@
+Model = "Principian_Badlands"
+Planet = "Kaurava_III"
+
+Name = "$3900029"
+Description = "$3900289"
+TerrainDescription = "$3900290"
+
+History = 
+{
+"$3900291",
+"$3900223",
+"$3900292",
+"$3900223",
+"$3900293",
+"$3900223",
+"$3900294",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "6P_Principian_Badlands"
+MissionFileAttackingConquered = "6P_Principian_Badlands"
+MissionFileDefending = "6P_Principian_Badlands"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	"Nirraein",
+	"Kier_Harrad",
+	"Cape_of_Despair",
+	"Upper_Wastes"
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_horror_hg_dxp3",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_assault_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_nob_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_psyker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_banshee_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_alpha_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_celestian_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_warrior_leader_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 2
+
+OwnerPrimary = "eldar_race"
+OwnerSecondary = "necron_race"
+
+StartingResourceBonus = 0.0

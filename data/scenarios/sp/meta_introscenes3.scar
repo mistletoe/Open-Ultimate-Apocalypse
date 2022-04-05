@@ -1,0 +1,3976 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- IMPORTS
+	-- import("ScarUtil.scar")	:		has most of the scar function
+	-- import("WXPScarUtil.scar")	:	more scar functions from DC and/or WA (I honestly not sure)	
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- ONGAMESETUP
+	-- OnGameSetup() : Mandatory Function that sets up the mission & sets up the players that are in the mission (Including AI Players).
+		-- This function is run first and starts the entire mission and than starts OnInit( )
+		-- Also has list of the Global varibles defined in it ( g_ )
+	-- OnGameRestore() : Mandatory Function called after loading a saved game.
+		-- This function is used to redefine the player slots after loading a saved game
+		-- NOT FILLED IN BY RELIC?
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function OnGameSetup()
+
+	-- Global varibles
+	
+	-- Controls all  my debug commands, true is On, false is off
+		-- Debug is Not Yet Fully Implemented Everywhere
+	g_debug = true				
+
+	-- Place to store the player Race, so I dont have to keep calling the functions to get them
+		-- chaos_marine_race, dark_eldar_race, eldar_race, guard_race, necron_race, ork_race, space_marine_race, sisters_race, tau_race
+	g_raceName = "default_race"
+	
+	-- What Race based intel event to use
+	g_intelEvent_raceId = 0
+
+	-- Place to store the player Faction (Example: "Blood Ravens")
+	-- So I dont have to keep calling the functions to get them
+	g_factionName = "default_factionName"
+	
+	-- Place to store the Color Scheme being used for player race (Example: "default_1")
+	g_colorScheme = "default_colorScheme"
+
+	-- Place to stores the Type of HQ based on each players race (Example: "chaos_hq")
+	g_HQ_blueprint = " "
+
+	-- Place to stores the Type of Barracks Like Building used based on each players race (Example: "chaos_sacrificial_circle")
+	g_Barracks_blueprint = " "
+
+	-- Place to stores the Type of Upgrade Like Building used based on each players race (Example: "chaos_armoury")
+	g_Upgrade_blueprint = " " 
+
+	-- Place to stores the Type of Power Plant used based on each players race (Example: "chaos_plasma_generator")
+	g_Power_blueprint = " "
+	
+	-- Place to stores the Type of Builder used based on each players race (Example: "chaos_squad_slave")
+	g_Builder_blueprint = " "
+	
+	-- Tier to determine difficulty level of mission based on stronghold strength
+		-- 1 = low, 2 = medium, 3 = high
+	g_strongholdStrengthTier	=	0	
+	
+
+	
+	------------------------------------------BALANCE VARIBLES----------------------------------
+		
+		--------------------- Starting Resources ----------------------------------------
+		
+		-- Amount of Initial Resource to give each of the AI Players
+			-- Does Nothing For this Scenario
+		g_amountRequisitionToGiveAI = 10000
+		g_amountPowerToGiveAI = 5000
+	
+		-- Initial Amount of Extra Resources to Give Player (Non Necron Races)
+		g_amountRequisitionToGivePlayer = 500
+		g_amountPowerToGivePlayer = 500
+
+		-- Initial Amount of Extra Power Resource to Give to Necron Player
+		g_amountPowerToGiveNecron = 500
+		
+		-- How Much Resources to Give the Player for each cage they save
+		g_amountRequisitionToGivePlayer_PerCage = 300
+		g_amountPowerToGivePlayer_PerCage = 100
+		
+		-- How Much Resources to Give the Necron Player for each cage they save
+		g_amountPowerToGiveNecron_PerCage = 300
+	
+		-- Time for RendSoul to Charge	
+		g_rendSoul_Counter = 0
+		g_rendSoul_Counter_Max = 90
+		
+		-- Time for Sadism to Charge
+		g_sadisim_Counter	=	0
+		g_sadisim_Counter_Max	=	180
+		
+		-- Time for ScreamDammed to Charge	
+		g_screamDammed_Counter = 0
+		g_screamDammed_Counter_Max = 240
+		
+		g_max_number_prisonerDefense_units = 5
+		g_max_number_prisonerPatrolOne_units = 3
+		g_max_number_prisonerPatrolTwo_units = 2
+	
+		-- How many Mandrake Squads Patrol From North Base
+		g_max_number_northBase_Patrol_units = 4
+	
+		g_max_number_eastBase_units = 5
+		g_max_number_mainBase_units = 5
+		g_max_number_northBase_units = 5
+		g_max_number_northWestBase_units = 5
+		g_max_number_westBase_units = 5
+	
+		g_max_number_vectSupport_units = 5
+
+		g_productionTimer_eastBase = 90
+		g_attackTimer_eastBase = 150
+	
+		g_productionTimer_mainBase = 80
+		g_attackTimer_mainBase = 210
+	
+		-- Raiders will attempt to Jump & Attack Player Squads
+		g_timer_Raider_JumpAttack = 45
+	
+		g_timer_vectAttack = 300
+		g_productionTimer_vectSupport = 90
+	
+		-- What Percent of His life does vect retreat at
+		g_vect_retreat_damage = .95
+	
+		g_productionTimer_eastBase_Hellion = 45
+	
+		g_productionTimer_northBase = 90
+		g_attackTimer_northBase = 210
+	
+		g_productionTimer_northWestBase = 90
+
+		g_productionTimer_prisonerDefense = 45
+		g_productionTimer_patrols	=	60
+	
+		g_productionTimer_westBase = 90
+		g_attackTimer_westBase = 210
+	
+		--Time From Player Construction of HQ until Enemy Techs to Next Tier
+		g_time_Tier_Two =	600 
+		g_time_Tier_Three = 900
+	
+	---------------------------------------------END BALANCE VARIBLES------------------------------
+	
+	
+	---------------------------------------------RACE BASED INTEL EVENT ARRAYS---------------------
+	
+	-- Race Based IE Array for Initial : Our troops are caged -- Free them
+	g_ie_Initial_Array = {
+								EVENTS.IE_Initial_Chaos,
+								EVENTS.IE_Initial_DarkEldar, -- should not be possible to get
+								EVENTS.IE_Initial_Eldar,
+								EVENTS.IE_Initial_Guard,
+								EVENTS.IE_Initial_Necron,
+								EVENTS.IE_Initial_Ork,
+								EVENTS.IE_Initial_Sisters,
+								EVENTS.IE_Initial_Space,
+								EVENTS.IE_Initial_Tau}
+	
+	-- Race Based IE Array for FirstCage : Player frees first cage of troops
+	g_ie_FirstCage_Array = {
+								EVENTS.IE_FirstCage_Chaos,
+								EVENTS.IE_FirstCage_DarkEldar, -- should not be possible to get
+								EVENTS.IE_FirstCage_Eldar,
+								EVENTS.IE_FirstCage_Guard,
+								EVENTS.IE_FirstCage_Necron,
+								EVENTS.IE_FirstCage_Ork,
+								EVENTS.IE_FirstCage_Sisters,
+								EVENTS.IE_FirstCage_Space,
+								EVENTS.IE_FirstCage_Tau}
+	
+	-- Race Based IE Array for EarlyDarkEldarCharge : Dark Eldar have spotted & are attacking us
+	g_ie_EarlyDarkEldarCharge_Array = {
+								EVENTS.IE_EarlyDarkEldarCharge_Chaos,
+								EVENTS.IE_EarlyDarkEldarCharge_DarkEldar, -- should not be possible to get
+								EVENTS.IE_EarlyDarkEldarCharge_Eldar,
+								EVENTS.IE_EarlyDarkEldarCharge_Guard,
+								EVENTS.IE_EarlyDarkEldarCharge_Necron,
+								EVENTS.IE_EarlyDarkEldarCharge_Ork,
+								EVENTS.IE_EarlyDarkEldarCharge_Sisters,
+								EVENTS.IE_EarlyDarkEldarCharge_Space,
+								EVENTS.IE_EarlyDarkEldarCharge_Tau}
+	
+	
+	-- Race Based IE Array for ShowTwoBases : Tell Player to avoid attacking the two large bases
+	g_ie_ShowTwoBases_Array = {
+								EVENTS.IE_ShowTwoBases_Chaos,
+								EVENTS.IE_ShowTwoBases_DarkEldar, -- should not be possible to get
+								EVENTS.IE_ShowTwoBases_Eldar,
+								EVENTS.IE_ShowTwoBases_Guard,
+								EVENTS.IE_ShowTwoBases_Necron,
+								EVENTS.IE_ShowTwoBases_Ork,
+								EVENTS.IE_ShowTwoBases_Sisters,
+								EVENTS.IE_ShowTwoBases_Space,
+								EVENTS.IE_ShowTwoBases_Tau}
+	
+	-- Race Based IE Array for FreeMostTroops : Most of our troops are freed
+	g_ie_FreeMostTroops_Array = {
+								EVENTS.IE_FreeMostTroops_Chaos,
+								EVENTS.IE_FreeMostTroops_DarkEldar, -- should not be possible to get
+								EVENTS.IE_FreeMostTroops_Eldar,
+								EVENTS.IE_FreeMostTroops_Guard,
+								EVENTS.IE_FreeMostTroops_Necron,
+								EVENTS.IE_FreeMostTroops_Ork,
+								EVENTS.IE_FreeMostTroops_Sisters,
+								EVENTS.IE_FreeMostTroops_Space,
+								EVENTS.IE_FreeMostTroops_Tau}
+	
+	-- Race Based IE Array for FreeBuilders : Builders Freed -- Tell Player to Build HQ
+	g_ie_FreeBuilders_Array = {
+								EVENTS.IE_FreeBuilders_Chaos,
+								EVENTS.IE_FreeBuilders_DarkEldar, -- should not be possible to get
+								EVENTS.IE_FreeBuilders_Eldar,
+								EVENTS.IE_FreeBuilders_Guard,
+								EVENTS.IE_FreeBuilders_Necron,
+								EVENTS.IE_FreeBuilders_Ork,
+								EVENTS.IE_FreeBuilders_Sisters,
+								EVENTS.IE_FreeBuilders_Space,
+								EVENTS.IE_FreeBuilders_Tau}	
+
+	-- Race Based IE Array for VectFirstAttack : First Time Vect Attacks Player -- Vect Taunts, Player Responds
+	g_ie_VectFirstAttack_Array = {
+								EVENTS.IE_VectFirstAttack_Chaos,
+								EVENTS.IE_VectFirstAttack_DarkEldar, -- should not be possible to get
+								EVENTS.IE_VectFirstAttack_Eldar,
+								EVENTS.IE_VectFirstAttack_Guard,
+								EVENTS.IE_VectFirstAttack_Necron,
+								EVENTS.IE_VectFirstAttack_Ork,
+								EVENTS.IE_VectFirstAttack_Sisters,
+								EVENTS.IE_VectFirstAttack_Space,
+								EVENTS.IE_VectFirstAttack_Tau}
+	
+	-- 3 Random Lines for when Vect Attacks Player
+	g_ie_VectRandomAttack_Array = {
+								EVENTS.IE_VectRandomAttack_One,
+								EVENTS.IE_VectRandomAttack_Two,
+								EVENTS.IE_VectRandomAttack_Three}
+
+	-- 4 Random Lines for when Vect Retreats
+	g_ie_VectRandomFlee_Array = {
+								EVENTS.IE_VectRandomFlee_One,
+								EVENTS.IE_VectRandomFlee_Two,
+								EVENTS.IE_VectRandomFlee_Three,
+								EVENTS.IE_VectRandomFlee_Four}								
+
+	-----------------------------------------END RACE BASED INTEL EVENT ARRAYS---------------------
+	
+	-- Get the player race & store for later access
+	g_raceName = MetaMap_GetPlayerNRaceName(0)
+	
+	-- if Debug: Override the races for testing
+	if g_debug == true
+	then
+		--g_raceName = "guard_race"
+	end
+
+	-- Create the Human Player
+	g_Player1 = Setup_Player(0, g_factionName, g_raceName, 1)
+
+	-- NOW THAT HUMAN IS SET UP, NEED TO SET UP THE AI PLAYERS AND TEAMS
+
+	-- Eldar AI Players
+	g_Player2 = Setup_Player (1, "2 - Dark Eldar Building", "dark_eldar_race", 2)	
+	g_Player3 = Setup_Player (2, "3 - Dark Eldar Units", "dark_eldar_race", 2)
+	g_Player4 = Setup_Player (3, "4 - Vect & his Dais of Destruction", "dark_eldar_race", 2)
+	g_Player5 = Setup_Player (4, "5 - Dark Eldar Shared Vision", "guard_race", 2)
+	
+	-- NOT YET USED IN DARK ELDAR
+	g_Player6 = Setup_Player (5, "6 - Guard that Dave is using", "guard_race", 2)
+	g_Player7 = Setup_Player (6, "7 - Imperial Guard Baneblades", "guard_race", 2)	
+end
+
+-- Used to redefine the player slots (both AI and HUMAN) after loading a saved game
+function OnGameRestore()
+--	g_Player1 = World_GetPlayerAt(0)
+--	g_Player2 = World_GetPlayerAt(1)
+--	g_Player3 = World_GetPlayerAt(2)
+--	g_Player4 = World_GetPlayerAt(3)
+--	g_Player5 = World_GetPlayerAt(4)
+--	g_Player6 = World_GetPlayerAt(5)
+--	g_Player7 = World_GetPlayerAt(6)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF " GAME SETUP & RESTORE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- INITALIZATION
+	-- OnInit() : Mandatory Function that sets up the mission
+		-- Called after OnGameSetup() : Not Sure if possible for something to come between the two of them
+		-- Used for pregame functions, things that should happen before the player officially enters the world
+			--Despawn Reserve Units, Set Groups and Start commands for persistent behaviors.
+	-- Scar_AddInit(OnInit) : Mandatory Function that registers OnInit function with scar.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function OnInit()
+	-- Function Used to Setup the Sound and Music
+	Rule_SetupMusicPlaylist()
+
+	-- Sets up HQ, Builder, Faction Name, Color Scheme, Exception Lists, etc...
+	Rule_Player_Race_Dependant_Stuff()
+
+	-- Set up stuff based on the difficulty level of the stronghold
+	Rule_Stronghold_Difficulty_Strength_Stuff()
+
+	--Function Used to set the pregame state of the AI (basically disables all the AI)
+	Rule_PresetAI()
+
+	--Sets the AI Difficulty Level : Function Is Defined Below
+--	Rule_SetDifficultyLevel( Difficulty_Get() )	
+
+	-- Function used to create all the Ai Controlled Buildings on the Map
+	Rule_Create_All_Ai_Initial_Buildings( )
+
+	-- Function used to create all the Initial Ai Units on the Map
+	Rule_Create_All_Ai_Initial_Units( )
+
+	-- Function used to give resources & create all the Player Initial Units on the Map (including Honor Guard) 
+	Rule_Create_All_Player_Initial_Units( )
+
+	-- Rule_Objective_Define(): Sets up the Objective Lua Tables, but doesn't actually assign them
+	Rule_Objective_Define()
+
+	-- OPENING NIS STUFF GOES HERE:
+
+	-- NIS_Setup(timeFadeSec, timeLetterboxSec) : used to control screen fade and letterbox mode
+--	NIS_Setup(0,0) 
+
+	-- START NIS - calls the Opening NIS function located in the MissionName.nis file
+--	Util_StartNIS( EVENTS.NIS_Opening )
+
+	-- Rule_GameStart : Function used to Start the Actual Mission
+	Rule_Add( Rule_GameStart )	
+end
+
+-- This registers your init function with scar.
+Scar_AddInit(OnInit)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL "INITALIZATION" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- EXTRA INITIAL SETUP
+	-- Rule_SetupMusicPlaylist() : Used to Setup the music & ambient soundtracks : Called from OnInit()
+	-- Rule_SetDifficultyLevel( difficultyLevel ) : Used to set up AI difficulty levels : Called from OnInit()
+	-- Rule_Stronghold_Difficulty_Strength_Stuff() : Used to Set up stuff based on the difficulty level of the stronghold (10-17) : Called from OnInit()
+	-- Rule_PresetAI() : Used to Disable AI Players (Done Before Initial NIS) : Called from OnInit( )
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Used to Setup the music & ambient soundtracks : Called from OnInit()
+function Rule_SetupMusicPlaylist()
+	-- MUSIC TRACKS
+	
+	-- clear the music playlist
+	Sound_PlaylistClear( PC_Music )
+	-- Add tracks to the playlist
+	Sound_PlaylistAddTrack( PC_Music, "music_imperial_guard_theme_perc_choir" )
+	Sound_PlaylistAddTrack( PC_Music, "MU_IG_STR_Tau_perc_brass.wav" )
+	Sound_PlaylistAddTrack( PC_Music, "music_invasion_theme" )
+	-- Mark these tracks to play in order or random (True is in order) 
+	Sound_PlaylistSetorder( PC_Music, true )
+	-- add silence between tracks in seconds (Randomly chooses time between the two numbers)
+	Sound_PlaylistSetSilence( PC_Music, 20, 70 )
+
+	-- AMBIENT TRACKS
+
+	-- clear the ambient playlist
+	Sound_PlaylistClear( PC_Ambient )
+	--add tracks to the playlist
+	Sound_PlaylistAddTrack( PC_Ambient, "Ambient-Prototype-Battle BG" )
+	Sound_PlaylistAddTrack( PC_Ambient, "ambient_city" )
+	-- Mark these tracks to play in order or random (True is in order) 
+	Sound_PlaylistSetorder( PC_Ambient, false )
+	-- add silence between tracks in seconds (Randomly chooses time between the two numbers)
+	Sound_PlaylistSetSilence( PC_Ambient, 5, 10 )
+end
+
+-- Used to set up AI difficulty levels : Called from OnInit()
+	-- Not using AI so this does nothing
+function Rule_SetDifficultyLevel( difficultyLevel )
+	-- If in Debug, Override the difficulty level for the AI
+		-- Doesnt effect Global Difficulty Settings from Metamap
+	if g_debug == true
+	then
+			difficultyLevel = DIFFICULTY_NORMAL
+	end
+
+	if difficultyLevel == DIFFICULTY_EASY
+	then
+		Cpu_SetDifficulty ( g_Player2, AD_Easy )
+		Cpu_SetDifficulty ( g_Player3, AD_Easy )
+		Cpu_SetDifficulty ( g_Player4, AD_Easy )
+		Cpu_SetDifficulty ( g_Player5, AD_Easy )
+		Cpu_SetDifficulty ( g_Player6, AD_Easy )
+		Cpu_SetDifficulty ( g_Player7, AD_Easy )
+
+	elseif difficultyLevel == DIFFICULTY_NORMAL
+	then
+		Cpu_SetDifficulty ( g_Player2, AD_Standard )
+		Cpu_SetDifficulty ( g_Player3, AD_Standard )
+		Cpu_SetDifficulty ( g_Player4, AD_Standard )
+		Cpu_SetDifficulty ( g_Player5, AD_Standard )
+		Cpu_SetDifficulty ( g_Player6, AD_Standard )
+		Cpu_SetDifficulty ( g_Player7, AD_Standard )
+
+	elseif difficultyLevel == DIFFICULTY_HARD
+	then
+		Cpu_SetDifficulty ( g_Player2, AD_Hard )
+		Cpu_SetDifficulty ( g_Player3, AD_Hard )
+		Cpu_SetDifficulty ( g_Player4, AD_Hard )
+		Cpu_SetDifficulty ( g_Player5, AD_Hard )
+		Cpu_SetDifficulty ( g_Player6, AD_Hard )
+		Cpu_SetDifficulty ( g_Player7, AD_Hard )
+	end
+end
+
+
+-- Used to Set up stuff based on the difficulty level of the stronghold (10-17) : Called from OnInit()
+function Rule_Stronghold_Difficulty_Strength_Stuff()
+	-- Get the strength of the stronghold from the MetaMap
+	g_strongholdStrength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetDefendingTerritoryIndex())
+
+	-- if debug, set the stronghold strength (easier for testing)
+	if g_debug == true
+	then
+		g_strongholdStrength = 14
+	end
+	
+	-- Set the difficulty tier based on stronghold strength: (10,11,12)
+	if g_strongholdStrength <= 12
+	then
+		g_strongholdStrengthTier = 1
+		
+
+	-- Set the difficulty tier based on stronghold strength: (13,14,15)
+	elseif g_strongholdStrength <= 15
+	then
+		g_strongholdStrengthTier = 2
+		
+
+	-- Set the difficulty tier based on stronghold strength: (16,17)
+	else
+		g_strongholdStrengthTier = 3
+		
+	end
+end
+
+-- Used to Disable AI Players (Done Before Initial NIS) : Called from OnInit( )
+function Rule_PresetAI()
+	Cpu_Enable(g_Player2, false)
+	Cpu_Enable(g_Player3, false)
+	Cpu_Enable(g_Player4, false)
+	Cpu_Enable(g_Player5, false)
+	Cpu_Enable(g_Player6, false)
+	Cpu_Enable(g_Player7, false)
+end
+------------------------------------------------------------------------
+-- END OF ALL "EXTRA INITIAL SETUP" RULES
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- INITIAL PLAYER SETUP RULES
+	-- Rule_Player_Race_Dependant_Stuff() : Handles setting everything in scenario that changes based on the player race : Called from OnInit()
+	-- Rule_Create_All_Player_Initial_Units() : Creates all the Players Initial Units on the Map (including Honor Guard) ( & give resources) : Called from OnInit()
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Handles setting everything in scenario that changes based on the player race : Called from OnInit( )
+function Rule_Player_Race_Dependant_Stuff()
+	if g_raceName == "chaos_marine_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 1
+	
+		-- Faction name that Race is using
+		g_factionName = "Chaos Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "chaos_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "chaos_temple"
+
+		-- Upgrade Buiding that Race uses
+		g_Upgrade_blueprint = "chaos_armoury"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "chaos_plasma_generator"
+	
+		-- Builder that Race uses
+		g_Builder_blueprint = "chaos_squad_slave"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "chaos_squad_horror_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "chaos_squad_cultist_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "chaos_squad_khorne_berserker_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "chaos_squad_cultist_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "chaos_marine_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "chaos_squad_horror_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"chaos_thermo_plasma_generator",
+			"chaos_plasma_generator",
+			"chaos_turret_bolter",
+			"chaos_mine_field"}
+		
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	elseif g_raceName == "dark_eldar_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 2
+		
+		-- Faction name that Race is using
+		g_factionName = "Dark Eldar Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "dark_eldar_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "dark_eldar_hall_of_blood"
+
+		-- Upgrade Buiding that Race uses
+			-- They dont have an upgrade like building in Tier I -- This is needed for production anyways
+		g_Upgrade_blueprint = "dark_eldar_slave_caravel"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "dark_eldar_plasma_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "dark_eldar_squad_slave"
+		
+		-- NOT NEEDED SINCE IS DARK ELDAR LEVEL
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "guard_squad_kasrkin_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "guard_squad_ogryns_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "guard_squad_psyker_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "guard_squad_kasrkin_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {}
+		
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	-- Should not be possible to be this race on this map
+	elseif g_raceName == "eldar_race"
+	then
+		-- What Intel Events race is using (not actually used)
+		g_intelEvent_raceId = 3 
+		
+		-- Faction name that Race is using
+		g_factionName = "Eldar Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "eldar_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "eldar_aspect_portal"
+
+		-- Upgrade Buiding that Race uses
+			-- Soul Shrine is too powerful -- Already gives them Tech Tier II -- this is needed for production anyways
+		g_Upgrade_blueprint = "eldar_webway_gate"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "eldar_warp_generator"
+
+		-- Builder that Race uses
+		g_Builder_blueprint = "eldar_squad_bonesinger"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "eldar_squad_fire_dragon_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "eldar_guardian_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "eldar_squad_wraithguard_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "eldar_squad_dark_reapers_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "eldar_harlequin_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "eldar_squad_banshees_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"eldar_advanced_warp_generator",
+			"eldar_warp_generator",
+			"eldar_support_platform_scatterlaser",
+			"eldar_mine_field"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	elseif g_raceName == "guard_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 4
+		
+		-- Faction name that Race is using
+		g_factionName = "Guard Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "guard_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "guard_infantry"
+
+		-- Upgrade Buiding that Race uses
+		g_Upgrade_blueprint = "guard_tactica"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "guard_plasma_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "guard_squad_enginseer"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "guard_squad_kasrkin_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "guard_squad_ogryns_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "guard_squad_psyker_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "guard_squad_kasrkin_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"guard_thermo_plasma",
+			"guard_plasma_generator",
+			"guard_turret_heavy_bolter",
+			"guard_mines"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	elseif g_raceName == "necron_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 5
+		
+		-- Faction name that Race is using
+		g_factionName = "Necron Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint =	"monolith"
+		
+		-- Barracks that Race uses
+			-- Race Doesn't have a barracks -- this is about similiar
+		g_Barracks_blueprint = "necron_forbidden_archive"
+
+		-- Upgrade Buiding that Race uses
+			-- Closest thing they have to an upgrade buiding
+		g_Upgrade_blueprint = "necron_summoning_core"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "necron_plasma_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "necron_builder_scarab_squad"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "necron_immortal_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "necron_basic_warrior_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "necron_pariah_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "necron_basic_warrior_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "necron_wraith_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "necron_immortal_squad_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"necron_thermoplasma_generator",
+			"necron_plasma_generator",
+			"necron_turret",}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	elseif g_raceName == "ork_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 6
+		
+		-- Faction name that Race is using
+		g_factionName = "Ork Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "ork_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "ork_boy_hut"
+
+		-- Upgrade Buiding that Race uses
+		g_Upgrade_blueprint = "ork_pile_o_guns"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "ork_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "ork_squad_grot"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "ork_squad_shoota_boy_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "ork_squad_slugga_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "ork_squad_nob_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "ork_squad_slugga_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "ork_squad_tankbusta_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "ork_squad_shoota_boy_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"ork_bigger_generator",
+			"ork_generator",
+			"ork_waagh_banner",
+			"ork_mine_field"}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}		
+	
+	elseif g_raceName == "sisters_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 7
+		
+		-- Faction name that Race is using
+		g_factionName = "Sister Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "sisters_hq"
+
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "sisters_infantry"
+
+		-- Upgrade Buiding that Race uses
+		g_Upgrade_blueprint = "sisters_sanctuary"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "sisters_plasma_generator"
+
+		-- Builder that Race uses
+		g_Builder_blueprint = "sisters_squad_cherubim"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "sisters_squad_battle_repentia_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "sisters_squad_battle_missionary_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "sisters_squad_battle_celestian_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "sisters_squad_battle_missionary_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "sisters_squad_battle_sister_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "sisters_squad_battle_repentia_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {	}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+
+	elseif g_raceName == "space_marine_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 8
+		
+		-- Faction name that Race is using
+		g_factionName = "Space Marine Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "space_marine_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "space_marine_barracks"
+
+		-- Upgrade Buiding that Race uses
+		g_Upgrade_blueprint = "space_marine_armoury"
+
+		-- Power Building that Race uses
+		g_Power_blueprint = "space_marine_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "space_marine_squad_servitor"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "space_marine_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "space_marine_squad_scout_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "space_marine_squad_terminator_veteran_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "space_marine_squad_scout_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "space_marine_squad_grey_knights_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "space_marine_squad_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"space_marine_thermo_generator",
+			"space_marine_generator",
+			"space_marine_turret_bolter",
+			"space_marine_mine_field"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	elseif g_raceName == "tau_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 9
+		
+		-- Faction name that Race is using
+		g_factionName = "Tau Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "tau_hq"
+		
+		-- Barracks that Race uses
+		g_Barracks_blueprint = "tau_barracks"
+
+		-- Upgrade Buiding that Race uses
+			-- Path of Enlightment is too powerful -- already gives them tech level 2
+		g_Upgrade_blueprint = "tau_kroot_nest"
+
+		-- Power Building that Race uses
+		g_Power_blueprint =  "tau_plasma_generator"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "tau_builder_squad"
+		
+		-- What drops out of the prisoner cages when they are freed (7-9 are builders)
+		g_prisoner_blueprint_1 = "tau_kroot_alpha_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_2 = "tau_honor_guard_fire_warrior_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_3 = "tau_kroot_hound_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_4 = "tau_honor_guard_fire_warrior_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_5 = "tau_kroot_shaper_squad_sp_dxp3_prisoner"
+		g_prisoner_blueprint_6 = "tau_kroot_alpha_squad_sp_dxp3_prisoner"		
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"tau_thermoplasma_generator",
+			"tau_plasma_generator",}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	end
+	
+	-- Set the Faction Name of the player
+	Setup_SetPlayerName(g_Player1, g_factionName)
+	
+	-- Set the Color Schemes Here 
+	Misc_PlayerTeamColor(g_Player1, g_colorScheme)
+	
+end
+
+
+-- Creates all the Players Initial Units on the Map (including Honor Guard) : Called from OnInit()
+function Rule_Create_All_Player_Initial_Units()
+	-- Clear the Honor Guard List
+	t_honorGuardUnits = {}
+
+	--Set up the Unlocked wargear upgrades
+	MetaMap_UpdatePlayerWargear(g_Player1)
+
+	--Set up the List of the Honor Guard units
+	MetaMap_GetRaceStartingSquadsList(g_raceName, t_honorGuardUnits)
+
+	-- Create the Honor Guard Units on the Map
+	for j = 1,  table.getn(t_honorGuardUnits) do
+		Util_CreateSquadsAtMarker(g_Player1, "sg_honorGuard", t_honorGuardUnits[j], "mkr_honorGuard_Location", 1)
+	end
+
+	-- Create the Initial Troops (2 Squads)
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_player_troops", g_prisoner_blueprint_2, "mkr_initial_troops", 2,10)
+	
+	-- Sets the Initial Player Resources (RT_Requisition, RT_Power, RT_Pop(Orks Only))
+	if g_raceName == "necron_race"
+	then
+		-- If Necron, Only Give Power
+		Player_SetResource(g_Player1, RT_Power, g_amountPowerToGiveNecron)
+	else
+		-- Otherwise give both
+		Player_SetResource(g_Player1, RT_Requisition, g_amountRequisitionToGivePlayer)
+		Player_SetResource(g_Player1, RT_Power, g_amountPowerToGivePlayer)
+	end	
+end
+------------------------------------------------------------------------
+-- END OF ALL "INITIAL PLAYER SETUP" RULES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- CREATE AI BUILDINGS RULES
+	-- Rule_Create_All_Ai_Initial_Buildings() : Create all AI Bases & give them initial resources & strategic points : Called from OnInit( )
+		-- Rule_Create_CenterBase_Buildings() : Create Buildings for Center Base (also creates the HQs for the Mega Basilisk Spotter Objective)
+			--Center Base belongs to AI Player: g_Player3	
+		-- Rule_Create_ConvoyBase_Buildings( ) : Create Buildings for Convoy Bases
+			--Convoy Base belongs to AI Player: g_Player3
+		-- Rule_Create_MainBase_Buildings( ) : Create Buildings for the Main Base (also creates the Mars Patterns for the Destroy Mars Pattern Command Objective)
+			--Main Base belongs to AI Player: g_Player2
+		-- Rule_Setup_AI_StrategicPoints( ) : Setup the Strategic Points, Critical Points,  & Relics to AI Control
+		-- Rule_Create_Turrets( ) : Create and upgrade all the turrets on the map
+			-- All Turrets belongs to AI Player: g_Player2
+		-- Rule_Set_AI_ResearchLevel() : Setup the Races Unit, Building, & Addon Tables and restrict AI construction of them
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create all AI Bases, Research Tables & give them strategic points : Called from OnInit( )
+function Rule_Create_All_Ai_Initial_Buildings()
+	-- Setup the Races Unit, Building, & Addon Tables and restrict AI construction of them
+	Rule_Set_AI_ResearchLevel()
+
+	-- Create all the AI Buildings
+	Rule_Create_DarkEldar_Buildings()
+
+	-- Setup the Strategic Points, Critical Points,  & Relics to AI Control
+	Rule_Setup_AI_StrategicPoints( )
+end
+
+-- Setup the Races Unit, Building, & Addon Tables and restrict AI construction of them
+	-- Restricted Stuff just prevents AI building on them, can still use scar to give them the units
+function Rule_Set_AI_ResearchLevel()
+	-- Set up a table of all DarkEldar Units to make it easier to restrict them
+	t_allDarkEldarUnits = {
+		"dark_eldar_squad_archon",
+		"dark_eldar_squad_dais_of_destruction",
+		"dark_eldar_squad_haemonculus",
+		"dark_eldar_squad_hellion",
+		"dark_eldar_squad_mandrake",
+		"dark_eldar_squad_raider",
+		"dark_eldar_squad_ravager",
+		"dark_eldar_squad_reaver",
+		"dark_eldar_squad_scourge",
+		"dark_eldar_squad_slave",
+		"dark_eldar_squad_talos",
+		"dark_eldar_squad_warp_beast",
+		"dark_eldar_squad_warrior",
+		"dark_eldar_squad_wych",
+	}
+	
+	-- Restrict every squad  at start
+	Player_RestrictSquadList(g_Player2, t_allDarkEldarUnits)
+	Player_RestrictSquadList(g_Player3, t_allDarkEldarUnits)	
+	Player_RestrictSquadList(g_Player4, t_allDarkEldarUnits)
+	Player_RestrictSquadList(g_Player5, t_allDarkEldarUnits)
+	Player_RestrictSquadList(g_Player6, t_allDarkEldarUnits)
+	
+	-- Set up a table of all Dark Eldar buildings to make it easier to restrict buildings
+	t_allDarkEldarBuildings = {
+		"dark_eldar_haemonculus_laboratory",
+		"dark_eldar_hall_of_blood",
+		"dark_eldar_hq",
+		"dark_eldar_listening_post",
+		"dark_eldar_plasma_generator",
+		"dark_eldar_skimmer_shop",
+		"dark_eldar_slave_caravel",
+		"dark_eldar_soul_cage",
+		"dark_eldar_thermo_plasma",
+		"dark_eldar_wych_cult_arena"
+	}
+
+	-- Restrict every building at start
+	Player_RestrictBuildingList(g_Player2, t_allDarkEldarBuildings)
+	Player_RestrictBuildingList(g_Player3, t_allDarkEldarBuildings)
+	Player_RestrictBuildingList(g_Player4, t_allDarkEldarBuildings)
+	Player_RestrictBuildingList(g_Player5, t_allDarkEldarBuildings)
+	Player_RestrictBuildingList(g_Player6, t_allDarkEldarBuildings)
+	
+	-- Set up a table of all Dark Eldar Addons to make it easier to restrict 
+	t_allDarkEldarAddons = {
+		"addon_dark_eldar_list_post_1",
+		"addon_dark_eldar_list_post_2",
+	}
+	
+	-- Restrict every Addon at start
+	Player_RestrictAddOnList(g_Player2, t_allDarkEldarAddons)
+	Player_RestrictAddOnList(g_Player3, t_allDarkEldarAddons)
+	Player_RestrictAddOnList(g_Player4, t_allDarkEldarAddons)
+	Player_RestrictAddOnList(g_Player5, t_allDarkEldarAddons)
+	Player_RestrictAddOnList(g_Player6, t_allDarkEldarAddons)
+	
+	-- Research:
+	-- dark_eldar_barbed_walls_research, dark_eldar_crucible_of_malediction_research, dark_eldar_dais_research, dark_eldar_gruesome_display_research, dark_eldar_infiltration_mandrake_research
+	-- dark_eldar_penumbra_research, dark_eldar_planetary_raid_research, dark_eldar_poisoned_blades_research, dark_eldar_rend_soul_research
+	-- dark_eldar_sadism_research, dark_eldar_screams_of_the_damned_research, dark_eldar_scythes_research, dark_eldar_short_circuit_research,
+	-- dark_eldar_soul_destruction_research, dark_eldar_soulharvest_research, dark_eldar_sudden_strike_research, dark_eldar_talisman_of_petrification_research,
+	-- dark_eldar_terrorfex_grenade_research, dark_eldar_upgrade_agonizer, dark_eldar_upgrade_destructor, dark_eldar_upgrade_power_1, dark_eldar_upgrade_power_2, 
+	-- dark_eldar_upgrade_power_scythe, dark_eldar_upgrade_requisition_1, dark_eldar_upgrade_requisition_2, dark_eldar_upgrade_soulseeker_ammunition, dark_eldar_upgrade_vehicle_armor
+	
+	-- Abilities:
+	-- dark_eldar_animus_vitae, dark_eldar_barbed_walls, dark_eldar_combat_drugs, dark_eldar_crucible, dark_eldar_darklance_sweep,
+	-- dark_eldar_energy_field, dark_eldar_gruesome_display, dark_eldar_haywire_bombs, dark_eldar_horrorfex, dark_eldar_penumbra,
+	-- dark_eldar_rend_soul, dark_eldar_sadism, dark_eldar_screams_of_the_damned, dark_eldar_scythes, dark_eldar_short_circuit, dark_eldar_soul_shock
+	-- dark_eldar_stinger, dark_eldar_talisman_of_petrification, dark_eldar_tame_warp_beasts, dark_eldar_terrorfex_grenade, dark_eldar_torture_amp
+	-- dark_eldar_tracking_device, dark_eldar_wildfire,
+end
+
+-- Create All the Dark Eldar Buildings on the Map 
+function Rule_Create_DarkEldar_Buildings()
+	print("DarkEldar Buildings")
+
+	-- Create the haemonculus laboratory: 
+	for i = 1,3  do
+		print("Haemonculus Laboratory: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_haemonculusLab_"..i, "dark_eldar_haemonculus_laboratory","mkr_haemonculusLab_"..i, 1)
+	end
+
+	-- Create the Barracks: Hall of Blood 
+	for i = 1,15  do
+		print("Hall of Blood: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_hallOfBlood_"..i, "dark_eldar_hall_of_blood","mkr_hallOfBlood_"..i, 1)
+	end
+
+	-- Create the HQ: 
+	for i = 1,7  do
+		print("HQ: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_hq_"..i, "dark_eldar_hq","mkr_hq_"..i, 1)
+	end
+
+	-- Create the Plasma Generators: 
+	for i = 1,18  do
+		print("Power: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_power_"..i, "dark_eldar_plasma_generator","mkr_power_"..i, 1)
+	end
+
+	-- Create the Prisoner Cages: 
+	for i = 1,10  do
+		print("Prisoner Cage: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_prisonerCage_"..i, "dark_eldar_prisoner_cage_sp_dxp3","mkr_prisonerCage_"..i, 1)
+	end
+
+	-- Create the Vehicle Bay: Skimmer Shop (Dark Foundry) 
+	for i = 1,10  do
+		print("Skimmer Shop: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_skimmerShop_"..i, "dark_eldar_skimmer_shop","mkr_skimmerShop_"..i, 1)
+	end
+
+	-- Create the Slave Caravels:
+	for i = 1,20  do
+		print("Slave Caravel: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_slaveCaravel_"..i, "dark_eldar_slave_caravel","mkr_slaveCaravel_"..i, 1)
+	end
+
+	-- Create the Soul Cages: (4-6 are used for objectives)
+		-- Player 3 for Skill Reasons
+	for i = 1,6  do
+		print("Soul Cages: "..i)
+		Entity_CreateBuildingMarker(g_Player3,"eg_soulCage_"..i, "dark_eldar_soul_cage_sp_dxp3","mkr_soulCage_"..i, 1)
+	end
+
+	-- Create the Wych Cult Arena: 
+	for i = 1,1  do
+		print("Wych Cult Arena: "..i)
+		Entity_CreateBuildingMarker(g_Player2,"eg_wychCultArena_"..i, "dark_eldar_wych_cult_arena","mkr_wychCultArena_"..i, 1)
+	end
+end
+
+-- Setup the Strategic Points, Critical Points,  & Relics to AI Control
+	-- All EGroups are set in the editor
+function Rule_Setup_AI_StrategicPoints( )
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Strategic Point Ownership & Upgrades to Listening Posts
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- The three by the location where player bulds base
+	for i=15, 17 do
+		EGroup_SetPlayerOwner("eg_stratPoint"..i, g_Player2)
+	end
+	
+	-- Strategic Points to g_Player2
+		-- Upgrade to Tier 2
+	for i=1, 14 do
+		EGroup_SetPlayerOwner("eg_stratPoint"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_listeningPost"..i, "dark_eldar_listening_post", EGroup_GetPosition("eg_stratPoint"..i), 1)
+		EGroup_ForceAddOn("eg_listeningPost"..i, "addon_dark_eldar_list_post_2" )
+	end
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Relic Ownership  & Upgrades to Listening Posts Level 2
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Relic by the Main Base to g_Player2
+	for i=1, 1 do
+		EGroup_SetPlayerOwner("eg_relic"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_listeningPostRelic"..i, "dark_eldar_listening_post", EGroup_GetPosition("eg_relic"..i), 1)
+		EGroup_ForceAddOn("eg_listeningPostRelic"..i, "addon_dark_eldar_list_post_2" )
+	end
+	
+	-- Relic by the Side Bases to g_Player2
+		-- No LP so Player knows where they are
+	for i=2, 3 do
+		EGroup_SetPlayerOwner("eg_relic"..i, g_Player2)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " CREATE AI BUILDINGS " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- CREATE AI INITIAL UNIT RULES
+	-- Rule_Create_All_Ai_Initial_Units() : Create all AI Initial Units : Called from OnInit( )
+		-- Rule_Create_HeavyWeaponsTeams() : Create & Entrench all the Original Heavy Weapons Teams
+			-- Rule_Regroup_Entrenched_HeavyWeaponsTeams(): Regroups the Heavy Weapon Teams SGroups since they are lost when a squad entrenchs
+		-- Rule_Garrision_Troops_In_Buildings() : Garrisons Troops in the HQs, Infantry Commands, & Mechanized Commands  based on Stronghold Strength
+		-- Rule_Create_All_Ai_Idle_Units : Create all the Idle Vehicles that become active via drivers as the Player nears them
+			-- Idle Units all belong to g_Player5
+		-- Rule_Face_All_Ai_Idle_Units() : Makes it so all the Idle  Chimeras & Sentinels are Facing the Correct Direction
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create all AI Initial Units : Called from OnInit( )
+function Rule_Create_All_Ai_Initial_Units()
+	-- Spawn in Vect for the Objective
+	Util_CreateSquadsAtMarker(g_Player4, "sg_Vect_Objective", "dark_eldar_squad_dais_of_destruction_sp_dxp3", "mkr_vect_objective", 1)
+	
+	-- Produce some basic troops by the First Prisoner Cage (Cage 10)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisonerCage_firstTroops", "dark_eldar_squad_mandrake", "mkr_prisonerCage_10", 1,8)
+	SGroup_AddLeaders("sg_prisonerCage_firstTroops")
+
+	-- Produce the First Attack Squad of Troops (The group that attacks right past the first cage)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_firstTroops", "dark_eldar_squad_mandrake", "mkr_spawnFirstTroops_1", 1,8)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_firstTroops", "dark_eldar_squad_warrior", "mkr_spawnFirstTroops_2", 1,8)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_firstTroops", "dark_eldar_squad_mandrake", "mkr_spawnFirstTroops_3", 1,8)
+	
+	-- Produce the First Squad of Troops from Hall of Blood 10
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hallOfBlood10_firstTroops", "dark_eldar_squad_warrior", "mkr_hallOfBlood_10", 1,8)
+	SGroup_AddLeaders("sg_hallOfBlood10_firstTroops")
+	
+	-- Produce the First Squad of Troops from Hall of Blood 14
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hallOfBlood14_firstTroops", "dark_eldar_squad_warrior", "mkr_hallOfBlood_14", 1,8)
+	SGroup_AddLeaders("sg_hallOfBlood14_firstTroops")
+
+	-- Produce the First Squad of Troops from Hall of Blood 15
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hallOfBlood15_firstTroops", "dark_eldar_squad_warrior", "mkr_hallOfBlood_15", 1,8)
+	SGroup_AddLeaders("sg_hallOfBlood15_firstTroops")
+
+	-- Produce the First Reavers from SKimmer10
+	Util_CreateSquadsAtMarker(g_Player3, "sg_skimmer10_firstTroops", "dark_eldar_squad_reaver", "mkr_skimmerShop_10", 2)
+
+	-- Produce Some Loaded Raiders For Jumping In
+		-- Create at Hall of Blood 7 & Skimmer Shop 7 & Jump in once the player nears the markers
+	for i=1,4
+	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisoner_raider_jump_troops"..i, "dark_eldar_squad_warrior", "mkr_hallOfBlood_7", 1,8)
+		Util_CreateSquadsAtMarker(g_Player3, "sg_prisoner_raider_jump_"..i, "dark_eldar_squad_raider_sp_dxp3", "mkr_skimmerShop_7", 1)
+		Cmd_EnterTransport("sg_prisoner_raider_jump_troops"..i, "sg_prisoner_raider_jump_"..i)
+	end
+
+	-- Create the Sourge Jump Troops used to jump in throughout the intro areas
+		-- Create by Center Base Patrol Point & Jump in once the player nears the markers
+	for i = 1,6
+	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisoner_scourge_jump_"..i, "dark_eldar_squad_scourge_sp_dxp3", "mkr_AI_PatrolTwo_4", 1,6)
+	end
+
+	-- Create the Helion Jump Troops used to jump in throughout the intro areas
+		-- Create at Hall of Blood 6 & Jump in once the player nears the markers
+	for i = 1,3
+	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisoner_hellion_jump_"..i, "dark_eldar_squad_hellion_sp_dxp3", "mkr_hallOfBlood_6", 1,6)
+	end
+	
+	-- Create the Wychs By Prisoner Cage 6
+	for i = 1,2
+	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisoner_wych_"..i, "dark_eldar_squad_wych", "mkr_prisoner_wych_"..i, 1,6)
+	end
+	
+	-- Create the Warriors By Prisoner Cage 6
+	for i = 1,2
+	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_prisoner_warrior_"..i, "dark_eldar_squad_warrior", "mkr_prisoner_troop_"..i, 1,6)
+	end
+	
+	-- Create Initial Defense Troops by the South East & West Bases
+	Rule_Create_Ai_Initial_Units_SouthEast_Base()
+	Rule_Create_Ai_Initial_Units_SouthWest_Base()
+end
+
+--Produce Some Troops for Initial South East Base Defense:
+function Rule_Create_Ai_Initial_Units_SouthEast_Base()
+	-- Two Scourge Squads at Hall of Blood 11
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southEast_defense_scourge1", "dark_eldar_squad_scourge_sp_dxp3", "mkr_hallOfBlood_11", 1,6)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southEast_defense_scourge2", "dark_eldar_squad_scourge_sp_dxp3", "mkr_hallOfBlood_11", 1,6)
+
+	-- 1 Talos & 1 Cloaked Mandrakes at HQ7
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southEast_defense_talos", "dark_eldar_squad_talos", "mkr_hq_7", 1)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southEast_defense_mandrakes", "dark_eldar_squad_mandrake", "mkr_hq_7", 1,8)
+	-- Cloak Mandrakes Here (May Need to Be Seperate Team for Research Reasons)	
+
+	-- 2 Ravagers at Power Plants 17 & 18
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southEast_defense_ravager1", "dark_eldar_squad_ravager", "mkr_power_17", 1)
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southEast_defense_ravager2", "dark_eldar_squad_ravager", "mkr_power_18", 1)
+end
+
+--Produce Some Troops for Initial South West Base Defense:
+function Rule_Create_Ai_Initial_Units_SouthWest_Base()
+	-- One Wych Squad by Hall of Blood 12
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southWest_defense_wych", "dark_eldar_squad_wych", "mkr_hallOfBlood_12", 1,8)
+	
+	-- One Warp Beast Squad by Hall of Blood 13
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southWest_defense_warpBeast", "dark_eldar_squad_warp_beast", "mkr_hallOfBlood_13", 1,6)
+
+	-- One Talos by Skimmer Shop 9
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southWest_defense_talos", "dark_eldar_squad_talos", "mkr_skimmerShop_9", 1)
+	
+	-- One Mandrakes by Haemonculus Lab
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southWest_defense_mandrakes", "dark_eldar_squad_mandrake", "mkr_haemonculusLab_3", 1,8)
+	-- Cloak Mandrakes Here (May Need to Be Seperate Team for Research Reasons)	
+
+	-- One Haemonculus by Haemonculus Lab
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_southWest_defense_haemonculus", "dark_eldar_squad_haemonculus", "mkr_haemonculusLab_3", 1,8)
+	
+	-- Two Ravagers by HQ6
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southWest_defense_ravager1", "dark_eldar_squad_ravager", "mkr_hq_6", 1)
+	Util_CreateSquadsAtMarker(g_Player3, "sg_southWest_defense_ravager2", "dark_eldar_squad_ravager", "mkr_hq_6", 1)
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " CREATE AI INITIAL UNIT " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+-- GAME START
+	-- Rule_GameStart( ) : Starts the actual mission : Called from OnInit
+		-- Optional: this all could be done in OnInit( ) but this makes it easier to read and is clearer
+		-- Sets up objective, win/lose conditions, tracks characters, etc...
+	-- Rule_StartAI() : Used to Enable the AI after the NIS Finishes : Called from GameStart( )
+	-- Rule_UI_Game_Timer() : Initially sets up the timer that shows the total elapsed time
+	-- Rule_UI_Game_Timer_Tick():  Updates & Shows the game timer every second
+-----------------------------------------------------------------------------------------------------------------------
+-- Starts the actual mission : Called from OnInit
+function Rule_GameStart()
+	if not Event_IsAnyRunning() then
+
+		--Start the AI  : Function Is Defined Below
+		Rule_StartAI()
+
+		-- Show and Control the Game Timer
+		Rule_UI_Game_Timer()
+
+		-- Remove the Fog of War from Map
+		--FOW_RevealAll()
+
+		-- Assign & Check for Primary Objective: Kill Vect
+		Rule_AddInterval(Rule_KillVect_Objective,1)
+
+		-- Assign & Check for Primary Objective: Establish Base of Operations (HQ)
+		Rule_AddInterval(Rule_EstablishBaseOfOperation_Objective,1)
+		
+		-- Set up shared vision for Patrols
+		World_EnablePlayerToPlayerFOW(g_Player1, g_Player5, false)
+		
+		-- Set up the check for VICTORY (will check for lose condition every 10 secs) : Function is Defined Below
+--		Rule_AddInterval(Rule_EndGame_Victory, 10)
+
+		-- Set up the check for DEFEAT (will check for lose condition every 10 secs) : Function is Defined Below
+--		Rule_AddInterval(Rule_EndGame_Defeat, 10)
+
+		-- Makes Sure all base attacks are synced up
+		Rule_AddOneShot(Rule_Create_And_Sync_Attacks, 0)
+		
+		-- Remove this rule so that it never runs again 
+		Rule_Remove(Rule_GameStart) 
+	end
+end
+
+-- Used to Enable the AI after the NIS Finishes : Called from GameStart( )
+	-- AI isn't used so this is useless
+function Rule_StartAI()
+	Cpu_Enable(g_Player2, false)
+	Cpu_Enable(g_Player3, false)
+	Cpu_Enable(g_Player4, false)
+	Cpu_Enable(g_Player5, false)
+	Cpu_Enable(g_Player6, false)
+	Cpu_Enable(g_Player7, false)
+end
+
+-- Initially sets up the timer that shows the total elapsed time
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates & Shows the game timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--------------------------------------------------------
+-- END OF ALL "GAME START" RULES
+--------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- OBJECTIVES
+	-- INTIAL DEFINE:	
+		-- Rule_Objective_Define(): Sets up the actual Objective Lua Tables : Called from OnInit()
+			-- Doesn't actually assign the objectives -- Just sets up the tables for them
+
+	-- ASSIGNING AND CHECKING:
+		-- Rule_DestroyImperialGuardHQ_Objective : Primary Objective:
+			-- Checks if the HQ in the Main Base has been destroyed
+			-- Completing: Wins Scenario if StopBaneBladeProduction is also completed 
+		-- Rule_StopBaneBladeProduction_Objective() : Primary Ojective
+			-- Auto Completed once either sub-objectives is completed 
+			-- Completing: Wins Scenario if Destroy HQ is also completed 
+		-- Rule_DestroyMarsPatternCommand_Objective() : Sub-Primary Objective
+			-- Checks if both Mars Pattern Buildings have been destroyed
+			-- Completing:
+		-- Rule_StopConvoysFromReachingBase_Objective : Sub-Primary Objective
+			-- Checks if all Convoy Mechanized Commands have been destroyed
+			-- Completing:
+		-- Rule_DestroyMegaBasilisk_Objective() : Secondary Objective
+			-- Checks if the Mega Basilisk has been destroyed
+			-- Completing:
+		-- Rule_StopSpotterProduction_Objective() : Sub-Secondary Objective
+			-- Checks if the the HQs that produce spotters have been destroyed
+			-- Completing:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Sets up the actual Objective Lua Tables : Called from OnInit()
+function Rule_Objective_Define()
+	-- Primary Objective : Assigned at Intro
+	Objective_KillVect = { title_id = 3950077, short_desc_id = 3950078, help_tip_id = 3950078}
+	
+	-- PrimaryObjective: Assigned at Intro
+	Objective_EstablishBaseOfOperation = { title_id = 3950079, short_desc_id = 3950080, help_tip_id = 3950080}
+	
+	-- Sub-Primary Ojective : Assigned briefly after start
+	Objective_FreeBuilders = { title_id = 3950081, short_desc_id = 3950082, help_tip_id = 3950082}
+	
+	-- Sub-Primary Objective:  Assigned once builders are freed
+	Objective_BuildHQ = { title_id = 3950083, short_desc_id = 3950084, help_tip_id = 3950084}
+	
+	-- Secondary Objective: Assigned briefly after start
+	Objective_FreeTroops = { title_id = 3950085, short_desc_id = 3950086, help_tip_id = 3950086}
+	
+	-- Secondary Objective: Assigned after hq is built
+	Objective_DestroySoulCages = { title_id = 3950087, short_desc_id = 3950088, help_tip_id = 3950088}
+	
+	-- Sub-Secondary Objective for all the Soul Cages
+	Objective_DestroyCage_RendSoul = { title_id = 3950089, short_desc_id = 3950090, help_tip_id = 3950090}
+	Objective_DestroyCage_ScreamDammed = { title_id = 3950093, short_desc_id = 3950094, help_tip_id = 3950094}
+	Objective_DestroyCage_Sadisim = { title_id = 3950091, short_desc_id = 3950092, help_tip_id = 3950092}
+end	
+
+-- Assigns & Checks for Primary Objective: Kill Vect
+function Rule_KillVect_Objective()	
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_KillVect.title_id) == false
+	then
+		-- Create ( & Assign)  the objective as a primary one
+		Util_ObjectiveCreate(Objective_KillVect, true)
+
+		-- No Objective Screen Ping... ?? 
+
+	-- Else Check if Vect is Dead are destroyed
+	elseif Event_IsAnyRunning() == false and
+		SGroup_Count("sg_Vect_Objective") == 0
+	then	
+		-- Complete the Objective and Remove the Rule
+		Util_ObjectiveComplete(Objective_KillVect.title_id)
+		Rule_Remove( Rule_KillVect_Objective )
+
+		-- Victory Goes Here
+
+	end
+end
+
+-- Assigns & Check for Sub-Primary Objective : Establish your Base
+function Rule_EstablishBaseOfOperation_Objective()
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_EstablishBaseOfOperation.title_id) == false
+	then
+		-- Create ( & Assign) the objective as a primary one
+		Util_ObjectiveCreate(Objective_EstablishBaseOfOperation, true)
+
+		-- Track when the player builds their hq (& thus all sub-objectives completed)
+		g_player_hq_created = false
+		
+		-- Assign & Check for the Sub-Objective: Free Builders
+		Rule_AddInterval(Rule_FreeBuilders_Objective,1)
+		
+		-- Assign & Check for the Secondary Objective: Free Troops
+		Rule_AddInterval(Rule_FreeTroops_Objective,1)
+
+	-- if objective exists & the sub-objectives are completed (if the player has built HQ)
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_EstablishBaseOfOperation.title_id) == true and
+		g_player_hq_created == true
+	then
+		-- Play IE for Player HQ Completion
+		Util_StartIntel(EVENTS.IE_PlayerHQ_Built)
+		
+		--Handles the Delayed Teching & Activation of Enemy Bases & research
+		Rule_AddOneShot(Rule_Tech_And_Activate_Tier_One,5)
+		Rule_AddOneShot(Rule_Tech_And_Activate_Tier_Two, g_time_Tier_Two)
+		Rule_AddOneShot(Rule_Tech_And_Activate_Tier_Three, g_time_Tier_Three)
+		
+		-- Assign the Secondary Objective to Destroy All the Soul Cages
+		Rule_AddIntervalDelay(Rule_DestroySoulCages_Objective,1,5)
+		
+		-- Complete the Objective and Remove the Rule
+		Util_ObjectiveComplete(Objective_EstablishBaseOfOperation.title_id)
+		Rule_Remove(Rule_EstablishBaseOfOperation_Objective)
+	end
+end
+
+-- Assigns & Check for Sub-Primary Objective : Free your builders
+function Rule_FreeBuilders_Objective()
+	-- Confirm the Primary Objective Exists & check if the Sub-Objective exists & add sub if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_EstablishBaseOfOperation.title_id) == true and
+		Objective_Exists(Objective_FreeBuilders.title_id) == false
+	then
+		-- Create (Assign)  the objective as a sub-primary one
+		Objective_SubAdd(Objective_FreeBuilders, Objective_EstablishBaseOfOperation.title_id)
+
+		--Associate a Ping with the Objective on the Objective Screen (updates when each cage is destroyed)
+		g_PrisonerCage_7_Ping_Objective = Objective_PingMarker(Objective_FreeBuilders.title_id, "mkr_prisonerCage_7", true, attack)
+		g_PrisonerCage_8_Ping_Objective = Objective_PingMarker(Objective_FreeBuilders.title_id, "mkr_prisonerCage_8", true, attack)
+		g_PrisonerCage_9_Ping_Objective = Objective_PingMarker(Objective_FreeBuilders.title_id, "mkr_prisonerCage_9", true, attack)
+
+		-- Set up a ping on the ingame screen:
+		Ping_Marker("mkr_prisonerCage_7", false, "default")
+		Ping_Marker("mkr_prisonerCage_8", false, "default")
+		Ping_Marker("mkr_prisonerCage_9", false, "default")
+		
+		-- Track when first builder is free so know to assign: Build HQ Objective
+		g_buildHQ_assigned = false
+
+	-- if the objective exists & all the builders are freed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_FreeBuilders.title_id) == true and
+		EGroup_Count("eg_prisonerCage_7") == 0 and
+		EGroup_Count("eg_prisonerCage_8") == 0 and
+		EGroup_Count("eg_prisonerCage_9") == 0
+	then
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_FreeBuilders.title_id)
+		Rule_Remove(Rule_FreeBuilders_Objective)
+	end
+
+	-- Remove Objective Ping when the prisoner cage 7 is destroyed:
+	if EGroup_Count("eg_prisonerCage_7") == 0
+	then
+		Objective_PingRemove(Objective_FreeBuilders.title_id, g_PrisonerCage_7_Ping_Objective)
+			
+		if g_buildHQ_assigned == false
+		then
+			g_buildHQ_assigned = true
+			
+			-- Assign Build HQ Objective here
+			Rule_AddInterval(Rule_BuildHQ_Objective,1)
+		end
+	end
+	
+	-- Remove Objective Ping when the prisoner cage 8 is destroyed:
+	if EGroup_Count("eg_prisonerCage_8") == 0
+	then
+		Objective_PingRemove(Objective_FreeBuilders.title_id, g_PrisonerCage_8_Ping_Objective)
+		
+		if g_buildHQ_assigned == false
+		then
+			g_buildHQ_assigned = true
+			
+			-- Assign Build HQ Objective here
+			Rule_AddInterval(Rule_BuildHQ_Objective,1)
+		end
+	end
+	
+	-- Remove Objective Ping when the prisoner cage 9 is destroyed:
+	if EGroup_Count("eg_prisonerCage_9") == 0
+	then
+		Objective_PingRemove(Objective_FreeBuilders.title_id, g_PrisonerCage_9_Ping_Objective)
+		
+		if g_buildHQ_assigned == false
+		then
+			g_buildHQ_assigned = true
+			
+			-- Assign Build HQ Objective here
+			Rule_AddInterval(Rule_BuildHQ_Objective,1)
+		end		
+	end
+end
+
+-- Assigns & Check for Sub-Primary Objective : Build Your HQ
+function Rule_BuildHQ_Objective()
+	-- Confirm the Primary Objective Exists & check if the Sub-Objective exists & add sub if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_EstablishBaseOfOperation.title_id) == true and
+		Objective_Exists(Objective_BuildHQ.title_id) == false
+	then
+		-- Create (Assign)  the objective as a sub-primary one
+		Objective_SubAdd(Objective_BuildHQ, Objective_EstablishBaseOfOperation.title_id)
+		
+		-- Play IE
+		Util_StartIntel(g_ie_FreeBuilders_Array[g_intelEvent_raceId])
+
+	-- if the objective exists & all the player HQ is built
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_BuildHQ.title_id) == true and
+		g_playerHQ_built == true
+	then
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_BuildHQ.title_id)
+		Rule_Remove(Rule_BuildHQ_Objective)
+		
+		-- so game know Player has built there HQ & where it is ( so main objective completes)
+		g_player_hq_created = true
+	end
+
+	--Does Player Have HQ?
+	if EGroup_ContainsBlueprints(Player_GetEntities(g_Player1), Util_MakeBlueprintTable(g_HQ_blueprint), true) == true and
+		g_player_hq_created == false
+	then
+		-- Create EGroup with Player HQ
+		EGroup_CreateFromEGroup("eg_player_HQ", EGroup_GetName(Player_GetEntities(g_Player1)), g_HQ_blueprint)
+		-- Is the Player hq Completed (Greater than 95%)?
+		if EGroup_GetAvgHealth("eg_player_HQ") > 0.95
+		then
+			print("HQ completed")
+			g_playerHQ_position = EGroup_GetPosition("eg_player_HQ")
+			g_attack_position = EGroup_GetPosition("eg_player_HQ")
+			g_playerHQ_built = true
+		end
+	end
+end
+
+-- Assigns & Check for Secondary Objective : Free your troops
+function Rule_FreeTroops_Objective()
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_FreeTroops.title_id) == false
+	then
+		-- Create( & Assign) the objective as a secondary one
+		Util_ObjectiveCreate(Objective_FreeTroops, false)
+		
+		-- Play Initial IE: Our troops are caged -- Free them
+		Util_StartIntel(g_ie_Initial_Array[g_intelEvent_raceId])
+
+		--Associate a Ping with the Objective on the Objective Screen (updates when each cage is destroyed)
+		g_PrisonerCage_1_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_1", true, attack)
+		g_PrisonerCage_2_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_2", true, attack)
+		g_PrisonerCage_3_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_3", true, attack)
+		g_PrisonerCage_4_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_4", true, attack)
+		g_PrisonerCage_5_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_5", true, attack)
+		g_PrisonerCage_6_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_6", true, attack)
+		g_PrisonerCage_10_Ping_Objective = Objective_PingMarker(Objective_FreeTroops.title_id, "mkr_prisonerCage_10", true, attack)
+
+		-- Set up a ping on the ingame screen for all the prisoner cages:
+		for i=1,6
+		do
+			Ping_Marker("mkr_prisonerCage_"..i, false, "default")
+		end
+		Ping_Marker("mkr_prisonerCage_10", false, "default")
+
+	-- if the objective exists & all the troops are freed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_FreeTroops.title_id) == true and
+		EGroup_Count("eg_prisonerCage_1") == 0 and
+		EGroup_Count("eg_prisonerCage_2") == 0 and
+		EGroup_Count("eg_prisonerCage_3") == 0 and
+		EGroup_Count("eg_prisonerCage_4") == 0 and
+		EGroup_Count("eg_prisonerCage_5") == 0 and
+		EGroup_Count("eg_prisonerCage_6") == 0 and
+		EGroup_Count("eg_prisonerCage_10") == 0
+	then
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_FreeTroops.title_id)
+		Rule_Remove(Rule_FreeTroops_Objective)
+	end
+	
+	-- Remove Objective Ping when the prisoner cage 1 is destroyed:
+	if EGroup_Count("eg_prisonerCage_1") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_1_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 2 is destroyed:
+	if EGroup_Count("eg_prisonerCage_2") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_2_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 3 is destroyed:
+	if EGroup_Count("eg_prisonerCage_3") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_3_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 4 is destroyed:
+	if EGroup_Count("eg_prisonerCage_4") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_4_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 5 is destroyed:
+	if EGroup_Count("eg_prisonerCage_5") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_5_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 6 is destroyed:
+	if EGroup_Count("eg_prisonerCage_6") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_6_Ping_Objective)
+	end
+	-- Remove Objective Ping when the prisoner cage 10 is destroyed:
+	if EGroup_Count("eg_prisonerCage_10") == 0
+	then
+		Objective_PingRemove(Objective_FreeTroops.title_id, g_PrisonerCage_10_Ping_Objective)
+	end
+end
+
+-- Assigns & Check for Secondary Objective : Destroy All Soul Cages
+function Rule_DestroySoulCages_Objective()
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_DestroySoulCages.title_id) == false
+	then
+		-- Create( & Assign) the objective as a secondary one
+		Util_ObjectiveCreate(Objective_DestroySoulCages, false)
+
+		-- so we can track when All Soul Cages are destroyed
+		g_allSoulCages_Destroyed = false
+
+		-- Add Sub-Objectives to Destroy Soul Cages
+		Rule_AddInterval(Rule_DestroyCage_RendSoul_Objective,1)
+		Rule_AddInterval(Rule_DestroyCage_Sadisim_Objective,1)
+		Rule_AddInterval(Rule_DestroyCage_ScreamDammed_Objective,1)
+
+	-- if the objective exists & all the soul cages are destroyed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroySoulCages.title_id) == true and
+		g_allSoulCages_Destroyed == true
+	then
+		-- Play Initial IE: All Soul Cages Are Destroyed
+		Util_StartIntel(EVENTS.IE_AllSoulCages_Destroyed)
+		
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_DestroySoulCages.title_id)
+		Rule_Remove(Rule_DestroySoulCages_Objective)
+	end
+end
+
+-- Assigns & Check for Sub-Secondary Objective : Destroy Soul Cage: Rend Soul
+function Rule_DestroyCage_RendSoul_Objective()
+	-- Confirm the Primary Objective Exists & check if the Sub-Objective exists & add sub if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_DestroySoulCages.title_id) == true and
+		Objective_Exists(Objective_DestroyCage_RendSoul.title_id) == false
+	then
+		-- Create (Assign) the objective as a sub-secondary one
+		Objective_SubAdd(Objective_DestroyCage_RendSoul, Objective_DestroySoulCages.title_id)
+
+		--Associate a Ping with the Objective on the Objective Screen
+		g_SoulCage_RendSoul_Ping_Objective = Objective_PingMarker(Objective_DestroyCage_RendSoul.title_id, "mkr_soulCage_6", true, attack)
+
+		-- Set up a ping on the ingame screen:
+		Ping_Marker("mkr_soulCage_6", false, "default")
+
+		-- Reveal FOW around the cage for 10 secs
+		FOW_RevealMarker("mkr_soulCage_6", 10)
+
+		--Set & Show Timer until Skill Fires
+		g_rendSoul_Counter = g_rendSoul_Counter_Max
+		UI_ShowCountDXP("RendSoul_Timer_Ui", g_Player1, 3950095, g_rendSoul_Counter)
+
+		-- Update Onscreen Timer & Track when skill ready to fire 
+		Rule_AddInterval(Rule_RendSoul_Timer,1)
+
+	-- if the objective exists & all the soul cage is destroyed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroyCage_RendSoul.title_id) == true and
+		EGroup_Count("eg_soulCage_6") == 0
+	then
+		-- Hide the Counter & Remove Rule to Fire Skill
+		UI_HideCount("RendSoul_Timer_Ui")
+		Rule_Remove(Rule_RendSoul_Timer)
+
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_DestroyCage_RendSoul.title_id)
+		Rule_Remove(Rule_DestroyCage_RendSoul_Objective)
+		
+		-- Play IE unless this is the last cage to be destroyed...
+		if EGroup_Count("eg_soulCage_4") == 0 and
+			EGroup_Count("eg_soulCage_5") == 0
+		then
+			g_allSoulCages_Destroyed = true
+		else
+			-- Play IE: Soul Cages is Destroyed
+			Util_StartIntel(EVENTS.IE_SoulCage_One_Destroyed)
+		end		
+	end	
+end
+
+-- Assigns & Check for Sub-Secondary Objective : Destroy Soul Cage: Rend Soul
+function Rule_DestroyCage_Sadisim_Objective()
+	-- Confirm the Primary Objective Exists & check if the Sub-Objective exists & add sub if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_DestroySoulCages.title_id) == true and
+		Objective_Exists(Objective_DestroyCage_Sadisim.title_id) == false
+	then
+		-- Create (Assign) the objective as a sub-secondary one
+		Objective_SubAdd(Objective_DestroyCage_Sadisim, Objective_DestroySoulCages.title_id)
+
+		--Associate a Ping with the Objective on the Objective Screen
+		g_SoulCage_Sadisim_Ping_Objective = Objective_PingMarker(Objective_DestroyCage_Sadisim.title_id, "mkr_soulCage_5", true, attack)
+
+		-- Set up a ping on the ingame screen:
+		Ping_Marker("mkr_soulCage_5", false, "default")
+
+		-- Reveal FOW around the cage for 10 secs
+		FOW_RevealMarker("mkr_soulCage_5", 10)
+
+		--Set & Show Timer until Skill Fires
+		g_sadisim_Counter = g_sadisim_Counter_Max
+		UI_ShowCountDXP("Sadisim_Timer_Ui", g_Player1, 3950096, g_sadisim_Counter)
+
+		-- Update Onscreen Timer & Track when skill ready to fire 
+		Rule_AddInterval(Rule_Sadisim_Timer,1)
+
+	-- if the objective exists & all the soul cage is destroyed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroyCage_Sadisim.title_id) == true and
+		EGroup_Count("eg_soulCage_5") == 0
+	then
+		-- Hide the Counter & Remove Rule to Fire Skill
+		UI_HideCount("Sadisim_Timer_Ui")
+		Rule_Remove(Rule_Sadisim_Timer)
+
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_DestroyCage_Sadisim.title_id)
+		Rule_Remove(Rule_DestroyCage_Sadisim_Objective)
+		
+		-- Play IE unless this is the last cage to be destroyed...
+		if EGroup_Count("eg_soulCage_4") == 0 and
+			EGroup_Count("eg_soulCage_6") == 0
+		then
+			g_allSoulCages_Destroyed = true
+		else
+			-- Play IE: Soul Cages is Destroyed
+			Util_StartIntel(EVENTS.IE_SoulCage_Two_Destroyed)
+		end		
+	end	
+end
+
+-- Assigns & Check for Sub-Secondary Objective : Destroy Soul Cage: ScreamDammed
+function Rule_DestroyCage_ScreamDammed_Objective()
+	-- Confirm the Primary Objective Exists & check if the Sub-Objective exists & add sub if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_DestroySoulCages.title_id) == true and
+		Objective_Exists(Objective_DestroyCage_ScreamDammed.title_id) == false
+	then
+		-- Create (Assign) the objective as a sub-secondary one
+		Objective_SubAdd(Objective_DestroyCage_ScreamDammed, Objective_DestroySoulCages.title_id)
+
+		--Associate a Ping with the Objective on the Objective Screen
+		g_SoulCage_ScreamDammed_Ping_Objective = Objective_PingMarker(Objective_DestroyCage_ScreamDammed.title_id, "mkr_soulCage_4", true, attack)
+
+		-- Set up a ping on the ingame screen:
+		Ping_Marker("mkr_soulCage_4", false, "default")
+
+		-- Reveal FOW around the cage for 10 secs
+		FOW_RevealMarker("mkr_soulCage_4", 10)
+
+		--Set & Show Timer until Skill Fires
+		g_screamDammed_Counter = g_screamDammed_Counter_Max
+		UI_ShowCountDXP("ScreamDammed_Timer_Ui", g_Player1, 3950097, g_screamDammed_Counter)
+
+		-- Update Onscreen Timer & Track when skill ready to fire 
+		Rule_AddInterval(Rule_ScreamDammed_Timer,1)
+
+	-- if the objective exists & the soul cage is destroyed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroyCage_ScreamDammed.title_id) == true and
+		EGroup_Count("eg_soulCage_4") == 0
+	then
+		-- Hide the Counter & Remove Rule to Fire Skill
+		UI_HideCount("ScreamDammed_Timer_Ui")
+		Rule_Remove(Rule_ScreamDammed_Timer)
+
+		-- Complete the Objective & Remove the Rule
+		Util_ObjectiveComplete(Objective_DestroyCage_ScreamDammed.title_id)
+		Rule_Remove(Rule_DestroyCage_ScreamDammed_Objective)
+		
+		-- Play IE unless this is the last cage to be destroyed...
+		if EGroup_Count("eg_soulCage_5") == 0 and
+			EGroup_Count("eg_soulCage_6") == 0
+		then
+			g_allSoulCages_Destroyed = true
+		else
+			-- Play IE: Soul Cages is Destroyed
+			Util_StartIntel(EVENTS.IE_SoulCage_Three_Destroyed)
+		end		
+	end	
+end
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " OBJECTIVES " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Timers & Firing for the Three Soul Cage Skills
+function Rule_RendSoul_Timer()
+	-- Update & Show the Onscreen Timer for Rend Soul Skill
+	g_rendSoul_Counter = g_rendSoul_Counter - 1
+	UI_ShowCountUpdateDxp("RendSoul_Timer_Ui", g_rendSoul_Counter, 3950095)
+	
+	-- if Timer has Reached 0..fire skill
+	if g_rendSoul_Counter == 0
+	then
+		--Pick Target & Use Skill Here
+		print("Using Skill: Rend Soul")
+		--dark_eldar_rend_soul_sp_dxp3
+		
+		g_rendSoul_Counter = g_rendSoul_Counter_Max
+	end
+end
+
+function Rule_Sadisim_Timer()
+	-- Update & Show the Onscreen Timer for Rend Soul Skill
+	g_sadisim_Counter = g_sadisim_Counter - 1
+	UI_ShowCountUpdateDxp("Sadisim_Timer_Ui", g_sadisim_Counter, 3950096)
+
+	-- if Timer has Reached 0...fire skill
+	if g_sadisim_Counter == 0
+	then
+		print("Using Skill: Sadisim")
+		Command_EntityAbilitySelf(g_Player3, EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_soulCage_5"), 1), "dark_eldar_sadism_sp_dxp3")
+		g_sadisim_Counter = g_sadisim_Counter_Max
+	end
+end
+
+function Rule_ScreamDammed_Timer()
+	-- Update & Show the Onscreen Timer for Scream Dammed Skill
+	g_screamDammed_Counter = g_screamDammed_Counter - 1
+	UI_ShowCountUpdateDxp("ScreamDammed_Timer_Ui", g_screamDammed_Counter, 3950097)
+	
+	-- if Timer has Reached 0...fire skill
+	if g_screamDammed_Counter == 0
+	then
+		print("Using Skill: ScreamDammed")
+		Command_EntityAbilitySelf(g_Player3, EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_soulCage_4"), 1), "dark_eldar_screams_of_the_damned_sp_dxp3")
+		g_screamDammed_Counter = g_screamDammed_Counter_Max
+	end
+end
+
+
+--Handles the Delayed Tech-ing & Activation of Enemy Bases & granting of research
+function Rule_Tech_And_Activate_Tier_One()
+	
+	-- Rule For Vect Attacks to Start
+	Rule_AddInterval(Rule_VectAttack, g_timer_vectAttack)
+	
+	-- Jumping Hellions from East Base
+	g_skimmerShop8_activated = true
+	
+	-- Attacking Mandrakes from East Base
+	g_hq5_activated = true
+	
+	-- Patroling Mandrakes from North Base
+	g_hq2_activated = true
+	
+	-- Scourge Help Troops from NorthWest Base
+	g_hallOfBlood9_activated  = true
+
+	-- Vect Support Mandrakes from North West Base
+	g_hq3_activated = true
+	
+	-- Vect Repair Troops from Main Base
+	g_hq1_activated = true
+
+	-- Warriors from West Base
+	g_hallOfBlood7_activated  = true
+	
+	-- Reavers from West Base
+	g_skimmerShop7_activated = true
+	
+	-- Grant Building Retaliation Damage
+	Player_GrantResearch(g_Player2, "dark_eldar_barbed_walls_research")
+	Player_GrantResearch(g_Player3, "dark_eldar_barbed_walls_research")
+end
+
+function Rule_Tech_And_Activate_Tier_Two()
+	
+	--Taunt Player (Since Tiered Up)
+	Util_StartIntel(EVENTS.IE_Taunt_One)
+	
+	-- Warriors from East Base
+	g_hallOfBlood4_activated  = true
+	
+	-- Warriors from North Base
+	g_hallOfBlood5_activated  = true
+	
+	-- Warp Beasts from West Base
+	g_hallOfBlood6_activated  = true
+	
+	-- Raiders with Warriors & Wychs from Main Base
+	g_hallOfBlood2_activated  = true
+	g_hallOfBlood3_activated  = true
+	g_skimmerShop2_activated = true
+	g_skimmerShop3_activated = true
+
+	
+	-- Grant Mandrake Cloaking
+	Player_GrantResearch(g_Player2, "dark_eldar_infiltration_mandrake_research")
+	Player_GrantResearch(g_Player3, "dark_eldar_infiltration_mandrake_research")
+	
+	-- Grant Increase Melee & Range Damage for Leaders
+	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_power_scythe")
+	Player_GrantResearch(g_Player3, "dark_eldar_upgrade_power_scythe")
+	
+	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_destructor")
+	Player_GrantResearch(g_Player3, "dark_eldar_upgrade_destructor")
+
+	-- Increase Weapon Accuracy
+	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_soulseeker_ammunition")
+	Player_GrantResearch(g_Player3, "dark_eldar_upgrade_soulseeker_ammunition")
+
+	-- Add DOT to Melee Attacks
+	Player_GrantResearch(g_Player2, "dark_eldar_poisoned_blades_research")
+	Player_GrantResearch(g_Player3, "dark_eldar_poisoned_blades_research")	
+end
+
+function Rule_Tech_And_Activate_Tier_Three()
+	
+	--Taunt Player (Since Tiered Up)
+	Util_StartIntel(EVENTS.IE_Taunt_Two)
+	
+	-- Ravager for North Base
+	g_skimmerShop4_activated = true
+	-- Talos & Reavers from North Base
+	g_skimmerShop5_activated = true
+	
+	-- Increase Vechicle Armor
+	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_vehicle_armor")
+	Player_GrantResearch(g_Player3, "dark_eldar_upgrade_vehicle_armor")
+	Player_GrantResearch(g_Player4, "dark_eldar_upgrade_vehicle_armor")
+	
+	-- Vechile Retaliation Damage
+	Player_GrantResearch(g_Player2, "dark_eldar_scythes_research")
+	Player_GrantResearch(g_Player3, "dark_eldar_scythes_research")
+	Player_GrantResearch(g_Player4, "dark_eldar_scythes_research")
+	
+	-- Grant 2nd Increase Melee Damage for Leaders
+	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_agonizer")
+	Player_GrantResearch(g_Player3, "dark_eldar_upgrade_agonizer")
+end
+
+-- dark_eldar_crucible_of_malediction_research, dark_eldar_gruesome_display_research
+-- dark_eldar_penumbra_research 
+-- dark_eldar_short_circuit_research,
+-- dark_eldar_soul_destruction_research, dark_eldar_soulharvest_research, dark_eldar_talisman_of_petrification_research,
+-- dark_eldar_terrorfex_grenade_research
+
+-----------------------------------------------------------------------------------------------------------------------
+-- BASE ACTIVATION, PRODUCTION, & ATTACKS
+	-- Rule_Create_And_Sync_Attacks() : Creates the SGroups Used & Adds all the attack Rules at the same time to sync them
+-----------------------------------------------------------------------------------------------------------------------
+
+-- Creates the SGroups Used & Adds all the attack Rules at the same time to sync them
+	-- Note: South Bases Warp Spider Attacks are based off when the Squads Die & Are not synced with rest of attacks
+function Rule_Create_And_Sync_Attacks()
+
+	g_firstTroops_sent = false
+	
+	-- I SHOULD REALLY PUT ALL THIS INTO ARRAYS	
+	g_prisonerCage3_activated = false
+	g_prisonerCage4_activated = false
+	g_prisonerCage6_activated = false
+	g_prisonerCage10_activated = false
+	
+	g_hallOfBlood1_activated  = false -- Main Base
+	g_hallOfBlood2_activated  = false -- Main Base
+	g_hallOfBlood3_activated  = false -- Main Base
+	g_hallOfBlood4_activated  = false -- East Base
+	g_hallOfBlood5_activated  = false -- North Base
+	g_hallOfBlood6_activated  = false -- West Base
+	g_hallOfBlood7_activated  = false -- West Base
+	
+	g_hallOfBlood9_activated  = false -- NorthWest Base
+	g_hallOfBlood10_activated  = false
+	g_hallOfBlood13_activated = false
+	g_hallOfBlood14_activated = false
+	g_hallOfBlood15_activated = false
+	
+	g_skimmerShop1_activated = false -- Main Base
+	g_skimmerShop2_activated = false -- Main Base
+	g_skimmerShop3_activated = false -- Main Base
+	g_skimmerShop4_activated = false -- North Base
+	g_skimmerShop5_activated = false -- North Base
+	g_skimmerShop6_activated = false -- Center base
+	g_skimmerShop7_activated = false -- West Base
+	g_skimmerShop8_activated = false -- East Base
+	-- skimer shop 9 is located in SouthWestBase
+	g_skimmerShop10_activated = false
+	
+	g_hq1_activated = false	-- Main Base
+	g_hq2_activated = false	-- North Base
+	g_hq3_activated = false	-- NorthWest Base
+	g_hq5_activated = false	-- East Base
+	
+	-- So Vects Support Troops Gets Better as mission goes on
+	g_vectSupport_Ravagers = false
+	
+	g_baseRevealed = false
+	
+	g_centerBase_activated = false
+	g_eastBase_activated = false
+	g_northBase_activated = false
+	g_northWestBase_activated = false
+	g_southEastBase_activated = false
+	g_southWestBase_activated = false
+	g_westBase_activated = false
+	
+	-- Are the Patrols Active or have the troops been recalled to base defense
+	g_patrolOne_activated = true
+	g_patrolTwo_activated = true
+	g_patrolThree_activated = true
+	
+	-- Keep track of number of Patrol Squads from North Base
+	g_numUnits_patrolThree = 0
+	g_numUnits_patrolThreeReverse = 0
+	
+	-- Track if IEs have played:
+	g_ie_FirstCage_Played = false
+	g_ie_FreeMostTroops_Played = false
+	
+	-- Counts have many prisoners have been freed
+	g_prisonerCage_numFreed = 0	
+	
+	-- Checks if a prisoner has been freed from their cage yet
+	g_array_prisonerCage_freed = {
+								false, --1
+								false, --2
+								false, --3
+								false, --4
+								false, --5
+								false, --6
+								false, --7
+								false, --8
+								false, --9
+								false, --10
+	}
+
+	-- What Prisoner to free from what cage
+	g_array_prisonerCage_prisoner = {
+								g_prisoner_blueprint_1, --1
+								g_prisoner_blueprint_2, --2
+								g_prisoner_blueprint_3, --3
+								g_prisoner_blueprint_4, --4
+								g_prisoner_blueprint_5, --5
+								g_prisoner_blueprint_6, --6
+								g_Builder_blueprint, --7
+								g_Builder_blueprint, --8
+								g_Builder_blueprint, --9
+								g_prisoner_blueprint_5, --10
+	}
+	g_attack_position = SGroup_GetPosition(Player_GetSquads(g_Player1))
+	
+	--used to track all the player units
+	SGroup_Create("sg_players_units")
+	
+	-- Create the SGroups used by the Bases to Attack & Patrol with
+	SGroup_Create("sg_prisonerDefense_units")
+	SGroup_Create("sg_prisonerPatrolOne_units")
+	SGroup_Create("sg_prisonerPatrolTwo_units")
+	SGroup_Create("sg_northBase_Patrol_units")
+	
+	-- Used For Main Base Loaded-Raider Jumping
+	SGroup_Create("sg_mainBase_east_raider_loaded")	
+	SGroup_Create("sg_mainBase_west_raider_loaded")
+	
+	SGroup_Create("sg_mainBase_east_raider")
+	SGroup_Create("sg_mainBase_west_raider")
+	SGroup_Create("sg_mainBase_raider_warriors")
+	SGroup_Create("sg_mainBase_raider_wych")
+	
+	-- Group for building repair troops and repairing vect
+	SGroup_Create("sg_vectRepair")
+	
+	-- Group for Producing Troops to support Vects Attacks
+	SGroup_Create("sg_vectSupport_attack")
+	
+	SGroup_Create("sg_eastBase_attack")
+	SGroup_Create("sg_mainBase_attack")
+	SGroup_Create("sg_northBase_attack")
+	SGroup_Create("sg_westBase_attack")
+	
+	-- Only 1 Produced at a time -- for skill usage reasons
+	SGroup_Create("sg_northBase_talos")
+	
+	SGroup_Create("sg_northWestBase_units")
+	SGroup_Create("sg_northWest_mandrakes")
+	
+	-- Produced in NorthWest Base & Used to Help Other Bases for Defense Reasons
+	SGroup_Create("sg_scourge_jump_units")	
+	
+	-- Check for Base Activation by the Prisoner Cages
+	Rule_AddInterval(Rule_PrisonerCage_BaseActivation, 1)
+	
+	-- Check For Destroyed Cages so know to free prisoner 	
+	Rule_AddInterval(Rule_PrisonerCage_FreeCage,1)
+
+	-- Sync Production (Note: Real Production won't occur until bases are activated)
+	Rule_AddInterval(Rule_PrisonerCage_Defense_Production, g_productionTimer_prisonerDefense)
+	Rule_AddInterval(Rule_Patrol_Production, g_productionTimer_patrols)
+	
+	Rule_AddInterval(Rule_Production_East_Base, g_productionTimer_eastBase)
+	Rule_AddInterval(Rule_Production_Main_Base, g_productionTimer_mainBase)
+	Rule_AddInterval(Rule_Production_Main_Base_Vect_Support, g_productionTimer_vectSupport)
+	Rule_AddInterval(Rule_Production_North_Base, g_productionTimer_northBase)
+	Rule_AddInterval(Rule_Production_NorthWest_Base, g_productionTimer_northWestBase)
+	Rule_AddInterval(Rule_Production_West_Base, g_productionTimer_westBase)
+	
+	Rule_AddIntervalDelay(Rule_EastBase_Hellion_Production,2, g_productionTimer_eastBase_Hellion)
+	Rule_AddInterval(Rule_PathThree_Patrol,1)
+	
+	-- Sync the Attack Rules for the Bases (Bases won't actually start to attack until they activate & produce units)
+	Rule_AddInterval(Rule_Attack_East_Base, g_attackTimer_eastBase)
+	Rule_AddInterval(Rule_Attack_Main_Base, g_attackTimer_mainBase)
+	Rule_AddInterval(Rule_Attack_North_Base, g_attackTimer_northBase)
+	Rule_AddInterval(Rule_Attack_West_Base, g_attackTimer_westBase)
+	
+	-- Provide Some Random Movement to Make South East & West Bases Appear More Life-Like
+	Rule_AddInterval(Rule_RandomMovement_SouthEast_Base, 10)
+	Rule_AddInterval(Rule_RandomMovement_SouthWest_Base, 10)
+	
+	Rule_AddInterval(Rule_Main_Base_Raider_Attack,g_timer_Raider_JumpAttack)	
+end
+
+-- Control Vect Attacks if ready for them
+function Rule_VectAttack()
+	print("Vect Attack")
+	--if vect is at full life
+	if SGroup_GetAvgHealth("sg_Vect_Objective") == 1.0
+	then
+	
+		-- Share FOW Vision with Vect
+		World_EnablePlayerToPlayerFOW(g_Player1, g_Player4, false)
+		
+		-- Get all his support troops around him
+		Player_GetAllSquadsNearMarker(g_Player3, "sg_vectAttack", "mkr_vect_objective")
+		
+		--Order him & his support to attack the player
+		Cmd_AttackMovePos("sg_vectAttack", g_attack_position)
+		Cmd_AttackMovePos("sg_Vect_Objective", g_attack_position)
+	
+		-- Pick Vects Attack Taunt & Play IE
+		attack_Taunt = World_GetRand(1,3)
+		Util_StartIntel(g_ie_VectRandomAttack_Array[attack_Taunt])
+	
+		-- Subtract 10% from his retreat damage number (EX: 95% to 85%)
+		g_vect_retreat_damage = g_vect_retreat_damage - 0.1
+	
+		-- So Retreat Damage is Always over 50%
+		if g_vect_retreat_damage <= 0.5
+		then
+			g_vect_retreat_damage = 0.5
+			
+			-- Give Vect Ravager Support from North Base
+			g_vectSupport_Ravagers = false
+		end
+		
+		-- Give Vect More Help as he takes more damage
+		if g_vect_retreat_damage <= 0.75
+		then
+			-- Warrior & Ravager Support for Vect Attacks from Main Base
+			g_hallOfBlood1_activated  = true
+			g_skimmerShop1_activated = true
+		end
+		
+		-- Confirm Rule was removed in time
+		Rule_Remove(Rule_VectAttack)
+		
+		-- Add rule to check if Vect has been hurt
+		Rule_AddIntervalDelay(Rule_Check_For_Vect_Damage,3,10)
+		
+	-- Vect is Still Wounded...
+	else
+	
+		--Taunt Player (Since Not Attacking)
+		Util_StartIntel(EVENTS.IE_Taunt_Four)
+		
+		-- make sure he is in his marker area for next attack
+		Cmd_MoveToMarker("sg_Vect_Objective", "mkr_vect_objective")
+		
+		-- task some slaves to fix him
+		if SGroup_Count("sg_vectRepair") > 0
+		then
+			Command_SquadSquad(g_Player4, "sg_vectRepair", SCMD_Repair, "sg_Vect_Objective")
+		end
+	end
+end
+
+--Check if Vect is Damaged enough -- retreat if so
+function Rule_Check_For_Vect_Damage()
+	-- If hurt enough to retreat
+	if SGroup_GetAvgHealth("sg_Vect_Objective") <= g_vect_retreat_damage
+	then
+		-- Pick Vects Attack Taunt & Play IE
+		retreat_Taunt = World_GetRand(1,4)
+		Util_StartIntel(g_ie_VectRandomFlee_Array[retreat_Taunt])
+		
+		-- Stop Sharing FOW Vision with Vect
+		World_EnablePlayerToPlayerFOW(g_Player1, g_Player4, true)
+		
+		-- Use Skill To Cover Escape & retreat
+		Cmd_CastAbilitySelf("sg_Vect_Objective", "dark_eldar_darklance_sweep")
+		Cmd_MoveToMarker("sg_Vect_Objective", "mkr_vect_objective")
+		
+		-- task some slaves to fix him
+		if SGroup_Count("sg_vectRepair") > 0
+		then
+			Command_SquadSquad(g_Player4, "sg_vectRepair", SCMD_Repair, "sg_Vect_Objective")
+		end
+		
+		--Prepare for Next Attack Attempt
+		Rule_AddInterval(Rule_VectAttack, 120)
+		Rule_Remove(Rule_Check_For_Vect_Damage)
+	end
+end
+
+-- Produce Troops from the Main Base once activated to Support Vect & his Dais of Destruction
+function Rule_Production_Main_Base_Vect_Support()
+	local numberTroops
+	
+	-- If there is no slave squad to repair vect
+	if SGroup_Count("sg_vectRepair") == 0 and
+		EGroup_Count("eg_hq_1") == 1 and 
+		g_hq1_activated == true
+	then
+		print("Vect Support: HQ 1 -- Producing Slave Squad to Repair Vect")
+		Util_CreateSquadsAtMarker(g_Player4, "sg_vectRepair", "dark_eldar_squad_slave", "mkr_hq_1", 1)
+		Command_SquadSquad(g_Player4, "sg_vectRepair", SCMD_Repair, "sg_Vect_Objective")
+	end
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_vectSupport_attack") < g_max_number_vectSupport_units
+	then
+		-- if Hall of Blood 1 in Main Base Still Exists (and is Activated) -- Produce some Warriors
+		if EGroup_Count("eg_hallOfBlood_1") == 1 and
+			g_hallOfBlood1_activated == true
+		then
+			print("Vect Support: Hall of Blood 1 -- Producing Warriors")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_vectSupport_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_1", 1, numberTroops)
+			SGroup_AddLeaders("sg_vectSupport_warriors")
+			SGroup_AddGroup("sg_vectSupport_attack", "sg_vectSupport_warriors")
+			Util_AttackMoveMarkerRandomRadius("sg_vectSupport_warriors", "mkr_vect_objective")
+			SGroup_Clear("sg_vectSupport_warriors")
+		end
+		
+		-- if Dark Foundry 1 in Main Base Still Exists (and is Activated) -- Produce a Ravager (if allowed)
+		if EGroup_Count("eg_skimmerShop_1") == 1 and
+			g_skimmerShop1_activated == true and
+			g_vectSupport_Ravagers == true
+		then
+			print("Vect Support: Skimmer Shop 1 -- Producing Raider")
+			Util_CreateSquadsAtMarker(g_Player3, "sg_vectSupport_ravager", "dark_eldar_squad_ravager", "mkr_skimmerShop_1", 1)
+			SGroup_AddGroup("sg_vectSupport_attack", "sg_vectSupport_ravager")
+			Util_AttackMoveMarkerRandomRadius("sg_vectSupport_ravager", "mkr_vect_objective")
+			SGroup_Clear("sg_vectSupport_ravager")
+		
+		-- Not Yet time for Ravager -- so produce a reaver
+		elseif EGroup_Count("eg_skimmerShop_1") == 1 and
+			g_skimmerShop1_activated == true
+		then
+			print("Vect Support: Skimmer Shop 1 -- Producing Reaver")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_vectSupport_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_1", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_vectSupport_attack", "sg_vectSupport_reaver")
+			Util_AttackMoveMarkerRandomRadius("sg_vectSupport_reaver", "mkr_vect_objective")
+			SGroup_Clear("sg_vectSupport_reaver")		
+		end
+	end
+
+	if 	EGroup_Count("eg_hq_1") == 0 and
+		EGroup_Count("eg_skimmerShop_1") == 0 and
+		EGroup_Count("eg_hallOfBlood_1") == 0
+	then
+		Rule_Remove(Rule_Production_Main_Base_Vect_Support)
+	end
+end
+
+
+-- Jump in the Raiders on top of the players army
+function Rule_Main_Base_Raider_Attack()
+	-- Find All the Player Units
+	SGroup_Clear("sg_players_units")
+	SGroup_AddGroup("sg_players_units", Player_GetSquads(g_Player1))
+	
+	--if we got someone...
+	if SGroup_Count("sg_players_units") > 0
+	then
+		-- Get Number of Active Player Squads
+		numUnits = Player_GetActiveSquadCount(g_Player1)
+		-- Get the Number we counted
+		sCount = SGroup_Count("sg_players_units")
+		
+		print("Active Squads: "..numUnits)
+		print("SCount: "..sCount)
+		
+		--use the lowest
+		if sCount < numUnits
+		then
+			numUnits = sCount
+		end
+		
+		if numUnits >= 1
+		then
+			-- Jump in Raider on top of player squad
+			raiderattack_pos = Squad_GetPosition(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_players_units"), World_GetRand(1, numUnits)))
+			Cmd_JumpToPos("sg_mainBase_east_raider_loaded", raiderattack_pos)
+		
+			-- Jump in Raider on top of player squad
+			raiderattack_pos = Squad_GetPosition(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_players_units"), World_GetRand(1, numUnits)))
+			Cmd_JumpToPos("sg_mainBase_west_raider_loaded", raiderattack_pos)
+		end
+	end
+end
+
+-- Produce Troops from the Main Base once activated
+function Rule_Production_Main_Base()
+	local numberTroops
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_mainBase_attack") < g_max_number_mainBase_units
+	then
+		-- if Hall of Blood 2 by Main Base Still Exists (and is Activated) -- Produce some Warriors
+		if EGroup_Count("eg_hallOfBlood_2") == 1 and
+			g_hallOfBlood2_activated == true
+		then
+			print("Main Base: Hall of Blood 2 -- Producing Warriors")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_mainBase_raider_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_2", 1, numberTroops)
+			SGroup_AddLeaders("sg_mainBase_raider_warriors")
+		end
+		
+		-- if Dark Foundry 2 by Main Base Still Exists (and is Activated) -- Produce a Raider 
+		if EGroup_Count("eg_skimmerShop_2") == 1 and
+			g_skimmerShop2_activated == true and
+			SGroup_Count("sg_mainBase_west_raider_loaded") == 0
+		then
+			print("Main Base: Skimmer Shop 2 -- Producing Raider")
+			Util_CreateSquadsAtMarker(g_Player3, "sg_mainBase_west_raider", "dark_eldar_squad_raider_sp_dxp3", "mkr_skimmerShop_2", 1)
+		
+		-- Only one Raider allowed -- so produce a reaver
+		elseif EGroup_Count("eg_skimmerShop_2") == 1 and
+			g_skimmerShop2_activated == true
+		then
+			print("Main Base: Skimmer Shop 2 -- Producing Reaver")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_mainBase_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_2", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_mainBase_attack", "sg_mainBase_reaver")
+			SGroup_Clear("sg_mainBase_reaver")		
+		end
+		
+		-- if both troops & transport exist...
+		if SGroup_Count("sg_mainBase_west_raider") == 1 and
+			SGroup_Count("sg_mainBase_raider_warriors") == 1
+		then
+			-- load the troops into the transport
+			Cmd_EnterTransport("sg_mainBase_raider_warriors", "sg_mainBase_west_raider")
+			-- buy time for the troops to get into the raider
+			Rule_AddOneShot(Rule_Load_Raider_MainBase_West, 10)
+	
+		--if only the transport exists...
+		elseif SGroup_Count("sg_mainBase_west_raider") == 1
+		then
+			SGroup_AddGroup("sg_mainBase_west_raider_loaded", "sg_mainBase_west_raider")
+			-- Clear out the Squad so can make more units
+			SGroup_Clear("sg_mainBase_west_raider")
+	
+		--if only the troops exists...
+		elseif SGroup_Count("sg_mainBase_raider_warriors") == 1
+		then
+			-- Add the troops to the Attack Group
+			SGroup_AddGroup("sg_mainBase_attack", "sg_mainBase_raider_warriors")
+			-- Clear out the troops squad so can make more units
+			SGroup_Clear("sg_mainBase_raider_warriors")
+		end
+		
+		-- if Hall of Blood 3 by Main Base Still Exists (and is Activated) -- Produce some Wychs
+		if EGroup_Count("eg_hallOfBlood_3") == 1 and
+			g_hallOfBlood3_activated == true
+		then
+			print("Main Base: Hall of Blood 3 -- Producing Wychs")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_mainBase_raider_wych", "dark_eldar_squad_wych", "mkr_hallOfBlood_3", 1, numberTroops)
+			SGroup_AddLeaders("sg_mainBase_raider_wych")
+		end
+		
+		-- if Dark Foundry 3 by Main Base Still Exists (and is Activated) -- Produce a Raider 
+		if EGroup_Count("eg_skimmerShop_3") == 1 and
+			g_skimmerShop3_activated == true and
+			SGroup_Count("sg_mainBase_east_raider_loaded") == 0
+		then
+			print("Main Base: Skimmer Shop 3 -- Producing Raider")
+			Util_CreateSquadsAtMarker(g_Player3, "sg_mainBase_east_raider", "dark_eldar_squad_raider_sp_dxp3", "mkr_skimmerShop_3", 1)
+		
+		-- Only one Raider allowed -- so produce a reaver
+		elseif EGroup_Count("eg_skimmerShop_3") == 1 and
+			g_skimmerShop3_activated == true
+		then
+			print("Main Base: Skimmer Shop 3 -- Producing Reaver")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_mainBase_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_3", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_mainBase_attack", "sg_mainBase_reaver")
+			SGroup_Clear("sg_mainBase_reaver")		
+		end
+		
+		-- if both troops & transport exist...
+		if SGroup_Count("sg_mainBase_east_raider") == 1 and
+			SGroup_Count("sg_mainBase_raider_wych") == 1
+		then
+			-- load the troops into the transport
+			Cmd_EnterTransport("sg_mainBase_raider_wych", "sg_mainBase_east_raider")
+			-- buy time for the troops to get into the raider
+			Rule_AddOneShot(Rule_Load_Raider_MainBase_East, 10)
+	
+		--if only the transport exists...
+		elseif SGroup_Count("sg_mainBase_east_raider") == 1
+		then
+			SGroup_AddGroup("sg_mainBase_east_raider_loaded", "sg_mainBase_east_raider")
+			-- Clear out the Squad so can make more units
+			SGroup_Clear("sg_mainBase_east_raider")
+	
+		--if only the troops exists...
+		elseif SGroup_Count("sg_mainBase_raider_wych") == 1
+		then
+			-- Add the troops to the Attack Group
+			SGroup_AddGroup("sg_mainBase_attack", "sg_mainBase_raider_wych")
+			-- Clear out the troops squad so can make more units
+			SGroup_Clear("sg_mainBase_raider_wych")
+		end
+	end
+	
+	if 	EGroup_Count("eg_skimmerShop_2") == 0 and
+		EGroup_Count("eg_skimmerShop_3") == 0 and
+		EGroup_Count("eg_hallOfBlood_2") == 0 and
+		EGroup_Count("eg_hallOfBlood_3") == 0
+	then
+		Rule_Remove(Rule_Production_Main_Base)
+		Rule_Remove(Rule_Attack_Main_Base)
+	end
+end
+
+-- OneShot rule that gives the troops time to get into transport
+function Rule_Load_Raider_MainBase_West()
+	if SGroup_Count("sg_mainBase_west_raider") >= 1
+	then
+		-- Add the Raider to the Jump Group
+		SGroup_AddGroup("sg_mainBase_west_raider_loaded", "sg_mainBase_west_raider")
+		
+		-- Clear out the raider & troops squad so can make more units
+		SGroup_Clear("sg_mainBase_west_raider")
+		SGroup_Clear("sg_mainBase_raider_warriors")
+	end
+end
+
+-- OneShot rule that gives the troops time to get into transport
+function Rule_Load_Raider_MainBase_East()
+	if SGroup_Count("sg_mainBase_east_raider") >= 1
+	then
+		-- Add the Raider to the Jump Group
+		SGroup_AddGroup("sg_mainBase_east_raider_loaded", "sg_mainBase_east_raider")
+		
+		-- Clear out the raider & troops squad so can make more units
+		SGroup_Clear("sg_mainBase_east_raider")
+		SGroup_Clear("sg_mainBase_raider_wych")
+	end
+end
+
+-- Orders the Base to Send its Produced Troops to attack location of the Player HQ
+function Rule_Attack_Main_Base()
+	Cmd_AttackMovePos("sg_mainBase_attack", g_attack_position)
+end
+
+-- Produce a Hellion Jump Squad from East Base
+function Rule_EastBase_Hellion_Production()
+	-- If Hall of Blood 4 by East Base still exists & is activated 
+	if EGroup_Count("eg_skimmerShop_8") == 1 and
+		g_skimmerShop8_activated == true
+	then
+		-- Remove this rule until next time is needed... since Squad is Produced
+		Rule_Remove(Rule_EastBase_Hellion_Production)
+		
+		print("North Base: Skimmer Shop 8 -- Producing Jumping Hellions")
+		numberTroops = World_GetRand(4,8)
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_eastBase_hellions", "dark_eldar_squad_hellion_sp_dxp3", "mkr_skimmerShop_8", 1, numberTroops)
+		SGroup_AddLeaders("sg_eastBase_hellions")
+		
+		-- Task them to Location of TakeOff Point & Add Rule to Check when they arrive
+		Cmd_AttackMoveMarker("sg_eastBase_hellions", "mkr_east_hellion_takeOff")
+		Rule_AddInterval(Rule_EastBase_Hellion_CheckTakeOff,2)
+	end
+	
+	-- Permantly Remove Rule, since the Skimmer Shop is destroyed
+	if EGroup_Count("eg_skimmerShop_8") == 0
+	then
+		Rule_Remove(Rule_EastBase_Hellion_Production)
+	end	
+end
+
+-- Check for East Base Hellion Take Off
+function Rule_EastBase_Hellion_CheckTakeOff()
+	-- if all the Hellion have been killed
+	if SGroup_Exists("sg_eastBase_hellions") and
+		SGroup_Count("sg_eastBase_hellions") == 0
+	then
+		Rule_Remove(Rule_EastBase_Hellion_CheckTakeOff)
+		
+		-- Add Rule to try & produce next squad of them
+		Rule_AddIntervalDelay(Rule_EastBase_Hellion_Production,3, g_productionTimer_eastBase_Hellion)
+	
+	-- Check if the Hellions arrived at the takeoff location
+	elseif SGroup_Exists("sg_eastBase_hellions") and
+		Prox_AllSquadsNearMarker("sg_eastBase_hellions", "mkr_east_hellion_takeOff")
+	then	
+		-- Remove This Rule since first jump was made
+		Rule_Remove(Rule_EastBase_Hellion_CheckTakeOff)
+		
+		-- Pick the First Jump Location
+		jumpLoc = World_GetRand(1, 6)
+		
+		-- Randomize how long between jumps
+		g_eastBase_Hellion_JumpTime = World_GetRand(10, 15)
+		
+		-- Jump to First Location & Add Rule to keep jumping
+		print("Hellions Taking Off: "..jumpLoc)
+		Cmd_JumpToMarker("sg_eastBase_hellions", "mkr_east_hellion_landLocation_"..jumpLoc)
+		Rule_AddInterval(Rule_EastBase_Hellion_CheckJump, g_eastBase_Hellion_JumpTime)
+		Rule_AddOneShot(Rule_EastBase_Hellion_AttackMove,3)
+
+	end
+end
+
+-- Check for Hellion Jumps
+function Rule_EastBase_Hellion_CheckJump()
+	-- if all the Hellions have been killed
+	if SGroup_Exists("sg_eastBase_hellions") and
+		SGroup_Count("sg_eastBase_hellions") == 0
+	then
+		Rule_Remove(Rule_EastBase_Hellion_CheckJump)
+		
+		-- Add Rule to try & produce next squad of them
+		Rule_AddIntervalDelay(Rule_EastBase_Hellion_Production,3, g_productionTimer_eastBase_Hellion)
+
+	else
+		-- Pick the Next Jump Location
+		jumpLoc = World_GetRand(1, 6)
+		print("Hellions Taking Off: "..jumpLoc)
+		
+		--Jump to Next Location & Attack Base from the New Direction
+		Cmd_JumpToMarker("sg_eastBase_hellions", "mkr_east_hellion_landLocation_"..jumpLoc)
+		Rule_AddOneShot(Rule_EastBase_Hellion_AttackMove,3)
+	end
+end
+
+-- Order the Hellions to attack after they land from a jump
+function Rule_EastBase_Hellion_AttackMove()
+	if SGroup_Exists("sg_eastBase_hellions") and
+		SGroup_Count("sg_eastBase_hellions") == 0
+	then
+		--Do Nothing Since Squad is Killed
+
+	-- Else Attack Move on the player from the new direction	
+	else
+		Cmd_AttackMovePos("sg_eastBase_hellions", g_attack_position)
+	end
+end
+
+-- Produce Troops from the East Base once activated
+function Rule_Production_East_Base()
+	local numberTroops
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_eastBase_attack") < g_max_number_eastBase_units
+	then
+		-- if Hall of Blood 4 by East Base Still Exists (and is Activated) -- Produce some Warriors
+		if EGroup_Count("eg_hallOfBlood_4") == 1 and
+			g_hallOfBlood4_activated == true
+		then
+			-- Create a Warrior Squad
+			print("East Base: Hall of Blood 4 -- Producing Warriors")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_eastBase_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_4", 1, numberTroops)
+			SGroup_AddLeaders("sg_eastBase_warriors")
+			-- Add the Squad to Attack Squad for Unit Counting & Attacking
+			SGroup_AddGroup("sg_eastBase_attack", "sg_eastBase_warriors")
+			-- Clear SGroup so can make more
+			SGroup_Clear( "sg_eastBase_warriors")
+		end
+		
+		-- if HQ by East Base Still Exists (and is Activated) -- Produce some Mandrakes
+		if EGroup_Count("eg_hq_5") == 1 and
+			g_hq5_activated == true
+		then
+			print("East Base: HQ 5 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create a Squad of Mandrakes
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_eastBase_mandrakes", "dark_eldar_squad_mandrake", "mkr_hq_5", 1,numberTroops)
+			-- Add the Squad to Attack Squad for Unit Counting & Attacking
+			SGroup_AddGroup("sg_eastBase_attack", "sg_eastBase_mandrakes")
+			-- Clear SGroup so can make more
+			SGroup_Clear("sg_eastBase_mandrakes")
+		end
+	end
+	
+	if EGroup_Count("eg_hallOfBlood_4") == 0 and
+		EGroup_Count("eg_hq_5") == 0
+	then
+		Rule_Remove(Rule_Production_East_Base)
+		Rule_Remove(Rule_Attack_East_Base)
+	end
+end
+
+-- Orders the Base to Send its Produced Troops to attack location of the Player HQ
+function Rule_Attack_East_Base()
+	Cmd_AttackMovePos("sg_eastBase_attack", g_attack_position)
+end
+
+
+-- Produce Troops from the North Base once activated
+function Rule_Production_North_Base()
+	local numberTroops
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_northBase_attack") < g_max_number_northBase_units
+	then
+		-- if Hall of Blood 5 by North Base Still Exists (and is Activated) -- Produce some Warriors
+		if EGroup_Count("eg_hallOfBlood_5") == 1 and
+			g_hallOfBlood5_activated == true
+		then
+			-- Create a Warrior Squad
+			print("North Base: Hall of Blood 5 -- Producing Warriors")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_northBase_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_5", 1, numberTroops)
+			SGroup_AddLeaders("sg_northBase_warriors")
+			-- Add the Squad to Attack Squad for Unit Counting & Attacking
+			SGroup_AddGroup("sg_northBase_attack", "sg_northBase_warriors")
+			-- Clear SGroup so can make more
+			SGroup_Clear( "sg_northBase_warriors")
+		end
+		
+		-- if Dark Foundry 4 by North Base Still Exists (and is Activated) -- Produce a Ravager 
+		if EGroup_Count("eg_skimmerShop_4") == 1 and
+			g_skimmerShop4_activated == true
+		then
+			print("North Base: Skimmer Shop 4 -- Producing Ravager")
+			Util_CreateSquadsAtMarker(g_Player3, "sg_northBase_ravager", "dark_eldar_squad_ravager", "mkr_skimmerShop_4", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_northBase_attack", "sg_northBase_ravager")
+			-- Clear SGroup so can make more
+			SGroup_Clear("sg_northBase_ravager")
+		end
+		
+		-- if Dark Foundry 5 by North Base Still Exists (and is Activated) -- Produce a Talos if none exists, otherwise produce a reaver 
+		if EGroup_Count("eg_skimmerShop_5") == 1 and
+			SGroup_Count("sg_northBase_talos") == 0 and
+			g_skimmerShop5_activated == true
+		then
+			print("North Base: Skimmer Shop 5 -- Producing Talos")
+			Util_CreateSquadsAtMarker(g_Player3, "sg_northBase_talos", "dark_eldar_squad_talos", "mkr_skimmerShop_5", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_northBase_attack", "sg_northBase_talos")
+		
+		-- Only one talos allowed -- so produce a reaver
+		elseif EGroup_Count("eg_skimmerShop_5") == 1 and
+			g_skimmerShop5_activated == true
+		then
+			print("North Base: Skimmer Shop 5 -- Producing Reaver")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_northBase_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_5", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_northBase_attack", "sg_northBase_reaver")
+			SGroup_Clear("sg_northBase_reaver")		
+		end
+	end
+	
+	if EGroup_Count("eg_skimmerShop_4") == 0 and
+		EGroup_Count("eg_skimmerShop_5") == 0 and
+		EGroup_Count("eg_hallOfBlood_5") == 0
+	then
+		Rule_Remove(Rule_Production_North_Base)
+		Rule_Remove(Rule_Attack_North_Base)
+	end
+end
+
+-- Orders the Base to Send its Produced Troops to attack location of the Player HQ
+function Rule_Attack_North_Base()
+	Cmd_AttackMovePos("sg_northBase_attack", g_attack_position)
+end
+
+-- Produce Troops from the NorthWest Base once activated
+function Rule_Production_NorthWest_Base()
+	local numberTroops
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_northWestBase_units") < g_max_number_northWestBase_units
+	then
+		-- if Hall of Blood 9 by East Base Still Exists (and is Activated) -- Produce some scourge for base support
+		if EGroup_Count("eg_hallOfBlood_9") == 1 and
+			g_hallOfBlood9_activated == true
+		then
+			-- Create a Warrior Squad
+			print("North West Base: Hall of Blood 9 -- Producing Scourge")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_northWest_scourge", "dark_eldar_squad_scourge_sp_dxp3", "mkr_hallOfBlood_9", 1, numberTroops)
+			SGroup_AddLeaders("sg_northWest_scourge")
+			-- Add the Squad to Unit Squad for Counting & to Jump Squad for Defense
+			SGroup_AddGroup("sg_scourge_jump_units", "sg_northWest_scourge")
+			SGroup_AddGroup("sg_northWestBase_units", "sg_northWest_scourge")
+			-- Clear SGroup so can make more
+			SGroup_Clear("sg_northWest_scourge")
+		end
+		
+		-- if HQ by East Base Still Exists (and is Activated) -- Produce some Mandrakes (but dont need more than 2 Mandrake Squads)
+		if EGroup_Count("eg_hq_3") == 1 and
+			SGroup_Count("sg_northWest_mandrakes") <= 2 and
+			g_hq5_activated == true
+		then
+			print("North West Base: HQ 3 -- Producing Mandrakes")
+			numberTroops = World_GetRand(4,8)
+			-- Create a Squad of Mandrakes
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_northWest_mandrakes", "dark_eldar_squad_mandrake", "mkr_hq_3", 1,numberTroops)
+			-- Add the Squad to Unit Squad for Counting
+			SGroup_AddGroup("sg_northWestBase_units", "sg_northWest_mandrakes")
+			-- Order the Squad to Hang out by Vect & Relic
+			Util_AttackMoveMarkerRandomRadius("sg_northWest_mandrakes", "mkr_vect_objective")
+		end
+	end
+	
+	-- All Production Buildings destroyed -- Remove Rule
+	if EGroup_Count("eg_hallOfBlood_9") == 0 and
+		EGroup_Count("eg_hq_3") == 0
+	then
+		Rule_Remove(Rule_Production_NorthWest_Base)
+	end
+end
+
+-- Produce Troops from the West Base once activated
+function Rule_Production_West_Base()
+	local numberTroops
+	
+	-- Is there still room to produce more troops
+	if SGroup_Count("sg_westBase_attack") < g_max_number_westBase_units
+	then
+		-- if Hall of Blood 6 by West Base Still Exists (and is Activated) -- Produce some Warp Beasts
+		if EGroup_Count("eg_hallOfBlood_6") == 1 and
+			g_hallOfBlood6_activated == true
+		then
+			-- Create a Warp Beast Squad
+			print("West Base: Hall of Blood 6 -- Producing Warp Beasts")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_westBase_warpBeasts", "dark_eldar_squad_warp_beast", "mkr_hallOfBlood_6", 1, numberTroops)
+			SGroup_AddLeaders("sg_westBase_warpBeasts")
+			-- Add the Squad to Attack Squad for Unit Counting & Attacking
+			SGroup_AddGroup("sg_westBase_attack", "sg_westBase_warpBeasts")
+			-- Clear SGroup so can make more
+			SGroup_Clear("sg_westBase_warpBeasts")
+		end
+		
+		-- if Hall of Blood 7 by West Base Still Exists (and is Activated) -- Produce some Warriors
+		if EGroup_Count("eg_hallOfBlood_7") == 1 and
+			g_hallOfBlood7_activated == true
+		then
+			-- Create a Warrior Squad
+			print("West Base: Hall of Blood 7 -- Producing Warriors")
+			numberTroops = World_GetRand(4,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_westBase_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_7", 1, numberTroops)
+			SGroup_AddLeaders("sg_westBase_warriors")
+			-- Add the Squad to Attack Squad for Unit Counting & Attacking
+			SGroup_AddGroup("sg_westBase_attack", "sg_westBase_warriors")
+			-- Clear SGroup so can make more
+			SGroup_Clear( "sg_westBase_warriors")
+		end
+		
+		-- if Dark Foundry 7 by West Base Still Exists (and is Activated) -- Produce a Reaver 
+		if EGroup_Count("eg_skimmerShop_7") == 1 and
+			g_skimmerShop7_activated == true
+		then
+			print("West Base: Skimmer Shop 7 -- Producing Reaver")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_westBase_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_7", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_westBase_attack", "sg_westBase_reaver")
+			-- Clear SGroup so can make more
+			SGroup_Clear("sg_westBase_reaver")
+		end	
+	end
+	
+	if EGroup_Count("eg_skimmerShop_7") == 0 and
+		EGroup_Count("eg_hallOfBlood_6") == 0 and
+		EGroup_Count("eg_hallOfBlood_7") == 0
+	then
+		Rule_Remove(Rule_Production_West_Base)
+		Rule_Remove(Rule_Attack_West_Base)
+	end
+end
+
+-- Orders the Base to Send its Produced Troops to attack location of the Player HQ
+function Rule_Attack_West_Base()
+	Cmd_AttackMovePos("sg_westBase_attack", g_attack_position)
+end
+
+-- Check For Destroyed Cages so know to free the prisoner from it (& Give Resources)	
+function Rule_PrisonerCage_FreeCage()
+	-- Loop Through All The Prisoner Cages
+	for i =1,10
+	do
+		-- If Cage is Destroyed (& Yet to Free this prisoner)
+		if EGroup_Count("eg_prisonerCage_"..i) == 0 and
+			g_array_prisonerCage_freed[i] == false
+		then
+			-- Free the Prisoner
+			Util_CreateSquadsAtMarkerEx(g_Player1, "sg_player_freePrisoner",g_array_prisonerCage_prisoner[i], "mkr_prisonerCage_"..i, 1,10)
+			g_array_prisonerCage_freed[i] = true
+			
+			-- Give the Player Resources (RT_Requisition, RT_Power) for Freeing Prisoner
+			if g_raceName == "necron_race"
+			then
+				-- If Necron, Only Give Power
+				Player_AddResource(g_Player1, RT_Power, g_amountPowerToGiveNecron_PerCage)
+			else
+				-- Otherwise give both
+				Player_AddResource(g_Player1, RT_Requisition, g_amountRequisitionToGivePlayer_PerCage)
+				Player_AddResource(g_Player1, RT_Power, g_amountPowerToGivePlayer_PerCage)
+			end	
+			
+			-- Increment the Number of Prisoners Freed
+			g_prisonerCage_numFreed  = g_prisonerCage_numFreed  + 1
+		end
+		
+		-- if the cage is still alive, reveal fog of war around it
+		if EGroup_Count("eg_prisonerCage_"..i) == 1
+		then
+			FOW_RevealMarker("mkr_prisonerCage_"..i, 10)
+		end
+	end
+
+	-- First Prisoner Freed...Play IE
+	if g_prisonerCage_numFreed == 1 and
+		g_ie_FirstCage_Played == false
+	then
+		g_ie_FirstCage_Played = true
+		
+		-- Play IE for first cage freed
+		Util_StartIntel(g_ie_FirstCage_Array[g_intelEvent_raceId])
+	end
+	
+	-- Most of the Prisoners Freed...Play IE to Attack Base
+	if g_prisonerCage_numFreed == 5 and
+		g_ie_FreeMostTroops_Played == false
+	then
+		g_ie_FreeMostTroops_Played = true
+		
+		-- Play IE for most troops freed
+		Util_StartIntel(g_ie_FreeMostTroops_Array[g_intelEvent_raceId])
+	end
+		
+	-- If ALL Prisoners have been freed...Remove the Rule
+	if g_prisonerCage_numFreed >= 10
+	then
+		print("All Cages Freed")
+		Rule_Remove(Rule_PrisonerCage_FreeCage)
+	end
+end
+
+-- Check for Activation of Base
+function Rule_PrisonerCage_BaseActivation()
+	-- Get the rough position of the Players Troops (somewhere for the units to attack move to)
+	g_attack_position = SGroup_GetPosition(Player_GetSquads(g_Player1))
+
+	-- If the Player is nearing Prisoner Cage 10 (First Cage)
+	if g_prisonerCage10_activated == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_prisonerCage_10")
+	then
+		-- Activate the Cage (Troops Sent)
+		g_prisonerCage10_activated = true
+
+		-- order the initial troops to attack player
+		Cmd_AttackMovePos("sg_prisonerCage_firstTroops", g_attack_position)
+	end
+
+	-- If the Player is nearing First group of defence troops (Right Past First Cage)
+	if g_firstTroops_sent == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_sendFirstTroops")
+	then
+		-- First Defense Troops Sent
+		g_firstTroops_sent = true
+		
+		-- Play IE for Dark Eldar Attack
+		Util_StartIntel(g_ie_EarlyDarkEldarCharge_Array[g_intelEvent_raceId])
+
+		-- order the initial troops to attack player
+		Cmd_AttackMovePos("sg_firstTroops", g_attack_position)
+	end
+
+	-- If the Player is nearing Prisoner Cage 1/2
+	if g_hallOfBlood14_activated == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_hallOfBlood14")
+	then
+		-- Activate Hall of Blood by Prisoner Cage 1/2
+		g_hallOfBlood14_activated = true
+
+		-- order the initial troops to attack player
+		Cmd_AttackMovePos("sg_hallOfBlood14_firstTroops", g_attack_position)
+		
+		-- Jump in Scourge Troops
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_1","mkr_prisoner_scourge_jump_1")
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_2","mkr_prisoner_scourge_jump_2")
+	end
+	
+	-- If the Player is heading towards Prisoner Cage 3
+	if g_hallOfBlood15_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_hallOfBlood15")
+	then
+		-- Activate Hall of Blood & Skimmer Shop by Prisoner Cage 3
+		g_hallOfBlood15_activated  = true
+		g_skimmerShop10_activated = true
+		
+		-- order the initial troops to attack player
+		Cmd_AttackMovePos("sg_hallOfBlood15_firstTroops", g_attack_position)
+		Cmd_AttackMovePos("sg_skimmer10_firstTroops", g_attack_position)
+	end
+	
+	-- If the Player is nearing Prisoner Cage 3
+	if g_prisonerCage3_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_prisonerCage_3")
+	then
+		-- Activate the Cage (Troops jumped In)
+		g_prisonerCage3_activated = true
+		
+		-- Jump in Scourge Squads
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_3","mkr_prisoner_scourge_jump_3")
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_4","mkr_prisoner_scourge_jump_4")
+	end
+	
+	-- If the Player is nearing Raider Ambush Location (Right Past Prisoner Cage 3)
+	if g_hallOfBlood13_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_hallOfBlood13")
+	then
+		-- Activate Hall of Blood13 by SouthWest Base (Produces Patroling Troops)
+		g_hallOfBlood13_activated  = true
+		
+		-- Activate Skimmer Shop 6 by Center Base (Produces Patroling Troops)
+		g_skimmerShop6_activated = true
+		
+		-- Varibles for Patrol Squad Unit Counts
+		g_numUnits_patrolOne = 0
+		g_numUnits_patrolTwo = 0
+		g_numUnits_patrolTwoReverse = 0
+		
+		-- Add the Patrol Functions 
+		Rule_AddInterval(Rule_PathOne_Patrol,1)
+		Rule_AddInterval(Rule_PathTwo_Patrol,1)
+		
+		-- Play IE for First Raider Attack
+		Util_StartIntel(EVENTS.IE_FirstRaiderAttack)
+		
+		-- Jump in the Scourge Squads
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_5","mkr_prisoner_scourge_jump_5")
+		Cmd_JumpToMarker("sg_prisoner_scourge_jump_6","mkr_prisoner_scourge_jump_6")
+		
+		-- Jump in the Raiders w/ Troops
+		Cmd_JumpToMarker("sg_prisoner_raider_jump_1","mkr_prisoner_raider_jump_1")
+		Cmd_JumpToMarker("sg_prisoner_raider_jump_2","mkr_prisoner_raider_jump_2")
+	end
+	
+	-- If the player has just past the First Raider Ambush
+	if g_baseRevealed == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_revealBase_warning")
+	then
+		-- Play IE for Dark Eldar Attack
+		Util_StartIntel(g_ie_ShowTwoBases_Array[g_intelEvent_raceId])
+		
+		-- Ping the Base Locations
+		Ping_Marker("mkr_activate_southEast_base",false,attack)
+		Ping_Marker("mkr_activate_southWest_base",false,attack)
+		
+		-- Warn the Player about the South East & West Bases & Reveal Fog of War on them
+		Rule_AddInterval(Rule_RevealBaseWarning,5)
+		g_baseRevealed = true
+	end
+	
+	-- If the Player is nearing Prisoner Cage 4
+	if g_prisonerCage4_activated == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_prisonerCage4")
+	then
+		-- Activate the Cage (Troops jumped In)
+		g_prisonerCage4_activated = true
+		
+		-- Jump in the Hellions
+		for i =1,3
+		do
+			Cmd_JumpToMarker("sg_prisoner_hellion_jump_"..i,"mkr_prisoner_hellion_jump_"..i)
+		end
+		
+		-- Jump in the Raiders w/ Warriors
+		Cmd_JumpToMarker("sg_prisoner_raider_jump_3","mkr_prisoner_raider_jump_3")
+		Cmd_JumpToMarker("sg_prisoner_raider_jump_4","mkr_prisoner_raider_jump_4")
+	end
+	
+	-- If the Player is nearing Prisoner Cage 5
+	if g_hallOfBlood10_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_hallOfBlood10")
+	then
+		-- Activate Hall of Blood by Prisoner Cage 5
+		g_hallOfBlood10_activated = true
+		
+		-- Activate the Slave Caravels by Prisoner Cage 5
+		Rule_AddInterval(Rule_PrisonerCage_SlaveCaravel_Attack,1)
+		
+		-- order the initial troops to attack player
+		Cmd_AttackMovePos("sg_hallOfBlood10_firstTroops", g_attack_position)
+	end
+	
+	-- If the Player is nearing Prisoner Cage 6
+	if g_prisonerCage6_activated == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_prisonerCage6")
+	then
+		g_prisonerCage6_activated = true
+		
+		-- MIGHT NEED SEPERATE RULES TO BUY TIME FOR SKILL CAST
+		print("Wych & Warrior Attack")
+		
+		-- Cast Torture Amp on Ground
+		Cmd_CastAbilityMarker("sg_prisoner_wych_1", "dark_eldar_torture_amp", "mkr_prisoner_wych_1")
+		Cmd_CastAbilityMarker("sg_prisoner_wych_2", "dark_eldar_torture_amp", "mkr_prisoner_wych_2")
+		
+		-- Cast Combat Drugs on the Warriors
+		Cmd_CastAbilitySGroup("sg_prisoner_wych_1", "dark_eldar_combat_drugs", "sg_prisoner_warrior_1")
+		Cmd_CastAbilitySGroup("sg_prisoner_wych_1", "dark_eldar_combat_drugs", "sg_prisoner_warrior_2")
+		
+		--... & And Back up to draw player in...
+		Cmd_MoveToMarker("sg_prisoner_wych_1", "mkr_prisoner_troop_1")
+		Cmd_MoveToMarker("sg_prisoner_wych_2", "mkr_prisoner_troop_2")
+			
+		--...while Warriors Attack
+		Cmd_AttackMovePos("sg_prisoner_warrior_1", g_attack_position)
+		Cmd_AttackMovePos("sg_prisoner_warrior_2", g_attack_position)
+	end
+	
+	-- If the Player is nearing Center Base from the West Side
+	if g_centerBase_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_centerBase_West")
+	then
+		-- Activate Center Base by Prisoner Cage 7-9
+		g_centerBase_activated = true		
+	end
+	
+	-- If the Player is nearing Center Base from the East Side
+	if g_centerBase_activated  == false and
+		Player_AreSquadsNearMarker(g_Player1, "mkr_activate_centerBase_East")
+	then
+		-- Activate Center Base by Prisoner Cage 7-9
+		g_centerBase_activated = true		
+	end
+	
+	-- Remove the Rule once all the bases have been activated...
+	if g_firstTroops_sent == true and
+		g_prisonerCage3_activated == true and
+		g_prisonerCage4_activated == true and
+		g_prisonerCage6_activated == true and
+		g_prisonerCage10_activated == true and
+		g_hallOfBlood10_activated  == true and
+		g_hallOfBlood13_activated  == true and
+		g_hallOfBlood14_activated == true and
+		g_hallOfBlood15_activated == true and
+		g_centerBase_activated == true
+	then
+		Rule_Remove(Rule_PrisonerCage_BaseActivation)
+	end
+end
+
+-- Warn the Player about the South East & West Bases & Reveal Fog of War on them
+function Rule_RevealBaseWarning()
+	-- Reveal the southEast & West Bases
+	FOW_RevealMarker("mkr_activate_southEast_base", 10)
+	FOW_RevealMarker("mkr_activate_southWest_base", 10)
+end
+
+-- Produce some troops to defend the prisoner cages
+function Rule_PrisonerCage_Defense_Production()
+	local numberTroops
+	
+	-- Get the rough position of the Players Troops (somewhere for the units to attack move to)
+	g_attack_position = SGroup_GetPosition(Player_GetSquads(g_Player1))
+	
+	-- Is there still room to produce troops...?
+	if SGroup_Count("sg_prisonerDefense_units") < g_max_number_prisonerDefense_units
+	then
+		-- if Hall of Blood by Prisoner Cage 1/2 Still Exists (and is Activated) -- Produce a Squad of Warriors & Order them to attack 
+		if EGroup_Count("eg_hallOfBlood_14") == 1 and
+			g_hallOfBlood14_activated == true
+		then
+			print("Hall of Blood 14 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create Squad & Add Leader
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall14_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_14", 1,numberTroops)
+			SGroup_AddLeaders("sg_hall14_warriors")
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall14_warriors")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_hall14_warriors")
+		end
+		
+		-- if Hall of Blood by Prisoner Cage 3 Still Exists (and is Activated) -- Produce a Squad of Warriors & Order them to attack 
+		if EGroup_Count("eg_hallOfBlood_15") == 1 and
+			g_hallOfBlood15_activated == true
+		then
+			print("Hall of Blood 15 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create Squad & Add Leader
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall15_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_15", 1,numberTroops)
+			SGroup_AddLeaders("sg_hall15_warriors")
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall15_warriors")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_hall15_warriors")
+		end
+		
+		-- if Dark Foundry by Prisoner Cage 3 Still Exists (and is Activated) -- Produce a Reaver & Order to attack 
+		if EGroup_Count("eg_skimmerShop_10") == 1 and
+			g_skimmerShop10_activated == true
+		then
+			print("Skimmer Shop 10 -- Producing")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_skimmer10_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_10", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_skimmer10_reaver")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_skimmer10_reaver")
+		end	
+		
+		-- if Hall of Blood by Prisoner Cage 5 Still Exists (& is Activated) -- Produce a Squad of Warriors & Order them to attack 
+		if EGroup_Count("eg_hallOfBlood_10") == 1 and
+			g_hallOfBlood10_activated == true
+		then
+			print("Hall of Blood 10 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create Squad & Add Leader
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall10_warriors", "dark_eldar_squad_warrior", "mkr_hallOfBlood_10", 1,numberTroops)
+			SGroup_AddLeaders("sg_hall10_warriors")
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall10_warriors")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_hall10_warriors")
+		end
+		
+		-- if Hall of Blood in Center Base Still Exists (& is Activated) -- Produce a Squad of Scourage & Order them to attack 
+		if EGroup_Count("eg_hallOfBlood_8") == 1 and
+			g_centerBase_activated == true
+		then
+			print("Center Base: Hall of Blood 8 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create Squad & Add Leader
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall8_scourge", "dark_eldar_squad_scourge_sp_dxp3", "mkr_hallOfBlood_8", 1,numberTroops)
+			SGroup_AddLeaders("sg_hall8_scourge")
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall8_scourge")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_hall8_scourge")
+		end
+		
+		-- if Skimmer Shop in Center Base Still Exists (& is Activated) -- Produce a Reaver & Order to attack 
+		if EGroup_Count("eg_skimmerShop_6") == 1 and
+			g_centerBase_activated == true
+		then
+			print("Center Base: Skimmer Shop 6 -- Producing")
+			-- Create a Reaver
+			Util_CreateSquadsAtMarker(g_Player3, "sg_skimmer6_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_6", 1)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_skimmer6_reaver")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_skimmer6_reaver")
+		end
+		
+		-- if HQ in Center Base Still Exists (& is Activated) -- Produce Mandrakes & Order to attack 
+		if EGroup_Count("eg_hq_4") == 1 and
+			g_centerBase_activated == true
+		then
+			print("Center Base: HQ 4 -- Producing")
+			numberTroops = World_GetRand(4,8)
+			-- Create a Squad of Mandrakes
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hq4_mandrakes", "dark_eldar_squad_mandrake", "mkr_hq_4", 1,numberTroops)
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_prisonerDefense_units", "sg_hq4_mandrakes")
+			-- Clear out the troops squad so can make more troops
+			SGroup_Clear("sg_hq4_mandrakes")
+		end
+		
+		-- If the South East Base is not really activate -- yet player is attacking it: 
+		if g_southEastBase_activated == false and
+			Player_AreSquadsNearMarker(g_Player1, "mkr_activate_southEast_base")
+		then
+			-- if Hall of Blood in SouthEast Base Still Exists -- Produce a Squad of Scourge & Order them to attack 
+			if EGroup_Count("eg_hallOfBlood_11") == 1
+			then
+				print("SouthEast Base: Hall of Blood 11 -- Proximity Producing")
+				numberTroops = World_GetRand(4,8)
+				-- Create Squad & Add Leader
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall11_scourge", "dark_eldar_squad_scourge_sp_dxp3", "mkr_hallOfBlood_11", 1,numberTroops)
+				SGroup_AddLeaders("sg_hall11_scourge")
+				-- Add the SGroup to the Unit group so know how many units base has produced
+				SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall11_scourge")
+				-- Clear out the troops squad so can make more troops
+				SGroup_Clear("sg_hall11_scourge")
+			end
+			
+			-- if the HQ in SouthEast Base Still Exists -- Produce a Squad of Scourge 
+			if EGroup_Count("eg_hq_7") == 1
+			then
+				print("South East Base: HQ 7 -- Proximity Producing")
+				numberTroops = World_GetRand(4,8)
+				-- Create a Squad of Mandrakes
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hq7_mandrakes", "dark_eldar_squad_mandrake", "mkr_hq_7", 1,numberTroops)
+				-- Add the SGroup to the Unit group so know how many units base has produced
+				SGroup_AddGroup("sg_prisonerDefense_units", "sg_hq7_mandrakes")
+				-- Clear out the troops squad so can make more troops
+				SGroup_Clear("sg_hq7_mandrakes")
+			end
+		end
+		
+		-- If the South West Base is not really activate -- yet player is attacking it: 
+		if g_southWestBase_activated == false and
+			Player_AreSquadsNearMarker(g_Player1, "mkr_activate_southWest_base")
+		then
+			-- if Hall of Blood12 in SouthWest Base Still Exists -- Produce a Squad of Wych & Order them to attack 
+			if EGroup_Count("eg_hallOfBlood_12") == 1
+			then
+				print("SouthWest Base: Hall of Blood 12 -- Proximity Producing")
+				numberTroops = World_GetRand(4,8)
+				-- Create Squad & Add Leader
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_hall12_wych", "dark_eldar_squad_wych", "mkr_hallOfBlood_12", 1,numberTroops)
+				SGroup_AddLeaders("sg_hall12_wych")
+				-- Add the SGroup to the Unit group so know how many units base has produced
+				SGroup_AddGroup("sg_prisonerDefense_units", "sg_hall12_wych")
+				-- Clear out the troops squad so can make more troops
+				SGroup_Clear("sg_hall12_wych")
+			end
+			
+			-- if the SkimmerShop in SouthWest Base Still Exists -- Produce a Reaver 
+			if EGroup_Count("eg_skimmerShop_9") == 1
+			then
+				print("South West Base: Skimmer Shop 9 -- Proximity Producing")
+				Util_CreateSquadsAtMarker(g_Player3, "sg_skimmer9_reaver", "dark_eldar_squad_reaver", "mkr_skimmerShop_9", 1)
+				-- Add the SGroup to the Unit group so know how many units base has produced
+				SGroup_AddGroup("sg_prisonerDefense_units", "sg_skimmer9_reaver")
+				-- Clear out the troops squad so can make more troops
+				SGroup_Clear("sg_skimmer9_reaver")
+			end
+		end
+	end
+	
+	-- Order the Group to Attack the Players Army
+	Cmd_AttackMovePos("sg_prisonerDefense_units", g_attack_position)
+
+	-- All Production Buildings Are destroyed -- Remove Rule
+	if	EGroup_Count("eg_hallOfBlood_8") == 0 and
+		EGroup_Count("eg_hallOfBlood_10") == 0 and
+		EGroup_Count("eg_hallOfBlood_11") == 0 and
+		EGroup_Count("eg_hallOfBlood_12") == 0 and
+		EGroup_Count("eg_hallOfBlood_14") == 0 and
+		EGroup_Count("eg_hallOfBlood_15") == 0 and
+		EGroup_Count("eg_skimmerShop_6") == 0 and
+		EGroup_Count("eg_skimmerShop_9") == 0 and
+		EGroup_Count("eg_skimmerShop_10") == 0 and
+		EGroup_Count("eg_hq_4") == 0 and
+		EGroup_Count("eg_hq_7") == 0
+	then
+		Rule_Remove(Rule_PrisonerCage_Defense_Production)
+	end
+end
+
+-- Handles Production of All Units that Patrol the Prisoner Cage Area
+function Rule_Patrol_Production()
+	-- Is there still room to produce patrol troops...?
+	if SGroup_Count("sg_prisonerPatrolOne_units") < g_max_number_prisonerPatrolOne_units
+	then
+		-- if Hall of Blood 13 by SouthWest Base Still Exists (and is Activated) -- Produce some Warp Beasts & Order to Patrol
+		if EGroup_Count("eg_hallOfBlood_13") == 1 and
+			g_hallOfBlood13_activated == true and
+			g_patrolOne_activated == true
+		then
+			-- Increment Counter of Number of PatrolOne Units
+			g_numUnits_patrolOne = g_numUnits_patrolOne + 1
+		
+			-- Create a Warp Beast Squad & Order to First Patrol Point
+			print("Hall of Blood 13 -- Producing Warp Beast Patrol Squad"..g_numUnits_patrolOne)
+			Util_CreateSquadsAtMarker(g_Player5, "sg_patrolOne_"..g_numUnits_patrolOne, "dark_eldar_squad_warp_beast", "mkr_hallOfBlood_13", 1)
+			SGroup_AddLeaders( "sg_patrolOne_"..g_numUnits_patrolOne)
+			Cmd_AttackMoveMarker("sg_patrolOne_"..g_numUnits_patrolOne, "mkr_AI_PatrolOne_2")
+			
+			-- Add the Squad to Patrol Unit Squad for Unit Counting
+			SGroup_AddGroup("sg_prisonerPatrolOne_units", "sg_patrolOne_"..g_numUnits_patrolOne)
+	
+		-- if the Hall was destroyed -- Remove the Patrol Rule & recall the patrol troops back to base for defense
+		elseif EGroup_Count("eg_hallOfBlood_13") == 0
+		then
+			g_patrolOne_activated = false
+			Rule_Remove(Rule_PathOne_Patrol)
+			Rule_AddOneShot(Rule_PathOne_Patrol_Panic,0)
+		end
+	end
+	
+	-- Is there still room to produce patrol troops...?
+	if SGroup_Count("sg_prisonerPatrolTwo_units") < g_max_number_prisonerPatrolTwo_units
+	then
+		-- if Skimmer Shop 6 by Center Base Still Exists (and is Activated) -- Produce some Hellions & Order to Patrol
+			-- Only Produce the Patrol Troops until the Center Base is Activated -- which will change the production
+		if EGroup_Count("eg_skimmerShop_6") == 1 and
+			g_skimmerShop6_activated == true and
+			g_patrolTwo_activated == true and
+			g_centerBase_activated == false
+		then
+			-- Increment Counters of Number of Patrol Units
+			g_numUnits_patrolTwo = g_numUnits_patrolTwo + 1
+			g_numUnits_patrolTwoReverse = g_numUnits_patrolTwoReverse + 1
+		
+			-- Create a Hellion Squad & Order to First Patrol Point
+			print("Skimmer Shop 6 -- Producing Hellion Patrol Squad"..g_numUnits_patrolTwo)
+			Util_CreateSquadsAtMarker(g_Player5, "sg_patrolTwo_"..g_numUnits_patrolTwo, "dark_eldar_squad_hellion_sp_dxp3", "mkr_skimmerShop_6", 1)
+			SGroup_AddLeaders( "sg_patrolTwo_"..g_numUnits_patrolTwo)
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..g_numUnits_patrolTwo, "mkr_AI_PatrolTwo_1")
+			
+			-- Create a Hellion Squad & Order to Third Patrol Point (Reverse Patrol)
+			print("Skimmer Shop 6 -- Producing Hellion Reverse Patrol Squad"..g_numUnits_patrolTwoReverse)
+			Util_CreateSquadsAtMarker(g_Player5, "sg_patrolTwoReverse_"..g_numUnits_patrolTwoReverse, "dark_eldar_squad_hellion_sp_dxp3", "mkr_skimmerShop_6", 1)
+			SGroup_AddLeaders( "sg_patrolTwoReverse_"..g_numUnits_patrolTwoReverse)
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..g_numUnits_patrolTwoReverse, "mkr_AI_PatrolTwo_3")
+		
+			-- Add the Squads to Patrol Unit Squad for Unit Counting
+			SGroup_AddGroup("sg_prisonerPatrolTwo_units", "sg_patrolTwo_"..g_numUnits_patrolTwo)
+			SGroup_AddGroup("sg_prisonerPatrolTwo_units", "sg_patrolTwoReverse_"..g_numUnits_patrolTwoReverse)
+			
+		-- if the Skimmer Shop was destroyed -- Remove the Patrol Rule & recall the patrol troops back to base for defense
+		elseif EGroup_Count("eg_skimmerShop_6") == 0
+		then
+			g_patrolTwo_activated = false
+			Rule_Remove(Rule_PathTwo_Patrol)
+			Rule_AddOneShot(Rule_PathTwo_Patrol_Panic,0)
+		end
+	end
+	
+	-- Is there still room to produce patrol troops...?
+	if SGroup_Count("sg_northBase_Patrol_units") < g_max_number_northBase_Patrol_units
+	then
+		-- if HQ2 by North Base Still Exists (and is Activated) -- Produce some Mandrakes & Order to Patrol
+		if EGroup_Count("eg_hq_2") == 1 and
+			g_hq2_activated == true and
+			g_patrolThree_activated == true
+		then
+			-- Increment Counters of Number of Patrol Units
+			g_numUnits_patrolThree = g_numUnits_patrolThree + 1
+			g_numUnits_patrolThreeReverse = g_numUnits_patrolThreeReverse + 1
+		
+			-- Create a Mandrake Squad & Order to First Patrol Point
+			print("HQ2 -- Producing Mandrake Patrol Squad"..g_numUnits_patrolThree)
+			numberTroops = World_GetRand(3,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_patrolThree_"..g_numUnits_patrolThree, "dark_eldar_squad_mandrake", "mkr_hq_2", 1,numberTroops)
+			Cmd_AttackMoveMarker("sg_patrolThree_"..g_numUnits_patrolThree, "mkr_AI_PatrolThree_1")
+			
+			-- Create a Mandrake Squad & Order to First Reverse Patrol Point
+			print("HQ2 -- Producing Mandrake Patrol Squad"..g_numUnits_patrolThreeReverse)
+			numberTroops = World_GetRand(3,8)
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_patrolThreeReverse_"..g_numUnits_patrolThreeReverse, "dark_eldar_squad_mandrake", "mkr_hq_2", 1,numberTroops)
+			Cmd_AttackMoveMarker("sg_patrolThreeReverse_"..g_numUnits_patrolThreeReverse, "mkr_AI_PatrolThree_4")
+		
+			-- Add the Squads to Patrol Unit Squad for Unit Counting
+			SGroup_AddGroup("sg_northBase_Patrol_units", "sg_patrolThree_"..g_numUnits_patrolThree)
+			SGroup_AddGroup("sg_northBase_Patrol_units", "sg_patrolThreeReverse_"..g_numUnits_patrolThreeReverse)
+			
+		-- if the Skimmer Shop was destroyed -- Remove the Patrol Rule & recall the patrol troops back to base for defense
+		elseif EGroup_Count("eg_hq_6") == 0
+		then
+			g_patrolThree_activated = false
+			Rule_Remove(Rule_PathThree_Patrol)
+			Rule_AddOneShot(Rule_PathThree_Patrol_Panic,0)
+		end
+	end
+	
+	-- All Patrols have been stopped or recalled -- Remove this Rule
+	if g_patrolOne_activated == false and
+		g_patrolTwo_activated == false and
+		g_patrolThree_activated == false
+	then
+		Rule_Remove(Rule_Patrol_Production)
+	end
+end
+
+-- Patrol Some Troops Around the Map
+function Rule_PathOne_Patrol()
+	-- Loop Through all Patrol One Squads
+	for i = 1,g_numUnits_patrolOne
+	do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_patrolOne_"..i) and
+			SGroup_Count("sg_patrolOne_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_patrolOne_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_2")
+		
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_patrolOne_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_3")	
+
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_patrolOne_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolOne_"..i, "mkr_AI_PatrolOne_1")	
+		end
+	end
+end
+
+-- Production Building Has Been Destroyed -- Recall All Patrol One Units to Base
+	-- Called as a OneShot once the production building is destroyed
+function Rule_PathOne_Patrol_Panic()
+	-- Loop Through all Patrol One Squads
+	for i = 1,g_numUnits_patrolOne
+	do
+		-- If the Squad is Killed -- Do Nothing
+		if SGroup_Exists("sg_patrolOne_"..i) and
+			SGroup_Count("sg_patrolOne_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Otherwise recall the squad back to base
+		elseif SGroup_Exists("sg_patrolOne_"..i)
+		then
+			Cmd_AttackMoveMarker("sg_patrolOne_"..i, "mkr_hallOfBlood_13")
+		end
+	end
+end
+
+-- Patrol Some Troops Around the Map
+function Rule_PathTwo_Patrol()
+	-- Loop Through all Patrol Two Squads -- patroling : 1,2,3,4
+	for i = 1,g_numUnits_patrolTwo
+	do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_patrolTwo_"..i) and
+			SGroup_Count("sg_patrolTwo_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_patrolTwo_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_2")
+		
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_patrolTwo_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_3")	
+
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_patrolTwo_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_4")	
+
+			-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_patrolTwo_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..i, "mkr_AI_PatrolTwo_1")	
+		end
+	end
+	
+	-- Loop Through all Reverse Patrol Two Squads -- patroling : 3,2,1,4
+	for i = 1,g_numUnits_patrolTwoReverse
+	do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			SGroup_Count("sg_patrolTwoReverse_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_2")
+		
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_1")	
+
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_4")	
+
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..i, "mkr_AI_PatrolTwo_3")	
+		end
+	end
+end
+
+-- Production Building Has Been Destroyed -- Recall All Patrol Two Units to Base
+	-- Called as a OneShot once the production building is destroyed
+function Rule_PathTwo_Patrol_Panic()
+	-- Loop Through all Patrol Two Squads
+	for i = 1,g_numUnits_patrolTwo
+	do
+		-- If the Squad is Killed -- Do Nothing
+		if SGroup_Exists("sg_patrolTwo_"..i) and
+			SGroup_Count("sg_patrolTwo_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing
+		
+		-- Otherwise recall the squad back to base
+		elseif SGroup_Exists("sg_patrolTwo_"..i)
+		then
+			Cmd_AttackMoveMarker("sg_patrolTwo_"..i, "mkr_skimmerShop_6")
+		end
+	end
+	
+	-- Loop Through all Patrol Two Reverse Squads
+	for i = 1,g_numUnits_patrolTwoReverse
+	do
+		-- If the Squad is Killed -- Do Nothing
+		if SGroup_Exists("sg_patrolTwoReverse_"..i) and
+			SGroup_Count("sg_patrolTwoReverse_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Otherwise recall the squad back to base
+		elseif SGroup_Exists("sg_patrolTwoReverse_"..i)
+		then
+			Cmd_AttackMoveMarker("sg_patrolTwoReverse_"..i, "mkr_skimmerShop_6")
+		end
+	end
+end
+
+-- Patrol Some Troops Around the Map
+function Rule_PathThree_Patrol()
+	-- Loop Through all Patrol Three Squads -- patroling : 1,2,3
+	for i = 1,g_numUnits_patrolThree
+	do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_patrolThree_"..i) and
+			SGroup_Count("sg_patrolThree_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_patrolThree_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_3")
+		
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_patrolThree_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_2")	
+
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_patrolThree_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolThree_"..i, "mkr_AI_PatrolThree_1")		
+		end
+	end
+	
+	-- Loop Through all Reverse Patrol Two Squads -- patroling : 4,5
+	for i = 1,g_numUnits_patrolThreeReverse
+	do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_patrolThreeReverse_"..i) and
+			SGroup_Count("sg_patrolThreeReverse_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_patrolThreeReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolThreeReverse_"..i, "mkr_AI_PatrolThree_4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolThreeReverse_"..i, "mkr_AI_PatrolThree_5")
+	
+		-- Check if the Squad arrived at the Patrol Location 5
+		elseif SGroup_Exists("sg_patrolThreeReverse_"..i) and
+			Prox_AllSquadsNearMarker("sg_patrolThreeReverse_"..i, "mkr_AI_PatrolThree_5")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_patrolThreeReverse_"..i, "mkr_AI_PatrolThree_4")	
+		end
+	end
+end
+
+-- Production Building Has Been Destroyed -- Recall All Patrol Two Units to Base
+	-- Called as a OneShot once the production building is destroyed
+function Rule_PathThree_Patrol_Panic()
+	-- Loop Through all Patrol Three Squads
+	for i = 1,g_numUnits_patrolThree
+	do
+		-- If the Squad is Killed -- Do Nothing
+		if SGroup_Exists("sg_patrolThree_"..i) and
+			SGroup_Count("sg_patrolThree_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing
+		
+		-- Otherwise recall the squad back to base
+		elseif SGroup_Exists("sg_patrolThree_"..i)
+		then
+			Cmd_AttackMoveMarker("sg_patrolThree_"..i, "mkr_soulCage_5")
+		end
+	end
+	
+	-- Loop Through all Patrol ThreeReverse Squads
+	for i = 1,g_numUnits_patrolThreeReverse
+	do
+		-- If the Squad is Killed -- Do Nothing
+		if SGroup_Exists("sg_patrolThreeReverse_"..i) and
+			SGroup_Count("sg_patrolThreeReverse_"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+		
+		-- Otherwise recall the squad back to base
+		elseif SGroup_Exists("sg_patrolThreeReverse_"..i)
+		then
+			Cmd_AttackMoveMarker("sg_patrolThreeReverse_"..i, "mkr_soulCage_5")
+		end
+	end
+end
+
+-- Slave Caravels use their Soul Shock Skill
+	-- Need to convert to all caravels
+function Rule_PrisonerCage_SlaveCaravel_Attack()
+	for i = 19,20
+	do
+		if EGroup_Count("eg_slaveCaravel_"..i) == 1 and
+			Player_AreSquadsNearMarker(g_Player1, "mkr_slaveCaravel_"..i)
+		then
+			-- Slave Caraval will only fire the skill if it is recharged
+			Command_EntityAbilitySelf(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_slaveCaravel_"..i), 1), "dark_eldar_soul_shock")
+			print("Attempted Slave Caravel Skill Use")
+		end
+	end
+	
+	-- If All Slave Caravels are destroyed -- Remove Rule
+	if EGroup_Count("eg_slaveCaravel_19") == 0 and
+		EGroup_Count("eg_slaveCaravel_20") == 0
+	then
+		Rule_Remove(Rule_PrisonerCage_SlaveCaravel_Attack)
+	end
+end
+
+-- Provide Some Random Movement to Make South-East Base Appear More Life-Like
+function Rule_RandomMovement_SouthEast_Base()
+	Util_AttackMoveMarkerRandomRadius("sg_southEast_defense_scourge1", "mkr_hallOfBlood_11")
+	Util_AttackMoveMarkerRandomRadius("sg_southEast_defense_scourge2", "mkr_hallOfBlood_11")
+	Util_AttackMoveMarkerRandomRadius("sg_southEast_defense_talos", "mkr_hq_7")
+	Util_AttackMoveMarkerRandomRadius("sg_southEast_defense_ravager1", "mkr_power_17")
+	Util_AttackMoveMarkerRandomRadius("sg_southEast_defense_ravager2", "mkr_power_18")
+end
+
+-- Provide Some Random Movement to Make South-West Base Appear More Life-Like
+function Rule_RandomMovement_SouthWest_Base()
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_wych", "mkr_hallOfBlood_12")
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_warpBeast", "mkr_hallOfBlood_13")
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_haemonculus", "mkr_haemonculusLab_3")
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_talos", "mkr_skimmerShop_9")
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_ravager1", "mkr_hq_6")
+	Util_AttackMoveMarkerRandomRadius("sg_southWest_defense_ravager2", "mkr_hq_6")
+end
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------
+-- Center South Base ( One By CenterBase HQ 2)
+--------------------------------------------------------------------------
+
+-- Checks if the Player Attacks the Base before it has been activated
+	-- Added as a Oneshot in Rule_Upgrade_To_Alert_Two()
+	-- Or Via Rule_Check_EarlyPlayer_Attack_CenterSouth_Base()
+function Rule_Check_EarlyPlayer_Attack_CenterSouth_Base()
+	-- Checks if the Base is already activated
+	if g_base_activated_CenterSouth == false
+	then
+		-- if not...Check if the Player is attacking the base
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_centerSouthBase_underAttack")
+		then
+			-- Count How many play units are at that marker
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_NearMarker", "mkr_centerSouthBase_underAttack")
+			local unitCount = SGroup_Count("sg_NearMarker")
+			SGroup_Clear("sg_NearMarker")
+
+			--is it enough units to activate a base?
+			if unitCount >= g_num_PlayerUnits_ActivateBase
+			then
+				-- Activate the North Base Instantly
+				g_base_activated_CenterSouth = true
+				Rule_AddOneShot(Rule_Activate_CenterSouth_Base, 0)
+			end
+		end
+	
+	-- Remove the Rule since the base is already activated
+	else
+		Rule_Remove(Rule_Check_EarlyPlayer_Attack_CenterSouth_Base)
+	end
+end
+
+-- Play IE & Enable the Base to Start Producing Units & Attack with them
+function Rule_Activate_CenterSouth_Base()
+	-- Play IE
+	--Util_StartIntel(EVENTS.IE_Idle_Chimera_Base_Out_Of_Units)
+	
+	-- Keep Track of How Many Bases Have been activated
+	g_number_bases_activated = g_number_bases_activated + 1
+	
+	-- Create the SGroups used by the Center South Base to keep track of its produced units
+	SGroup_Create("sg_centerSouthBase_units")
+	SGroup_Create("sg_centerSouthBase_chimera")
+	SGroup_Create("sg_centerSouthBase_troops")
+
+	-- Produce Guards out of barracks & Produce Chimera out of vehicle bay
+	Rule_AddIntervalDelay(Rule_Production_CenterSouth_Base, g_productionTimer_centerSouthBase,1)
+end
+
+-- Handles Production of Units (Chimeras & Guardsmen)
+function Rule_Production_CenterSouth_Base()
+
+	local loadout
+		
+	--if have room to produce more units
+	if SGroup_Count("sg_centerSouthBase_units") < g_max_number_units_centerSouthBase
+	then
+		print("CenterSouthBase Production Function -- Producing")
+
+		-- if barracks still exsists
+		if EGroup_Count("eg_centerBase_infantryCommand2") == 1
+		then
+			-- get size of guardsman squad
+			loadout = World_GetRand(5,g_number_GuardsmenPerSquad)
+	
+			-- Create a squad of guardsmen & give leader
+			Util_CreateSquadsAtMarkerEx(g_Player6, "sg_centerSouthBase_troops", "guard_squad_guardsmen", "mkr_centerBase_infantryCommand2", 1,loadout)
+			SGroup_AddLeaders("sg_centerSouthBase_troops")
+
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_centerSouthBase_units", "sg_centerSouthBase_troops")
+		end
+		
+		-- if barracks still exsists
+		if EGroup_Count("eg_centerBase_infantryCommand3") == 1
+		then
+			-- get size of guardsman squad
+			loadout = World_GetRand(5,g_number_GuardsmenPerSquad)
+	
+			-- Create a squad of guardsmen & give leader
+			Util_CreateSquadsAtMarkerEx(g_Player6, "sg_centerSouthBase_troops", "guard_squad_guardsmen", "mkr_centerBase_infantryCommand3", 1,loadout)
+			SGroup_AddLeaders("sg_centerSouthBase_troops")
+
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_centerSouthBase_units", "sg_centerSouthBase_troops")
+		end
+		
+		-- if barracks still exsists
+		if EGroup_Count("eg_centerBase_infantryCommand4") == 1
+		then
+			-- get size of guardsman squad
+			loadout = World_GetRand(5,g_number_GuardsmenPerSquad)
+	
+			-- Create a squad of guardsmen & give leader
+			Util_CreateSquadsAtMarkerEx(g_Player6, "sg_centerSouthBase_troops", "guard_squad_guardsmen", "mkr_centerBase_infantryCommand4", 1,loadout)
+			SGroup_AddLeaders("sg_centerSouthBase_troops")
+
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_centerSouthBase_units", "sg_centerSouthBase_troops")
+		end
+	
+		-- if mechanized command still exsists
+		if EGroup_Count("eg_centerBase_mechanizedCommand2") == 1
+		then
+			-- create a Chimera
+			Util_CreateSquadsAtMarker(g_Player6, "sg_centerSouthBase_chimera", "guard_squad_chimera", "mkr_centerBase_mechanizedCommand2", 1)
+			
+			-- Add the SGroup to the Unit group so know how many units base has produced
+			SGroup_AddGroup("sg_centerSouthBase_units", "sg_centerSouthBase_chimera")
+		end
+	
+		-- if both troops & transport exist...
+		if SGroup_Count("sg_centerSouthBase_chimera") == 1 and
+			SGroup_Count("sg_centerSouthBase_troops") >= 1
+		then
+			print("CenterSouthBase Production Function -- Loading into Transport")
+			-- load all the troops into the transport
+			Cmd_EnterTransport("sg_centerSouthBase_troops", "sg_centerSouthBase_chimera")
+			-- buy time for the troops to get into the chimera
+			Rule_AddOneShot(Rule_Send_Loaded_Transport_CenterSouthBase,20)
+	
+		--if only the transport exists...
+		elseif SGroup_Count("sg_centerSouthBase_chimera") == 1
+		then
+			-- Add the Transport to the Attack Group
+			SGroup_AddGroup("sg_centerSouthBase_attack", "sg_centerSouthBase_chimera")
+			-- Clear out the Chimera Squad so can make more units
+			SGroup_Clear("sg_centerSouthBase_chimera")
+	
+		--if only the troops exists...
+		elseif SGroup_Count("sg_centerSouthBase_troops") == 1
+		then
+			-- Add the troops to the Attack Group
+			SGroup_AddGroup("sg_centerSouthBase_attack", "sg_centerSouthBase_troops")
+			-- Clear out the troops squad so can make more units
+			SGroup_Clear("sg_centerSouthBase_troops")
+		end
+	end
+	
+	--if both barracks & mechanized command  are destroyed, remove rules since base is gone
+	if 	EGroup_Count("eg_centerBase_infantryCommand2") == 0 and
+		EGroup_Count("eg_centerBase_infantryCommand3") == 0 and
+		EGroup_Count("eg_centerBase_infantryCommand4") == 0 and
+		EGroup_Count("eg_centerBase_mechanizedCommand2") == 0
+	then
+		Rule_Remove(Rule_Production_CenterSouth_Base)
+		Rule_Remove(Rule_Attack_CenterSouth_Base)
+	end
+end
+
+-- OneShot rule that gives the troops time to get into transport before adding it to the attack group
+function Rule_Send_Loaded_Transport_CenterSouthBase()
+	if SGroup_Count("sg_centerSouthBase_chimera") == 1
+	then
+		print("CenterSouthBase Transport Ready To Send")
+		-- Add the Transport to the Attack Group
+		SGroup_AddGroup("sg_centerSouthBase_attack", "sg_centerSouthBase_chimera")
+		
+		-- Clear out the Chimera and troops squad so can make more units
+		SGroup_Clear("sg_centerSouthBase_chimera")
+		SGroup_Clear("sg_centerSouthBase_troops")
+	end
+end
+
+-- Orders the Base to Send its Produced Troops to attack the Player Base
+function Rule_Attack_CenterSouth_Base()
+	Cmd_AttackMoveMarker("sg_centerSouthBase_attack", "mkr_player_mainBase_HQ")
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " BASE ACTIVATION, PRODUCTION, & ATTACKS " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+-- NIS Stuff:
+
+-- EventCue_Enable(false) : disables the event cue along with every associated with it
+			-- AI, vocalization features, units under attack etc...
+-- Void Fade_Start( Real timeSecs, Boolean in ) : Starts a screen fade.
+	--Set bool to true to fade in & false to fade out (Will not fade out if the screen is already faded)
+-- Void W40k_Letterbox( Boolean on, Real timeSecs ) :Enters/Exits letterbox mode in amount of time specified by timeSecs. 
+-------------------------------------------------------------------------------------------------------------------------------------------
+function NIS_Setup(timeFadeSec, timeLetterboxSec)
+	EventCue_Enable(false)
+	Fade_Start( timeFadeSec, false )	
+	W40k_Letterbox( true, timeLetterboxSec )
+end
+
+-------------------------------------------------
+-- END OF ALL " NIS " RULES
+-------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- VICTORY / DEFEAT RULES
+	-- Rule_EndGame_Victory() : Checks if the mission has been Won (All Primary Objectives Completed)
+	-- Rule_EndGame_Actual_Victory() : Wins the Mission & Plays the Final NIS
+	-- Rule_EndGame_Defeat() : Checks if mission has been lost (Player Killed)
+	-- Rule_GameOver() : Sets Game Over 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Checks for the Victory Conditions
+function Rule_EndGame_Victory()
+	-- If Both Primary Objectives Exists & Are Completed
+	if Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroyImperialGuardHQ.title_id) == true and
+		Objective_Exists(Objective_StopBaneBladeProduction.title_id) == true and
+		Objective_GetState(Objective_DestroyImperialGuardHQ.title_id) == OS_Complete and
+		Objective_GetState(Objective_StopConvoysFromReachingBase.title_id) == OS_Complete
+	then
+		-- Call the Actual Victory Rule Wins the Mission & Plays FINAL NIS
+			-- The Delay is so it doesn't occur the second you complete the Objectives
+		Rule_AddOneShot(Rule_EndGame_Actual_Victory, 5)
+	end
+end
+
+-- Wins the Mission & Plays the Final NIS : Added as a OneShot in Rule_EndGame_Victory()
+function Rule_EndGame_Actual_Victory()
+	-- Kills all rules (Basically cleans up any extra rules that were running and prepares for scenario complete)
+	Rule_RemoveAll()
+
+	-- NIS: Play the mission complete scripted scene
+	--NIS_Setup(0,0) 
+	--Util_StartNIS(EVENTS.NIS_Victory)	
+	
+	Rule_GameOver()
+end
+
+
+-- Rule for Losing the Game : Rule Checks Every 10 secs & is Added in Rule_GameStart( )
+function Rule_EndGame_Defeat()
+
+	-- define the "enemy" who will win when the player 'loses'
+	g_enemy = g_Player2
+
+	--Lose because of Player Annihilation	
+	if Player_HasBuildingsExcept(g_Player1, t_building_exceptions) == false and
+		Player_HasSquadsExcept(g_Player1, t_unit_exceptions) == false
+	then
+		Rule_RemoveAll()
+		Fade_Start(4, false)
+		World_SetTeamWin( g_enemy, "" )
+		Rule_AddIntervalEx(Rule_GameOver,5,1 )
+		Rule_Remove( Rule_EndGame_Defeat )
+	end
+end
+
+
+-- Actually sets the Game Over & is added from Rule_EndGame_Victory( ) or Rule_EndGame_Defeat( )
+function Rule_GameOver()
+	World_SetGameOver() 
+end
+
+----------------------------------------------------------------
+-- END OF ALL " VICTORY / DEFEAT  " RULES
+----------------------------------------------------------------

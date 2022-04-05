@@ -1,0 +1,250 @@
+----------------------------------------------------------------------------------------------------------------
+-- Single player difficulty level functions
+-- (c) 2003 Relic Entertainment Inc.
+
+-- these functions increase or decrease various unit statstics depending upon what difficulty level it is.
+
+entity_list = {}
+
+--
+--
+--
+DIFFICULTY_EASY 		= 0
+DIFFICULTY_NORMAL 	= 1
+DIFFICULTY_HARD		= 2
+
+--? @shortdesc Returns the difficulty level for the mission (DIFFICULTY_EASY, DIFFICULTY_NORMAL or DIFFICULTY_HARD)
+--? @args Void
+--? @result Integer
+function Difficulty_Get()
+	
+	if __ScarCustomVariables.SCAR_DIFFICULTY == nil then
+		error("Difficulty has not been set")
+	end
+	
+	if __ScarCustomVariables.SCAR_DIFFICULTY < DIFFICULTY_EASY or __ScarCustomVariables.SCAR_DIFFICULTY > DIFFICULTY_HARD then
+		error("Invalid difficulty")
+	end
+	
+	return __ScarCustomVariables.SCAR_DIFFICULTY
+end
+
+--? @shortdesc Set the difficulty level for all players in a mission
+--? @extdesc This function should be called to set the difficulty level for all players in the mission.  Note that it WILL NOT modify attributes for the player themselves, just everyone else.   Values for difficulty are: 0 = easy, 1 = normal, 2 = hard
+--? @result Void
+--? @args Integer difficultlevel
+function Difficulty_SetForAll( difficulty )
+	numPlayers = World_GetPlayerCount() 
+	-- need a list of all the entities that will be modified for this difficulty level
+	for i=1,numPlayers-1 do
+		Difficulty_SetForPlayer( World_GetPlayerAt(i), difficulty )
+	end	
+end
+
+--? @shortdesc Set the difficulty level for one player
+--? @extdesc This function should be called to set the difficulty level for a single player in a mission.  Values for difficulty are: 0 = easy, 1 = normal, 2 = hard
+--? @result Void
+--? @args PlayerID playerId, Integer difficultlevel
+function Difficulty_SetForPlayer( player, difficulty )
+	-- need a list of all the entities that will be modified for this difficulty level
+	race = Player_GetRaceName( player );
+	PopulateListForRace( race );
+	SetHealthLevel( difficulty, player );
+	
+end
+
+function PopulateListForRace( race )
+	-- populates the entity_list for this race
+	if race == "space_marine_race" then
+	
+		entity_list = {
+									-- units
+									"apothecary",
+									"assault_marine",
+									"dreadnought",
+									"dreadnought_hellfire_variant",
+									"force_commander",
+									"land_raider",
+									"land_speeder",
+									"librarian",
+									"predator",
+									"rhino",
+									"scout_marine",
+									"servitor",
+									"skull_probe",
+									"sergeant",
+									"space_marine_tactical_bolter",
+									"terminator",
+									"terminator_assault",
+									"whirlwind",
+									"chaplain",
+									-- structures
+									"space_marine_ability_building",
+									"space_marine_armoury",
+									"space_marine_barracks",
+									"space_marine_drop_pod_building",
+									"space_marine_generator",
+									"space_marine_hq",
+									"space_marine_listening_post",
+									"space_marine_orbital_relay",
+									"space_marine_thermo_generator",
+									"space_marine_turret_bolter",
+									"space_marine_turret_missiles",
+									"space_marine_vehicle_building"
+								}
+								
+		elseif race == "ork_race" then
+			entity_list = {
+									-- units
+									"ork_bad_dok",
+									"ork_grot",
+									"ork_killa_kan",
+									"ork_looted_tank",	
+									"ork_mek_boy",	
+									"ork_nob",	
+									"ork_shoota_boy",	
+									"ork_slugga_boy",	
+									"ork_armored_nob",	
+--~ 									"ork_squiggoth",	
+									"ork_stormboy",	
+									"ork_tankbusta",	
+									"ork_trukk",	
+									"ork_warboss",	
+									"ork_wartrak",	
+									-- structures
+									"ork_bigger_generator",
+									"ork_boy_hut",
+									"ork_generator",
+									"ork_gork_totem",
+									"ork_hq",
+									"ork_mek_shop",
+									"ork_pile_o_guns",
+									"ork_waagh_banner"
+								}
+		elseif race == "chaos_marine_race" then
+			entity_list = {
+									-- units
+									"chaos_marine_bolter",
+									"chaos_bloodthirster",
+									"chaos_cultist",
+									"chaos_defiler",	
+									"chaos_horror",	
+									"chaos_lord",	
+									"chaos_obliterator",	
+									"chaos_possessed_marine",	
+									"chaos_predator",	
+									"chaos_raptor",	
+									"chaos_rhino",	
+									"chaos_slave",	
+									"chaos_sorcerer",	
+									"chaos_khorne_berserker",	
+									-- structures
+									"chaos_armoury",
+									"chaos_greater_sacrificial_circle",
+									"chaos_hq",
+									"chaos_listening_post",
+									"chaos_machine_pit",
+									"chaos_plasma_generator",
+									"chaos_sacrificial_circle",
+									"chaos_temple",
+									"chaos_thermo_plasma_generator",
+									"chaos_turret_bolter",
+									"chaos_turret_missiles"
+								}
+		elseif race == "eldar_race" then
+			entity_list = {
+									-- units
+									"eldar_guardian",
+									"eldar_avatar",
+									"eldar_banshees",
+									"eldar_bonesinger",	
+									"eldar_dark_reapers",	
+									"eldar_falcon_grav_tank",	
+									"eldar_farseer",	
+									"eldar_fire_prism",	
+									"eldar_grav_platform",	
+									"eldar_grav_platform_brightlance",	
+									"eldar_rangers",	
+									"eldar_warlock_seer",	
+									"eldar_vypers",	
+									"eldar_warp_spider",	
+									"eldar_wraithlord",	
+									"eldar_banshee_exarch",	
+									"eldar_fire_dragon",
+									"eldar_fire_dragon_exarch",
+									-- structures
+									"eldar_advanced_warp_generator",
+									"eldar_aspect_portal",
+									"eldar_hq",
+									"eldar_listening_post",
+									"eldar_soul_shrine",
+									"eldar_support_platform_scatterlaser",
+									"eldar_support_portal",
+									"eldar_warp_generator",
+									"eldar_webway_gate"
+								}
+		elseif race == "guard_race" then
+			entity_list = {
+									-- units
+									"guard_infantry_guardsmen",
+									"guard_infantry_guardsmen_sergeant",
+--~ 									"guard_infantry_heavy_weapon_platoon",
+									"guard_infantry_kasrkin",
+									"guard_infantry_kasrkin_sergeant",
+									"guard_infantry_ogryn",
+									"guard_infantry_ogryn_sergeant",
+									"guard_leaders_assassin",
+									"guard_leaders_captain",
+									"guard_leaders_commissar",
+									"guard_leaders_commissar_command_squad",
+									"guard_leaders_priest",
+									"guard_leaders_priest_command_squad",
+									"guard_leaders_psyker",
+									"guard_leaders_psyker_command_squad",
+									"guard_support_enginseer",
+									"guard_vehicles_baneblade",
+									"guard_vehicles_basilisk",
+									"guard_vehicles_chimera",
+									"guard_vehicles_hellhound",
+									"guard_vehicles_lemanruss",
+									"guard_vehicles_sentinel",									
+									-- structures
+									"guard_hq",
+									"guard_infantry",
+									"guard_listening_post",
+									"guard_mars_pattern",
+									"guard_mechanized",
+									"guard_mines",
+									"guard_plasma_generator",
+									"guard_tactica",
+									"guard_turret_heavy_bolter",
+									"guard_thermo_plasma"
+								}
+		end	
+end
+
+function SetHealthLevel( difficulty, player )
+	-- difficulty determines what modification level we use
+	modlevel = 1;
+	if difficulty == DIFFICULTY_EASY then
+		modlevel = 0.75
+	elseif difficulty == DIFFICULTY_HARD then
+		modlevel = 1.5
+	end
+	
+	for i=1,table.getn( entity_list ) do
+		-- create the modifier
+		local modifier = Modifier_Create(
+			MAT_EntityType,      -- This modifier will be applied to an entity blueprint
+			"health_maximum_modifier",   -- Modify entity sight radius
+			MUT_Multiplication,     -- Multiply sight radius by 0.5 non exclusive
+			false, 
+			modlevel, 
+			entity_list[i]     -- Do this to all entities in the entity list
+		)
+		
+		-- apply it to the player
+		local modID = Modifier_ApplyToPlayer( modifier, player )
+	end	
+end
+

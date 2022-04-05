@@ -1,0 +1,411 @@
+----------------------------------------------------------------------------------------------------------------
+-- Balancing tool scar helper functions
+-- (c) 2004 Relic Entertainment Inc.
+
+--? @group Balance
+
+BalanceTool =
+{
+	init = {},
+	players = {},
+	abort = false,
+	timeout = 1,
+	iterations = 1,
+	current_run = 1,
+	player_effectiveness = {},
+	scriptname = "invalid",
+	time_per_iteration = {}
+}
+
+function Balance_SetIterations( iterations )
+	BalanceTool.iterations = iterations
+end
+
+function Balance_SetTimeOut( timeout )
+	BalanceTool.timeout = timeout
+end
+
+--? @shortdesc Creates the maximum number of squads of this loadout given the resources at a marker position and adds them to a squadgroup.  The squadgroup will be created if it doesnt exist.
+--? @extdesc Loadout will be clipped to unitMin and unitMax from the squad blueprint.
+--? @args PlayerID playerId, String squadgroupName, String squadBlueprint, Table load_out_table, String markername, Float requisition_amount, Float power_amount
+--? @result SGroupID
+function Balance_CreateSquadsAtMarkerByResource( player, sgroup_name, squad_name, load_out_table, marker_name, requisition, power)
+
+	local id = Player_GetID( player )
+	
+	--save out the use of resources
+	BalanceTool.players[id].total.requisition = BalanceTool.players[id].total.requisition + requisition
+	BalanceTool.players[id].total.power = BalanceTool.players[id].total.power + power
+	
+	--figure out how many squads of this type can be built with this amount of resources, and record it
+	local squad_num = 0
+	
+	local has_leader = false
+	local load_out_count = 0
+	for i in load_out_table do
+		if( load_out_table[i] == "leader" ) then
+			has_leader = true
+		else
+			load_out_count = load_out_count + 1
+		end
+	end
+	
+	--cost of squad
+	local needed_req = Squad_GetCost( squad_name, RT_Requisition )
+	local needed_power = Squad_GetCost( squad_name, RT_Power )
+	
+	local max_load_out = Squad_GetMaxFromName( squad_name )
+
+	if( load_out_count > max_load_out ) then
+		print ("load out for "..squad_name.." larger than max -- clipping to minimum")
+		load_out_count = max_load_out
+	end
+
+	load_out_count = load_out_count - Squad_GetMinFromName( squad_name )
+	if( load_out_count < 0 ) then
+		error ("Balance Tool: load out for "..squad_name.." smaller than minimum")
+	end
+	
+	
+	local reinforce_req_cost = Squad_GetReinforceCost( squad_name, RT_Requisition )
+	local reinforce_pow_cost = Squad_GetReinforceCost( squad_name, RT_Power )
+	
+	--cost of reinforcing
+	needed_req = needed_req + (reinforce_req_cost*load_out_count)
+	needed_power = needed_power + (reinforce_pow_cost*load_out_count)
+	
+	--cost of upgrades
+	local upgrades = {}
+	local upgrade_num = 0
+	
+	--save the ones that aren't default and aren't leader
+	for i in load_out_table do
+		if ( load_out_table[i] ~= "leader" ) and ( load_out_table[i] ~= "default" ) then
+			upgrade_num = upgrade_num + 1
+			if( upgrade_num <= max_load_out ) then
+				local upgrade_req_cost = Squad_GetUpgradeCost( squad_name, load_out_table[i], RT_Requisition )
+				local upgrade_pow_cost = Squad_GetUpgradeCost( squad_name, load_out_table[i], RT_Power )
+				table.insert( upgrades, load_out_table[i] )
+			
+				needed_req = needed_req + upgrade_req_cost
+				needed_power = needed_power + upgrade_pow_cost
+			end
+		end
+	end
+	
+	--cost of leader
+	if( has_leader ) then
+		local leader_req_cost = Squad_GetReinforceLeaderCost( squad_name, RT_Requisition )
+		local leader_pow_cost = Squad_GetReinforceLeaderCost( squad_name, RT_Power )
+		
+		needed_req = needed_req + leader_req_cost
+		needed_power = needed_power + leader_pow_cost
+	end
+
+	--determine how many we can build
+	while true do
+		if( requisition >= needed_req and power >= needed_power ) then
+			--subtract from total
+			requisition = requisition - needed_req
+			power = power - needed_power
+			
+			--increment count
+			squad_num = squad_num + 1
+		else
+			break
+		end
+	end
+	
+	BalanceTool.players[id].unused.requisition = BalanceTool.players[id].unused.requisition + requisition
+	BalanceTool.players[id].unused.power = BalanceTool.players[id].unused.power + power
+	
+	--exit if no squads can be created
+	if( squad_num == 0 ) then
+		return
+	end
+	
+	--create the squad
+	local sgroup = nil
+	local current_marker = 1
+	
+	for i = 1, squad_num do
+		sgroup = Util_CreateSquadsAtMarkerEx( player, sgroup_name, squad_name, marker_name..tostring(current_marker), 1, load_out_count + Squad_GetMinFromName( squad_name ) )
+		current_marker = current_marker + 1
+		if current_marker > 4 then
+			current_marker = 1
+		end
+	end
+	
+	--upgrade them
+	for i in upgrades do
+		SGroup_ForEach( sgroup,	
+			function( sgroupid, itemindex, squadID ) 
+				Squad_UpgradeWeapon( squadID, upgrades[i] )  
+			end )
+	end
+	
+	--add leader
+	if has_leader then
+		SGroup_ForEach( sgroup,	
+			function( sgroupid, itemindex, squadID ) 
+				Squad_AddLeader( squadID )
+			end )
+		
+	end
+		
+	table.insert( BalanceTool.players[id].squads, { squad_name, load_out_table, squad_num } )
+	
+	return sgroup
+end
+
+function Balance_ApplyTimeOut()
+	--if timeout is zero, it's infinite
+	if( BalanceTool.timeout ~= 0 ) then
+		Rule_AddOneShot(Balance_TimeOut, BalanceTool.timeout)
+	end
+end
+
+function Balance_OnInit()
+
+	if Rule_Exists( Balance_TimeOut ) then
+		Rule_Remove( Balance_TimeOut )
+	end
+
+	BalanceTool.abort = false
+	Rule_AddOneShot( Balance_ApplyTimeOut, 0 ) 
+	
+	--everyone is an AI
+	Cpu_ControlLocalPlayer()
+	
+	g_Player1 = World_GetPlayerAt(0)
+	g_Player2 = World_GetPlayerAt(1)
+
+	local marker1 = Marker_FromName( "no_mans_land1", "basic_marker" )
+	local marker2 = Marker_FromName( "no_mans_land2", "basic_marker" )
+
+	--tell them all to go in the middle and fight!
+	Cpu_AssignWaypoint( g_Player1, marker1, 1 )
+	Cpu_AssignWaypoint( g_Player2, marker2, 1 )
+	
+	Balance_Reset( g_Player1 )
+	Balance_Reset( g_Player2 )
+	
+end
+
+function Balance_Reset( player )
+	local id = Player_GetID( player )
+	
+	--turn off components
+	Cpu_EnableComponent( player, false, CT_Resourcing )
+	Cpu_EnableComponent( player, false, CT_BuildUnits )
+	Cpu_EnableComponent( player, false, CT_BuildBuildings )
+	Cpu_EnableComponent( player, false, CT_BuildResearch )
+	Cpu_EnableComponent( player, false, CT_BuildAddOns )
+	Cpu_EnableComponent( player, false, CT_Tactics )
+
+	BalanceTool.players[id] = 
+	{
+		total =
+		{
+			requisition = 0,
+			power = 0
+		},
+		
+		unused =
+		{
+			requisition = 0,
+			power = 0
+		},
+		
+		squads = {},
+	}
+	
+	--kill all squads 
+	local sgroup = Player_GetSquads( player )
+	local sgroup_name = SGroup_GetName(sgroup)
+	SGroup_DestroyAllSquads( sgroup_name )
+
+	local egroup = Player_GetEntities( player )
+	local egroup_name = EGroup_GetName( egroup )
+	EGroup_DestroyAllEntities( egroup_name )
+end
+
+function Balance_TimeOut()
+	-- total number of players
+	BalanceTool.abort = true
+end
+
+function Balance_GameOver()
+
+	--check all units dead
+	local count = World_GetPlayerCount();
+
+	for i = 0, count-1 do
+		local player = World_GetPlayerAt(i);
+		if( Player_GetEntityCount( player ) == 0 ) then
+			BalanceTool.abort = true
+		end
+	end
+	
+	if( BalanceTool.abort ) then
+
+		--log effectiveness
+		for i = 0, count-1 do
+			local player = World_GetPlayerAt(i);
+			local id = Player_GetID( player )
+
+			if BalanceTool.player_effectiveness[id] == nil then
+				BalanceTool.player_effectiveness[id] = 0
+			end
+			
+			--calculate cost effectiveness
+			local cost_req = Stats_ActiveArmyCost( player, RT_Requisition )
+			local cost_pow = Stats_ActiveArmyCost( player, RT_Power )
+			
+			local f_req = cost_req / (BalanceTool.players[id].total.requisition - BalanceTool.players[id].unused.requisition )
+			if( cost_req == 0 ) then
+				f_req = 0
+			end
+			
+			local f_pow = cost_pow / ( BalanceTool.players[id].total.power - BalanceTool.players[id].unused.power )
+			if( cost_pow == 0 ) then
+				f_pow = 0
+			end
+
+			local f = (f_req + f_pow)/2
+			
+			local effectiveness = 1 / ( math.sqrt( 1 - f*f ) )
+
+			BalanceTool.player_effectiveness[id] = BalanceTool.player_effectiveness[id] + effectiveness
+		end
+		
+		if( BalanceTool.current_run < BalanceTool.iterations ) then
+			local total_duration = 0
+			for i in BalanceTool.time_per_iteration do
+				total_duration = total_duration + BalanceTool.time_per_iteration[i]
+			end
+			
+			table.insert( BalanceTool.time_per_iteration, Stats_GameDuration() - total_duration )
+			BalanceTool.current_run = BalanceTool.current_run + 1
+			Balance_Run()
+		else
+			Balance_DumpStats()
+			
+			World_SetTeamWin( World_GetPlayerAt(0), "annihilate" );
+			World_SetGameOver()
+		end
+	end
+
+end
+
+function Balance_DumpStats()
+
+	Stats_BeginBalanceStatsDump( Stats_GetScenarioName().."_"..BalanceTool.scriptname)
+	
+	Stats_BalancePrint( "MAP:,"..Stats_GetScenarioName() )
+	Stats_BalancePrint( "SCRIPT:,"..BalanceTool.scriptname )
+	Stats_BalancePrint( "DURATION:,"..tostring(Stats_GameDuration() / BalanceTool.iterations) )
+	Stats_BalancePrint( "ITERATIONS,"..tostring(BalanceTool.iterations) )
+	Stats_BalancePrint( "" )
+	
+	local count = World_GetPlayerCount();
+
+	for i = 0, count-1 do
+		local player = World_GetPlayerAt(i);
+		local id = Player_GetID( player )
+		
+		Stats_BalancePrint( "PLAYER,"..tostring(Player_GetID(player) ) )
+		Stats_BalancePrint( "" )
+	
+		--print units built
+		for j in BalanceTool.players[id].squads do
+		
+			local units = BalanceTool.players[id].squads[j]
+			Stats_BalancePrint( "Squad:, "..units[1] )
+			
+			local load_out_string = ""
+			
+			for k in units[2] do
+				load_out_string = load_out_string..units[2][k]..","
+			end
+			
+			Stats_BalancePrint( "Load Out:, "..load_out_string )
+			Stats_BalancePrint( "Num squads:, "..units[3] )
+			Stats_BalancePrint("")
+			
+		end
+		
+		--print resources used
+		Stats_BalancePrint( "Requisition Allocated:, "..tostring(BalanceTool.players[id].total.requisition))
+		Stats_BalancePrint( "Power Allocated:, "..tostring(BalanceTool.players[id].total.power))
+		
+		--print resources unused
+		Stats_BalancePrint( "Unused Requisition:, "..tostring(BalanceTool.players[id].unused.requisition))
+		Stats_BalancePrint( "Unused Power:, "..tostring(BalanceTool.players[id].unused.power))
+		
+		local effectiveness = BalanceTool.player_effectiveness[id]
+		
+		--average -- divide by number of runs
+		effectiveness = effectiveness / BalanceTool.iterations
+		
+		Stats_BalancePrint( "Army Effectiveness,"..tostring(effectiveness) )
+		
+		Stats_BalancePrint( "\n" )
+	end
+	
+	--print the cost effectiveness
+
+	Stats_EndBalanceStatsDump()
+end
+
+--? @shortdesc Set the Lua Function used to initialize each Balance Tool iteration. 
+--? @extdesc The function is used to set up the forces that will battle
+--? @args LuaFunction func
+--? @result Void
+function Balance_SetInit( func )
+	BalanceTool.init = func
+end
+
+function Balance_SetScriptName( name )
+	BalanceTool.scriptname = name
+end
+
+function Balance_Run()
+	Balance_OnInit()	
+	Rule_AddOneShot( BalanceTool.init, 0 ) 
+end
+
+function Balance_AddTimer()
+	
+	dr_setdisplay("duration_timer", 1)
+	dr_setautoclear("duration_timer", 0)
+	
+	Rule_AddInterval(Balance_PrintTime,1) 
+	
+end
+
+function Balance_PrintTime()
+
+	-- the selected color of the text:
+	local colour = {255,255,192}
+	local	xval	= 0.05
+	local	yval	= 0.05
+	
+	dr_clear("duration_timer")
+	
+	local duration = Stats_GameDuration()
+	
+	for i in BalanceTool.time_per_iteration do
+		duration = duration - BalanceTool.time_per_iteration[i]
+	end
+	
+	dr_text2d( "duration_timer", xval, yval, "Current duration: "..tostring( duration ) , colour[1], colour[2], colour[3] )
+	
+end
+
+Rule_AddInterval(Balance_GameOver,5) 
+Rule_AddOneShot(Balance_AddTimer, 0) 
+
+
+
+

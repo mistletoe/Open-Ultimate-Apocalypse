@@ -1,0 +1,262 @@
+Model = "Dussala_Precinct"
+Planet = "Kaurava_I"
+
+Name = "$3900010"
+Description = "$3900100"
+TerrainType = "$2851002"
+TerrainDescription = "$3900101"
+History = 
+{
+"$3900102",
+"$3900103",
+"$3900104",
+"$3900105",
+"$3900106",
+}
+
+ Nuggets = 
+{
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100139",
+			"$2850018",
+			"$5100140",
+		},
+		Speech =
+		{
+			5100139,
+			5100140,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550220",
+		Text =
+		{
+			"$5100141",
+			"$2850018",
+			"$5100142",
+		},
+		Speech =
+		{
+			5100141,
+			5100142,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550430",
+		Text =
+		{
+			"$5100149",
+			"$2850018",
+			"$5100150",
+		},
+		Speech =
+		{
+			5100149,
+			5100150,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550530",
+		Text =
+		{
+			"$5100145",
+			"$2850018",
+			"$5100146",
+		},
+		Speech =
+		{
+			5100145,
+			5100146,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550630",
+		Text =
+		{
+			"$5100134",
+			"$2850018",
+			"$5100135",
+		},
+		Speech =
+		{
+			5100134,
+			5100135,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550730",
+		Text =
+		{
+			"$5100147",
+			"$2850018",
+			"$5100148",
+		},
+		Speech =
+		{
+			5100147,
+			5100148,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550630",
+		Text =
+		{
+			"$5100136",
+			"$2850018",
+			"$5100137",
+			--"$2850018",
+			--"$5100138",
+		},
+		Speech =
+		{
+			5100136,
+			5100137,
+			--5100138,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550630",
+		Text =
+		{
+			"$5100143",
+			"$2850018",
+			"$5100144",
+		},
+		Speech =
+		{
+			5100143,
+			5100144,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100084",
+		"$2851718",
+		"$5100085",
+		"$2851718",
+		"$5100086",
+	},
+	Speech =
+	{
+		5100084,
+		--5100085,
+		--5100086,
+	}
+}
+
+MissionFileAttacking = "Stronghold_Imperial_Guard"
+MissionFileAttackingConquered = "8P_Dussala_Precinct_Attack_Skirmish"
+MissionFileDefending = "8P_Dussala_Precinct"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Jalaganda_Lowlands",
+	"Vyasastan",
+	"Kaurav_City",
+	"Shakun_Coast",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_khorne_berserker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_wartrak_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_assassin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	]]--
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "guard_race"
+OwnerSecondary = "guard_race"
+
+KeyLocationAbility =
+{
+	ID = "reduced_costs",
+	Name = "$3900069",
+	HelpText =
+	{
+		"$3900414",
+		"$3900415"
+	},
+	CommanderScreenName = "$3900478",
+	CommanderScreenHelpText =
+	{
+		"$3900479",
+		"$3900480",
+		"$3900414",
+		"$3900415"
+	},
+	CommanderScreenLostName = "$3900478",
+	CommanderScreenLostHelpText =
+	{
+		"$3900479",
+		"$3900481",
+	}
+}
+
+StartingResourceBonus = 0.0

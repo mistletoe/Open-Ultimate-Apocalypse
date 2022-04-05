@@ -1,0 +1,3060 @@
+-------------------------------------------------
+--[[ IMPORTS -- This is neccesary to use all the functions of SCAR]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[ GAME SETUP ]]
+-------------------------------------------------
+
+-- TODO:
+-- Starting base needs to be a bigger area with less neg cover
+-- Try to recap points once and a while
+-- Faster attacks at start, slow down a bit when the attack waves start getting bigger
+-- Way better ending sequence.
+--[[ the OnGameSetup() function is mandatory! -- Here you should setup all your global variables, which can be used in any function.]]
+function OnGameSetup()
+
+--[[Tweak these variables to change difficulty]]
+-- global timers
+g_TierUpTimer = 270
+g_DropPodDeepStrikeTimer = 120 -- 120
+g_IncreaseBeaconTimer = 900
+g_ResearchTimer = 400
+g_MainBaseDropTimer = 4
+g_MainBaseDropNumber = 10
+g_SpawnTransportUnitsTimer = 230 -- 200
+g_SendPredatorTankTimer = 320 -- 320 
+g_PredatorBaseActive = 8 -- turns the predator base on when this many beacons are left
+g_RhinoBaseActive = 7 -- turns the rhino base on when this many beacons are left
+g_PlayIEAtDeepStrikeNumber = 5 -- plays the taunt 1 ie after this many space marine squads are deep striked in
+g_AttackFromMainBaseInterval = 380 -- attacks come from the main base after all beacons are down
+-- air base timers
+g_AirbaseDefenseDreadnaughtTimer = 65
+g_AirbaseDefensePredatorTimer = 70
+g_AirbaseDefenseTempestTimer = 60
+
+-- fake population
+g_MaxSpaceMarines = 10
+g_MaxDreadnought = 2
+g_MaxHFDreadnought = 2
+g_MaxTerminators = 4
+g_MaxAssaultTerminators = 4
+g_MaxApothecary = 4
+g_MaxForceCommander = 1
+g_MaxLibrarian = 1
+g_MaxTechMarine = 1
+g_MaxChaplain = 1
+g_MaxSkullProbe = 3
+g_MaxLandRaider = 1
+g_MaxRhino = 1
+g_MaxGreyKnights = 3
+g_MaxPredator = 5
+g_MaxLandSpeeders = 4
+
+-- main base attacks unit cap
+g_MaxMainSM = 3
+g_MaxMainAssault = 3
+g_MaxMainScouts = 3
+g_MaxMainGreyKnights = 2
+g_MaxMainAssTerminators = 1
+g_MaxMainTerminators = 1
+g_MaxMainLandSpeeders = 2
+g_MaxMainHFDN = 2
+g_MaxMainDN = 2
+g_MaxMainWhirlwind = 1
+g_MaxMainPredators = 2
+
+-- air base stuff
+g_AirBaseDefenseDreadnaughtMax = 3
+g_AirBaseDefenseTempestMax = 3
+g_AirBaseDefensePredatorMax = 3
+
+--debug stuff
+g_Debug = false -- turns debug mode off and on.  (turns on and off fog of war)
+
+-- other global variables (DO NOT MODIFY)
+t_DropPoints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }
+g_TotalDropPoints = 12
+g_DropSquadTerminatorCounter = 0
+g_DropPodTier = 1
+g_SpaceMarineCount = 0
+g_DreadnoughtCount = 0
+g_HFDreadnoughtCount = 0
+g_TerminatorCount = 0
+g_AssaultTerminatorCount = 0
+g_GatherMarker = "mkr_gather1"
+g_gatherCounter = 0
+g_SimultaneousBeacons = 1
+g_TimerTillWeCountTankSuccessfullyCaptured = 0
+g_MaxTankCaptureTimer = 90
+g_ApothecaryCounter = 0
+g_ForceCommanderCounter = 0
+g_LibrarianCounter = 0
+g_TechMarineCounter = 0
+g_ChaplainCounter = 0
+g_DeepStrikeCounter = 0
+g_ResearchCounter = 0
+g_SMTUpgrades = false
+g_SkullProbeCounter = 0
+g_TechMarineCounter = 0
+g_LandRaiderCounter = 0
+g_RepairFlag = true
+g_TMinTransport = false
+g_DreadnoughtDefenseCounter = 0
+g_RhinoCounter = 0
+g_GreyKnightCounter = 0
+g_TransportCounter = 0
+g_SpawnTransportRuleAdded = false
+g_BringTransportToMainBaseFlag = true
+g_SendTransportHomeFlag = true
+g_JustDroppedOffCounter = 0
+g_SwapTeamCounter = 0
+g_PredatorCounter = 0
+g_DroppedOffDudesCounter = 0
+g_SwapRhinoDropoffUnitsFlag = true
+g_DropPodMoveCounter = 0
+t_OBFired = {false, false, false}
+g_NumOfPredatorToSend = 1
+g_TransportTarget = "playerbase"
+g_MarkerTarget = "mkr_droppod12"
+g_LandSpeederCounter = 0
+g_PredatorTier = 1
+g_TotalDeepStrikeCounter = 0
+g_HasTechMarineIEPlayedYet = false
+g_FinalOBIEFired = false
+g_JumpIEPlayed = false
+t_DroppedSquadUpgraded = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+t_SentInThunderhawk = {false, false, false}
+g_MainBaseMarinesCounter = 0
+g_MainBaseHFsCounter = 0
+g_MainBaseDNsCounter = 0
+g_MainBaseAssaultTermsCounter = 0
+g_MainBaseTerminatorsCounter = 0
+g_DropGuysInMainBase = 0
+g_MainBaseDropFlag = false
+g_MainBaseDropSquad = ""
+g_SquadsNearMainBaseCenter4Counter = 0
+g_PlayerSquadsNearTankBaseCounter = 0
+g_AirBaseDefenseDreadnaughtCounter = 0
+g_AirBaseDefenseTempestCounter = 0
+g_AirBaseDefensePredatorCounter = 0
+g_RelicIEFired = false
+g_beaconping = {}
+g_beaconping_mini = {}
+g_PlayerSquadsNearRhinoBaseCounter = 0
+g_MainCounterSM = 0
+g_MainCounterAssault = 0
+g_MainCounterGN = 0
+g_MainCounterScouts = 0
+g_MainCounterAssTerminators = 0
+g_MainCounterTerminators = 0
+g_MainCounterLandSpeeders = 0
+g_MainCounterHFDN = 0
+g_MainCounterDN = 0
+g_MainCounterWhirlwind = 0
+g_MainCounterPredator = 0
+g_RhinoBaseDead = false
+g_AirBaseDead = false
+g_RhinoObjectiveAdded = false
+
+--[[defining the name of the player's faction]]
+local Race
+Race = MetaMap_GetPlayerNRaceName(0)
+g_Player1 = Setup_Player(0, "Human Player 1", Race, 1)
+	
+--setting up the upgrades for the commander
+MetaMap_UpdatePlayerWargear(g_Player1)
+
+g_Player2 = Setup_Player(1, "Space Marine P2", "space_marine_race", 2)
+g_Player3 = Setup_Player(2, "Beacons", "space_marine_race", 2)
+g_Player4 = Setup_Player(3, "Space Marine P4 (SideBase)", "space_marine_race", 2)
+g_Player5 = Setup_Player(4, "Space Marine P5 (Scouts)", "space_marine_race", 2)
+--g_Player5 = Setup_Player(4, "Necron 5 (AI)", "necron_race", 2)
+--g_Player6 = Setup_Player(5, "Necron 6", "necron_race", 2)
+	
+end
+
+--[[ the OnGameRestore() function is mandatory!, this will only get called after loading a game ]]
+function OnGameRestore()
+end
+
+--[[This function runs first, here you can setup anything you want to happen before the game starts.]]
+function OnInit()
+
+	Rule_AddOneShot(Rule_CreateSMBases, 0)
+	
+	--NIS_Setup()
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Opening )
+	end
+
+	Rule_PresetAI()
+	
+	--[[ Start Gameplay]]
+	Rule_Add( Rule_GameStart )
+	
+	--[[
+	3950045	Destroy the beacons!
+	3950046	The beacons allow the space marine ships to drop down their army from space.  Destroy the beacons to stop them from drop podding.
+	3950047	Destroy the Space Marine Stronghold!
+	3950048	Destroy the stronghold to wipe the space marines off this planet!
+	3950049	Destroy the predator base!
+	3950050	Destroying the machine cults will stop the space marines from being able to build predators!
+	3950051	Capture the predator tanks!
+	3950052	Defend your newly captured predator tanks!
+	3950053	Destroy the back base!
+	3950054	There is a small base to the northeast that has been sending units down to attack via Rhino transports.  Destroy this base to stop the attacks!
+	]]
+	
+	--[[Define Objective: Below is what lua script calls a blueprint, but is better known in C as a struct.  This is a variable that contains other variables that can be referenced with dot notation (ie: Objective_Destroy_PowerGen.title_id will return 7000200)]]
+	Objective_DestroyBeacons = {title_id = 3950045, short_desc_id = 3950046 , help_tip_id =3950046}
+	Objective_DestroyStronghold = {title_id = 3950047, short_desc_id = 3950048 , help_tip_id =3950048}
+	Objective_DestroyPredatorBase = {title_id = 3950049, short_desc_id = 3950050 , help_tip_id =3950050}
+	Objective_CaptureTanks = {title_id = 3950051, short_desc_id = 3950052 , help_tip_id =3950052}
+	Objective_DestroyTankBase2 = {title_id = 3950053, short_desc_id = 3950054 , help_tip_id =3950054}
+	
+	
+	
+end
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+-------------------------------------------------
+--[[ PRESET AI ]]
+-------------------------------------------------
+
+function Rule_PresetAI()
+	
+	--[[This function is called from OnInit() and start or stop the AI.]]
+	
+	Cpu_Enable(g_Player2, false)
+	Cpu_SetDifficulty(g_Player2,   AD_Standard)
+	Cpu_Enable(g_Player3, false)
+	Cpu_SetDifficulty(g_Player3,   AD_Standard)
+	Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4,   AD_Standard)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5,   AD_Insane)
+	--[[Cpu_EnableComponent(g_Player5, true, CT_Attacking)
+	Cpu_EnableComponent(g_Player5, true, CT_Tactics)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player5, false, CT_Defending)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildUnits)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildAddOns)
+	Cpu_EnableComponent(g_Player5, false, CT_Resourcing)]]
+	
+	--[[Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4, AD_Standard)
+	Cpu_EnableComponent(g_Player4, false, CT_Attacking)
+	Cpu_EnableComponent(g_Player4, false, CT_Tactics)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5, AD_Standard)
+	Player_RestrictSquad(g_Player5, "necron_lord_squad")
+	Cpu_Enable(g_Player6, false)
+	Cpu_SetDifficulty(g_Player6, AD_Standard)
+	
+	Cpu_EnableComponent(g_Player5, false, CT_Attacking)
+	Cpu_EnableComponent(g_Player5, false, CT_Tactics)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildBuildings)
+	Cpu_EnableComponent(g_Player5, false, CT_BuildResearch)
+	Cpu_EnableComponent(g_Player4, false, CT_Resourcing)]]
+	
+end
+
+-------------------------------------------------
+--[[ MUSIC -- Called from Rule_GameStart()]]
+-------------------------------------------------
+
+function Rule_Start_Music()
+	
+	--[[Starts the music]]
+	t_IG_stronghold_music = {"MU_IG_STR_ImpGd_perc_brass", "MU_IG_STR_ImpGd",
+	"MU_IG_STR_ImpGd_perc", "MU_IG_STR_ImpGd_perc_str", "MU_IG_STR_ImpGd_perc_voice"}
+	
+	Playlist_Manager( PC_Music, t_IG_stronghold_music, true, true , {2, 4})
+	
+	
+	--[[Set ambient sounds]]
+	t_IG_stronghold_ambient = {"ambient_city"}
+	
+	Playlist_Manager( PC_Ambient, t_IG_stronghold_ambient, true, true , {5, 15})
+	
+end
+
+
+-------------------------------------------------
+--[[ START PLAY ]]
+-------------------------------------------------
+
+function Rule_GameStart()
+	
+	if Event_IsAnyRunning() == false then
+		Rule_Remove(Rule_GameStart)
+		
+		if g_Debug == true then
+			FOW_RevealAll()
+		end
+		
+		--[[ Set resources for both players ]]
+		Player_SetAllResources(g_Player1, 1000, 300, 20)
+		
+		-- Timer
+		Rule_UI_Game_Timer()
+		
+		--Music
+		Rule_AddOneShot(Rule_Start_Music, 0)
+		
+		-- Create Bases
+		Rule_AddOneShot(Rule_CreatePlayerBases, 0)
+		-- this line is here because it needs to be created with the player bases
+		Entity_CreateBuildingMarker(g_Player3, "eg_InitialBeacon", "sm_beacon", "mkr_initialbeacon", 1) 		
+		Rule_AddOneShot(Rule_SetupOtherStuff, 4)
+		
+		-- Objectives
+		Rule_AddInterval(Rule_Objective_DestroyBeaconsHelper, 1)
+		Rule_AddInterval(CheckForFirstRhinoKill, 2)
+		
+		-- Gameplay Rules
+		Rule_AddInterval(UpdateDropPoints, 1)
+		Rule_AddOneShot(InitialAttack, 30)
+		Rule_AddInterval(AttackMoveToMarkers, 5)
+		
+		--Rule_AddInterval(SkullProbes, 1)
+		Rule_AddInterval(Rule_GrantResearch, g_ResearchTimer)
+		Rule_AddInterval(IncreaseSimultaneousBeacons, g_IncreaseBeaconTimer)
+		Rule_AddInterval(Util_DropPodsAndDeepStrike, g_DropPodDeepStrikeTimer)
+		Rule_AddInterval(TierUp, g_TierUpTimer)
+		Rule_AddInterval(Thunderhawks_SendIn, 2)
+		Rule_AddInterval(FinalStand, 3)
+		Rule_AddInterval(AttackWithMainBaseGuys, 1)
+		Rule_AddInterval(Relic, 1)
+		Rule_AddInterval(RhinoBase, 1)
+		Rule_AddOneShot(SetupAirBaseDefense, 5)
+		Rule_AddInterval(AttackFromMainBase, g_AttackFromMainBaseInterval)
+		--Rule_AddInterval(AttackMoveFromGather, g_AttackFromGatherTimer)
+		Rule_AddInterval(DespawnTransports, 2)
+		
+		--IE's
+		Rule_AddInterval(MostBeaconsDeadIE, 3)
+		Rule_AddInterval(Taunt1, 3)
+		Rule_AddInterval(DamageFirstMine,2)
+		Rule_AddInterval(PlayerNearRhinoBase, 3)
+		Rule_AddInterval(PlayerNearMainBase, 3)
+		Rule_AddInterval(Taunt2,1)
+		Rule_AddInterval(Taunt3,1)
+		
+		
+		--[[ Clean up -- Since we did Rule_Add(Rule_GameStart) it was attempting to run this function every frame, but now that it has finished running, we don't need it to run anymore.]]
+		
+	end
+
+end
+
+-- Create and Initially Show the Game Timer
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates and shows the Game Timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--[[Drops down buildings at markers, to create the SM bases around the map]]
+function Rule_CreateSMBases()
+
+	--[[MainBase]]
+	--Entity_CreateBuildingMarker(g_Player2, "eg_CenterBase", "monolith", "mkr_centerbase_monolith", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBase", "space_marine_hq", "mkr_sm_hq", 1)
+	EGroup_ForceAddOn("eg_SMBase", "space_marine_hq_addon_1")
+	EGroup_ForceAddOn("eg_SMBase", "space_marine_hq_addon_2")
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseBarracks1", "space_marine_barracks", "mkr_sm_barracks1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseBarracks2", "space_marine_barracks", "mkr_sm_barracks2", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseBarracks3", "space_marine_barracks", "mkr_sm_barracks3", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseArmory", "space_marine_armoury", "mkr_sm_armory", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseSacredArtifact", "space_marine_ability_building", "mkr_sm_sacredartifact", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseOrbitalRelay", "space_marine_orbital_relay_stronghold_sp", "mkr_sm_orbitalrelay", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseMachineCult1", "space_marine_vehicle_building", "mkr_sm_machinecult", 1)
+	--Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseMachineCult2", "space_marine_vehicle_building", "mkr_sm_machinecult2", 1)
+	
+	for i=1,5 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseGenerator"..i, "space_marine_generator", "mkr_sm_generator"..i, 1)
+	end
+	for i=1,12 do
+		local flag = false
+		flag = Entity_CreateBuildingMarker(g_Player2, "eg_SMBaseTurret"..i, "space_marine_turret_bolter", "mkr_sm_turret"..i, 1)
+		if flag == true then
+			EGroup_ForceAddOn("eg_SMBaseTurret"..i, "space_marine_list_post_addon_2")
+		else
+			print("SMBaseTurret"..i.." didn't spawn")
+		end
+	end
+	for i=1,13 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SMMine"..i, "space_marine_mine_field", "mkr_sm_mine"..i, 1)
+	end
+	
+	--[[Vehicle Base 1]]
+	-- buildings
+	EGroup_Create("eg_TankBase")
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_TankBase"..i, "space_marine_vehicle_building", "mkr_tankbase1_machinecult"..i, 1)
+		EGroup_AddGroup("eg_TankBase", "eg_TankBase"..i)
+	end
+	for i=1,6 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_TankBase1Turret"..i, "space_marine_turret_bolter", "mkr_tankbase1_turret"..i, 1)
+	end
+	
+	--[[Vehicle Base 2]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_Tank2Base", "space_marine_hq", "mkr_tankbase2_hq", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_Tank2BaseBarracks", "space_marine_barracks", "mkr_tankbase2_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_Tank2BaseTank", "space_marine_vehicle_building", "mkr_tankbase2_tank", 1)
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_TankBase2Turret"..i, "space_marine_turret_bolter", "mkr_tankbase2_turret"..i, 1)
+	end	
+	
+	-- give the AI all of the strategic points, and put upgraded listening posts on them
+	--[[Strategic Points]]
+	for i = 1,9 do
+		EGroup_SetPlayerOwner("eg_LP"..i, g_Player2)
+		local Flag = false
+		Flag = Entity_CreateBuildingPosition(g_Player2, "eg_ListeningPosts"..i, "space_marine_listening_post", EGroup_GetPosition("eg_LP"..i), 1)
+		if Flag == true then
+			if i >=2 then
+				EGroup_ForceAddOn("eg_ListeningPosts"..i, "space_marine_list_post_addon_1")
+			end
+			if i >= 4 then
+				EGroup_ForceAddOn("eg_ListeningPosts"..i, "space_marine_list_post_addon_2")
+			end
+		else
+			print("eg_LP"..i.." doesn't exist or couldnt be created")
+		end
+	end
+	
+	--[[Relic]]
+	EGroup_SetPlayerOwner("eg_Relic", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_RelicPost", "space_marine_listening_post", EGroup_GetPosition("eg_Relic"), 1)
+	EGroup_ForceAddOn("eg_RelicPost", "space_marine_list_post_addon_1")
+	EGroup_ForceAddOn("eg_RelicPost", "space_marine_list_post_addon_2")
+	
+	--[[Beacons]]	
+	for i=1, 12 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_Beacon"..i, "sm_beacon", "mkr_beacon"..i, 1)
+	end
+	
+
+end
+
+function Rule_CreatePlayerBases()
+
+	local Race
+	local Player
+
+	Race = MetaMap_GetPlayerNRaceName(0)
+	Player = g_Player1
+
+	if Race == "chaos_marine_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "chaos_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "chaos_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"chaos_thermo_plasma_generator",
+		"chaos_plasma_generator",
+		"chaos_turret_bolter",
+		"chaos_mine_field"}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "guard_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "guard_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "guard_squad_enginseer", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"guard_thermo_plasma",
+		"guard_plasma_generator",
+		"guard_turret_heavy_bolter",
+		"guard_mines"}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "ork_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "ork_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "ork_squad_grot", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"ork_bigger_generator",
+		"ork_generator",
+		"ork_waagh_banner",
+		"ork_mine_field"}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "space_marine_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "space_marine_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "space_marine_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"space_marine_thermo_generator",
+		"space_marine_generator",
+		"space_marine_turret_bolter",
+		"space_marine_mine_field"}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "tau_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "tau_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "tau_builder_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"tau_thermoplasma_generator",
+		"tau_plasma_generator",}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "necron_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "monolith", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "necron_builder_scarab_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"necron_thermoplasma_generator",
+		"necron_plasma_generator",
+		"necron_turret",}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "eldar_squad_bonesinger", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"necron_thermoplasma_generator",
+		"necron_plasma_generator",
+		"necron_turret",}
+		
+		t_unit_exceptions = {}
+		
+	end
+	
+	t_blueprintbonus = {}
+	
+	MetaMap_GetRaceStartingSquadsList(MetaMap_GetPlayerNRaceName(0), t_blueprintbonus)	
+
+	for j = 1,  table.getn(t_blueprintbonus) do
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_Bonus"..j, t_blueprintbonus[j], "mkr_Player_HQ", 1)
+		
+	end
+	
+
+--[[TODO: Remove! DEBUG USE ONLY!]]
+	if g_Debug == true then
+		EGroup_SetHealthInvulnerable("eg_Player_HQ", true)
+	end
+
+end
+
+function SpawnSMBaseDudes()
+	--[[
+	-- spawn space marines
+	for i=1,22 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainBase_SM"..i, "space_marine_squad_tactical", "mkr_sm_spacemarinesquad"..i, 1, 8)
+		for j = 1, 5 do
+			local WeaponType = World_GetRand(1, 4)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainBase_SM"..i), 1),Weapon, 1)
+		end
+		SGroup_AddLeaders("sg_MainBase_SM"..i)
+	end
+	-- spawn terminators
+	for i=1,5 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainBase_Terminators"..i, "space_marine_squad_terminator", "mkr_sm_terminator"..i, 1, 8)
+		for j = 1, 2 do
+			local WeaponType = World_GetRand(1, 2)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_flamer"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_assault_cannon_terminator"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainBase_Terminators"..i), 1),Weapon, 1)
+		end
+		SGroup_AddLeaders("sg_MainBase_Terminators"..i)
+	end
+	-- spawn hellfires
+	for i=1,6 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainBase_Hellfires"..i, "space_marine_squad_dreadnought_hellfire", "mkr_HF"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainBase_Hellfires"..i), 1),"space_marine_missile_launcher_hellfire", 1)
+	end
+	
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Artillery"..i, "space_marine_squad_whirlwind", "mkr_whirlwind"..i, 1, 1)
+	end
+	]]
+	
+	-- spawn 2 predators
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_TopRightPredator"..i, "space_marine_squad_predator", "mkr_top_right_predator"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopRightPredator"..i), 1),"space_marine_lascannon_twin_predator", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopRightPredator"..i), 1),"space_marine_lascannon_tank_right", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopRightPredator"..i), 1),"space_marine_lascannon_tank_left", 1)
+		SGroup_FaceMarker("sg_TopRightPredator"..i, "mkr_top_right_face")
+	end
+	
+	-- spawn whirlwind
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_TopRightWhirlwind", "space_marine_squad_whirlwind", "mkr_top_right_whirlwind1", 1, 1)
+	SGroup_FaceMarker("sg_TopRightWhirlwind", "mkr_top_right_face")
+	-- spawn 2 predators
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_TopLeftPredator"..i, "space_marine_squad_predator", "mkr_top_left_predator"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopLeftPredator"..i), 1),"space_marine_lascannon_twin_predator", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopLeftPredator"..i), 1),"space_marine_lascannon_tank_right", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopLeftPredator"..i), 1),"space_marine_lascannon_tank_left", 1)
+		SGroup_FaceMarker("sg_TopLeftPredator"..i, "mkr_top_left_face")
+	end
+	-- spawn whirlwind
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_TopLeftWhirlwind", "space_marine_squad_whirlwind", "mkr_top_left_whirlwind1", 1, 1)
+	SGroup_FaceMarker("sg_TopLeftWhirlwind", "mkr_top_left_face")
+	
+	-- spawn jumpers
+	for i=1,6 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Jumper"..i, "space_marine_squad_assault_sp_dxp3", "mkr_assaultjump"..i, 1, 8)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Jumper"..i), 1),"space_marine_chainsword_assault", 1)
+		SGroup_AddLeaders("sg_Jumper"..i)
+	end
+
+end
+
+function Rule_SetupOtherStuff()
+	SpawnSMBaseDudes()
+	Rule_AddInterval(SMBaseJumperJump,2)	
+	ResearchAtStart()
+	Rule_AddInterval(DeepStrikeFromOrbitalRelay,1)
+	Rule_AddInterval(SpawnScouts, 90)
+	CreateLandRaiderAndTM()
+	Rule_AddInterval(TMAI,1)
+	Rule_AddInterval(DropPodMainBase,1)
+	Rule_AddInterval(SideBase1Functionality,3)
+	Rule_AddInterval(SideBase2Functionality,3)
+	Rule_AddInterval(CheckForFirstPredatorKill,1)
+	Util_StartIntel(EVENTS.IE_Intro)
+	
+	--[[Unused]]
+	--Rule_AddInterval(SpaceMarineMoraleBoost,1)
+	--Rule_AddInterval(MoveScoutsAroundMapRandomly,10)
+	--Rule_AddInterval(SendPredatorTanks,1)
+	
+end
+
+function SpaceMarineMoraleBoost()
+	for i=1,22 do
+		if SGroup_IsMoraleBroken("sg_MainBase_SM"..i, false) < .25 then
+			Cmd_CastAbilitySelf("sg_MainBase_SM"..i, "marines_rally")
+		end
+	end
+
+end
+
+
+function IncreaseSimultaneousBeacons()
+	if g_SimultaneousBeacons <= 2 then
+		g_SimultaneousBeacons = g_SimultaneousBeacons + 1
+		print("Increasing Simultaneous Beacons: " .. g_SimultaneousBeacons)
+		if g_DropPodTier  > 2 then
+			g_DropPodTier = g_DropPodTier - 1
+		end
+	else
+		Rule_Remove(IncreaseSimultaneousBeacons)
+	end
+end
+
+function Util_DropPodsAndDeepStrike()
+	
+	if g_SimultaneousBeacons >  g_TotalDropPoints then
+		g_SimultaneousBeacons =  g_TotalDropPoints
+	elseif g_TotalDropPoints == 0 then
+		Rule_Remove(Util_DropPodsAndDeepStrike)
+	end
+	
+	if g_SimultaneousBeacons > 0 then
+		for i=1, g_SimultaneousBeacons do
+			DropPodsAndDeepStrike()
+		end
+	end
+	
+end
+
+function DropPodsAndDeepStrike()
+	
+	local Rand = 0
+	
+	if g_TotalDropPoints > 0 then
+		-- if there is a player near any of the points, choose that point, else, pick a random point
+		local DropPoint = 0
+		for i=1,g_TotalDropPoints do
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_droppod"..t_DropPoints[i]) then
+				print("found player squads near pod "..t_DropPoints[i])
+				DropPoint = t_DropPoints[i]
+				break
+			end
+		end
+		if DropPoint == 0 then
+			DropPoint = t_DropPoints[ World_GetRand(1, g_TotalDropPoints ) ]
+			print("couldn't find any guys anywhere, choosing random location")
+		end
+		
+		if g_DropPodTier == 1 then
+			-- space marines, low count
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(3,5)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end
+		elseif g_DropPodTier == 2 then
+			-- more space marines
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(4,8)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end
+		elseif g_DropPodTier == 3 then
+			-- sparing dreadnoughts (x2) with low count space marines
+			Rand = World_GetRand(1,2)
+			if Rand == 1 and PopCheck(g_DreadnoughtCount, "sg_Dreadnought", g_MaxDreadnought) == true then
+				-- dreadnoughts
+				g_DreadnoughtCount = g_DreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Dreadnought" ..g_DreadnoughtCount , "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			elseif PopCheck(g_HFDreadnoughtCount, "sg_HFDreadnought", g_MaxHFDreadnought) == true then
+				--hellfire dreadnoughts
+				g_HFDreadnoughtCount = g_HFDreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_HFDreadnought" ..g_HFDreadnoughtCount , "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			end
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(3,6)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end
+		elseif g_DropPodTier == 4 then
+			-- sparing dreadnoughts (x2) with higher count space marines
+			Rand = World_GetRand(1,2)
+			if Rand == 1 and PopCheck(g_DreadnoughtCount, "sg_Dreadnought", g_MaxDreadnought) == true then
+				-- dreadnoughts
+				g_DreadnoughtCount = g_DreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Dreadnought" ..g_DreadnoughtCount , "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			elseif PopCheck(g_HFDreadnoughtCount, "sg_HFDreadnought", g_MaxHFDreadnought) == true then
+				--hellfire dreadnoughts
+				g_HFDreadnoughtCount = g_HFDreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_HFDreadnought" ..g_HFDreadnoughtCount , "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			end
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(4,8)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end			
+		elseif g_DropPodTier == 5 then
+			-- sm + d (x2) + small count terminators (x2)
+			Rand = World_GetRand(1,2)
+			if Rand == 1 and PopCheck(g_DreadnoughtCount, "sg_Dreadnought", g_MaxDreadnought) == true then
+				-- dreadnoughts
+				g_DreadnoughtCount = g_DreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Dreadnought" ..g_DreadnoughtCount , "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			elseif PopCheck(g_HFDreadnoughtCount, "sg_HFDreadnought", g_MaxHFDreadnought) == true then
+				--hellfire dreadnoughts
+				g_HFDreadnoughtCount = g_HFDreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_HFDreadnought" ..g_HFDreadnoughtCount , "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			end
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(3,8)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end			
+			Rand = World_GetRand(1, 2)
+			if Rand == 1 and PopCheck(g_TerminatorCount, "sg_Terminators", g_MaxTerminators) == true then
+				-- terminators
+				local SquadCount = World_GetRand(3,6)
+				g_TerminatorCount = g_TerminatorCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Terminators" ..g_TerminatorCount , "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,SquadCount)
+			elseif PopCheck(g_AssaultTerminatorCount, "sg_AssaultTerminators", g_MaxAssaultTerminators) == true then
+				local SquadCount = World_GetRand(3,6)
+				--assault terminators
+				g_AssaultTerminatorCount = g_AssaultTerminatorCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_AssaultTerminators" ..g_AssaultTerminatorCount , "space_marine_squad_terminator_assault", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,SquadCount)
+			end
+		elseif g_DropPodTier == 6 then
+			-- sm + d (x2) + larger count terminators (x2)
+						Rand = World_GetRand(1,2)
+			if Rand == 1 and PopCheck(g_DreadnoughtCount, "sg_Dreadnought", g_MaxDreadnought) == true then
+				-- dreadnoughts
+				g_DreadnoughtCount = g_DreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Dreadnought" ..g_DreadnoughtCount , "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			elseif PopCheck(g_HFDreadnoughtCount, "sg_HFDreadnought", g_MaxHFDreadnought) == true then
+				--hellfire dreadnoughts
+				g_HFDreadnoughtCount = g_HFDreadnoughtCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_HFDreadnought" ..g_HFDreadnoughtCount , "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,1)
+			end
+			if PopCheck(g_SpaceMarineCount, "sg_SpaceMarines", g_MaxSpaceMarines) == true then
+				g_SpaceMarineCount = g_SpaceMarineCount + 1
+				Rand = World_GetRand(3,8)
+				Util_DeepStrike(g_Player2, "sg_SpaceMarines", g_SpaceMarineCount, "space_marine_squad_tactical", 1, Rand, DropPoint)
+			end			
+			Rand = World_GetRand(1, 2)
+			if Rand == 1 and PopCheck(g_TerminatorCount, "sg_Terminators", g_MaxTerminators) == true then
+				-- terminators
+				local SquadCount = World_GetRand(4,8)
+				g_TerminatorCount = g_TerminatorCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_Terminators" ..g_TerminatorCount , "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,SquadCount)
+			elseif PopCheck(g_AssaultTerminatorCount, "sg_AssaultTerminators", g_MaxAssaultTerminators) == true then
+				local SquadCount = World_GetRand(4,8)
+				--assault terminators
+				g_AssaultTerminatorCount = g_AssaultTerminatorCount + 1
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_AssaultTerminators" ..g_AssaultTerminatorCount , "space_marine_squad_terminator_assault", Marker_GetPosition(Marker_FromName( "mkr_droppod"..DropPoint, "basic_marker")) ,1,SquadCount)
+			end
+		end
+	end
+end
+
+function Util_DeepStrike(Player, SGroup, Counter, Blueprint, Squads, SquadNum, Point)
+	
+	g_TotalDeepStrikeCounter = g_TotalDeepStrikeCounter + 1
+	print("totaldeepstrikes: "..g_TotalDeepStrikeCounter)
+	if g_TotalDeepStrikeCounter == g_PlayIEAtDeepStrikeNumber then
+		Util_StartIntel(EVENTS.IE_AfterACoupleDeepStrikes)
+	end
+	
+	
+	local Commander = World_GetRand(1,6)
+
+	if Commander == 1 then
+		--force commander (hero) -- battlecry (pbae dmg/morale), orbital bombardment
+		CommBluePrint = "space_marine_squad_force_commander"
+		CommCounter = g_ForceCommanderCounter
+		CommMaxPop = g_MaxForceCommander
+		CommSGroup = "sg_ForceCommander"
+	elseif Commander >= 4 then
+		-- apothecary (healer) -- increases regen rate on units -- no special abilities, cap of 4
+		CommBluePrint = "space_marine_squad_apothecary"
+		CommCounter = g_ApothecaryCounter
+		CommMaxPop = g_MaxApothecary
+		CommSGroup = "sg_Apothecary"
+	elseif Commander == 3 then
+		-- chaplain (vet/hero) -- increases regen rate -- demoralizing shout demoralizes a squad target
+		CommBluePrint = "space_marine_squad_chaplain"
+		CommCounter = g_ChaplainCounter
+		CommMaxPop = g_MaxChaplain
+		CommSGroup = "sg_Chaplain"
+	elseif Commander == 2 then
+		-- librarian (good vs daemons) -- smite - targetted ae dmg, weaken resolve - reduce morale recover rate (squad target), word of the emperor - no infantry can die while active
+		CommBluePrint = "space_marine_squad_librarian"
+		CommCounter = g_LibrarianCounter
+		CommMaxPop = g_MaxLibrarian
+		CommSGroup = "sg_Librarian"
+	end
+	
+	-- spawn the squad that we sent into the function
+	Util_CreateSquadsAtMarkerEx(Player, SGroup..Counter, Blueprint, "mkr_sm_deepstrikespawn" , Squads, SquadNum)
+	
+	-- SM Squad - Leader, Flamer, Heavy Bolter, Plasma Gun, Missle Launcher
+	if Blueprint == "space_marine_squad_tactical" and g_SMTUpgrades == true then
+		local WeaponUpgrades = World_GetRand(1, SquadNum)
+		if WeaponUpgrades > 5 then
+			WeaponUpgrades = 5
+		end
+		for i = 1, WeaponUpgrades do
+			local WeaponType = World_GetRand(1, 4)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),Weapon, 1)
+			print("WeaponAdded: " .. Weapon)
+		end
+		Chance = World_GetRand(1,10)
+		if Chance >= 8 then
+			SGroup_AddLeaders(SGroup..Counter)
+			print(SGroup ..Counter.. " - Leader'd")
+		end
+	end
+	
+	-- Terminator - squad size 8, heavy flamer / assault cannon (2 possible)
+	if Blueprint == "space_marine_squad_terminator" then
+		local WeaponUpgrades = World_GetRand(1,2)
+		for i = 1, WeaponUpgrades do
+			local WeaponType = World_GetRand(1, 2)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_flamer"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_assault_cannon_terminator"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),Weapon, 1)
+			print("Terminator_WeaponAdded: " .. Weapon)
+		end
+	end
+	
+	-- 40% chance of spawning a commander with the squad
+	if g_DropPodTier >= 4 and g_TotalDropPoints <=9 then
+		if World_GetRand(1,10) <= 4 then
+			if PopCheck(CommCounter, CommSGroup, CommMaxPop) == true then
+				Util_CreateSquadsAtMarkerEx(Player, CommSGroup..CommCounter, CommBluePrint, "mkr_sm_deepstrikespawn" , 1, 1)
+				Cmd_AttachSquads(SGroup..Counter, CommSGroup..CommCounter)
+				if Commander == 1 then
+					ForceCommanderWeapons()
+					g_ForceCommanderCounter = g_ForceCommanderCounter + 1
+				elseif Commander >= 4 then
+					g_ApothecaryCounter = g_ApothecaryCounter + 1
+				elseif Commander == 3 then
+					g_ChaplainCounter = g_ChaplainCounter + 1
+				elseif Commander == 2 then
+					g_LibrarianCounter = g_LibrarianCounter + 1
+				end
+			end
+		end
+	end
+	
+	Cmd_AttackMoveMarker(SGroup..Counter, "mkr_sm_orbitalrelay")
+
+end
+
+function DeepStrikeFromOrbitalRelay()
+	
+	g_DeepStrikeCounter = g_DeepStrikeCounter + 1
+	
+	if Player_AreSquadsNearMarker(g_Player2, "mkr_sm_orbitalrelay") and g_TotalDropPoints > 0 then
+		Player_GetAllSquadsNearMarker(g_Player2, "sg_DeepStrike"..g_DeepStrikeCounter, "mkr_sm_orbitalrelay")
+		-- deep strike to some living beacon
+		-- if there is a player near any of the points, choose that point, else, pick a random point
+		local DropPoint = 0
+		for i=1,g_TotalDropPoints do
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_droppod"..t_DropPoints[i]) then
+				print("found player squads near pod "..t_DropPoints[i])
+				DropPoint = t_DropPoints[i]
+				break
+			end
+		end
+		if DropPoint == 0 then
+			DropPoint = t_DropPoints[ World_GetRand(1, g_TotalDropPoints ) ]
+			print("couldn't find any guys anywhere, choosing random location")
+		end
+		SGroup_DeSpawn("sg_DeepStrike"..g_DeepStrikeCounter)
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_DeepStrike"..g_DeepStrikeCounter), "space_marine_orbital_relay", Marker_GetPosition(Marker_FromName("mkr_droppod"..DropPoint, "basic_marker")))
+		
+		
+	end
+	
+end
+
+function ForceCommanderWeapons()
+
+	--giving the force commander his wargear
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_greaves", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_halo", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_shoulders", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_teleporter", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_girdle", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_force_commander_gauntlets", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_power_sword_force_commander", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_ForceCommander"..g_ForceCommanderCounter), 1),"space_marine_bolt_pistol_combi_chaingun_forcecommander", 1)
+
+end
+
+function ResearchAtStart()
+
+	--giving the force commander his wargear research
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_09_greaves_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_05_halo_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_06_shoulders_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_10_teleporter_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_07_girdle_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_08_gauntlets_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_01_power_sword_research")
+	Player_GrantResearch(g_Player2, "marine_wargear_upgrade_04_multi_melta_research")
+	
+end
+
+function PopCheck(Counter, SGroup, MaxPop)
+
+	local Pop = 0
+	
+	for i=0,Counter do
+			if SGroup_Exists(SGroup..i) and SGroup_Count(SGroup..i) > 0 then
+				
+				Pop = Pop + SGroup_Count(SGroup..i)
+				
+			end
+	end
+	
+	print("SGroup: " .. SGroup .. " - Pop: " .. Pop .. " - MaxPop: " .. MaxPop)
+	
+	if Pop < math.floor(MaxPop) then
+		return true
+	else
+		return false
+	end
+
+end
+
+
+function UpdateDropPoints()
+
+	if g_TotalDropPoints > 0 then
+		-- loop through all possible beacons
+		for i=1,12 do
+			-- if a beacon doesnt exist
+			if EGroup_Exists("eg_Beacon"..i) and EGroup_Count("eg_Beacon"..i) == 0 then
+				--loop through the table of existing beacons, and see if it is there
+				for j=1,g_TotalDropPoints do
+					-- if it does exist in the array
+					if t_DropPoints[j] == i then
+						--take a point from the end of the list and move it into its slot and decrement the global drop points
+						print("before -- ")
+						PrintArray()
+						t_DropPoints[j] = t_DropPoints[g_TotalDropPoints]
+						g_TotalDropPoints = g_TotalDropPoints - 1
+						print("after -- ")
+						PrintArray()
+						print("total drop points -- "..g_TotalDropPoints)
+						
+						if Objective_Exists(Objective_DestroyBeacons.title_id) then
+							Objective_PingRemove(Objective_DestroyBeacons.title_id, g_beaconping[i])
+						end
+					end
+				end
+			end
+		end
+	else
+		--Rule_Remove(DropPodsAndDeepStrike)
+		Rule_Remove(UpdateDropPoints)
+	end
+
+end
+
+function PrintArray()
+	
+	print("{")
+	for j=1,g_TotalDropPoints do
+		print(t_DropPoints[j] .. ", ")
+	end	
+	print("}")
+	
+end
+
+function TierUp()
+	if g_DropPodTier < 7 then
+		g_DropPodTier = g_DropPodTier + 1
+	end
+end
+
+function AttackMoveToMarkers()
+	
+	if g_DropPodTier < 7 then
+		g_DropPodMoveCounter = g_DropPodMoveCounter + 1
+		for i=1,12 do
+			if Player_AreSquadsNearMarker(g_Player2, "mkr_droppod"..i) then
+				Player_GetAllSquadsNearMarker(g_Player2, "sg_DropPodSquads"..i.."Counter"..g_DropPodMoveCounter, "mkr_droppod"..i)
+				Cmd_AttackMoveMarker("sg_DropPodSquads"..i.."Counter"..g_DropPodMoveCounter, "mkr_Player_HQ")
+			end
+		end
+	--[[else
+		for i=1,12 do
+			if Player_AreSquadsNearMarker(g_Player2, "mkr_droppod"..i) then
+				Player_GetAllSquadsNearMarker(g_Player2, "sg_DropPodSquads"..i, "mkr_droppod"..i)
+				Cmd_AttackMoveMarker("sg_DropPodSquads"..i, g_GatherMarker)
+				SGroup_SetPlayerOwner("sg_DropPodSquads"..i, g_Player4)
+			end
+		end]]		
+	end
+end
+
+function SMBaseJumperJump()
+	
+	for i=1,3 do
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center"..i) then
+			for j=1,6 do
+				if i == 1 and SGroup_Exists("sg_Jumper"..j) and SGroup_Count("sg_Jumper"..j) > 0 then
+					if g_JumpIEPlayed == false then
+						g_JumpIEPlayed = true
+						Util_StartIntel(EVENTS.IE_JumpAttack)
+					end
+					Cmd_JumpToMarker("sg_Jumper"..j, "mkr_assaultjump_landing_west"..j)
+					Rule_Remove(SMBaseJumperJump)
+				elseif i == 2 and SGroup_Exists("sg_Jumper"..j) and SGroup_Count("sg_Jumper"..j) > 0 then
+					if g_JumpIEPlayed == false then
+						g_JumpIEPlayed = true
+						Util_StartIntel(EVENTS.IE_JumpAttack)
+					end
+					Cmd_JumpToMarker("sg_Jumper"..j, "mkr_assaultjump_landing_south"..j)
+					Rule_Remove(SMBaseJumperJump)
+				elseif i == 3 and SGroup_Exists("sg_Jumper"..j) and SGroup_Count("sg_Jumper"..j) > 0 then
+					if g_JumpIEPlayed == false then
+						g_JumpIEPlayed = true
+						Util_StartIntel(EVENTS.IE_JumpAttack)
+					end					
+					Cmd_JumpToMarker("sg_Jumper"..j, "mkr_assaultjump_landing_east"..j)
+					Rule_Remove(SMBaseJumperJump)
+				end
+			end
+		end
+	end
+end
+
+function InitialAttack()
+	Util_StartIntel(EVENTS.IE_InitialDeepStrike)
+	for i=1,4 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_InitialAttack"..i, "space_marine_squad_tactical", "mkr_sm_hq", 1, World_GetRand(3,5))
+		SGroup_DeSpawn("sg_InitialAttack"..i)
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_InitialAttack"..i), "space_marine_orbital_relay", Marker_GetPosition(Marker_FromName("mkr_initialdrop"..i, "basic_marker")))
+	end
+end
+
+function Rule_Objective_DestroyBeaconsHelper()
+
+	if EGroup_Exists("eg_InitialBeacon") == true and EGroup_Count("eg_InitialBeacon") == 0 then
+		Rule_AddInterval(Rule_Objective_DestroyBeacons, 1)
+		Util_StartIntel(EVENTS.IE_DestroyedFirstBeacon)
+		CreateCounter()
+		Rule_AddInterval(Display_BeaconCounter, 1)
+		
+		--[[if g_Debug == true then
+			for i=1,12 do
+				if EGroup_Exists("eg_Beacon"..i) then
+					EGroup_SelfDestroy("eg_Beacon"..i,true)
+				end
+			end
+		end]]
+		Rule_Remove(Rule_Objective_DestroyBeaconsHelper)
+	end
+
+end
+
+function CreateCounter()
+
+	UI_ShowCountDXP("Beacons", g_Player1, 2791000, g_TotalDropPoints )
+	
+end
+
+function Display_BeaconCounter()
+	if g_TotalDropPoints > 0 then
+		UI_ShowCountUpdateDxp("Beacons", g_TotalDropPoints, 2791000)
+	else
+		Rule_Remove(Display_BeaconCounter)
+		UI_HideCount( "Beacons" )
+	end
+end
+
+function Rule_Objective_DestroyBeacons()
+
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and g_TotalDropPoints == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyBeacons.title_id )
+		Rule_Remove( Rule_Objective_DestroyBeacons)
+		--Objective_PingRemove(Objective_DestroyBeacons.title_id, g_ping_obj)
+	
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyBeacons.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyBeacons, true)
+			Rule_AddInterval(Rule_Objective_DestroyStronghold, 10)
+			if g_Debug == false then Objective_ShowScreen() end
+			for i=1,12 do
+				g_beaconping[i] = Objective_PingMarker(Objective_DestroyBeacons.title_id, "mkr_beacon"..i, true, "default")
+				g_beaconping_mini[i] = Ping_Marker("mkr_beacon"..i, false, "default")
+			end
+		end
+	end
+end
+
+function Rule_Objective_DestroyStronghold()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Count("eg_SMBase") == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyStronghold.title_id )
+		Rule_Remove( Rule_Objective_DestroyStronghold)		
+		--end the game if you complete objectives
+		Rule_AddInterval(CompleteScenario, 10)		
+		
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyStronghold.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyStronghold, true)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyStronghold.title_id, "mkr_sm_hq", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_sm_hq", false, "default")
+			if g_Debug == false then Objective_ShowScreen() end
+			
+		end
+	end
+end
+
+
+function Rule_Objective_DestroyPredatorBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Count("eg_TankBase") == 0 then
+		
+		Util_ObjectiveComplete( Objective_DestroyPredatorBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyPredatorBase)
+		g_AirBaseDead = true
+		--Objective_PingRemove(Objective_DestroyBeacons.title_id, g_ping_obj)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyPredatorBase.title_id) == false then
+			
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyPredatorBase, false)
+			for i=1,4 do
+				g_ping_obj = Objective_PingMarker(Objective_DestroyPredatorBase.title_id, "mkr_tankbase1_machinecult"..i, true, "default")
+				g_ping_obj_mini = Ping_Marker("mkr_tankbase1_machinecult"..i, false, "default")
+			end
+			if g_Debug == false then Objective_ShowScreen() end
+		end
+	end
+end
+
+function Rule_Objective_CaptureTanks()
+
+	
+	g_TimerTillWeCountTankSuccessfullyCaptured = g_TimerTillWeCountTankSuccessfullyCaptured + 1
+	
+	local CountTanks = 0
+	for i=1,10 do
+		if SGroup_Exists("sg_TakeoverTank"..i) and SGroup_Count("sg_TakeoverTank"..i) > 0 then
+			CountTanks = CountTanks + 1
+		end
+	end
+
+	--Objective Successfull
+	if Event_IsAnyRunning() == false and CountTanks > 0 and g_TimerTillWeCountTankSuccessfullyCaptured >= g_MaxTankCaptureTimer then
+		Util_ObjectiveComplete( Objective_CaptureTanks.title_id )
+		Rule_Remove( Rule_Objective_CaptureTanks)
+	elseif Event_IsAnyRunning() == false and CountTanks == 0 and g_TimerTillWeCountTankSuccessfullyCaptured >= g_MaxTankCaptureTimer then
+		--objective fail
+		Util_ObjectiveFail(Objective_CaptureTanks.title_id)
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_CaptureTanks.title_id) == false then
+		--If the objective doesn't exist, we're going to create it 
+		Util_ObjectiveCreate(Objective_CaptureTanks, false)
+		if g_Debug == false then Objective_ShowScreen() end
+	end
+end
+
+function Rule_Objective_DestroyTankBase2()
+	
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Count("eg_Tank2Base") == 0 then
+		Util_ObjectiveComplete( Objective_DestroyTankBase2.title_id )
+		Rule_Remove( Rule_Objective_DestroyTankBase2)
+		g_RhinoBaseDead = true
+		--Objective_PingRemove(Objective_DestroyBeacons.title_id, g_ping_obj)
+		
+	--[[If the objective doesn't exist, we're going to create it ]]
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyTankBase2.title_id) == false then
+		--[[Utility function to add objectives]]
+		Util_ObjectiveCreate(Objective_DestroyTankBase2, false)
+		g_ping_obj = Objective_PingMarker(Objective_DestroyTankBase2.title_id, "mkr_tankbase2_hq", true, "default")
+		g_ping_obj_mini = Ping_Marker("mkr_tankbase2_hq", false, "default")
+		if g_Debug == false then Objective_ShowScreen() end
+	end
+end
+
+function CompleteScenario()
+	Rule_RemoveAll()
+	-- JOSH: uncomment the lines in this function to make the closing nis play.
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Closing )
+	end
+	Rule_AddInterval(CompleteScenarioWin, 1)
+end
+
+function CompleteScenarioWin()
+	if Event_IsAnyRunning() == false then
+		World_SetGameOver() 	
+	end
+end
+
+function SpawnScouts()
+	if g_TotalDropPoints <= 10 then
+		Player_GrantResearch(g_Player5, "marine_scout_infiltrate_research")
+		-- spawn X scout squads randomly at beacons, invisible
+		for i=1,6 do
+			local RandomPoint = t_DropPoints[ World_GetRand(1, g_TotalDropPoints ) ]
+			Util_CreateSquadsAtMarkerEx(g_Player5, "sg_Scouts"..i, "space_marine_squad_scout", "mkr_droppod"..RandomPoint, 1, 4)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Scouts"..i), 1),"space_marine_sniper_rifle", 3)
+		end
+		for i=7,14 do
+			Util_CreateSquadsAtMarkerEx(g_Player5, "sg_Scouts"..i, "space_marine_squad_scout", "mkr_scout"..i, 1, 4)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Scouts"..i), 1),"space_marine_sniper_rifle", 3)
+		end
+		Rule_Remove(SpawnScouts)
+	end
+end
+
+function MoveScoutsAroundMapRandomly()
+	-- each beacon sends them to another beacon that exists
+	
+	for i=1,12 do
+		if Player_AreSquadsNearMarker(g_Player5, "mkr_droppod"..i) then
+			local RandomPoint = t_DropPoints[ World_GetRand(1, g_TotalDropPoints ) ]
+			Player_GetAllSquadsNearMarker(g_Player5, "sg_ScoutsOTM"..i, "mkr_droppod"..i)
+			Cmd_AttackMoveMarker("sg_ScoutsOTM"..i, "mkr_droppod"..RandomPoint)
+		end
+	end
+end
+
+
+function Rule_GrantResearch()
+	
+	g_ResearchCounter = g_ResearchCounter + 1
+	print("Research Upgraded: " .. g_ResearchCounter)
+	
+	if g_ResearchCounter == 1 then
+		Player_GrantResearch(g_Player2, "marine_librarian_research_1") 
+		Player_GrantResearch(g_Player4, "marine_librarian_research_1") 
+		Player_GrantResearch(g_Player5, "marine_librarian_research_1") 
+		
+		Player_GrantResearch(g_Player2, "marine_librarian_research_2") 
+		Player_GrantResearch(g_Player4, "marine_librarian_research_2") 
+		Player_GrantResearch(g_Player5, "marine_librarian_research_2") 
+		
+		Player_GrantResearch(g_Player2, "marine_melta_bomb_research") 
+		Player_GrantResearch(g_Player4, "marine_melta_bomb_research") 
+		Player_GrantResearch(g_Player5, "marine_melta_bomb_research") 
+		
+		Player_GrantResearch(g_Player2, "marine_force_commander_teleport_research") 
+		Player_GrantResearch(g_Player4, "marine_force_commander_teleport_research") 
+		Player_GrantResearch(g_Player5, "marine_force_commander_teleport_research") 
+		
+		Player_GrantResearch(g_Player2, "marine_max_weapons_research") 
+		Player_GrantResearch(g_Player4, "marine_max_weapons_research") 
+		Player_GrantResearch(g_Player5, "marine_max_weapons_research") 
+		
+		Player_GrantResearch(g_Player2, "marine_skull_probe_infiltrate_research") 
+		Player_GrantResearch(g_Player4, "marine_skull_probe_infiltrate_research") 
+		Player_GrantResearch(g_Player5, "marine_skull_probe_infiltrate_research") 
+	elseif g_ResearchCounter ==2 then
+		Player_GrantResearch(g_Player2, "marine_accuracy_upgrade_research") 
+		Player_GrantResearch(g_Player4, "marine_accuracy_upgrade_research") 
+		Player_GrantResearch(g_Player5, "marine_accuracy_upgrade_research") 
+		
+		Player_GrantResearch(g_Player2, "marine_health_upgrade_research") 
+		Player_GrantResearch(g_Player4, "marine_health_upgrade_research") 
+		Player_GrantResearch(g_Player5, "marine_health_upgrade_research") 
+	elseif g_ResearchCounter ==3 then
+		Player_GrantResearch(g_Player2, "marine_sergeant_ranged_upgrade_1")  
+		Player_GrantResearch(g_Player4, "marine_sergeant_ranged_upgrade_1")  
+		Player_GrantResearch(g_Player5, "marine_sergeant_ranged_upgrade_1")  
+	elseif g_ResearchCounter ==4 then
+		Player_GrantResearch(g_Player2, "marine_force_commander_ability_research_1") 
+		Player_GrantResearch(g_Player4, "marine_force_commander_ability_research_1") 
+		Player_GrantResearch(g_Player5, "marine_force_commander_ability_research_1") 
+		g_SMTUpgrades = true
+	elseif g_ResearchCounter ==5 then
+		Player_GrantResearch(g_Player2, "marine_sergeant_melee_upgrade_2") 
+		Player_GrantResearch(g_Player4, "marine_sergeant_melee_upgrade_2") 
+		Player_GrantResearch(g_Player5, "marine_sergeant_melee_upgrade_2") 
+	elseif g_ResearchCounter ==6 then
+		Player_GrantResearch(g_Player2, "marine_commander_health_research_1") 
+		Player_GrantResearch(g_Player4, "marine_commander_health_research_1") 
+		Player_GrantResearch(g_Player5, "marine_commander_health_research_1") 
+	elseif g_ResearchCounter ==7 then
+		Player_GrantResearch(g_Player2, "marine_quickening_research") 
+		Player_GrantResearch(g_Player4, "marine_quickening_research") 
+		Player_GrantResearch(g_Player5, "marine_quickening_research") 
+	elseif g_ResearchCounter ==8 then
+		Player_GrantResearch(g_Player2, "marine_sergeant_melee_upgrade_1") 
+		Player_GrantResearch(g_Player4, "marine_sergeant_melee_upgrade_1") 
+		Player_GrantResearch(g_Player5, "marine_sergeant_melee_upgrade_1") 
+	elseif g_ResearchCounter ==9 then
+		Player_GrantResearch(g_Player2, "marine_commander_health_research_2")
+		Player_GrantResearch(g_Player4, "marine_commander_health_research_2")
+		Player_GrantResearch(g_Player5, "marine_commander_health_research_2")
+	elseif g_ResearchCounter >=10 then
+		Rule_Remove(Rule_GrantResearch)
+	end
+
+end
+
+function SkullProbes()
+
+	RandomLP = World_GetRand(1,3)
+	
+	if --[[g_TotalDropPoints < 10 and]] EGroup_Exists("eg_LP"..RandomLP) and EGroup_Count("eg_LP"..RandomLP) > 0 and PopCheck(g_SkullProbeCounter, "sg_SkullProbe", g_MaxSkullProbe) == true then
+		--create the skull probe
+		g_SkullProbeCounter = g_SkullProbeCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SkullProbe"..g_SkullProbeCounter, "space_marine_squad_skull_probe", "mkr_LP"..RandomLP, 1, 1)
+		
+		-- figure out what to attack
+		Player_GetAllEntitiesNearMarker(g_Player1, "eg_PlayerBuildings", "mkr_playerbase_area")
+		EGroup_CreateFromEGroup("eg_PlayerBarracks", "eg_PlayerBuildings", "ork_boy_hut")
+		
+		if EGroup_Exists("eg_PlayerBarracks") and EGroup_Count("eg_PlayerBarracks") > 0 then
+			Cmd_CastAbilityPos("sg_SkullProbe"..g_SkullProbeCounter,"marines_sabotage", EGroup_GetPosition("eg_PlayerBarracks"))
+			print("barracksattack")
+		else
+			Cmd_CastAbilityPos("sg_SkullProbe"..g_SkullProbeCounter,"marines_sabotage", Marker_GetPosition(Marker_FromName("mkr_Player_HQ", "basic_marker")))
+			print("hqattack")
+		end
+	end
+end
+
+function CreateLandRaiderAndTM()
+	
+	-- spawn land raider
+	if PopCheck(g_LandRaiderCounter, "sg_LandRaider", g_MaxLandRaider) == true then
+		g_LandRaiderCounter = g_LandRaiderCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_LandRaider"..g_LandRaiderCounter, "space_marine_squad_land_raider", "mkr_sm_landraider", 1, 1)
+	end
+	
+	-- spawn tech marine
+	if PopCheck(g_TechMarineCounter, "sg_TechMarine", g_MaxTechMarine) == true then
+		g_TechMarineCounter = g_TechMarineCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_TechMarine"..g_TechMarineCounter, "space_marine_squad_servitor", "mkr_sm_landraider", 1, 1)
+	end
+	
+	Cmd_EnterTransport("sg_TechMarine"..g_TechMarineCounter, "sg_LandRaider".. g_LandRaiderCounter)
+	g_TMinTransport = true
+	
+	Rule_AddInterval(LandRaiderIE, 1)
+	
+end
+
+function TMAI()
+	
+	if SGroup_Exists("sg_LandRaider"..g_LandRaiderCounter) and SGroup_Count("sg_LandRaider"..g_LandRaiderCounter) > 0 and SGroup_GetAvgHealth("sg_LandRaider"..g_LandRaiderCounter) < .60 and g_TMinTransport == true then
+		Cmd_EmptyTransport("sg_LandRaider"..g_LandRaiderCounter, SGroup_GetPosition("sg_LandRaider"..g_LandRaiderCounter))
+		g_TMinTransport = false
+		if SGroup_Exists("sg_TechMarine"..g_TechMarineCounter) and SGroup_Count("sg_TechMarine"..g_TechMarineCounter) > 0 and g_TMinTransport == false then
+			if g_RepairFlag == true then
+				Rule_AddInterval(RepairTank, 5)
+				g_RepairFlag = false
+			end
+		end
+	elseif SGroup_Exists("sg_TechMarine"..g_TechMarineCounter) and SGroup_Count("sg_TechMarine"..g_TechMarineCounter) > 0 and g_TMinTransport == false and
+		SGroup_Exists("sg_LandRaider"..g_LandRaiderCounter) and SGroup_Count("sg_LandRaider"..g_LandRaiderCounter) > 0 and SGroup_GetAvgHealth("sg_LandRaider"..g_LandRaiderCounter) >= .80 then
+		if g_HasTechMarineIEPlayedYet == false then
+			g_HasTechMarineIEPlayedYet = true
+			Util_StartIntel(EVENTS.IE_TechMarineTrick)
+		end
+		Cmd_EnterTransport("sg_TechMarine"..g_TechMarineCounter, "sg_LandRaider".. g_LandRaiderCounter)
+		g_TMinTransport = true
+	end
+end
+
+function RepairTank()
+	if SGroup_Exists("sg_TechMarine"..g_TechMarineCounter) and SGroup_Count("sg_TechMarine"..g_TechMarineCounter) > 0 and g_TMinTransport == false then
+		Cmd_CastAbilitySelf("sg_TechMarine"..g_TechMarineCounter, "marines_blessing_of_the_omnissiah")
+		Command_SquadSquad(g_Player2, "sg_TechMarine"..g_TechMarineCounter, SCMD_Repair, "sg_LandRaider"..g_LandRaiderCounter)
+		g_RepairFlag = true
+		Rule_Remove(RepairTank)
+	end
+end
+
+function DropPodMainBase()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center4") then
+		g_SquadsNearMainBaseCenter4Counter = g_SquadsNearMainBaseCenter4Counter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_SquadsNearMainBaseCenter4"..g_SquadsNearMainBaseCenter4Counter, "mkr_mainbase_center4")
+		if SGroup_Exists("sg_SquadsNearMainBaseCenter4"..g_SquadsNearMainBaseCenter4Counter) and SGroup_Count("sg_SquadsNearMainBaseCenter4"..g_SquadsNearMainBaseCenter4Counter) > 2 then
+			Rule_AddIntervalEx(RandomDropPointInMainBase, g_MainBaseDropTimer, g_MainBaseDropNumber)
+			Rule_Remove(DropPodMainBase)
+		end
+	end
+end
+
+function RandomDropPointInMainBase()
+	
+	g_DropGuysInMainBase = g_DropGuysInMainBase + .5
+	local DropSquad = 1
+	if g_DropGuysInMainBase < 1 then
+		DropSquad = 1
+	else	
+		DropSquad = math.floor(g_DropGuysInMainBase)
+	end
+	
+	if DropSquad == 1 then
+		g_MainBaseMarinesCounter = g_MainBaseMarinesCounter + 1
+		-- space marines
+		SGroup = "sg_MainBaseMarines"
+		Counter = g_MainBaseMarinesCounter
+		Blueprint = "space_marine_squad_tactical"
+		SquadNum = World_GetRand(7,8)
+	elseif DropSquad == 2 then
+		g_MainBaseTerminatorsCounter = g_MainBaseTerminatorsCounter + 1
+		-- term
+		SGroup = "sg_MainBaseTerminators"
+		Counter = g_MainBaseTerminatorsCounter
+		Blueprint = "space_marine_squad_terminator"
+		SquadNum = World_GetRand(7,8)
+	elseif DropSquad == 3 then
+		g_MainBaseAssaultTermsCounter = g_MainBaseAssaultTermsCounter + 1
+		-- assault term
+		SGroup = "sg_MainBaseAssaultTerms"
+		Counter = g_MainBaseAssaultTermsCounter
+		Blueprint = "space_marine_squad_terminator_assault"
+		SquadNum = World_GetRand(7,8)
+	elseif DropSquad == 4 then
+		g_MainBaseDNsCounter = g_MainBaseDNsCounter + 1
+		-- dreadnaught
+		SGroup = "sg_MainBaseDNs"
+		Counter = g_MainBaseDNsCounter
+		Blueprint = "space_marine_squad_dreadnought"
+		SquadNum = World_GetRand(7,8)
+	elseif DropSquad == 5 then
+		g_MainBaseHFsCounter = g_MainBaseHFsCounter + 1
+		-- hf dreadnaught
+		SGroup = "sg_MainBaseHFs"
+		Counter = g_MainBaseHFsCounter
+		Blueprint = "space_marine_squad_dreadnought_hellfire"
+		SquadNum = World_GetRand(7,8)
+	end
+
+	local Commander = World_GetRand(1,6)
+	if Commander == 1 then
+		--force commander (hero) -- battlecry (pbae dmg/morale), orbital bombardment
+		CommBluePrint = "space_marine_squad_force_commander"
+		CommCounter = g_ForceCommanderCounter
+		CommMaxPop = g_MaxForceCommander
+		CommSGroup = "sg_ForceCommander"
+	elseif Commander >= 4 then
+		-- apothecary (healer) -- increases regen rate on units -- no special abilities, cap of 4
+		CommBluePrint = "space_marine_squad_apothecary"
+		CommCounter = g_ApothecaryCounter
+		CommMaxPop = g_MaxApothecary
+		CommSGroup = "sg_Apothecary"
+	elseif Commander == 3 then
+		-- chaplain (vet/hero) -- increases regen rate -- demoralizing shout demoralizes a squad target
+		CommBluePrint = "space_marine_squad_chaplain"
+		CommCounter = g_ChaplainCounter
+		CommMaxPop = g_MaxChaplain
+		CommSGroup = "sg_Chaplain"
+	elseif Commander == 2 then
+		-- librarian (good vs daemons) -- smite - targetted ae dmg, weaken resolve - reduce morale recover rate (squad target), word of the emperor - no infantry can die while active
+		CommBluePrint = "space_marine_squad_librarian"
+		CommCounter = g_LibrarianCounter
+		CommMaxPop = g_MaxLibrarian
+		CommSGroup = "sg_Librarian"
+	end
+	
+	Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, "mkr_sm_deepstrikespawn" , 1, SquadNum)
+	
+	-- SM Squad - Leader, Flamer, Heavy Bolter, Plasma Gun, Missle Launcher
+	if Blueprint == "space_marine_squad_tactical" then
+		for i = 1, 6 do
+			local WeaponType = World_GetRand(1, 4)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),Weapon, 1)
+			print("Marine WeaponAdded: " .. Weapon)
+		end
+		SGroup_AddLeaders(SGroup..Counter)
+	end
+	
+	
+	-- Terminator - squad size 8, heavy flamer / assault cannon (2 possible)
+	if Blueprint == "space_marine_squad_terminator" then
+		for i = 1, 2 do
+			local WeaponType = World_GetRand(1, 2)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_flamer"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_assault_cannon_terminator"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),Weapon, 1)
+			print("Terminator_WeaponAdded: " .. Weapon)
+		end
+	end
+	
+	-- DN upgraded weapons
+	if Blueprint == "space_marine_squad_dreadnought" then
+		local WeaponType = World_GetRand(1, 2)
+		if WeaponType == 1 then
+			Weapon = "space_marine_lascannon_twin_dreadnought"
+		elseif WeaponType == 2 then
+			Weapon = "space_marine_assault_cannon_dreadnought"
+		end
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),Weapon, 1)
+		print("Dreadnaught_WeaponAdded: " .. Weapon)
+	end
+	
+	-- commander spawns w/squad
+	if PopCheck(CommCounter, CommSGroup, CommMaxPop) == true and Blueprint ~= "space_marine_squad_dreadnought" and Blueprint ~= "space_marine_squad_dreadnought_hellfire" then
+		Util_CreateSquadsAtMarkerEx(g_Player2, CommSGroup..CommCounter, CommBluePrint, "mkr_sm_deepstrikespawn" , 1, 1)
+		Cmd_AttachSquads(SGroup..Counter, CommSGroup..CommCounter)
+		if Commander == 1 then
+			ForceCommanderWeapons()
+			g_ForceCommanderCounter = g_ForceCommanderCounter + 1
+		elseif Commander >= 4 then
+			g_ApothecaryCounter = g_ApothecaryCounter + 1
+		elseif Commander == 3 then
+			g_ChaplainCounter = g_ChaplainCounter + 1
+		elseif Commander == 2 then
+			g_LibrarianCounter = g_LibrarianCounter + 1
+		end
+	end	
+	
+	if g_MainBaseDropFlag == false then
+		g_MainBaseDropFlag = true
+		g_MainBaseDropSquad = SGroup..Counter
+		Rule_AddOneShot(MainBaseDrop, 1)
+	end
+end
+
+function MainBaseDrop()
+	g_MainBaseDropFlag = false
+	local DropPoint = World_GetRand(1,20)
+	SGroup_DeSpawn(g_MainBaseDropSquad)
+	Squad_DeepStrikeToPos(SGroup_FromName(g_MainBaseDropSquad), "space_marine_orbital_relay", Marker_GetPosition(Marker_FromName("mkr_mainbase_droppod"..DropPoint, "basic_marker")))	
+end
+
+function AttackWithMainBaseGuys()
+	for i=1,2 do
+		local Marker = ""
+		if i==1 then
+			Marker = "mkr_mainbase_center4"
+		elseif i==2 then
+			Marker = "mkr_top_area3"
+		end
+		if Player_AreSquadsNearMarker(g_Player1, Marker) then
+			g_SquadsNearMainBaseCenter4Counter = g_SquadsNearMainBaseCenter4Counter + 1
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerUnitsInMainBase"..g_SquadsNearMainBaseCenter4Counter, Marker)
+			if SGroup_Exists("sg_PlayerUnitsInMainBase"..g_SquadsNearMainBaseCenter4Counter) and SGroup_Count("sg_PlayerUnitsInMainBase"..g_SquadsNearMainBaseCenter4Counter) >= 2 then
+				Player_GetAllSquadsNearMarker(g_Player2, "sg_AttackPlayerInMainBase"..g_SquadsNearMainBaseCenter4Counter, Marker)
+				Cmd_AttackSGroup("sg_AttackPlayerInMainBase"..g_SquadsNearMainBaseCenter4Counter, "sg_PlayerUnitsInMainBase"..g_SquadsNearMainBaseCenter4Counter)
+			end
+		end
+	end
+end
+
+function SideBase2Functionality()
+	
+	if g_TotalDropPoints <= g_RhinoBaseActive and EGroup_Exists("eg_Tank2Base") and EGroup_Count("eg_Tank2Base") > 0 then
+		Rule_Remove(SideBase2Functionality)
+		Rule_AddInterval(SetRandomRhinoDrop, 5)
+		--Rule_AddInterval(CreateRhino, 30)
+		Rule_AddInterval(SpawnTransportUnits, g_SpawnTransportUnitsTimer)
+		Rule_AddInterval(EmptyTransportInMainBase, 10)
+		g_SpawnTransportRuleAdded = true
+		--Rule_AddInterval(LoadTransportUnits, 10)
+		Rule_AddInterval(SendInDroppedOffUnits, 4)
+		Rule_AddInterval(OBRamps, 1)
+	end
+	
+end
+	
+function SideBase1Functionality()
+
+	if g_TotalDropPoints <= g_PredatorBaseActive and EGroup_Exists("eg_TankBase") and EGroup_Count("eg_TankBase") > 0 then
+		Rule_Remove(SideBase1Functionality)
+		Rule_AddInterval(SendPredatorTanks, g_SendPredatorTankTimer)
+	end
+
+end
+
+function SetRandomRhinoDrop()
+	if g_TransportTarget == "playerbase" then
+		for i=1,3 do
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center"..i) then
+				g_TransportTarget = "mainbase"
+			end
+		end
+	elseif g_TransportTarget == "mainbase" then
+		for i=1,3 do
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center"..i) == false then
+				g_TransportTarget = "playerbase"
+			end
+		end
+	end
+	
+	if g_TransportTarget == "mainbase" then
+		g_MarkerTarget = "mkr_mainbase_rhinodrop_main"
+	elseif g_TransportTarget == "playerbase" then
+		local Chance = World_GetRand(1,2)
+		if Chance == 1 then
+			g_MarkerTarget = "mkr_droppod12"
+		elseif Chance == 2 then
+			g_MarkerTarget = "mkr_droppod7"
+		end
+	end
+end
+
+--[[function CreateRhino()
+	-- spawn rhino
+	if EGroup_Exists("eg_Tank2BaseTank") and EGroup_Count("eg_Tank2BaseTank") > 0 and PopCheck(g_RhinoCounter, "sg_Rhino", g_MaxRhino) == true then
+		g_RhinoCounter = g_RhinoCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player4, "sg_Rhino"..g_RhinoCounter, "space_marine_squad_rhino", "mkr_tankbase2_tank", 1, 1)
+		Cmd_MoveToMarker("sg_Rhino"..g_RhinoCounter, "mkr_tankbase2_rhinowaitingarea")
+	end
+end]]
+
+function SpawnTransportUnits()
+
+	local SquadNum = 0
+	local SquadCreated1 = ""
+	local SquadCreated2 = ""
+	local SquadCreated3 = ""
+
+	--grey knights or marines
+	for i=1,3 do
+		local Chance = World_GetRand(1,10)
+		
+		-- so the grey knights have the smallest chance of spawning
+		if Chance >= 4 then
+			Chance = World_GetRand(1,2)
+		end
+		
+		if Chance == 1 then
+			--marines
+			Blueprint = "space_marine_squad_tactical"
+			Counter = g_MainCounterSM
+			SquadName = "sg_MainSpaceMarines"
+			MaxPopName = 6 --g_MaxMainSM
+			Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+			SquadNum = World_GetRand(6,8)
+		--[[elseif Chance == 2 then
+			-- assault marines
+			Blueprint = "space_marine_squad_assault"
+			Counter = g_MainCounterAssault
+			SquadName = "sg_MainAssaultMarines"
+			MaxPopName = g_MaxMainAssault
+			Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+			SquadNum = World_GetRand(6,8)]]
+		elseif Chance == 2 then
+			-- scouts
+			Blueprint = "space_marine_squad_scout"
+			Counter = g_MainCounterScouts
+			SquadName = "sg_MainScouts"
+			MaxPopName = 4 --g_MaxMainScouts
+			Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+			SquadNum = World_GetRand(3,4)
+		elseif Chance == 3 then
+			--  grey knights
+			Blueprint = "space_marine_squad_grey_knights"
+			Counter = g_MainCounterGN
+			SquadName = "sg_MainGreyKnights"
+			MaxPopName = 2 --g_MaxMainGreyKnights
+			Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+			SquadNum = World_GetRand(6,8)
+		end
+
+		
+		if EGroup_Exists("eg_Tank2BaseBarracks") and EGroup_Count("eg_Tank2BaseBarracks") > 0 and PopCheck(Counter, SquadName, MaxPopName) == true then
+			if Blueprint == "space_marine_squad_grey_knights" then
+				g_MainCounterGN = g_MainCounterGN + 1
+			elseif Blueprint == "space_marine_squad_tactical" then
+				g_MainCounterSM = g_MainCounterSM + 1
+			elseif Blueprint == "space_marine_squad_scout" then
+				g_MainCounterScouts = g_MainCounterScouts + 1
+			elseif Blueprint == "space_marine_squad_assault" then
+				g_MainCounterAssault = g_MainCounterAssault + 1
+			end
+			
+			Util_CreateSquadsAtMarkerEx(g_Player2, SquadName..Counter, Blueprint, "mkr_tankbase2_barracks", 1, SquadNum)
+			if g_RhinoObjectiveAdded == false then
+				SGroup_CreateIfNotFound("sg_RhinoObjectiveSGCheck")
+				SGroup_AddGroup("sg_RhinoObjectiveSGCheck", SquadName..Counter)
+			end
+			
+			-- locally store the names of the 3 squads that we've spawned, so that we can have them enter the rhino
+			if i==1 then
+				SquadCreated1 = SquadName..Counter
+			elseif i==2 then
+				SquadCreated2 = SquadName..Counter
+			elseif i==3 then
+				SquadCreated3 = SquadName..Counter
+			end
+			
+			local Commander = World_GetRand(1,6)	
+			if Commander == 1 then
+				--force commander (hero) -- battlecry (pbae dmg/morale), orbital bombardment
+				CommBluePrint = "space_marine_squad_force_commander"
+				CommCounter = g_ForceCommanderCounter
+				CommMaxPop = g_MaxForceCommander
+				CommSGroup = "sg_ForceCommander"
+			elseif Commander >= 4 then
+				-- apothecary (healer) -- increases regen rate on units -- no special abilities, cap of 4
+				CommBluePrint = "space_marine_squad_apothecary"
+				CommCounter = g_ApothecaryCounter
+				CommMaxPop = g_MaxApothecary
+				CommSGroup = "sg_Apothecary"
+			elseif Commander == 3 then
+				-- chaplain (vet/hero) -- increases regen rate -- demoralizing shout demoralizes a squad target
+				CommBluePrint = "space_marine_squad_chaplain"
+				CommCounter = g_ChaplainCounter
+				CommMaxPop = g_MaxChaplain
+				CommSGroup = "sg_Chaplain"
+			elseif Commander == 2 then
+				-- librarian (good vs daemons) -- smite - targetted ae dmg, weaken resolve - reduce morale recover rate (squad target), word of the emperor - no infantry can die while active
+				CommBluePrint = "space_marine_squad_librarian"
+				CommCounter = g_LibrarianCounter
+				CommMaxPop = g_MaxLibrarian
+				CommSGroup = "sg_Librarian"
+			end
+			
+			-- SM Squad - Leader, Flamer, Heavy Bolter, Plasma Gun, Missle Launcher
+			if Blueprint == "space_marine_squad_tactical" then
+				local WeaponUpgrades = World_GetRand(1, SquadNum)
+				if WeaponUpgrades > 5 then
+					WeaponUpgrades = 5
+				end
+				for i = 1, WeaponUpgrades do
+					local WeaponType = World_GetRand(1, 4)
+					if WeaponType == 1 then
+						Weapon = "space_marine_heavy_bolter_tactical"
+					elseif WeaponType == 2 then
+						Weapon = "space_marine_flamer_tactical"
+					elseif WeaponType == 3 then
+						Weapon = "space_marine_missile_launcher_tactical"
+					elseif  WeaponType == 4 then
+						Weapon = "space_marine_plasma_gun"
+					end
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),Weapon, 1)
+				end
+				Chance = World_GetRand(1,10)
+				if Chance >= 8 then
+					SGroup_AddLeaders(SquadName..Counter)
+				end
+			elseif Blueprint == "space_marine_squad_scout" then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_sniper_rifle", 2)
+			elseif Blueprint == "space_marine_squad_assault" then
+				if World_GetRand(1,10) > 5 then
+					SGroup_AddLeaders(SquadName..Counter)
+				end
+			end
+			
+			-- 40% chance of spawning a commander with the squad
+			if World_GetRand(1,10) <= 4 then
+				if PopCheck(CommCounter, CommSGroup, CommMaxPop) == true then
+					Util_CreateSquadsAtMarkerEx(g_Player2, CommSGroup..CommCounter, CommBluePrint, "mkr_tankbase2_barracks" , 1, 1)
+					Cmd_AttachSquads(SquadName..Counter, CommSGroup..CommCounter)
+					if Commander == 1 then
+						ForceCommanderWeapons()
+						g_ForceCommanderCounter = g_ForceCommanderCounter + 1
+					elseif Commander >= 4 then
+						g_ApothecaryCounter = g_ApothecaryCounter + 1
+					elseif Commander == 3 then
+						g_ChaplainCounter = g_ChaplainCounter + 1
+					elseif Commander == 2 then
+						g_LibrarianCounter = g_LibrarianCounter + 1
+					end
+				end
+			end
+			
+			--Cmd_AttackMoveMarker(SquadName..Counter, "mkr_tankbase2_rhinowaitingarea")
+		end
+	end
+	
+	-- 20% chance to spawn 1 or 2 land speeders (20% chance to spawn 2)
+	if World_GetRand(1, 10) > 7 then
+		if EGroup_Exists("eg_Tank2BaseTank") and EGroup_Count("eg_Tank2BaseTank") > 0 and PopCheck(g_LandSpeederCounter, "sg_LandSpeeder", g_MaxLandSpeeders) then
+			--create landspeeder(s)
+			local Chance = World_GetRand(1, 10)
+			if Chance > 8 then
+				SquadCount = 2
+			else
+				SquadCount = 1
+			end
+			g_LandSpeederCounter = g_LandSpeederCounter + 1
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_LandSpeeder"..g_LandSpeederCounter, "space_marine_squad_land_speeder", "mkr_tankbase2_tank" , SquadCount, 1)
+			-- send land speeder to player base
+			Cmd_AttackMoveMarker("sg_LandSpeeder"..g_LandSpeederCounter, "mkr_Player_HQ")
+		end
+	end
+	
+	
+	
+	if SquadCreated1 == "" and SquadCreated2 == "" and SquadCreated3 == "" then
+		-- do nothing
+	else
+		-- load our 3 squads into a rhino, DONT SPAWN IF THERE ARE NO GUYS GETTING IN (POPCAP FULL)
+		g_RhinoCounter = g_RhinoCounter + 1
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Rhino"..g_RhinoCounter, "space_marine_squad_rhino", "mkr_tankbase2_tank", 1, 1)
+		if SGroup_Exists("sg_Rhino"..g_RhinoCounter) and SGroup_Count("sg_Rhino"..g_RhinoCounter) > 0 then
+			if SGroup_Exists(SquadCreated1) and SGroup_Count(SquadCreated1) > 0 then
+				print(SquadCreated1.." is trying to enter ".."sg_Rhino"..g_RhinoCounter)
+				Cmd_EnterTransport(SquadCreated1, "sg_Rhino"..g_RhinoCounter)
+			end
+			if SGroup_Exists(SquadCreated2) and SGroup_Count(SquadCreated2) > 0 then
+				print(SquadCreated2.." is trying to enter ".."sg_Rhino"..g_RhinoCounter)
+				Cmd_EnterTransport(SquadCreated2, "sg_Rhino"..g_RhinoCounter)
+			end
+			if SGroup_Exists(SquadCreated3) and SGroup_Count(SquadCreated3) > 0 then
+				print(SquadCreated3.." is trying to enter ".."sg_Rhino"..g_RhinoCounter)
+				Cmd_EnterTransport(SquadCreated3, "sg_Rhino"..g_RhinoCounter)
+			end
+		else
+			print("wtf is going on with the rhino")
+		end
+		
+		-- send the rhino to the player base
+		if g_BringTransportToMainBaseFlag == true then
+			Rule_AddOneShot(BringTransportToMainBase, 20)
+			g_BringTransportToMainBaseFlag = false
+		end
+	end
+	
+end
+
+--[[function LoadTransportUnits()
+	
+	if Player_AreSquadsNearMarker(g_Player2, "mkr_tankbase2_transportwaitingarea") then
+		Rule_Remove(SpawnTransportUnits)
+		g_SpawnTransportRuleAdded = false
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_tankbase2_rhinowaitingarea") then
+			g_TransportCounter = g_TransportCounter + 1
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_TransportGuys"..g_TransportCounter, "mkr_tankbase2_transportwaitingarea")
+			Cmd_EnterTransport("sg_TransportGuys"..g_TransportCounter, "sg_Rhino"..g_RhinoCounter)
+			if g_BringTransportToMainBaseFlag == true then
+				Rule_AddOneShot(BringTransportToMainBase, 20)
+				g_BringTransportToMainBaseFlag = false
+			end
+		elseif Player_AreSquadsNearMarker(g_Player2, "mkr_tankbase2_rhinowaitingarea") then
+			g_SwapTeamCounter = g_SwapTeamCounter + 1
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_SwapTeam"..g_SwapTeamCounter, "mkr_tankbase2_rhinowaitingarea")
+			SGroup_SetPlayerOwner("sg_SwapTeam"..g_SwapTeamCounter, g_Player2)
+		end
+	elseif g_SpawnTransportRuleAdded == false then
+		Rule_AddInterval(SpawnTransportUnits, g_SpawnTransportUnitsTimer)
+		g_SpawnTransportRuleAdded = true
+	end
+
+end]]
+
+function BringTransportToMainBase()	
+	g_BringTransportToMainBaseFlag = true
+	Cmd_MoveToMarker("sg_Rhino"..g_RhinoCounter, g_MarkerTarget)
+end
+
+g_RhinoToSendHome = ""
+function EmptyTransportInMainBase()
+	for i=1,g_RhinoCounter do
+		if SGroup_Exists("sg_Rhino"..i) and SGroup_Count("sg_Rhino"..i) > 0 then
+			if Prox_AllSquadsNearMarker("sg_Rhino"..i, "mkr_mainbase_rhinodrop_main") or 
+				Prox_AllSquadsNearMarker("sg_Rhino"..i, "mkr_droppod12") or 
+				Prox_AllSquadsNearMarker("sg_Rhino"..i, "mkr_droppod7") then
+				Cmd_EmptyTransport("sg_Rhino"..i, SGroup_GetPosition("sg_Rhino"..i))
+				g_RhinoToSendHome = "sg_Rhino"..i
+				--Cmd_MoveToMarker("sg_Rhino"..i, "mkr_tankbase2_rhinowaitingarea")
+				if g_SendTransportHomeFlag == true then
+					Rule_AddOneShot(SendTransportHome, 1)
+					g_SendTransportHomeFlag = false
+				end
+			end
+		end
+	end
+end
+
+function SendTransportHome()
+	if SGroup_Exists(g_RhinoToSendHome) and SGroup_Count(g_RhinoToSendHome) > 0 then
+		Cmd_MoveToMarker(g_RhinoToSendHome, "mkr_tankbase2_rhinowaitingarea")
+		print("rhino sent home")
+	else
+		print("rhino couldnt be sent home, its dead :(")
+	end	
+	g_SendTransportHomeFlag = true	
+end
+
+function DespawnTransports()
+	for i=0,g_RhinoCounter - 1 do
+		if SGroup_Exists("sg_Rhino"..i) and SGroup_Count("sg_Rhino"..i) > 0 and Prox_AllSquadsNearMarker("sg_Rhino"..i, "mkr_tankbase2_rhinowaitingarea") then
+			SGroup_DeSpawn("sg_Rhino"..i)
+			SGroup_Destroy("sg_Rhino"..i)
+		end
+	end
+end
+
+--[[function SwapRhinoDropoffUnits()
+	
+	g_JustDroppedOffCounter = g_JustDroppedOffCounter + 1
+	
+	if Player_AreSquadsNearMarker(g_Player4, "mkr_mainbase_rhinodrop_main") then
+		Player_GetAllSquadsNearMarker(g_Player4, "sg_JustDroppedOff"..g_JustDroppedOffCounter, "mkr_mainbase_rhinodrop_main")
+	elseif Player_AreSquadsNearMarker(g_Player4, "mkr_droppod12") then
+		Player_GetAllSquadsNearMarker(g_Player4, "sg_JustDroppedOff"..g_JustDroppedOffCounter, "mkr_droppod12")
+	elseif Player_AreSquadsNearMarker(g_Player4, "mkr_droppod7") then
+		Player_GetAllSquadsNearMarker(g_Player4, "sg_JustDroppedOff"..g_JustDroppedOffCounter, "mkr_droppod7")
+	end
+	if SGroup_Exists("sg_JustDroppedOff"..g_JustDroppedOffCounter) and SGroup_Count("sg_JustDroppedOff"..g_JustDroppedOffCounter) > 0 then
+		Rule_Remove(SwapRhinoDropoffUnits)
+		SGroup_SetPlayerOwner("sg_JustDroppedOff"..g_JustDroppedOffCounter, g_Player2)
+		g_SwapRhinoDropoffUnitsFlag = true
+	end
+end]]
+
+function SendInDroppedOffUnits()
+	
+	local PlayersInBase = false
+	for i=1,4 do
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_mainbase_rhinodrop_main") then
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center"..i) then
+				g_DroppedOffDudesCounter = g_DroppedOffDudesCounter + 1
+				Player_GetAllSquadsNearMarker(g_Player2, "sg_DroppedOffDudes"..g_DroppedOffDudesCounter, "mkr_mainbase_rhinodrop_main")
+				Cmd_MoveToMarker("sg_DroppedOffDudes"..g_DroppedOffDudesCounter, "mkr_mainbase_rhinodrop"..i)
+				PlayersInBase = true
+				return true
+			end
+		end
+	end
+	
+	if PlayersInBase == false then
+		g_DroppedOffDudesCounter = g_DroppedOffDudesCounter + 1
+		Player_GetAllSquadsNearMarker(g_Player2, "sg_DroppedOffDudes"..g_DroppedOffDudesCounter, "mkr_mainbase_rhinodrop_main")
+		Cmd_MoveToMarker("sg_DroppedOffDudes"..g_DroppedOffDudesCounter, "mkr_mainbase_rhinodrop4")
+	end
+	
+end
+
+function SendPredatorTanks()
+
+	local BaseSpawn = World_GetRand(1,4)
+	local Marker = ""
+	
+	if g_PredatorTier < 3 then
+		g_PredatorTier = g_PredatorTier + .5
+	end
+	if g_TotalDropPoints <= g_PredatorBaseActive then
+		if g_TransportTarget == "mainbase" then
+			Marker = "mkr_mainbase_predator_attmovemarker"
+		elseif g_TransportTarget == "playerbase" then
+			Marker = "mkr_Player_HQ"
+		end
+		for i=1, math.floor(g_NumOfPredatorToSend) do
+			local BaseSpawn = World_GetRand(1,4)
+			--[[print("creating airplane~1111")
+			if EGroup_Exists("eg_TankBase"..BaseSpawn) and EGroup_Count("eg_TankBase"..BaseSpawn) > 0 then
+				print("building req: YES")
+			else
+				print("building req: NO")
+			end
+			if PopCheck(g_PredatorCounter, "sg_Predator", g_MaxPredator) == true then
+				print("pop req: YES")
+			else
+				print("pop req: NO")
+			end]]
+			if EGroup_Exists("eg_TankBase"..BaseSpawn) and EGroup_Count("eg_TankBase"..BaseSpawn) > 0 and PopCheck(g_PredatorCounter, "sg_Predator", g_MaxPredator) == true then
+				g_PredatorCounter = g_PredatorCounter + 1
+				print("creating airplane~")
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Predator"..g_PredatorCounter, "space_marine_squad_tempest", "mkr_tankbase1_machinecult"..BaseSpawn, 1, 1)
+				
+				if math.floor(g_PredatorTier) == 1 then
+					-- anti infantry
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Predator"..g_PredatorCounter), 1),"space_marine_missile_frag_tempest", 1)
+					print("air weapon upgraded -- tier1")
+				elseif math.floor(g_PredatorTier) == 2 then
+					-- anti vehicle
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Predator"..g_PredatorCounter), 1),"space_marine_missile_krak_tempest", 1)
+					print("air weapon upgraded -- tier2")
+				elseif math.floor(g_PredatorTier) <=3 then
+					print("air weapon upgraded -- tier3")
+					--anti vehicle OR anti infantry
+					if World_GetRand(1,2) == 2 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Predator"..g_PredatorCounter), 1),"space_marine_missile_krak_tempest", 1)
+					else
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Predator"..g_PredatorCounter), 1),"space_marine_missile_frag_tempest", 1)
+					end
+				end
+				Cmd_AttackMoveMarker("sg_Predator"..g_PredatorCounter, Marker)
+				if g_NumOfPredatorToSend < 3 then
+					g_NumOfPredatorToSend = g_NumOfPredatorToSend + .5
+				end
+			end
+		end
+	end
+end
+
+function CheckForFirstPredatorKill()
+	if (SGroup_Exists("sg_Predator1") and SGroup_Count("sg_Predator1") == 0) or Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase1_area") then
+		Rule_AddInterval(Rule_Objective_DestroyPredatorBase, 1)
+		Rule_AddOneShot(PredObjAssignedIE, 10)
+		Rule_Remove(CheckForFirstPredatorKill)
+	end
+end
+
+function CheckForFirstRhinoKill()
+	if (SGroup_Exists("sg_RhinoObjectiveSGCheck") and SGroup_IsUnderAttack("sg_RhinoObjectiveSGCheck", false)) or Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase2_area") then
+		g_RhinoObjectiveAdded = true
+		Rule_AddInterval(Rule_Objective_DestroyTankBase2, 1)
+		Rule_AddOneShot(RhinoObjAssignedIE, 10)
+		Rule_Remove(CheckForFirstRhinoKill)
+	end
+end
+
+function OBRamps()
+	if EGroup_Exists("eg_SMBaseOrbitalRelay") and EGroup_Count("eg_SMBaseOrbitalRelay") > 0 then
+		for i=1,3 do
+			if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_ob"..i) and t_OBFired[i] == false then
+				print("ob fired")
+				World_FXEvent("data:Art/Events/Markers/Orbital_Bombardment_Marker", Marker_GetPosition(Marker_FromName("mkr_mainbase_ob"..i, "basic_marker")))
+				Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_SMBaseOrbitalRelay"), 1), "marines_orbital_bombardment_stronghold_sp",Marker_GetPosition(Marker_FromName("mkr_mainbase_ob"..i, "basic_marker")))
+				t_OBFired[i] = true
+				if g_FinalOBIEFired == false then
+					g_FinalOBIEFired = true
+					Util_StartIntel(EVENTS.IE_FinalOrbitalBombardment)
+				end
+			end
+		end
+	end
+	
+	local CountQuick = 0
+	for j=1,3 do
+		if t_OBFired[i] == true then
+			CountQuick = CountQuick + 1
+		end
+	end
+	if CountQuick >= 3 then
+		Rule_Remove(OBRamps)
+	end
+end
+
+function Thunderhawks_SendIn()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_lowerright_area") and t_SentInThunderhawk[1] == false then
+		t_SentInThunderhawk[1] = true
+		Thunderhawks(1)
+		Rule_AddInterval(UpgradeSMs1, 2)
+	end
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_lowerleft_area") and t_SentInThunderhawk[2] == false then
+		t_SentInThunderhawk[2] = true
+		Thunderhawks(2)
+		Rule_AddInterval(UpgradeSMs2, 2)
+	end
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_lowermiddle_area") and t_SentInThunderhawk[3] == false then
+		t_SentInThunderhawk[3] = true
+		Thunderhawks(3)
+	end
+	
+	local Remove = 0
+	for i=1,3 do
+		if t_SentInThunderhawk[i] == true then
+			Remove = Remove + 1
+		end
+	end
+	if Remove == 3 then
+		Rule_Remove(Thunderhawks_SendIn)
+	end
+end
+
+function Thunderhawks(pos)
+	if pos == 4 then
+		Rule_Remove(Thunderhawks)
+		return
+	else
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Thunderhawk"..pos, "space_marine_squad_thunderhawk", "mkr_thunderhawk"..pos, 1, 1)
+		SGroup_SetHealthInvulnerable("sg_Thunderhawk"..pos, true)
+		SGroup_FaceMarker("sg_Thunderhawk"..pos, "mkr_thunderhawk_face"..pos)
+		Anim_PlaySGroupAnim(SGroup_FromName("sg_Thunderhawk"..pos), "sp_land")
+		if pos == 1 then
+			for i=1,4 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_LowerRightSM"..i, "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "mkr_sm_lowerright"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			for i=1,2 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_LowerRightHF"..i, "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_sm_lowerright_hf"..i, "basic_marker")) ,1,1)
+			end
+			Rule_AddOneShot(Thunderhawks_Spawn1, 6)
+			Rule_AddOneShot(Thunderhawks_TakeOff1, 8)
+		elseif pos == 2 then
+			for i=1,2 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_LowerLeftHF"..i, "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_sm_lowerleft_hf"..i, "basic_marker")) ,1,1)
+			end
+			for i=1,4 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_LowerLeftSM"..i, "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "mkr_sm_lowerleft"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			Rule_AddOneShot(Thunderhawks_Spawn2, 6)
+			Rule_AddOneShot(Thunderhawks_TakeOff2, 8)
+		elseif pos == 3 then
+			for i=1,2 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_MiddleAssaultTerminators"..i, "space_marine_squad_terminator_assault", Marker_GetPosition(Marker_FromName( "mkr_sm_middle_assaultterminators"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			Rule_AddOneShot(Thunderhawks_Spawn3, 6)
+			Rule_AddOneShot(Thunderhawks_TakeOff3, 8)
+		end
+	end
+end
+
+function UpgradeSMs1()
+	for i = 1, 4 do
+		if SGroup_Exists("sg_LowerRightSM"..i) and SGroup_Count("sg_LowerRightSM"..i) > 0 and SGroup_CountSpawned("sg_LowerRightSM"..i) > 0 and t_DroppedSquadUpgraded[i] == false then
+			t_DroppedSquadUpgraded[i] = true
+			local WeaponType = i
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_LowerRightSM"..i), 1),Weapon, 6)
+			SGroup_AddLeaders("sg_LowerRightSM"..i)
+		end
+	end
+	local Remove = 0
+	for i=1,4 do
+		if t_DroppedSquadUpgraded[i] == true then
+			Remove = Remove + 1
+		end
+	end
+	if Remove == 4 then
+		Rule_Remove(UpgradeSMs1)
+		print("Rule Removed: UpgradeSMs1")
+	end
+end
+
+function UpgradeSMs2()
+	for i = 1, 4 do
+		if SGroup_Exists("sg_LowerLeftSM"..i) and SGroup_Count("sg_LowerLeftSM"..i) > 0 and SGroup_CountSpawned("sg_LowerLeftSM"..i) > 0 and t_DroppedSquadUpgraded[i+4] == false then
+			t_DroppedSquadUpgraded[i+4] = true
+			local WeaponType = i
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_LowerLeftSM"..i), 1),Weapon, 6)
+			SGroup_AddLeaders("sg_LowerLeftSM"..i)
+		end
+	end	
+	local Remove = 0
+	for i=1,4 do
+		if t_DroppedSquadUpgraded[i+4] == true then
+			Remove = Remove + 1
+		end
+	end
+	if Remove == 4 then
+		Rule_Remove(UpgradeSMs2)
+		print("Rule Removed: UpgradeSMs2")
+	end
+end
+
+function Thunderhawks_Spawn1()
+	for i=1,2 do
+		Util_CreateSquadsAtPositionEx(g_Player2, "sg_LowerRightPredator"..i, "space_marine_squad_predator", SGroup_GetPosition("sg_Thunderhawk1"), 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_LowerRightPredator"..i), 1),"space_marine_lascannon_twin_predator", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_LowerRightPredator"..i), 1),"space_marine_lascannon_tank_right", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_LowerRightPredator"..i), 1),"space_marine_lascannon_tank_left", 1)
+	end
+end
+function Thunderhawks_Spawn2()
+	for i=1,2 do
+		Util_CreateSquadsAtPositionEx(g_Player2, "sg_LowerLeftKnights"..i, "space_marine_squad_grey_knights", SGroup_GetPosition("sg_Thunderhawk2"), 1, World_GetRand(7,8))
+	end
+end
+function Thunderhawks_Spawn3()
+	for i=1,2 do
+		Util_CreateSquadsAtPositionEx(g_Player2, "sg_Artillery"..i, "space_marine_squad_whirlwind", SGroup_GetPosition("sg_Thunderhawk3"), 1, 1)
+	end
+end
+
+function Thunderhawks_TakeOff1()
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_Thunderhawk1"), "sp_take_off")
+	Rule_AddOneShot(Thunderhawks_Despawn1, 10)
+end
+
+function Thunderhawks_TakeOff2()
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_Thunderhawk2"), "sp_take_off")
+	Rule_AddOneShot(Thunderhawks_Despawn2, 10)
+end
+
+function Thunderhawks_TakeOff3()
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_Thunderhawk3"), "sp_take_off")
+	Rule_AddOneShot(Thunderhawks_Despawn3, 10)
+end
+
+function Thunderhawks_Despawn1()
+	SGroup_DeSpawn("sg_Thunderhawk1")
+	SGroup_Destroy("sg_Thunderhawk1")
+end
+function Thunderhawks_Despawn2()
+	SGroup_DeSpawn("sg_Thunderhawk2")
+	SGroup_Destroy("sg_Thunderhawk2")
+end
+function Thunderhawks_Despawn3()
+	SGroup_DeSpawn("sg_Thunderhawk3")
+	SGroup_Destroy("sg_Thunderhawk3")
+end
+
+function FinalStand()
+	for j=1,3 do
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_top_area"..j) then
+			for i=1,4 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_TopMarines"..i, "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "mkr_top_drop_sm"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			for i=1,1 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_TopAssaultTerminators"..i, "space_marine_squad_terminator_assault", Marker_GetPosition(Marker_FromName( "mkr_top_drop_assaultterminator"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			for i=1,1 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_TopTerminators"..i, "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "mkr_top_drop_terminator"..i, "basic_marker")) ,1,World_GetRand(7,8))
+			end
+			for i=1,2 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_TopHFs"..i, "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_top_drop_hfdreadnaught"..i, "basic_marker")) ,1,1)
+			end
+			for i=1,1 do
+				Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_TopDreadnaughts"..i, "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_top_drop_dreadnaught"..i, "basic_marker")) ,1,1)
+			end
+			Rule_AddInterval(UpgradeTop, 1)
+			Rule_Remove(FinalStand)
+			return			
+		end
+	end
+end
+
+function UpgradeTop()
+	for i = 1, 5 do
+		if SGroup_Exists("sg_TopMarines"..i) and SGroup_Count("sg_TopMarines"..i) > 0 and SGroup_CountSpawned("sg_TopMarines"..i) > 0 and t_DroppedSquadUpgraded[i+8] == false then
+			t_DroppedSquadUpgraded[i+8] = true
+			local WeaponType = i
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			elseif WeaponType == 5 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopMarines"..i), 1),Weapon, 6)
+			SGroup_AddLeaders("sg_TopMarines"..i)
+		end
+	end
+	for i=1,2 do
+		if SGroup_Exists("sg_TopDreadnaughts"..i) and SGroup_Count("sg_TopDreadnaughts"..i) > 0 and SGroup_CountSpawned("sg_TopDreadnaughts"..i) > 0 and t_DroppedSquadUpgraded[i+13] == false then
+			t_DroppedSquadUpgraded[i+13] = true
+			local WeaponType = i
+			if WeaponType == 1 then
+				Weapon = "space_marine_lascannon_twin_dreadnought"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_assault_cannon_dreadnought"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopDreadnaughts"..i), 1),Weapon, 1)
+		end
+	end
+	for i=1,2 do
+		if SGroup_Exists("sg_TopTerminators"..i) and SGroup_Count("sg_TopTerminators"..i) > 0 and SGroup_CountSpawned("sg_TopTerminators"..i) > 0 and t_DroppedSquadUpgraded[i+15] == false then
+			t_DroppedSquadUpgraded[i+15] = true
+			local WeaponType = i
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_flamer"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_assault_cannon_terminator"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TopTerminators"..i), 1),Weapon, 3)
+		end
+	end
+	local Remove = 0
+	for i=1,9 do
+		if t_DroppedSquadUpgraded[i+8] == true then
+			Remove = Remove + 1
+		end
+	end
+	if Remove == 9 then
+		Rule_Remove(UpgradeTop)
+		print("Rule Removed: UpgradeTop")
+	end
+end
+
+function Relic()
+	
+	if EGroup_Exists("eg_RelicPost") and EGroup_Count("eg_RelicPost") == 0 and g_RelicIEFired == false then
+		g_RelicIEFired = true
+		Util_StartIntel(EVENTS.IE_Taunt2)
+	end
+	
+	if EGroup_Exists("eg_Relic") and EGroup_IsCapturedByPlayer("eg_Relic", g_Player1, true) then
+		-- drop pod 
+		for i=1,2 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RelicMarines"..i, "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "mkr_relic_sm"..i, "basic_marker")) ,1,World_GetRand(7,8))
+		end
+		for i=1,2 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RelicTerminators"..i, "space_marine_squad_terminator", Marker_GetPosition(Marker_FromName( "mkr_relic_terminators"..i, "basic_marker")) ,1,World_GetRand(7,8))
+		end		
+		for i=1,1 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RelicHFs"..i, "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_relic_dn_hf"..i, "basic_marker")) ,1,1)
+		end
+		for i=1,1 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RelicDreadnaughts"..i, "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_relic_dn"..i, "basic_marker")) ,1,1)
+		end
+		-- send predator from main base
+		if EGroup_Exists("eg_SMBaseMachineCult") and EGroup_Count("eg_SMBaseMachineCult") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_RelicPredator1", "space_marine_squad_predator", "mkr_sm_machinecult", 1, 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RelicPredator1"), 1),"space_marine_lascannon_twin_predator", 1)
+			Cmd_AttackMoveMarker("sg_RelicPredator1", "mkr_relic_predator_attackmove1")
+		end
+		if EGroup_Exists("eg_SMBaseMachineCult2") and EGroup_Count("eg_SMBaseMachineCult2") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_RelicPredator2", "space_marine_squad_predator", "mkr_sm_machinecult2", 1, 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RelicPredator2"), 1),"space_marine_lascannon_tank_right", 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RelicPredator2"), 1),"space_marine_lascannon_tank_left", 1)
+			Cmd_AttackMoveMarker("sg_RelicPredator2", "mkr_relic_predator_attackmove2")
+		end
+		-- send capture squad from main base
+		Util_CreateSquadsAtMarkerEx(g_Player2 , "sg_CaptureSquad", "space_marine_squad_tactical", "mkr_sm_machinecult2" ,1,World_GetRand(7,8))
+		Cmd_Capture("sg_CaptureSquad", "eg_Relic")
+		Rule_Remove(Relic)
+	end
+end
+
+function SetupAirBaseDefense()
+	for i=1,5 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_AirBaseDefenseTempest"..i, "space_marine_squad_tempest", "mkr_tankbase_temptest"..i, 1, 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseDefenseTempest"..i), 1),"space_marine_missile_krak_tempest", 1)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseDefenseTempest"..i), 1),"space_marine_missile_frag_tempest", 1)
+	end
+	Rule_AddInterval(AirBaseDefense, 1)
+end
+
+function AirBaseDefense()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase1_area") then
+		g_PlayerSquadsNearTankBaseCounter = g_PlayerSquadsNearTankBaseCounter  + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+		if SGroup_Exists("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 1 then
+			Util_StartIntel(EVENTS.IE_PlayerNearAirfield)
+			-- add a rule to spawn random shit outta each base till the player has destroyed them all
+			Rule_AddInterval(AirBaseDefense_SpawnDreadnaught, g_AirbaseDefenseDreadnaughtTimer)
+			Rule_AddInterval(AirBaseDefense_SpawnTempest, g_AirbaseDefenseTempestTimer)
+			Rule_AddInterval(AirBaseDefense_SpawnPredator, g_AirbaseDefensePredatorTimer)
+			Rule_AddInterval(AirBaseDefense_AttackPlayerSquads, 5)
+			-- grab everything in the area and attack the player squads
+			Player_GetAllSquadsNearMarker(g_Player3, "sg_P3AirBaseSquads", "mkr_tankbase1_area")
+			Cmd_AttackSGroup("sg_P3AirBaseSquads", "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter)
+			-- remove rule
+			Rule_Remove(AirBaseDefense)
+		end		
+	end
+end
+
+function AirBaseDefense_AttackPlayerSquads()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase1_area") then
+		g_PlayerSquadsNearTankBaseCounter = g_PlayerSquadsNearTankBaseCounter  + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+		Player_GetAllSquadsNearMarker(g_Player2, "sg_Player2SquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+		if SGroup_Exists("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 0 then
+			if SGroup_Exists("sg_Player2SquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_Player2SquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 0 then
+				Cmd_AttackSGroup("sg_Player2SquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter)
+			end
+		end	
+	end
+end
+
+function AirBaseDefense_SpawnDreadnaught()
+	local Base = World_GetRand(1,4)
+	if EGroup_Exists("eg_TankBase"..Base) and EGroup_Count("eg_TankBase"..Base) > 0 then
+		if PopCheck(g_AirBaseDefenseDreadnaughtCounter,"sg_AirBaseDreadnaughts",g_AirBaseDefenseDreadnaughtMax) then
+			g_AirBaseDefenseDreadnaughtCounter = g_AirBaseDefenseDreadnaughtCounter + 1
+			-- spawn dn
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_AirBaseDreadnaughts"..g_AirBaseDefenseDreadnaughtCounter, "space_marine_squad_dreadnought", "mkr_tankbase1_machinecult"..Base, 1, 1)
+			if World_GetRand(1,2) == 2 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseDreadnaughts"..g_AirBaseDefenseDreadnaughtCounter), 1),"space_marine_assault_cannon_dreadnought", 1)
+			else
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseDreadnaughts"..g_AirBaseDefenseDreadnaughtCounter), 1),"space_marine_lascannon_twin_dreadnought", 1)			
+			end
+			-- find & attack any squads in the area
+			g_PlayerSquadsNearTankBaseCounter = g_PlayerSquadsNearTankBaseCounter  + 1
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+			if SGroup_Exists("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 0 then
+				Cmd_AttackSGroup("sg_AirBaseDreadnaughts"..g_AirBaseDefenseDreadnaughtCounter, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter)
+			else
+				Cmd_AttackMoveMarker("sg_AirBaseDreadnaughts"..g_AirBaseDefenseDreadnaughtCounter, "mkr_tankbase1_defaultgather")
+			end
+		end		
+	end
+end
+
+function AirBaseDefense_SpawnTempest()
+	local Base = World_GetRand(1,4)
+	if EGroup_Exists("eg_TankBase"..Base) and EGroup_Count("eg_TankBase"..Base) > 0 then
+		if PopCheck(g_AirBaseDefenseTempestCounter,"sg_AirBaseTempests",g_AirBaseDefenseTempestMax) then
+			g_AirBaseDefenseTempestCounter = g_AirBaseDefenseTempestCounter + 1
+			-- spawn dn
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_AirBaseTempests"..g_AirBaseDefenseTempestCounter, "space_marine_squad_tempest", "mkr_tankbase1_machinecult"..Base, 1, 1)
+			if World_GetRand(1,2) == 2 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseTempests"..g_AirBaseDefenseTempestCounter), 1),"space_marine_missile_krak_tempest", 1)
+			else
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBaseTempests"..g_AirBaseDefenseTempestCounter), 1),"space_marine_missile_frag_tempest", 1)
+			end
+			-- find & attack any squads in the area
+			g_PlayerSquadsNearTankBaseCounter = g_PlayerSquadsNearTankBaseCounter  + 1
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+			if SGroup_Exists("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 0 then
+				Cmd_AttackSGroup("sg_AirBaseTempests"..g_AirBaseDefenseTempestCounter, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter)
+			else
+				Cmd_AttackMoveMarker("sg_AirBaseTempests"..g_AirBaseDefenseTempestCounter, "mkr_tankbase1_defaultgather")
+			end
+		end
+	end
+end
+
+function AirBaseDefense_SpawnPredator()
+	local Base = World_GetRand(1,4)
+	if EGroup_Exists("eg_TankBase"..Base) and EGroup_Count("eg_TankBase"..Base) > 0 then
+		if PopCheck(g_AirBaseDefensePredatorCounter,"sg_AirBasePredators",g_AirBaseDefensePredatorMax) then
+			g_AirBaseDefensePredatorCounter = g_AirBaseDefensePredatorCounter + 1
+			-- spawn dn
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_AirBasePredators"..g_AirBaseDefensePredatorCounter, "space_marine_squad_predator", "mkr_tankbase1_machinecult"..Base, 1, 1)
+			local Weapon = World_GetRand(1,6)
+			if Weapon == 1 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_twin_predator", 1)
+			elseif Weapon == 2 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_tank_right", 1)
+			elseif Weapon == 3 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_tank_left", 1)
+			elseif Weapon == 4 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_tank_left", 1)
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_twin_predator", 1)
+			elseif Weapon >= 5 then
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_tank_left", 1)
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_twin_predator", 1)
+				Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter), 1),"space_marine_lascannon_tank_right", 1)
+			end
+			-- find & attack any squads in the area
+			g_PlayerSquadsNearTankBaseCounter = g_PlayerSquadsNearTankBaseCounter + 1
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter, "mkr_tankbase1_area")
+			if SGroup_Exists("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) and SGroup_Count("sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter) > 0 then
+				Cmd_AttackSGroup("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter, "sg_PlayerSquadsNearTankBase"..g_PlayerSquadsNearTankBaseCounter)
+			else
+				Cmd_AttackMoveMarker("sg_AirBasePredators"..g_AirBaseDefensePredatorCounter, "mkr_tankbase1_defaultgather")
+			end
+		end
+	end
+end
+
+function RhinoBase()
+	
+	if EGroup_Exists("eg_Tank2Base") and EGroup_IsUnderAttack("eg_Tank2Base", true) then
+		-- drop pod 
+		for i=1,2 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RhinoBaseMarines"..i, "space_marine_squad_tactical", Marker_GetPosition(Marker_FromName( "mkr_rhinobase_sm"..i, "basic_marker")) ,1,World_GetRand(7,8))
+		end
+		for i=1,2 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RhinoBaseTerminators"..i, "space_marine_squad_terminator_assault", Marker_GetPosition(Marker_FromName( "mkr_rhinobase_term"..i, "basic_marker")) ,1,World_GetRand(7,8))
+		end		
+		for i=1,1 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RhinoBaseHFs"..i, "space_marine_squad_dreadnought_hellfire", Marker_GetPosition(Marker_FromName( "mkr_rhinobase_dn1", "basic_marker")) ,1,1)
+		end
+		for i=1,1 do
+			Util_CreateSquadsAndDropPodIn(g_Player2 , "sg_RhinoBaseDreadnaughts"..i, "space_marine_squad_dreadnought", Marker_GetPosition(Marker_FromName( "mkr_rhinobase_dn2", "basic_marker")) ,1,1)
+		end
+		-- send predator from main base
+		if EGroup_Exists("eg_SMBaseMachineCult") and EGroup_Count("eg_SMBaseMachineCult") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_RhinoBasePredator1", "space_marine_squad_predator", "mkr_sm_machinecult", 1, 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RhinoBasePredator1"), 1),"space_marine_lascannon_twin_predator", 1)
+			Cmd_AttackMoveMarker("sg_RhinoBasePredator1", "mkr_rhinobase_predator_attackmove1")
+		end
+		if EGroup_Exists("eg_SMBaseMachineCult2") and EGroup_Count("eg_SMBaseMachineCult2") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_RhinoBasePredator2", "space_marine_squad_predator", "mkr_sm_machinecult2", 1, 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RhinoBasePredator2"), 1),"space_marine_lascannon_tank_right", 1)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RhinoBasePredator2"), 1),"space_marine_lascannon_tank_left", 1)
+			Cmd_AttackMoveMarker("sg_RhinoBasePredator2", "mkr_rhinobase_predator_attackmove2")
+		end
+		-- send capture squad from main base
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2 , "sg_RhinoAttackSquad"..i, "space_marine_squad_tactical", "mkr_sm_machinecult2" ,1,World_GetRand(7,8))
+			local WeaponType = World_GetRand(1, 4)
+			if WeaponType == 1 then
+				Weapon = "space_marine_heavy_bolter_tactical"
+			elseif WeaponType == 2 then
+				Weapon = "space_marine_flamer_tactical"
+			elseif WeaponType == 3 then
+				Weapon = "space_marine_missile_launcher_tactical"
+			elseif  WeaponType == 4 then
+				Weapon = "space_marine_plasma_gun"
+			end
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RhinoAttackSquad"..i), 1),Weapon, 6)
+			SGroup_AddLeaders("sg_RhinoAttackSquad"..i)
+			Cmd_AttackMoveMarker("sg_RhinoAttackSquad"..i, "mkr_rhinobase_predator_attackmove"..i)
+		end
+		Rule_AddInterval(RhinoBaseDefense_AttackPlayerSquads, 1)
+		Rule_Remove(RhinoBase)		
+	end
+end
+
+function RhinoBaseDefense_AttackPlayerSquads()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase2_area") then
+		g_PlayerSquadsNearRhinoBaseCounter = g_PlayerSquadsNearRhinoBaseCounter  + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_P1SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter, "mkr_tankbase2_area")
+		Player_GetAllSquadsNearMarker(g_Player2, "sg_P2SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter, "mkr_tankbase2_area")
+		if SGroup_Exists("sg_P1SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter) and SGroup_Count("sg_P1SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter) > 0 then
+			if SGroup_Exists("sg_P2SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter) and SGroup_Count("sg_P2SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter) > 0 then
+				Cmd_AttackSGroup("sg_P2SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter, "sg_P1SquadsNearRhinoBase"..g_PlayerSquadsNearRhinoBaseCounter)
+			end
+		end	
+	end
+end
+
+function AttackFromMainBase()
+	if g_TotalDropPoints == 0 and (g_RhinoBaseDead == true or g_AirBaseDead == true) then
+		local SquadNum = 0
+		
+		for i=1,4 do
+			local Chance = 0
+			-- spawns light infantry, heavy infantry, light vehicle, and heavy vehicle to attack the player base
+			if i==1 then
+				-- infantry
+				Chance = World_GetRand(1,3)
+			elseif i==2 then
+				-- heavy infantry
+				Chance = World_GetRand(4,6)
+			elseif i==3 then
+				-- light vehicle
+				Chance = World_GetRand(7,9)
+			elseif i==4 then
+				-- heavy vehicle
+				Chance = World_GetRand(10,12)
+			end
+			
+			if Chance == 1 then
+				--marines
+				Blueprint = "space_marine_squad_tactical"
+				Counter = g_MainCounterSM
+				SquadName = "sg_MainSpaceMarines"
+				MaxPopName = g_MaxMainSM
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(6,8)
+			elseif Chance == 2 then
+				-- assault marines
+				Blueprint = "space_marine_squad_assault"
+				Counter = g_MainCounterAssault
+				SquadName = "sg_MainAssaultMarines"
+				MaxPopName = g_MaxMainAssault
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(6,8)
+			elseif Chance == 3 then
+				-- scouts
+				Blueprint = "space_marine_squad_scout"
+				Counter = g_MainCounterScouts
+				SquadName = "sg_MainScouts"
+				MaxPopName = g_MaxMainScouts
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(3,4)
+			elseif Chance == 4 then
+				--  grey knights
+				Blueprint = "space_marine_squad_grey_knights"
+				Counter = g_MainCounterGN
+				SquadName = "sg_MainGreyKnights"
+				MaxPopName = g_MaxMainGreyKnights
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(6,8)
+			elseif Chance == 5 then
+				-- assault terminators
+				Blueprint = "space_marine_squad_terminator_assault"
+				Counter = g_MainCounterAssTerminators
+				SquadName = "sg_MainAssTerminators"
+				MaxPopName = g_MaxMainAssTerminators
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(6,8)
+			elseif Chance == 6 then
+				-- terminators
+				Blueprint = "space_marine_squad_terminator"
+				Counter = g_MainCounterTerminators
+				SquadName = "sg_MainTerminators"
+				MaxPopName = g_MaxMainTerminators
+				Building = "eg_SMBaseBarracks"..World_GetRand(1,4)
+				SquadNum = World_GetRand(6,8)
+			elseif Chance == 7 then
+				-- land speeder
+				Blueprint = "space_marine_squad_land_speeder"
+				Counter = g_MainCounterLandSpeeders
+				SquadName = "sg_MainLandSpeeders"
+				MaxPopName = g_MaxMainLandSpeeders
+				Building = "eg_SMBaseMachineCult"..World_GetRand(1,2)
+				SquadNum = 1
+			elseif Chance == 8 then
+				-- hf dn
+				Blueprint = "space_marine_squad_dreadnought_hellfire"
+				Counter = g_MainCounterHFDN
+				SquadName = "sg_MainDNHF"
+				MaxPopName = g_MaxMainHFDN
+				Building = "eg_SMBaseMachineCult"..World_GetRand(1,2)
+				SquadNum = 1
+			elseif Chance == 9 then
+				-- dn
+				Blueprint = "space_marine_squad_dreadnought"
+				Counter = g_MainCounterDN
+				SquadName = "sg_MainDN"
+				MaxPopName = g_MaxMainDN
+				Building = "eg_SMBaseMachineCult"..World_GetRand(1,2)
+				SquadNum = 1
+			elseif Chance == 10 then
+				-- whirlwind
+				Blueprint = "space_marine_squad_whirlwind"
+				Counter = g_MainCounterWhirlwind
+				SquadName = "sg_MainWhirlwind"
+				MaxPopName = g_MaxMainWhirlwind
+				Building = "eg_SMBaseMachineCult"..World_GetRand(1,2)
+				SquadNum = 1
+			elseif Chance == 11 or Chance == 12 then
+				-- predator
+				Blueprint = "space_marine_squad_predator"
+				Counter = g_MainCounterPredator
+				SquadName = "sg_MainPredator"
+				MaxPopName = g_MaxMainPredators
+				Building = "eg_SMBaseMachineCult"..World_GetRand(1,2)
+				SquadNum = 1
+			end
+			
+			if EGroup_Exists(Building) and EGroup_Count(Building) > 0 and PopCheck(Counter, SquadName, MaxPopName) == true then
+				
+				-- increase counter
+				if Blueprint == "space_marine_squad_grey_knights" then
+					g_MainCounterGN = g_MainCounterGN + 1
+				elseif Blueprint == "space_marine_squad_tactical" then
+					g_MainCounterSM = g_MainCounterSM + 1
+				elseif Blueprint == "space_marine_squad_predator" then
+					g_MainCounterPredator = g_MainCounterPredator + 1
+				elseif Blueprint == "space_marine_squad_whirlwind" then
+					g_MainCounterWhirlwind = g_MainCounterWhirlwind + 1
+				elseif Blueprint == "space_marine_squad_dreadnought" then
+					g_MainCounterDN = g_MainCounterDN + 1
+				elseif Blueprint == "space_marine_squad_dreadnought_hellfire" then
+					g_MainCounterHFDN = g_MainCounterHFDN + 1
+				elseif Blueprint == "space_marine_squad_land_speeder" then
+					g_MainCounterLandSpeeders = g_MainCounterLandSpeeders + 1
+				elseif Blueprint == "space_marine_squad_terminator" then
+					g_MainCounterTerminators = g_MainCounterTerminators + 1
+				elseif Blueprint == "space_marine_squad_terminator_assault" then
+					g_MainCounterAssTerminators = g_MainCounterAssTerminators + 1
+				elseif Blueprint == "space_marine_squad_scout" then
+					g_MainCounterScouts = g_MainCounterScouts + 1
+				elseif Blueprint == "space_marine_squad_assault" then
+					g_MainCounterAssault = g_MainCounterAssault + 1
+				end
+				
+				Util_CreateSquadsAtPositionEx(g_Player2, SquadName..Counter, Blueprint, EGroup_GetPosition(Building), 1, SquadNum)
+				
+				-- add weapons / leader
+				if Blueprint == "space_marine_squad_tactical" then
+					local WeaponType = World_GetRand(1, 4)
+					if WeaponType == 1 then
+						Weapon = "space_marine_heavy_bolter_tactical"
+					elseif WeaponType == 2 then
+						Weapon = "space_marine_flamer_tactical"
+					elseif WeaponType == 3 then
+						Weapon = "space_marine_missile_launcher_tactical"
+					elseif  WeaponType == 4 then
+						Weapon = "space_marine_plasma_gun"
+					end
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),Weapon, 5)
+					SGroup_AddLeaders(SquadName..Counter)
+				elseif Blueprint == "space_marine_squad_predator" then
+					local Weapon = World_GetRand(1,6)
+					if Weapon == 1 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_twin_predator", 1)
+					elseif Weapon == 2 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_tank_right", 1)
+					elseif Weapon == 3 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_tank_left", 1)
+					elseif Weapon == 4 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_tank_left", 1)
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_twin_predator", 1)
+					elseif Weapon >= 5 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_tank_left", 1)
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_twin_predator", 1)
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_lascannon_tank_right", 1)
+					end
+				elseif Blueprint == "space_marine_squad_dreadnought" then
+					local WeaponType = World_GetRand(1,2)
+					if WeaponType == 1 then
+						Weapon = "space_marine_lascannon_twin_dreadnought"
+					elseif WeaponType == 2 then
+						Weapon = "space_marine_assault_cannon_dreadnought"
+					end
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),Weapon, 1)				
+				elseif Blueprint == "space_marine_squad_terminator" then
+					local WeaponType = World_GetRand(1,2)
+					if WeaponType == 1 then
+						Weapon = "space_marine_heavy_flamer"
+					elseif WeaponType == 2 then
+						Weapon = "space_marine_assault_cannon_terminator"
+					end
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),Weapon, 3)
+				elseif Blueprint == "space_marine_squad_scout" then
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SquadName..Counter), 1),"space_marine_sniper_rifle", 3)
+				elseif Blueprint == "space_marine_squad_assault" then
+					SGroup_AddLeaders(SquadName..Counter)
+				end
+				
+				-- if we're spawning infantry, also spawn a leader
+				if Chance >= 1 or Chance <= 6 then
+					local Commander = World_GetRand(1,6)	
+					if Commander == 1 then
+						--force commander (hero) -- battlecry (pbae dmg/morale), orbital bombardment
+						CommBluePrint = "space_marine_squad_force_commander"
+						CommCounter = g_ForceCommanderCounter
+						CommMaxPop = g_MaxForceCommander
+						CommSGroup = "sg_ForceCommander"
+					elseif Commander >= 4 then
+						-- apothecary (healer) -- increases regen rate on units -- no special abilities, cap of 4
+						CommBluePrint = "space_marine_squad_apothecary"
+						CommCounter = g_ApothecaryCounter
+						CommMaxPop = g_MaxApothecary
+						CommSGroup = "sg_Apothecary"
+					elseif Commander == 3 then
+						-- chaplain (vet/hero) -- increases regen rate -- demoralizing shout demoralizes a squad target
+						CommBluePrint = "space_marine_squad_chaplain"
+						CommCounter = g_ChaplainCounter
+						CommMaxPop = g_MaxChaplain
+						CommSGroup = "sg_Chaplain"
+					elseif Commander == 2 then
+						-- librarian (good vs daemons) -- smite - targetted ae dmg, weaken resolve - reduce morale recover rate (squad target), word of the emperor - no infantry can die while active
+						CommBluePrint = "space_marine_squad_librarian"
+						CommCounter = g_LibrarianCounter
+						CommMaxPop = g_MaxLibrarian
+						CommSGroup = "sg_Librarian"
+					end
+					
+					if PopCheck(CommCounter, CommSGroup, CommMaxPop) == true then
+						Util_CreateSquadsAtPositionEx(g_Player2, CommSGroup..CommCounter, CommBluePrint, SGroup_GetPosition(SquadName..Counter), 1, 1)
+						Cmd_AttachSquads(SquadName..Counter, CommSGroup..CommCounter)
+						if Commander == 1 then
+							ForceCommanderWeapons()
+							g_ForceCommanderCounter = g_ForceCommanderCounter + 1
+						elseif Commander >= 4 then
+							g_ApothecaryCounter = g_ApothecaryCounter + 1
+						elseif Commander == 3 then
+							g_ChaplainCounter = g_ChaplainCounter + 1
+						elseif Commander == 2 then
+							g_LibrarianCounter = g_LibrarianCounter + 1
+						end
+					end
+				end
+				
+				Cmd_AttackMoveMarker(SquadName..Counter, "mkr_Player_HQ")
+			end
+		end
+		
+		-- 20% chance to spawn 1 or 2 land speeders (20% chance to spawn 2)
+		if World_GetRand(1, 10) > 8 then
+			if EGroup_Exists("eg_Tank2BaseTank") and EGroup_Count("eg_Tank2BaseTank") > 0 and PopCheck(g_LandSpeederCounter, "sg_LandSpeeder", g_MaxLandSpeeders) then
+				--create landraider(s)
+				local Chance = World_GetRand(1, 10)
+				if Chance > 8 then
+					SquadCount = 2
+				else
+					SquadCount = 1
+				end
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_LandSpeeder"..g_LandSpeederCounter, "space_marine_squad_land_speeder", "mkr_tankbase2_tank" , SquadCount, 1)
+				-- send land raider to player base
+				Cmd_AttackMoveMarker("sg_LandSpeeder"..g_LandSpeederCounter, "mkr_Player_HQ")
+			end
+		end
+	end
+end
+
+--[[(((((((((((((IE's)))))))))))))]]
+
+function StealPredatorTanksIE()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_StealPredatorTanks)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_StealPredatorTanks)
+	end
+end
+
+function PredObjAssignedIE()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_PredatorObjAssigned)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_PredatorObjAssigned)
+	end
+end
+
+function RhinoObjAssignedIE()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		Util_StartIntel(EVENTS.IE_Ork_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_FirstRhinoKilled)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_FirstRhinoKilled)
+	end
+end
+
+function Taunt2()
+	if g_DropPodTier == 4 then
+		Rule_Remove(Taunt2)
+		Util_StartIntel(EVENTS.IE_WhenDeepStrikesTierUp)
+	end
+end
+
+function Taunt3()
+	if g_NumOfPredatorToSend == 2 then
+		Util_StartIntel(EVENTS.IE_Taunt3)		
+		Rule_Remove(Taunt3)
+	end
+end
+
+function LandRaiderIE()
+	if SGroup_Exists("sg_LandRaider"..g_LandRaiderCounter) and SGroup_Count("sg_LandRaider"..g_LandRaiderCounter) > 0 and SGroup_GetAvgHealth("sg_LandRaider"..g_LandRaiderCounter) < 1 then
+		Rule_Remove(LandRaiderIE)
+		Util_StartIntel(EVENTS.IE_LandRaiderSeen)
+	end
+end
+
+function MostBeaconsDeadIE()
+	if g_TotalDropPoints <= 2 then
+		Util_StartIntel(EVENTS.IE_MostBeaconsDead)
+		Rule_Remove(MostBeaconsDeadIE)
+	end
+end
+
+
+
+function Taunt1()
+	if g_TotalDropPoints == 7 then
+		Util_StartIntel(EVENTS.IE_Taunt1 )
+		Rule_Remove(Taunt1)
+	end
+end
+function DamageFirstMine()
+	for i=1,13 do
+		if EGroup_Exists("eg_SMMine"..i) and EGroup_IsUnderAttack("eg_SMMine"..i, true) then
+			if MetaMap_GetPlayerRaceName() == "eldar_race" then
+				Util_StartIntel(EVENTS.IE_Eldar_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+				Util_StartIntel(EVENTS.IE_IG_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+				Util_StartIntel(EVENTS.IE_Necron_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+				Util_StartIntel(EVENTS.IE_Ork_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+				Util_StartIntel(EVENTS.IE_Chaos_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+				Util_StartIntel(EVENTS.IE_Tau_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+				Util_StartIntel(EVENTS.IE_Sisters_DmgFirstMine)
+			elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+				Util_StartIntel(EVENTS.IE_DE_DmgFirstMine)
+			end
+			Rule_Remove(DamageFirstMine)
+		end
+	end
+end
+
+function PlayerNearRhinoBase()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_tankbase2_area") then
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+			Util_StartIntel(EVENTS.IE_Necron_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+			Util_StartIntel(EVENTS.IE_Chaos_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_PlayerNearRhinoBase)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_PlayerNearRhinoBase)
+		end
+		Rule_Remove(PlayerNearRhinoBase)
+	end
+end
+function PlayerNearMainBase()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbase_center4") then
+		if MetaMap_GetPlayerRaceName() == "eldar_race" then
+			Util_StartIntel(EVENTS.IE_Eldar_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+			Util_StartIntel(EVENTS.IE_IG_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+			Util_StartIntel(EVENTS.IE_Necron_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+			Util_StartIntel(EVENTS.IE_Ork_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+			Util_StartIntel(EVENTS.IE_Chaos_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+			Util_StartIntel(EVENTS.IE_Tau_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+			Util_StartIntel(EVENTS.IE_Sisters_PlayerNearMainBase)
+		elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+			Util_StartIntel(EVENTS.IE_DE_PlayerNearMainBase)
+		end
+		Rule_Remove(PlayerNearMainBase)
+	end
+end
+

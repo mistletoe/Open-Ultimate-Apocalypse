@@ -1,0 +1,45 @@
+-------------------------------------------------
+--IMPORTS
+-------------------------------------------------
+import("ScarUtil.scar")
+import("BalanceTool.scar")
+
+g_rescount = 4000
+
+function OnInit()
+	load_out_table_1 =
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	load_out_table_2 = 
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	g_Player1 = World_GetPlayerAt(0)
+	g_Player2 = World_GetPlayerAt(1)
+	
+	Balance_CreateSquadsAtMarkerByResource( g_Player1, "foogroup", "space_marine_squad_tactical", load_out_table_1, "marker1", g_rescount, g_rescount )
+	Cmd_SetStance( "foogroup", STANCE_Attack ) 
+	Cmd_SetMeleeStance( "foogroup", MSTANCE_Ranged ) 
+	Balance_CreateSquadsAtMarkerByResource( g_Player2, "foogroup2", "space_marine_squad_servitor", load_out_table_2, "marker2", g_rescount, g_rescount )
+	Cmd_SetStance( "foogroup2", STANCE_CeaseFire ) 
+	Cmd_SetMeleeStance( "foogroup2", MSTANCE_Ranged ) 
+end
+
+Balance_SetInit( OnInit )

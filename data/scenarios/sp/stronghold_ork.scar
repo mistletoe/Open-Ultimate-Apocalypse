@@ -1,0 +1,2895 @@
+-------------------------------------------------
+--[[ IMPORTS -- This is neccesary to use all the functions of SCAR]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[ GAME SETUP ]]
+-------------------------------------------------
+
+--[[ the OnGameSetup() function is mandatory! -- Here you should setup all your global variables, which can be used in any function.]]
+function OnGameSetup()
+
+--[[Tweak these variables to change difficulty]]
+g_ResearchCounterTimer = 90 -- Number of seconds between Orks getting upgrades to their army.  Helps scale level difficulty
+g_RelicBaseAttackTimer = 190 -- frequency of attacks from the first relic base
+g_SmallBase1AttackTimer = 325 --frequency of attacks from smallbase1
+g_SmallBase2AttackTimer = 295 --frequency of attacks from smallbase2
+g_NobBaseAttacksTimer = 305 -- (310) frequency of nob base attacks
+g_TankBaseAttacksTimer = 365 -- (355) frequency of tank base attacks
+g_AttackFromSmallBase3Timer =  304 -- frequency of smallbase3 attacks
+g_StartBase1and2FallBackTimer = 1000 -- if the player hasnt left their base in X seconds, start bases 1 and 2 anyway.
+g_TurnOnTankAndNobBaseTimer = 1500 -- (2000) if the player doesnt take the relic within this amount of time, the tank and nob bases turn on anyway.
+g_Base3ForcedAttackTimer = 2800 -- if the player doesnt trigger base3, force it to turn on at this point
+g_SquiggCoolDownTimer = 600 -- (600) time between when a squigg can be built
+g_GretchinSpawnTimer = 20 -- gretchins spawn every x seconds to repair smallbase3
+g_StormBoyPatrolCreateTimer = 405 -- timer between stormboy patrol creation
+g_QuickSluggasTimer = 27 -- when the player enters the final base, sluggas come out fast
+g_ManditoryResearchTimer = 800 -- if the player doesn't reach their goals to force the upgrades, then at least upgrade them this slow.
+g_FightaBombaReplacementTimer = 110 -- time between fighta bombas being replaced if they die
+g_RelicAttackTierTimer = 290 -- tier up the amount of guys sent by the relic camp
+g_RecaptureSquadTimer = 489 -- time between sending a squad of guys in to recapture the relic point
+g_TurnOnTankAndNobBasesDelayTimer = 297 -- after the player kills the relic lp, wait this many seconds before starting the tank/nob bases
+
+-- attack tiers
+g_TankBaseTierTimer = 420 -- increase wartraks sent
+g_SmallBase2TierUpTimer = 350 -- increase stuff sent from base 2
+g_SmallBase1TierTimer = 390 -- increase stuff sent from base1
+
+-- if there are >= this number of squads in a base, send all of the defense units of the base to attack the squads
+g_SB1DefenseNumber = 2
+g_SB2DefenseNumber = 2
+g_SB3DefenseNumber = 3
+g_NBDefenseNumber = 3
+g_TBDefenseNumber = 3
+g_SBDefenseNumber = 3
+
+-- fake population
+g_MaxSlugga = 6
+g_MaxShoota = 6
+g_MaxStormboy = 3
+g_MaxWartrukk = 3
+g_MaxMadDok = 3
+g_MaxBase2TankBusta = 1
+g_MaxBase2Slugga = 2
+g_MaxBigMek = 1
+g_MaxNobs = 5
+g_MaxWartrakk = 6
+g_MaxSquigg = 1
+g_MaxFlashGitz = 2
+g_MaxMegaNobs = 2
+g_MaxTankBusta = 3
+g_MaxLootedTank = 2
+g_MaxKillaKan = 2
+g_MaxGretchin = 2
+g_MaxMainBaseSluggas = 11
+g_MaxFightaBomba = 3
+
+
+--debug stuff
+g_Debug = false -- turns debug mode off and on.  (turns on fog of war)
+g_Debug_TurnOffFinalRetribution = false -- if this is false, the huge attack comes.  leaving it on true makes testing other end-of-scenario stuff easier.
+
+-- other global variables (DO NOT MODIFY)
+g_SluggaCounter = 0
+g_ShootaCounter = 0
+g_StormboyCounter = 0
+g_JumpAttackCounter = 0
+g_AttackWavesFromRelicBase = 0
+g_WartrukkCounter = 0
+g_MadDokCounter = 0
+g_StartSmallBases1and2Counter = 0
+g_TransportFlag = false
+g_TransportSquad = ""
+g_Base2SluggaCounter = 0
+g_Base2TankBustaCounter = 0
+g_BigMekCounter = 0
+g_WaaghWallDefenseFirstRun = true
+g_NobCounter = 0
+g_TurnOnTankAndNobBaseTime = 0
+g_TrakkCounter = 0
+g_SquiggFlagCounter = 0
+g_SquiggCounter = 0
+g_SquiggFlag = true
+g_FlashGitzCounter = 0
+g_LootedTankCounter = 0
+g_MegaNobsCounter = 0
+g_TankBustaCounter = 0
+g_KillaKanCounter = 0
+g_GretchinCounter = 1
+g_BombDestroyCounter = 1
+g_MainBaseSluggaCounter = 0
+g_ManditoryResearchCounter = 0
+t_TierResearched = {false, false, false, false }
+g_TankBaseFirstTime = true
+g_NobBaseFirstTime = true
+g_SquiggBaseFirstTime = true
+t_ProximityIEs = {false, false, false, false}
+g_GiantWaaghBannerDestroyed = false
+g_GiantWaaghBannerSeen = false
+g_FirstSquigg = true
+g_NobTierReached = false
+t_ObjAssigned = {false, false, false, false}
+g_PlayerAttackingSquadCounter = 0
+g_WartrakTier = 1
+g_SmallBase2Tier = 1
+g_SmallBase1Tier = 1
+g_Base3ForcedAttackCounter = 0
+g_SB3AttMoveCounter = 0
+g_MainBaseP1Counter = 0
+g_FightaBombaCounter = 0
+g_PlayerSquadsNearBase3Counter = 0
+g_RelicAttackTier = 1
+g_PlayerTookRelic = false
+g_SquadsNearRelicCounter = 0
+g_SquiggFlagHelper = false
+g_CaptureCounter = 0
+g_SquiggObjectiveComplete = false
+g_TankObjectiveComplete = false
+g_NobObjectiveComplete = false
+g_AirObjectiveComplete = false
+g_StormboyJumpAttackCounter = 0
+t_StormBoyAttackSent = {false, false, false, false, false, false}
+g_CanSendStormboyFlag = true
+g_StormboyCooldown = 0
+-- generator markers start at 0
+g_bonus_gen_counter = 0
+-- turrer markers start at 6
+g_bonus_turret_counter = 6
+g_GlobalAttackPos = 0
+g_PrimaryObjectives = 0
+g_SecondaryObjectives = 0
+g_QuickSluggaRatchet = 0
+g_QuickSluggaCooldown = {0,0,0,0,0,0,0,0,0,0,0,0}
+g_QuickSluggaSend =  {false,false,false,false,false,false,false,false,false,false,false,false}
+
+--[[defining the name of the player's faction]]
+if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+	factionname = "$3950214"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+	factionname = "$3950219"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+	factionname = "$3950215"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+	factionname = "$3950213"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+	factionname = "$3950224"
+	colorscheme = "default_4"
+elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+	factionname = "$3950217"
+	colorscheme = "default_5"
+elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+	factionname = "$3950223"
+	colorscheme = "default_0"
+elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+	factionname = "$3950220"
+	colorscheme = "default_1"
+elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+	factionname = "$3900048"
+	colorscheme = "default_2"
+end
+g_Player1 = Setup_Player(0, factionname, MetaMap_GetPlayerRaceName(), 0)
+Misc_PlayerTeamColor(g_Player1, colorscheme)
+
+--g_Player1 = Setup_Player(0, "Human Player 1", "chaos_marine_race", 1)
+--setting up the upgrades for the commander
+MetaMap_UpdatePlayerWargear(g_Player1)
+g_Player2 = Setup_Player(1, "$3950216", "ork_race", 1) -- nuddyfist
+g_Player3 = Setup_Player(2, "$3950215", "ork_race", 1) -- gorgutz
+g_Player4 = Setup_Player(3, "$3950216", "ork_race", 1) -- nuddyfist
+g_Player5 = Setup_Player(4, "$3950216", "ork_race", 1) -- stormboyz that jump into player base on higher difficulty settings
+Misc_PlayerTeamColor(g_Player2, "default_4")
+Misc_PlayerTeamColor(g_Player3, "default_8")
+Misc_PlayerTeamColor(g_Player4, "default_4")
+Misc_PlayerTeamColor(g_Player5, "default_4")
+
+end
+
+--[[ the OnGameRestore() function is mandatory!, this will only get called after loading a game ]]
+function OnGameRestore()
+end
+
+--[[This function runs first, here you can setup anything you want to happen before the game starts.]]
+function OnInit()
+	Rule_AddOneShot(Rule_CreateOrkBases, 0)
+	
+	--NIS_Setup()
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Opening )
+	end
+	
+	Rule_PresetAI()
+	
+	--[[ Start Gameplay]]
+	Rule_Add( Rule_GameStart )
+	--[[
+	3950069	Destroy the Ork HQ!
+	3950070	Destroy the Ork HQ to wipe the Orks off this planet!
+	3950071	Destroy the squigg bases!
+	3950072	Destroy the squigg bases to stop sqiggoths from attacking!
+	3950073	Destroy the nob base!
+	3950074	Destroy the nob base to stop nobs from claw spamming your town!
+	3950075	Destroy the tank base!
+	3950076	Destroy the tank base to stop wartraks from attacking!
+	]]
+	
+	--[[Define Objective: Below is what lua script calls a blueprint, but is better known in C as a struct.  This is a variable that contains other variables that can be referenced with dot notation (ie: Objective_Destroy_PowerGen.title_id will return 7000200)]]
+	Objective_DestroyBase = {title_id = 3950069, short_desc_id = 3950070 , help_tip_id =3950070 }
+	Objective_DestroySquiggBases = {title_id = 3950071, short_desc_id = 3950072 , help_tip_id =3950072 }
+	Objective_DestroyTankBase = {title_id = 3950075, short_desc_id = 3950076 , help_tip_id =3950076 }
+	Objective_DestroyNobBase = {title_id = 3950073, short_desc_id = 3950074 , help_tip_id =3950074 }
+	Objective_DestroyAirBase = {title_id = 3950172, short_desc_id = 3950173 , help_tip_id =3950173 }
+	
+	
+	
+end
+
+--[[ the Scar_AddInit(OnInit) function is mandatory! This registers your init function with scar. ]]
+Scar_AddInit(OnInit)
+
+-------------------------------------------------
+--[[ PRESET AI ]]
+-------------------------------------------------
+
+function Rule_PresetAI()
+	
+	--[[This function is called from OnInit() and start or stop the AI.]]
+	Cpu_Enable(g_Player2, false)
+	Cpu_SetDifficulty(g_Player2,   AD_Standard)
+	Cpu_Enable(g_Player3, false)
+	Cpu_SetDifficulty(g_Player3,   AD_Standard)
+	Cpu_Enable(g_Player4, false)
+	Cpu_SetDifficulty(g_Player4, AD_Easy)
+	Cpu_Enable(g_Player5, false)
+	Cpu_SetDifficulty(g_Player5, AD_Easy)
+	--[[Cpu_Enable(g_Player6, false)
+	Cpu_SetDifficulty(g_Player6, AD_Easy)
+	Cpu_Enable(g_Player7, false)
+	Cpu_SetDifficulty(g_Player7, AD_Easy)
+	Cpu_Enable(g_Player8, false)
+	Cpu_SetDifficulty(g_Player8, AD_Easy)]]
+end
+-------------------------------------------------
+--[[ MUSIC -- Called from Rule_GameStart()]]
+-------------------------------------------------
+
+function Rule_Start_Music()
+	
+	--Perc+strings ->  all tracks -> perc only -> perc+brass
+	--[[Starts the music]]
+	t_Ork_stronghold_music = {"MU_IG_STR_Ork_perc_str", "MU_IG_STR_Ork",
+	"MU_IG_STR_Ork_perc", "MU_IG_STR_Ork_perc_brass"}
+	
+	Playlist_Manager( PC_Music, t_Ork_stronghold_music, true, true , {2, 4})
+	
+	
+	--[[Set ambient sounds]]
+	t_Ork_stronghold_ambient = {"Ambience_Paradise_Lost"}
+	
+	Playlist_Manager( PC_Ambient, t_Ork_stronghold_ambient, true, true , {5, 15})
+	
+end
+
+
+-------------------------------------------------
+--[[ START PLAY ]]
+-------------------------------------------------
+
+function Rule_GameStart()
+	
+	if Event_IsAnyRunning() == false then
+		if g_Debug == true then
+			FOW_RevealAll()
+		end
+		
+		-- Set Difficulty Level
+		DifficultyLevel()
+		
+		-- Timer
+		Rule_UI_Game_Timer()		
+		
+		--Music
+		Rule_AddOneShot(Rule_Start_Music, 0)
+		
+		Rule_AddOneShot(Rule_CreatePlayerBases, 0)
+		
+		-- Objectives
+		
+		-- Gameplay Rules
+		Rule_AddOneShot(InitialAttack, 15)
+		Rule_AddOneShot(InitialFightaBomba, 3)
+		Rule_AddInterval(StartSmallBases1and2, 1)
+		Rule_AddInterval(TurnOnTankAndNobBases, 1)
+		Rule_AddInterval(StartAttackingFromSmallBase3, 1)
+		Rule_AddInterval(WaaghWallDefense, 1)
+		Rule_AddInterval(StormboyPatrolCreate, g_StormBoyPatrolCreateTimer)
+		Rule_AddInterval(StormboyPatrol, 1)
+		Rule_AddInterval(StealthedGretchinRepair, g_GretchinSpawnTimer)
+		Rule_AddInterval(MadDokBomb, 1)
+		Rule_AddInterval(MainBaseReact, 1)
+		Rule_AddInterval(GrantResearch,1)
+		Rule_AddOneShot(MainObjectiveHelper, 10)
+		Rule_AddInterval(IE_PlayerTakesRelic, 7)
+		Rule_AddInterval(IE_Taunts, 4)
+		Rule_AddInterval(GiantWaaghBannerIEHelper, 1)
+		Rule_AddInterval(MakeSureObjIsAssigned, 1)
+		Rule_AddInterval(GorgutzBase, 1)
+		Rule_AddInterval(InternallyDefendAllBases, 1)
+		Rule_AddInterval(MiddlePass, 1)
+		Rule_AddInterval(RelicAttackTier,g_RelicAttackTierTimer)
+		Rule_AddInterval(RecaptureRelicPoint, g_RecaptureSquadTimer)
+		Rule_AddInterval(Lose, 10)
+		Rule_AddInterval(StormboyAttack_SendIt, 1)
+		Rule_AddInterval(StormboyAttack_HighLvlStronghold_Jumpto, 1)
+		Rule_AddInterval(IntelligentlyMoveAttacks, 5)
+		Rule_AddInterval(ForceCapture, 3)		
+		GrantInitialResearch()
+		MadDokBombSetup()
+		SetupGorgutzBase()
+		
+		--[[ Clean up -- Since we did Rule_Add(Rule_GameStart) it was attempting to run this function every frame, but now that it has finished running, we don't need it to run anymore.]]
+		Rule_Remove(Rule_GameStart)
+	end
+
+end
+
+
+function NIS_Setup()
+
+    EventCue_Enable(false)
+    Fade_Start( 5, false )            
+    W40k_Letterbox( true, 3 )
+
+    -- NIS_Setup(timeFadeSec, timeLetterboxSec) : used to control screen fade and letterbox mode
+    --NIS_Setup(0,0) 
+
+	-- START NIS - calls the Opening NIS function located in the MissionName.nis file
+    Util_StartNIS( EVENTS.NIS_Opening )
+
+end
+
+-- Create and Initially Show the Game Timer
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates and shows the Game Timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--[[Drops down buildings at markers, to create the ork bases around the map]]
+function Rule_CreateOrkBases()
+
+	local SquadCount = 0
+	
+	--[[MainBase]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_MainOrkBase01", "ork_hq", "mkr_mainbase", 1)
+	EGroup_ForceAddOn("eg_MainOrkBase01", "ork_hq_addon")
+	
+	for i=1,3 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_MainOrkBaseHuts"..i, "ork_boy_hut", "mkr_mainhut"..i, 1)
+	end
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_MainOrkBaseMek"..i, "ork_mek_shop", "mkr_mainmek"..i, 1)
+	end
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_MainOrkBaseGunz"..i, "ork_pile_o_guns", "mkr_maingunz"..i, 1)
+	end
+	
+	for i=1,14 do
+		local test = Entity_CreateBuildingMarker(g_Player2, "eg_MainOrkWaagh", "ork_waagh_banner", "mkr_waagh"..i, 1)
+	end
+	
+	--[[Air Base]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_AirBase", "ork_hq", "mkr_squiggbase1", 1)
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_AirBaseMek"..i, "ork_mek_shop", "mkr_squigg1mek"..i, 1)
+	end
+	
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_AirBaseWaagh"..i, "ork_waagh_banner", "mkr_squigg1waagh"..i, 1)
+	end
+	EGroup_CreateIfNotFound("eg_AirBaseObj")
+	EGroup_AddGroup("eg_AirBaseObj", "eg_AirBaseMek1")
+	EGroup_AddGroup("eg_AirBaseObj", "eg_AirBaseMek2")
+
+	--[[Squigg Base 2]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_SquiggBase02", "ork_hq", "mkr_squiggbase2", 1)
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SquiggBaseMek"..i, "ork_mek_shop", "mkr_squigg2mek"..i, 1)
+	end
+	
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SquiggBase02Waagh", "ork_waagh_banner", "mkr_squigg2waagh"..i, 1)
+	end
+	
+	EGroup_CreateIfNotFound("eg_SquiggBaseObj")
+	EGroup_AddGroup("eg_SquiggBaseObj", "eg_SquiggBaseMek1")
+	EGroup_AddGroup("eg_SquiggBaseObj", "eg_SquiggBaseMek2")
+	
+	--[[Tank Base]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_TankBase01", "ork_hq", "mkr_tankbase", 1)
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_TankBaseMek"..i, "ork_mek_shop", "mkr_tankbasemek"..i, 1)
+	end
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_TankBase01Waagh", "ork_waagh_banner", "mkr_tankbasewaagh"..i, 1)
+	end
+	
+	EGroup_CreateIfNotFound("eg_TankBaseObj")
+	EGroup_AddGroup("eg_TankBaseObj", "eg_TankBaseMek1")
+	EGroup_AddGroup("eg_TankBaseObj", "eg_TankBaseMek2")
+	
+	--[[Nob Base]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_NobBase01", "ork_hq", "mkr_nobbase", 1)
+	
+	for i=1,3 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_NobBaseHut"..i, "ork_boy_hut", "mkr_nobbasehut"..i, 1)
+	end
+	
+	for i=1,2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_NobBase01Waagh", "ork_waagh_banner", "mkr_nobbasewaagh"..i, 1)
+	end
+	
+	EGroup_CreateIfNotFound("eg_NobBaseObj")
+	EGroup_AddGroup("eg_NobBaseObj", "eg_NobBaseHut1")
+	EGroup_AddGroup("eg_NobBaseObj", "eg_NobBaseHut2")
+	EGroup_AddGroup("eg_NobBaseObj", "eg_NobBaseHut3")
+	
+	--[[Small Base 1]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase01", "ork_hq", "mkr_smallbase1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SmallBaseGunz1", "ork_pile_o_guns", "mkr_smallbase1gunz1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase1Mek1", "ork_mek_shop", "mkr_smallbase1mek1", 1)
+	
+	for i=1, 2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase1Hut"..i, "ork_boy_hut", "mkr_smallbase1hut"..i, 1)
+	end
+	
+	for i=1,3 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase01Waagh", "ork_waagh_banner", "mkr_smallbase1waagh"..i, 1)
+	end
+	
+	--[[Small Base 2]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase02", "ork_hq", "mkr_smallbase2", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_SmallBaseGunz1", "ork_pile_o_guns", "mkr_smallbase2gunz1", 1)
+	
+	for i=1, 2 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase2Hut"..i, "ork_boy_hut", "mkr_smallbase2hut"..i, 1)
+	end
+	
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_SmallBase02Waagh", "ork_waagh_banner", "mkr_smallbase2waagh"..i, 1)
+	end
+	
+	--[[Small Base 3]]
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building1", "ork_hq", "mkr_smallbase3", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building2", "ork_pile_o_guns", "mkr_smallbase3gunz1", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building3", "ork_boy_hut", "mkr_smallbase3hut1", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building4", "ork_boy_hut", "mkr_smallbase3hut2", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building5", "ork_mek_shop", "mkr_smallbase3mek1", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building6", "ork_mek_shop", "mkr_smallbase3mek2", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building7", "ork_waagh_banner", "mkr_smallbase3waagh1", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building8", "ork_waagh_banner", "mkr_smallbase3waagh2", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building9", "ork_waagh_banner", "mkr_smallbase3waagh3", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building10", "ork_waagh_banner", "mkr_smallbase3waagh4", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building11", "ork_waagh_banner", "mkr_smallbase3waagh5", 1)
+	Entity_CreateBuildingMarker(g_Player3, "eg_SmallBase3Building12", "ork_waagh_banner", "mkr_smallbase3waagh6", 1)
+	
+	for i=1,8 do
+		EGroup_ForceAddOn("eg_DefenseWall"..i, "ork_waagh_banner_gunzaddon")
+	end
+	
+	--[[waagh wall]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_WaaghWallHut", "ork_boy_hut", "mkr_waaghwallhut", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_WaaghWallGunz", "ork_pile_o_guns", "mkr_waaghwallgunz", 1)
+	
+	--[[Big Waagh Banners in each base]]
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_WaaghWall", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_waaghwall", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_SmallBase1", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_smallbase1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_SmallBase2", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_smallbase2", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_SmallBase3", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_smallbase3", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_NobBase", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_nobbase", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_TankBase", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_tankbase", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_SquiggBase1", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_squiggbase1", 1)
+	Entity_CreateBuildingMarker(g_Player2, "eg_BigWaagh_SquiggBase2", "ork_giant_waagh_banner_sp_dxp3", "mkr_bigwaagh_squiggbase2", 1)
+	
+	EGroup_Create("eg_BigWaagh_Complete")
+	
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_WaaghWall")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_SmallBase1")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_SmallBase2")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_SmallBase3")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_NobBase")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_TankBase")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_SquiggBase1")
+	EGroup_AddGroup("eg_BigWaagh_Complete", "eg_BigWaagh_SquiggBase2")
+	
+	-- give the AI all of the strategic points, and put upgraded listening posts on them
+	for i = 1,11 do
+		EGroup_SetPlayerOwner("eg_LP"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_ListeningPosts"..i, "ork_gork_totem", EGroup_GetPosition("eg_LP"..i), 1)
+		if i >= 3 then
+			EGroup_ForceAddOn("eg_ListeningPosts"..i, "ork_gork_totem_addon_1" )
+			EGroup_ForceAddOn("eg_ListeningPosts"..i, "ork_gork_totem_addon_2" )
+		end
+	end
+	
+	EGroup_SetPlayerOwner("eg_Relic", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_ListeningPostsRelic", "ork_gork_totem", EGroup_GetPosition("eg_Relic"), 1)
+	EGroup_ForceAddOn("eg_ListeningPostsRelic", "ork_gork_totem_addon_1" )
+	EGroup_ForceAddOn("eg_ListeningPostsRelic", "ork_gork_totem_addon_2" )
+
+	--[[Mad Dok Bomb Waagh]]
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_BombWaagh"..i, "ork_waagh_banner", "mkr_bombwaagh"..i, 1)
+	end
+	
+	--[[Random Power Generators]]
+	for i=1,18 do
+		local test = Entity_CreateBuildingMarker(g_Player2, "eg_Powergen"..i, "ork_generator", "mkr_randompowergen"..i, 1)
+	end
+	
+	--[[Bigga Generator]]
+	Entity_CreateBuildingPosition(g_Player2, "eg_BiggaGenerator", "ork_bigger_generator", EGroup_GetPosition("eg_SlagDeposit"), 1)
+	
+	CreateStaticDefenses()
+end
+
+function CreateStaticDefenses()
+
+	-- smallbase1
+	SGroup_Create("sg_SmallBase1Defense")
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SmallBase1DefenseTrukk"..i, "ork_squad_trukk_sp_dxp3", "mkr_smallbase1_wartrukk"..i, 1, 1)
+		SGroup_AddGroup("sg_SmallBase1Defense", "sg_SmallBase1DefenseTrukk"..i)
+	end
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SmallBase1DefenseShoota"..i, "ork_squad_shoota_boy", "mkr_smallbase1_shootas"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SmallBase1DefenseShoota"..i), 1),"ork_big_shoota_shoota", World_GetRand(5,7))
+		SGroup_AddGroup("sg_SmallBase1Defense", "sg_SmallBase1DefenseShoota"..i)
+	end
+	Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SmallBase1DefenseSlugga", "ork_squad_slugga", "mkr_smallbase1_sluggas1", 1, 20)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SmallBase1DefenseSlugga"), 1),"ork_burna_slugga", World_GetRand(5,7))
+	SGroup_AddGroup("sg_SmallBase1Defense", "sg_SmallBase1DefenseSlugga")
+	
+	-- smallbase2
+	SGroup_Create("sg_SmallBase2Defense")
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SmallBase2DefenseShoota"..i, "ork_squad_shoota_boy", "mkr_smallbase2_shootas"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SmallBase2DefenseShoota"..i), 1),"ork_big_shoota_shoota", World_GetRand(5,7))
+		SGroup_AddGroup("sg_SmallBase2Defense", "sg_SmallBase2DefenseShoota"..i)
+	end
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SmallBase2DefenseSlugga"..i, "ork_squad_slugga", "mkr_smallbase2_sluggas"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SmallBase2DefenseSlugga"..i), 1),"ork_burna_slugga", World_GetRand(5,7))
+		SGroup_AddGroup("sg_SmallBase2Defense", "sg_SmallBase2DefenseSlugga"..i)
+	end
+	
+	-- smallbase3
+	SGroup_Create("sg_SmallBase3Defense")
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_SmallBase3DefenseFlashGitz"..i, "ork_flash_gitz_squad", "mkr_smallbase3_flashgitz"..i, 1, 7)
+		SGroup_AddGroup("sg_SmallBase3Defense", "sg_SmallBase3DefenseFlashGitz"..i)
+	end
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_SmallBase3DefenseMegaNob"..i, "ork_squad_armored_nob", "mkr_smallbase3_meganobs"..i, 1, 4)
+		SGroup_AddGroup("sg_SmallBase3Defense", "sg_SmallBase3DefenseMegaNob"..i)
+	end
+	for i=1,1 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_SmallBase3DefenseLootedTank"..i, "ork_squad_looted_tank", "mkr_smallbase3_lootedtank"..i, 1, 1)
+		SGroup_AddGroup("sg_SmallBase3Defense", "sg_SmallBase3DefenseLootedTank"..i)
+	end
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_SmallBase3DefenseKan"..i, "ork_squad_killa_kan", "mkr_smallbase3_killakan"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SmallBase3DefenseKan"..i), 1),"ork_rokkit_launcha_killakan", 1)
+		SGroup_AddGroup("sg_SmallBase3Defense", "sg_SmallBase3DefenseKan"..i)
+	end
+	for i=1,3 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_WallDefenseFlashGitz"..i, "ork_flash_gitz_squad", "mkr_defendpoint_flashgitz"..i, 1, 7)
+	end
+	
+	-- nobbase
+	SGroup_Create("sg_NobBaseDefense")
+	for i=1,4 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_NobBaseDefenseNobs"..i, "ork_squad_nob", "mkr_nobbase_nobs"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_NobBaseDefenseNobs"..i), 1),"ork_power_claw_nobz", World_GetRand(8,10))
+		SGroup_AddGroup("sg_NobBaseDefense", "sg_NobBaseDefenseNobs"..i)
+	end
+	
+	-- tankbase
+	SGroup_Create("sg_TankBaseDefense")
+	for i=1,8 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_TankBaseDefenseWartrakk"..i, "ork_squad_wartrak", "mkr_tankbase_wartrakk"..i, 1, 20)
+		SGroup_AddGroup("sg_TankBaseDefense", "sg_TankBaseDefenseWartrakk"..i)
+		if i==1 or i == 3 or i== 5 or i == 7 then
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_TankBaseDefenseWartrakk"..i), 1),"ork_bomb_chucka_wartrack", 1)
+		end
+	end
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_TankBaseDefenseTankbustaz"..i, "ork_squad_tankbusta", "mkr_tankbase_tankbustaz"..i, 1, 20)
+		SGroup_AddGroup("sg_TankBaseDefense", "sg_TankBaseDefenseTankbustaz"..i)
+	end
+	
+	-- squiggbase
+	SGroup_Create("sg_SquiggBaseDefense")
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SquiggBaseDefenseKan"..i, "ork_squad_killa_kan", "mkr_squiggbase_killakan"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggBaseDefenseKan"..i), 1),"ork_rokkit_launcha_killakan", 1)
+		SGroup_AddGroup("sg_SquiggBaseDefense", "sg_SquiggBaseDefenseKan"..i)
+	end
+	for i=1,4 do
+		Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SquiggBaseDefenseSlugga"..i, "ork_squad_slugga", "mkr_squiggbase_sluggas"..i, 1, 20)
+		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggBaseDefenseSlugga"..i), 1),"ork_burna_slugga", World_GetRand(5,7))
+		SGroup_AddGroup("sg_SquiggBaseDefense", "sg_SquiggBaseDefenseSlugga"..i)
+	end
+	Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SquiggBaseDefenseSquigg1", "ork_squad_squiggoth", "mkr_squiggbase_squigg1", 1, 1)
+	Util_CreateSquadsAtMarkerEx( g_Player2, "sg_SquiggBaseDefenseSquigg2", "ork_squad_squiggoth", "mkr_squiggbase_squigg2", 1, 1)
+	Cmd_EnterTransport("sg_SquiggBaseDefenseSlugga3", "sg_SquiggBaseDefenseSquigg1")
+	Cmd_EnterTransport("sg_SquiggBaseDefenseSlugga4", "sg_SquiggBaseDefenseSquigg2")
+	SGroup_AddGroup("sg_SquiggBaseDefense", "sg_SquiggBaseDefenseSquigg1")
+	SGroup_AddGroup("sg_SquiggBaseDefense", "sg_SquiggBaseDefenseSquigg2")
+	
+	-- mainbase
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_MainBaseDefense", "ork_flash_gitz_squad", "mkr_mainbasedefense_flashgitz"..i, 1, 7)
+	end
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_MainBaseDefense", "ork_squad_killa_kan", "mkr_mainbasedefense_kan"..i, 1, 1)
+	end
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx( g_Player3, "sg_MainBaseDefense", "ork_squad_looted_tank", "mkr_mainbasedefense_lootedtank"..i, 1, 1)
+	end
+	
+end
+
+function Rule_CreatePlayerBases()
+
+	local Race
+	local Player
+
+	Race = MetaMap_GetPlayerNRaceName(0)
+	Player = g_Player1
+
+	if Race == "chaos_marine_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "chaos_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "chaos_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"chaos_armoury",
+		"chaos_listening_post",
+		"chaos_mine_field",
+		"chaos_plasma_generator",
+		"chaos_thermo_plasma_generator",
+		"chaos_turret_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "guard_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "guard_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "guard_squad_enginseer", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"guard_listening_post",
+		"guard_mines",
+		"guard_plasma_generator",
+		"guard_tactica",
+		"guard_thermo_plasma",
+		"guard_turret_heavy_bolter"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "ork_race" then
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "ork_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "ork_squad_grot", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"ork_bigger_generator",
+		"ork_generator",
+		"ork_gork_totem",
+		"ork_mine_field",
+		"ork_pile_o_guns",
+		"ork_waagh_banner"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "space_marine_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "space_marine_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "space_marine_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"space_marine_armoury",
+		"space_marine_generator",
+		"space_marine_listening_post",
+		"space_marine_mine_field",
+		"space_marine_turret_bolter",
+		"space_marine_thermo_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "tau_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "tau_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "tau_builder_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"tau_listening_post",
+		"tau_research_building",
+		"tau_shrine_of_kauyon",
+		"tau_shrine_of_montka",
+		"tau_shrine_of_purpose",
+		"tau_thermoplasma_generator",
+		"tau_turret_sp",	
+		"tau_plasma_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "necron_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "monolith", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "necron_builder_scarab_squad", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"necron_listening_post",
+		"necron_summoning_core",
+		"necron_plasma_generator",
+		"necron_energy_core",
+		"necron_greater_summoning_core",
+		"necron_forbidden_archive",
+		"necron_thermoplasma_generator",
+		"necron_turret"
+		}
+		
+		t_unit_exceptions = {}
+		
+		
+	elseif Race == "eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "eldar_squad_bonesinger", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"eldar_advanced_warp_generator",
+		"eldar_listening_post",
+		"eldar_mine_field",
+		"eldar_soul_shrine",
+		"eldar_support_platform_scatterlaser",
+		"eldar_warp_generator"
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "dark_eldar_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "dark_eldar_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "dark_eldar_squad_slave", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"dark_eldar_haemonculus_laboratory",
+		"dark_eldar_listening_post",
+		"dark_eldar_plasma_generator",
+		"dark_eldar_slave_caravel",
+		"dark_eldar_soul_cage",
+		"dark_eldar_thermo_plasma"		
+		}
+		
+		t_unit_exceptions = {}
+		
+	elseif Race == "sisters_race" then
+		
+		
+		Entity_CreateBuildingMarker(Player, "eg_Player_HQ", "sisters_hq", "mkr_Player_HQ", 1)
+		Util_CreateSquadsAtMarkerEx(Player, "sg_Player_Builder", "sisters_squad_servitor", "mkr_Player_Builder", 1, 1)
+		
+		--win/loss
+		t_building_exceptions = {
+		"sisters_thermo_plasma",
+		"sisters_plasma_generator",
+		"sisters_turret_flamer",
+		"sisters_holy_reliquary",
+		"sisters_listening_post",
+		"sisters_mines",
+		"sisters_sanctuary"
+		}
+		
+		t_unit_exceptions = {}
+		
+	end
+	
+	t_blueprintbonus = {}
+	
+	MetaMap_GetRaceStartingSquadsList(MetaMap_GetPlayerNRaceName(0), t_blueprintbonus)	
+
+	for j = 1,  table.getn(t_blueprintbonus) do
+		
+		Util_CreateSquadsAtMarker(g_Player1, "sg_Bonus"..j, t_blueprintbonus[j], "mkr_Player_Builder", 1)
+		
+	end
+	
+
+--[[TODO: Remove! DEBUG USE ONLY!]]
+	if g_Debug == true then
+		EGroup_SetHealthInvulnerable("eg_Player_HQ", true)
+	end
+	
+	ForwardBases()
+end
+
+
+function ForwardBases()
+
+	--determine race specific blueprints to be looked for when creating forward base
+	if MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		
+		g_bonus_generator = "chaos_plasma_generator"
+		g_bonus_turret = "chaos_turret_bolter"
+		g_bonus_barracks = "chaos_temple"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "chaos_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "eldar_race" then
+		
+		g_bonus_generator = "eldar_warp_generator"
+		g_bonus_turret = "eldar_support_platform_scatterlaser"
+		g_bonus_barracks = "eldar_aspect_portal"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "eldar_soul_shrine"
+		
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		
+		g_bonus_generator = "guard_plasma_generator"
+		g_bonus_turret = "guard_turret_heavy_bolter"
+		g_bonus_barracks = "guard_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "guard_tactica"
+		
+	elseif MetaMap_GetPlayerRaceName() == "ork_race" then
+		
+		g_bonus_generator = "ork_generator"
+		g_bonus_turret = "ork_waagh_banner"
+		g_bonus_barracks = "ork_boy_hut"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "ork_pile_o_guns"
+		
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		
+		g_bonus_generator = "space_marine_generator"
+		g_bonus_turret = "space_marine_turret_bolter"
+		g_bonus_barracks = "space_marine_barracks"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "space_marine_armoury"
+		
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		
+		g_bonus_generator = "tau_plasma_generator"
+		g_bonus_turret = 0  --tau have no turrets, so zero is simply a filler value to establish the variable instead of writting cutom checks for tau later.  0 will never be a value fed in by code, so it simply allows the algorithm to function in a standadrd manner for all races.
+		g_bonus_barracks = "tau_barracks"
+		g_bonus_barracks2 = "tau_kroot_nest"
+		g_bonus_research = "tau_research_building"
+		
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		
+		g_bonus_generator = "sisters_plasma_generator"
+		g_bonus_turret = "sisters_turret_flamer"
+		g_bonus_barracks = "sisters_infantry"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "sisters_sanctuary"
+		
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		
+		g_bonus_generator = "dark_eldar_plasma_generator"
+		g_bonus_turret = "dark_eldar_slave_caravel"
+		g_bonus_barracks = "dark_eldar_hall_of_blood"
+		g_bonus_barracks2 = "dark_eldar_skimmer_shop"
+		g_bonus_research = "dark_eldar_haemonculus_laboratory"
+		
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		
+		g_bonus_generator = "necron_plasma_generator"
+		g_bonus_turret = "necron_turret"
+		g_bonus_barracks = "necron_summoning_core"
+		g_bonus_barracks2 = 0 --value on used for tau kroot nest, dummy value for all other races, like the Tau turret.
+		g_bonus_research = "necron_forbidden_archive"
+		
+	end
+
+	--Add in any bonus buildings made availible if the player has purchased them via owning Hyperion peaks province
+	t_blueprintEntitybonus = {}
+
+	
+	-- Always builds the building (prevents crashes and speeds things up)
+	function user_CreateBuilding(p_PlayerID, p_EGroupID, p_MarkerName, p_Blueprint)
+		l_EntityID = Entity_Create(p_Blueprint, p_PlayerID, Marker_GetPosition(Marker_FromName(p_MarkerName, "basic_marker" )))
+		EGroup_Add(EGroup_CreateIfNotFound(p_EGroupID), l_EntityID)
+		Entity_Spawn(l_EntityID)                        
+	end
+
+	MetaMap_GetAttackingRaceStartingEntitiesList(t_blueprintEntitybonus)
+
+	for j=1,table.getn(t_blueprintEntitybonus) do
+		
+		if t_blueprintEntitybonus[j] == g_bonus_generator then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_gen_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next generator will then spawn at the correct marker after this one
+			g_bonus_gen_counter = g_bonus_gen_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_turret then
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement"..g_bonus_turret_counter, t_blueprintEntitybonus[j])
+			--increase by one, the next turret will then spawn at the correct marker after this one
+			g_bonus_turret_counter = g_bonus_turret_counter + 1
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks then
+			--fixed marker spawn based on Phil's table.  Only one barracks is spawned, always at marker 10
+			--Necron intentionally spawn a summoning core in place of a barracks due to the monolith doubling as their barracks.
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement10", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_research then
+			--fixed marker spawn based on Phil's table.  Only one research building is spawned, always at marker 11
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement11", t_blueprintEntitybonus[j])
+		elseif t_blueprintEntitybonus[j] == g_bonus_barracks2 then
+			--This will only be used to spawn the kroot nest when the player is Tau, otherwise it will be passed over due to g_bonus_barracks2 being a dummy value.
+			--fixed marker spawn based on Phil's table.  Only one kroot nest is spawned, always at marker 13
+			user_CreateBuilding(g_Player1, "eg_Bonus"..j,"MM_Reinforcement13", t_blueprintEntitybonus[j])
+		end
+	end
+end
+
+function DifficultyLevel()
+	local StrongholdStrength = MetaMap_GetTerritoryMilitaryStrength(MetaMap_GetDefendingTerritoryIndex())
+	
+	if StrongholdStrength == 10 or StrongholdStrength == 11 or StrongholdStrength == 12 then
+		g_Difficulty = 1
+	elseif StrongholdStrength == 13 or StrongholdStrength == 14 or StrongholdStrength == 15 then
+		g_Difficulty = 2
+	elseif  StrongholdStrength == 16 or StrongholdStrength == 17 then
+		g_Difficulty = 3
+	end
+end
+
+function PopCheck(Counter, SGroup, MaxPop)
+
+	local Pop = 0
+	
+	for i=0,Counter do
+			if SGroup_Exists(SGroup..i) and SGroup_Count(SGroup..i) > 0 then
+				
+				Pop = Pop + SGroup_Count(SGroup..i)
+				
+			end
+	end
+	
+	if Pop < math.floor(MaxPop) then
+		return true
+	else
+		return false
+	end
+
+end
+
+function InitialAttack()
+	if g_Difficulty == 1 then
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_slugga", "mkr_waaghwallhut", 1, 10)
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_shoota_boy", "mkr_waaghwallhut", 1, 6)
+		Cmd_AttackMoveMarker("InitialAttack", "mkr_Player_HQ")
+	elseif g_Difficulty == 2 then
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_slugga", "mkr_waaghwallhut", 2, World_GetRand(12,14))
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_shoota_boy", "mkr_waaghwallhut", 1, World_GetRand(7,8))
+		Cmd_AttackMoveMarker("InitialAttack", "mkr_Player_HQ")
+	elseif g_Difficulty == 3 then
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_slugga", "mkr_waaghwallhut", 3, World_GetRand(13,15))
+		Util_CreateSquadsAtMarkerEx(g_Player2, "InitialAttack", "ork_squad_shoota_boy", "mkr_waaghwallhut", 2, World_GetRand(7,8))
+		Cmd_AttackMoveMarker("InitialAttack", "mkr_Player_HQ")
+	end	
+	Rule_AddInterval(AttackWavesFromRelicBase, g_RelicBaseAttackTimer)
+	Rule_AddInterval(JumpStormBoysOTW, 1)
+end
+
+function RelicAttackTier()
+	if g_RelicAttackTier < 3 then
+		g_RelicAttackTier = g_RelicAttackTier + 1
+	else
+		Rule_Remove(RelicAttackTier)
+	end	
+end
+
+function AttackWavesFromRelicBase()
+	local DifficultyModifier = 0
+	if g_Difficulty == 1 then
+		DifficultyModifier = 0
+	elseif g_Difficulty == 2 then
+		DifficultyModifier = 1
+	elseif g_Difficulty == 3 then
+		DifficultyModifier = 2
+	end
+	
+	local NumSquadsSent = g_RelicAttackTier + DifficultyModifier
+	
+	for i=1, NumSquadsSent do
+		local Chance = World_GetRand(1,6)
+		if Chance == 1 or Chance == 2 then
+			--slugga
+			SGroup = "sg_Slugga"
+			Counter = g_SluggaCounter
+			Blueprint = "ork_squad_slugga"
+			MaxPop = g_MaxSlugga
+			Building = "eg_WaaghWallHut"
+			SpawnMarker = "mkr_waaghwallhut"
+			if g_Difficulty == 1 then
+				SquadNum =  World_GetRand(8, 12)
+			elseif g_Difficulty == 2 then
+				SquadNum =  World_GetRand(9, 14)
+			elseif g_Difficulty == 3 then
+				SquadNum =  World_GetRand(13, 15)
+			end
+		elseif Chance == 3 or Chance == 4 then
+			-- shoota
+			SGroup = "sg_Shoota"
+			Counter =g_ShootaCounter
+			Blueprint = "ork_squad_shoota_boy"
+			MaxPop = g_MaxShoota
+			Building = "eg_WaaghWallHut"
+			SpawnMarker = "mkr_waaghwallhut"
+			if g_Difficulty == 1 then
+				SquadNum =  World_GetRand(4, 8)
+			elseif g_Difficulty == 2 then
+				SquadNum =  World_GetRand(6, 9)
+			elseif g_Difficulty == 3 then
+				SquadNum =  World_GetRand(8, 9)
+			end
+		elseif Chance == 5 or Chance == 6 then
+			-- stormboy
+			SGroup = "sg_Stormboy"
+			Counter = g_StormboyCounter
+			Blueprint = "ork_squad_stormboy" 
+			MaxPop = g_MaxStormboy
+			Building = "eg_WaaghWallHut"
+			SpawnMarker = "mkr_waaghwallhut"
+			if g_Difficulty == 1 then
+				SquadNum =  World_GetRand(8, 12)
+			elseif g_Difficulty == 2 then
+				SquadNum =  World_GetRand(9, 14)
+			elseif g_Difficulty == 3 then
+				SquadNum =  World_GetRand(13, 15)
+			end
+		end
+		
+		if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, SpawnMarker, 1, SquadNum)			
+			Cmd_AttackMoveMarker(SGroup..Counter, "mkr_Player_HQ")
+		elseif EGroup_Exists(Building) and EGroup_Count(Building) == 0 then
+			Rule_Remove(AttackWavesFromRelicBase)
+			Rule_Remove(JumpStormBoysOTW)
+		end
+		
+		if g_AttackWavesFromRelicBase >= 4 and SGroup_Exists(SGroup..Counter) and SGroup_CountSpawned(SGroup..Counter) > 0 then
+			SGroup_AddLeaders(SGroup..Counter)
+		end
+		
+		if Blueprint == "ork_squad_slugga" then
+			g_SluggaCounter = g_SluggaCounter + 1
+		elseif Blueprint == "ork_squad_shoota_boy" then
+			g_ShootaCounter = g_ShootaCounter + 1
+		elseif Blueprint == "ork_squad_stormboy" then
+			g_StormboyCounter = g_StormboyCounter + 1
+		end
+		
+		g_AttackWavesFromRelicBase = g_AttackWavesFromRelicBase + 1
+	end
+
+end
+
+function JumpStormBoysOTW()
+	for i=0,g_StormboyCounter do
+		if SGroup_Exists("sg_Stormboy"..i) and SGroup_Count("sg_Stormboy"..i) > 0 and Prox_AnySquadNearMarker("sg_Stormboy"..i, "mkr_stormboy_jump") == true then
+			Cmd_JumpToMarker("sg_Stormboy"..i, "mkr_stormboy_jumpto"..World_GetRand(1,2))
+		end
+	end
+	
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_stormboy_jumpto"..i) then
+			Player_GetAllSquadsNearMarker(g_Player2, "JumpAttack"..g_JumpAttackCounter,"mkr_stormboy_jumpto"..i)
+			--Cmd_AttackMoveMarker("JumpAttack"..g_JumpAttackCounter,"mkr_Player_HQ")
+			Cmd_AttackMovePos("JumpAttack"..g_JumpAttackCounter,g_GlobalAttackPos)
+			g_JumpAttackCounter = g_JumpAttackCounter + 1
+		end
+	end
+end
+
+function SmallBase1Tier()
+	if g_SmallBase1Tier < 3 then
+		g_SmallBase1Tier = g_SmallBase1Tier + 1
+	end
+end
+
+function SmallBase1Attacks()
+
+	for i=1,g_SmallBase1Tier do
+		local Chance = World_GetRand(1,4)
+		if Chance == 1 or Chance == 2 then
+			--slugga
+			SGroup = "sg_Slugga"
+			Counter = g_SluggaCounter
+			Blueprint = "ork_squad_slugga"
+			SquadNum =  World_GetRand(10, 12)
+			MaxPop = g_MaxSlugga
+			Building = "eg_SmallBase1Hut1"
+			SpawnMarker = "mkr_smallbase1hut1"
+		elseif Chance == 3 or Chance == 4 then
+			-- shoota
+			SGroup = "sg_Shoota"
+			Counter =g_ShootaCounter
+			Blueprint = "ork_squad_shoota_boy"
+			SquadNum =  World_GetRand(10,12)
+			MaxPop = g_MaxShoota
+			Building = "eg_SmallBase1Hut2"
+			SpawnMarker = "mkr_smallbase1hut2"
+		end
+		
+		if EGroup_Exists("eg_SmallBase01") and EGroup_Count("eg_SmallBase01") > 0 then
+			if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+				Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, SpawnMarker, 1, SquadNum)
+				if SGroup_Exists(SGroup..Counter) and SGroup_CountSpawned(SGroup..Counter) > 0 then
+					if Blueprint == "ork_squad_slugga" then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"ork_burna_slugga", 4)
+					elseif Blueprint == "ork_squad_shoota_boy" then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"ork_big_shoota_shoota", 4)
+					end
+					SGroup_AddLeaders(SGroup..Counter)
+					if PopCheck(g_MadDokCounter, "sg_MadDok", g_MaxMadDok) and EGroup_Exists("eg_SmallBase01") and EGroup_Count("eg_SmallBase01") > 0 then
+						Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MadDok"..g_MadDokCounter, "ork_squad_bad_dok", "mkr_smallbase1", 1, 1)
+						Cmd_AttachSquads(SGroup..Counter,"sg_MadDok"..g_MadDokCounter)
+						g_MadDokCounter = g_MadDokCounter + 1
+					end
+					if EGroup_Exists("eg_SmallBase1Mek1") and EGroup_Count("eg_SmallBase1Mek1") > 0 and PopCheck(g_WartrukkCounter, "sg_Wartrukk", g_MaxWartrukk) then
+						if g_TransportFlag == false then
+							Rule_AddOneShot(GetInTransport, 10)
+							g_TransportSquad = SGroup..Counter
+							g_TransportFlag = true
+						end
+					else
+						--Cmd_AttackMoveMarker(SGroup..Counter, "mkr_Player_HQ")
+						Cmd_AttackMovePos(SGroup..Counter, g_GlobalAttackPos)					
+					end
+					
+					if Blueprint == "ork_squad_slugga" then
+						g_SluggaCounter = g_SluggaCounter + 1
+					elseif Blueprint == "ork_squad_shoota_boy" then
+						g_ShootaCounter = g_ShootaCounter + 1
+					end
+				end
+			end
+		else
+			Rule_Remove(SmallBase1Attacks)
+			return
+		end
+	end
+	
+
+	
+end
+function GetInTransport()
+	-- create a transport
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Wartrukk"..g_WartrukkCounter, "ork_squad_trukk_sp_dxp3", "mkr_smallbase1mek1", 1, 1)			
+	Cmd_EnterTransport(g_TransportSquad, "sg_Wartrukk"..g_WartrukkCounter)
+	Rule_AddOneShot(TransportAttackPlayer, 10)
+end
+
+function TransportAttackPlayer()
+	--Cmd_AttackMoveMarker("sg_Wartrukk"..g_WartrukkCounter, "mkr_Player_HQ")
+	Cmd_AttackMovePos("sg_Wartrukk"..g_WartrukkCounter, g_GlobalAttackPos)
+	g_TransportFlag = false
+	g_WartrukkCounter = g_WartrukkCounter + 1
+end
+
+function SmallBase2Tier()
+	if g_SmallBase2Tier < 5 then
+		g_SmallBase2Tier = g_SmallBase2Tier + 1
+	end
+end
+
+function SmallBase2Attacks()
+	
+	for i=1,g_SmallBase2Tier do
+		local Chance = World_GetRand(1,4)
+		if Chance == 1 or Chance == 2 then
+			--slugga
+			SGroup = "sg_Base2Slugga"
+			Counter = g_Base2SluggaCounter
+			Blueprint = "ork_squad_slugga"
+			SquadNum =  World_GetRand(10, 12)
+			MaxPop = g_MaxBase2Slugga
+			Building = "eg_SmallBase2Hut1"
+			SpawnMarker = "mkr_smallbase2hut1"
+		elseif Chance == 3 or Chance == 4 then
+			-- tankbusta
+			SGroup = "sg_Base2TankBusta"
+			Counter =g_Base2TankBustaCounter
+			Blueprint = "ork_squad_tankbusta"
+			SquadNum =  World_GetRand(4,5)
+			MaxPop = g_MaxBase2TankBusta
+			Building = "eg_SmallBase2Hut2"
+			SpawnMarker = "mkr_smallbase2hut2"
+		end
+	
+		if EGroup_Exists("eg_SmallBase02") and EGroup_Count("eg_SmallBase02") > 0 then
+			if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+				Util_CreateSquadsAtMarkerEx(g_Player2, SGroup..Counter, Blueprint, SpawnMarker, 1, SquadNum)
+				if SGroup_Exists(SGroup..Counter) and SGroup_CountSpawned(SGroup..Counter) > 0 then
+					if Blueprint == "ork_squad_slugga" then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"ork_burna_slugga", 4)
+						SGroup_AddLeaders(SGroup..Counter)
+						if PopCheck(g_BigMekCounter, "sg_BigMek", g_MaxBigMek) then
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_BigMek"..g_BigMekCounter, "ork_squad_mek_boy", "mkr_smallbase2hut1", 1, 1)
+							Cmd_AttachSquads(SGroup..Counter,"sg_BigMek"..g_BigMekCounter)
+							g_BigMekCounter = g_BigMekCounter + 1
+						end
+					end
+					
+					Cmd_AttackMoveMarker(SGroup..Counter, "mkr_waaghwall_defensepoint"..World_GetRand(1,8))
+					if Blueprint == "ork_squad_slugga" then
+						g_Base2SluggaCounter = g_Base2SluggaCounter + 1
+					elseif Blueprint == "ork_squad_tankbusta" then
+						g_Base2TankBustaCounter = g_Base2TankBustaCounter + 1
+					end
+				end
+			end
+		else
+			Rule_Remove(SmallBase2Attacks)
+			return
+		end
+	end
+	
+
+end
+
+function BigMekTeleport()
+	for i=0,g_BigMekCounter do
+		if SGroup_Exists("sg_BigMek"..i) and SGroup_Count("sg_BigMek"..i) and Prox_AllSquadsNearMarker("sg_BigMek"..i,"mkr_bigmekteleport") then
+			Cmd_JumpToMarker("sg_BigMek"..i, "mkr_bigmekteleportdest"..World_GetRand(1,4))
+		end
+	end
+end
+
+function StartSmallBases1and2()
+	g_StartSmallBases1and2Counter = g_StartSmallBases1and2Counter + 1
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_startbases1and2") or g_StartSmallBases1and2Counter == g_StartBase1and2FallBackTimer then
+		Rule_AddInterval(SmallBase1Attacks, g_SmallBase1AttackTimer)
+		Rule_AddInterval(SmallBase2Attacks, g_SmallBase2AttackTimer)
+		Rule_AddInterval(BigMekTeleport, 1)
+		Rule_AddInterval(SmallBase2Tier, g_SmallBase2TierUpTimer)
+		Rule_AddInterval(SmallBase1Tier, g_SmallBase1TierTimer)
+		Rule_Remove(StartSmallBases1and2)
+	end
+end
+
+function WaaghWallDefense()
+	if g_WaaghWallDefenseFirstRun == true then
+		g_WaaghWallDefenseFirstRun = false
+		-- spawn guys
+		for i=1,2 do
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Shootas2RelicDefense"..i, "ork_squad_shoota_boy", "mkr_waaghwalldefense_flashgitz"..i, 1, World_GetRand(6,7))
+		end
+		for i=1,3 do --[[This could go up to 4]]
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_ShootasRelicDefense"..i, "ork_squad_shoota_boy", "mkr_waaghwalldefense_shootas"..i, 1, World_GetRand(10,12))
+		end
+		for i=1,3 do --[[This could go up to 4]]
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MegaNobsRelicDefense"..i, "ork_squad_slugga", "mkr_waaghwalldefense_meganobs"..i, 1, World_GetRand(12,14))
+			SGroup_AddLeaders("sg_MegaNobsRelicDefense"..i)
+		end
+	else
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_waaghwallentrance") then
+			-- wait till player is close, and move units into attack positions
+			for i=1,2 do
+				Cmd_AttackMoveMarker("sg_Shootas2RelicDefense"..i, "mkr_waaghwalldefense_flashgitzdest"..i)
+			end
+			Cmd_AttackMoveMarker("sg_MegaNobsRelicDefense1", "mkr_waaghwalldefense_meganobsdest1")
+			Util_StartIntel(EVENTS.IE_EarlyTaunt)
+			Rule_Remove(WaaghWallDefense)
+		end
+	end
+end
+
+function TurnOnTankAndNobBases()
+	g_TurnOnTankAndNobBaseTime = g_TurnOnTankAndNobBaseTime + 1
+	if (EGroup_Exists("eg_ListeningPostsRelic") and EGroup_Count("eg_ListeningPostsRelic") == 0) or (g_TurnOnTankAndNobBaseTime >= g_TurnOnTankAndNobBaseTimer) then
+		Rule_AddOneShot(TurnOnTankAndNobBases_Delayed, g_TurnOnTankAndNobBasesDelayTimer)
+		Rule_Remove(TurnOnTankAndNobBases)
+		return
+	end
+end
+
+function TurnOnTankAndNobBases_Delayed()
+	Rule_AddInterval(TankBaseAttacks, g_TankBaseAttacksTimer)
+	Rule_AddInterval(NobBaseAttacks, g_NobBaseAttacksTimer)
+	Rule_AddInterval(MoveIdleNobs, 30)
+	Rule_AddInterval(MoveIdleTanks, 30)
+	Rule_AddInterval(CanSquiggBeBuilt, 1)
+	Rule_AddInterval(CallForSquigg, 1)
+	Rule_AddInterval(IdleSquiggoth, 48)
+	Rule_AddInterval(IncreaseTankBaseTier, g_TankBaseTierTimer)
+	Rule_AddInterval(IdleRelicSquads, 30)
+end
+
+function NobBaseAttacks()
+	if g_NobObjectiveComplete == false then
+		if PopCheck(g_NobCounter, "sg_Nobs", g_MaxNobs) and EGroup_Exists("eg_NobBase01") and EGroup_Count("eg_NobBase01") > 0 then
+			if EGroup_Exists("eg_NobBaseHut3") and EGroup_Count("eg_NobBaseHut3") > 0 then
+				Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Nobs"..g_NobCounter, "ork_squad_nob", "mkr_nobbasehut3", 1, World_GetRand(9,10))
+				if World_GetRand(1,10) > 5 then
+					SGroup_AddLeaders("sg_Nobs"..g_NobCounter)
+				end
+				if g_NobTierReached == true then
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Nobs"..g_NobCounter), 1),"ork_power_claw_nobz", World_GetRand(5,10))
+				end
+				if g_NobBaseFirstTime == true then
+					g_NobBaseFirstTime = false
+					Rule_AddInterval(IE_NobBaseObj, 1)
+				end			
+				
+				-- find a place to send these puppies~
+				if SGroup_Exists("eg_SmallBase1PlayerEntities") == false then
+					SGroup_Create("eg_SmallBase1PlayerEntities")
+				end
+				if SGroup_Exists("eg_RelicPlayerEntities") == false then
+					SGroup_Create("eg_RelicPlayerEntities")
+				end
+				Player_GetAllEntitiesNearMarker(g_Player1, "eg_RelicPlayerEntities", "mkr_relicarea")
+				Player_GetAllEntitiesNearMarker(g_Player1, "eg_SmallBase1PlayerEntities", "mkr_smallbase1area")
+				
+				-- SMALLBASE1
+				if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase1area") or SGroup_Count("eg_SmallBase1PlayerEntities") > 0 then
+					Cmd_AttackMoveMarker("sg_Nobs"..g_NobCounter,"mkr_nob_attackmove")
+				elseif Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") or SGroup_Count("eg_RelicPlayerEntities") > 0 then
+					-- RELIC AREA
+					Cmd_AttackMoveMarker("sg_Nobs"..g_NobCounter,"mkr_waaghwalldefense_meganobsdest2")
+				else
+					--Cmd_AttackMoveMarker("sg_Nobs"..g_NobCounter,"mkr_Player_HQ")
+					Cmd_AttackMovePos("sg_Nobs"..g_NobCounter,g_GlobalAttackPos)					
+				end
+				g_NobCounter = g_NobCounter + 1
+			end
+		end
+	else
+		Rule_Remove(NobBaseAttacks)
+	end
+end
+
+function MoveIdleNobs()
+	for i=0,g_NobCounter do
+		if SGroup_Exists("sg_Nobs"..i) and SGroup_Count("sg_Nobs"..i) > 0 then
+			if Prox_AllSquadsNearMarker("sg_Nobs"..i, "mkr_smallbase1area") and Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase1area") == false then
+				Cmd_AttackMoveMarker("sg_Nobs"..i, "mkr_relicarea")
+			end
+			if Prox_AllSquadsNearMarker("sg_Nobs"..i, "mkr_relicarea") and Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") == false then
+				--Cmd_AttackMoveMarker("sg_Nobs"..i, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_Nobs"..i, g_GlobalAttackPos)				
+			end
+		end
+	end
+end
+
+function IncreaseTankBaseTier()
+	if g_WartrakTier < 4 then
+		g_WartrakTier = g_WartrakTier + 1
+	end
+end
+
+function TankBaseAttacks()
+	if g_TankObjectiveComplete == false then
+		if PopCheck(g_TrakkCounter, "sg_Wartrakk", g_MaxWartrakk) and EGroup_Exists("eg_TankBase01") and EGroup_Count("eg_TankBase01") > 0 then
+			if EGroup_Exists("eg_TankBaseMek1") and EGroup_Count("eg_TankBaseMek1") > 0 then
+				for i=1,g_WartrakTier do
+					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Wartrakk"..g_TrakkCounter, "ork_squad_wartrak", "mkr_tankbasemek1", 1, 1)
+					
+					-- bomb chucka upgrade
+					if World_GetRand(1,10) > 5 then
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Wartrakk"..g_TrakkCounter), 1),"ork_bomb_chucka_wartrack", 1)
+					end
+					
+					if g_TankBaseFirstTime == true then
+						g_TankBaseFirstTime = false
+						Rule_AddInterval(IE_TankBaseObj, 1)
+					end
+					
+					-- find a place to send these puppies~
+					if EGroup_Exists("eg_SmallBase2PlayerEntities") == false then
+						EGroup_Create("eg_SmallBase2PlayerEntities")
+					end
+					if EGroup_Exists("eg_RelicPlayerEntities") == false then
+						EGroup_Create("eg_RelicPlayerEntities")
+					end				
+					Player_GetAllEntitiesNearMarker(g_Player1, "eg_RelicPlayerEntities", "mkr_relicarea")
+					Player_GetAllEntitiesNearMarker(g_Player1, "eg_SmallBase2PlayerEntities", "mkr_smallbase2area")
+					-- SMALLBASE1
+					if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase2area") or EGroup_Count("eg_SmallBase2PlayerEntities") > 0 then
+						Cmd_AttackMoveMarker("sg_Wartrakk"..g_TrakkCounter,"mkr_tank_attackmove")
+					elseif Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") or EGroup_Count("eg_RelicPlayerEntities") > 0 then
+						-- RELIC AREA
+						Cmd_AttackMoveMarker("sg_Wartrakk"..g_TrakkCounter,"mkr_waaghwalldefense_meganobsdest2")
+					else
+						--Cmd_AttackMoveMarker("sg_Wartrakk"..g_TrakkCounter,"mkr_Player_HQ")
+						Cmd_AttackMovePos("sg_Wartrakk"..g_TrakkCounter,g_GlobalAttackPos)						
+					end
+					g_TrakkCounter = g_TrakkCounter + 1
+				end
+			end
+		end
+	else
+		Rule_Remove(TankBaseAttacks)
+	end
+end
+
+function MoveIdleTanks()
+	for i=0,g_TrakkCounter do
+		if SGroup_Exists("sg_Wartrakk"..i) and SGroup_Count("sg_Wartrakk"..i) > 0 then
+			if Prox_AllSquadsNearMarker("sg_Wartrakk"..i, "mkr_smallbase2area") and Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase2area") == false then
+				Cmd_AttackMoveMarker("sg_Wartrakk"..i, "mkr_relicarea")
+			end
+			if Prox_AllSquadsNearMarker("sg_Wartrakk"..i, "mkr_relicarea") and Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") == false then
+				--Cmd_AttackMoveMarker("sg_Wartrakk"..i, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_Wartrakk"..i, g_GlobalAttackPos)
+			end
+		end
+	end
+end
+
+function CanSquiggBeBuilt()
+	if SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 and g_SquiggFlag == false then
+		if g_SquiggFlagHelper == false then
+			g_SquiggFlagHelper = true
+			g_SquiggFlag = false
+			Rule_AddInterval(SquiggCooldown, 1)
+		end
+	end
+end
+
+function SquiggCooldown()
+	if g_SquiggFlagCounter < g_SquiggCoolDownTimer then
+		g_SquiggFlagCounter = g_SquiggFlagCounter + 1
+	else
+		Rule_Remove(SquiggCooldown)
+		g_SquiggFlagCounter = 0
+		g_SquiggFlag = true
+		g_SquiggFlagHelper = false
+	end
+end
+
+function SpawnSquiggAndAttack(marker)
+	if EGroup_Exists("eg_SquiggBase02") and EGroup_Count("eg_SquiggBase02") > 0 and g_SquiggFlag == true and PopCheck(g_SquiggCounter,"sg_Squiggoth",g_MaxSquigg) then
+		if EGroup_Exists("eg_SquiggBaseMek1") and EGroup_Count("eg_SquiggBaseMek1") > 0 then
+			g_SquiggCounter = g_SquiggCounter + 1
+			g_SquiggFlag = false
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Squiggoth"..g_SquiggCounter, "ork_squad_squiggoth_sp_long_rampage", "mkr_squigg2mek1", 1,1)
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SquiggothFodder"..g_SquiggCounter, "ork_squad_slugga", "mkr_squigg2mek1", 1,15)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggothFodder"..g_SquiggCounter), 1),"ork_burna_slugga", 6)
+			Cmd_EnterTransport("sg_SquiggothFodder"..g_SquiggCounter, "sg_Squiggoth"..g_SquiggCounter)
+			Cmd_AttackMoveMarker("sg_Squiggoth"..g_SquiggCounter, marker)
+			
+			-- fodder
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SquiggothSideFodder"..g_SquiggCounter, "ork_squad_slugga", "mkr_squigg2mek1", 1,15)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggothFodder"..g_SquiggCounter), 1),"ork_burna_slugga", 6)
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SquiggothSideFodder"..g_SquiggCounter, "ork_squad_slugga", "mkr_squigg2mek1", 1,15)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggothFodder"..g_SquiggCounter), 1),"ork_burna_slugga", 6)
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_SquiggothSideFodder"..g_SquiggCounter, "ork_squad_slugga", "mkr_squigg2mek1", 1,15)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SquiggothFodder"..g_SquiggCounter), 1),"ork_burna_slugga", 6)
+			Cmd_AttackMoveMarker("sg_SquiggothSideFodder"..g_SquiggCounter, marker)
+			
+			if g_SquiggBaseFirstTime == true then
+				g_SquiggBaseFirstTime = false
+				Rule_AddInterval(IE_SquiggBaseObj, 1)
+			end
+		end
+	end
+end
+
+function CallForSquigg()
+	if g_SquiggObjectiveComplete == false then
+		if g_FirstSquigg == true then
+			if EGroup_Exists("eg_TankBase01") and EGroup_IsUnderAttack("eg_TankBase01", false) then
+				g_FirstSquigg = false
+				SpawnSquiggAndAttack("mkr_tankbasemek1")
+			elseif EGroup_Exists("eg_SmallBase3Building1") and EGroup_IsUnderAttack("eg_SmallBase3Building1", false) then
+				g_FirstSquigg = false
+				SpawnSquiggAndAttack("mkr_smallbase3")
+			elseif EGroup_Exists("eg_AirBase") and EGroup_IsUnderAttack("eg_AirBase", false) then
+				g_FirstSquigg = false
+				SpawnSquiggAndAttack("mkr_squiggbase1")
+			elseif EGroup_Exists("eg_MainOrkBase01") and EGroup_IsUnderAttack("eg_MainOrkBase01", false) then
+				g_FirstSquigg = false
+				SpawnSquiggAndAttack("mkr_mainbase")
+			end
+		else
+			SpawnSquiggAndAttack("mkr_Player_HQ")
+		end
+	else
+		Rule_Remove(CallForSquigg)
+	end
+end
+--[[
+function CallForSquigg()
+	if g_FirstSquigg == true then
+		if EGroup_Exists("eg_TankBase01") and EGroup_IsUnderAttack("eg_TankBase01", false) then
+			if SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 then
+				SpawnSquiggAndAttack("mkr_tankbasemek1")
+			elseif SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) == false then
+				SpawnSquiggAndAttack("mkr_tankbasemek1")
+			end
+		elseif EGroup_Exists("eg_SmallBase3Building1") and EGroup_IsUnderAttack("eg_SmallBase3Building1", false) then
+			if SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 then
+				SpawnSquiggAndAttack("mkr_smallbase3")
+			elseif SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) == false then
+				SpawnSquiggAndAttack("mkr_smallbase3")
+			end
+		elseif EGroup_Exists("eg_SquiggBase01") and EGroup_IsUnderAttack("eg_SquiggBase01", false) then
+			if SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 then
+				SpawnSquiggAndAttack("mkr_squiggbase1")
+			elseif SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) == false then
+				SpawnSquiggAndAttack("mkr_squiggbase1")
+			end
+		elseif EGroup_Exists("eg_MainOrkBase01") and EGroup_IsUnderAttack("eg_MainOrkBase01", false) then
+			if SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 then
+				SpawnSquiggAndAttack("mkr_mainbase")
+			elseif SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) == false then
+				SpawnSquiggAndAttack("mkr_mainbase")
+			end
+		end
+	elseif SGroup_Exists("sg_Squiggoth"..g_SquiggCounter) and SGroup_Count("sg_Squiggoth"..g_SquiggCounter) == 0 then
+		g_FirstSquigg = false
+		SpawnSquiggAndAttack("mkr_Player_HQ")
+	end
+end
+
+]]
+
+function IdleSquiggoth()
+	for i=0, g_SquiggCounter do
+		if SGroup_Exists("sg_Squiggoth"..i) and SGroup_Count("sg_Squiggoth"..i) > 0 and SGroup_IsUnderAttack("sg_Squiggoth"..i, true) == false then
+			if Prox_AnySquadNearMarker("sg_Squiggoth"..i, "mkr_tankbasearea") or Prox_AnySquadNearMarker("sg_Squiggoth"..i, "mkr_otherbasearea") or Prox_AnySquadNearMarker("sg_Squiggoth"..i, "mkr_smallbase3area") or Prox_AnySquadNearMarker("sg_Squiggoth"..i, "mkr_mainbaseproximity") then
+				--Cmd_AttackMoveMarker("sg_Squiggoth"..i, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_Squiggoth"..i, g_GlobalAttackPos)				
+				return
+			end
+		end
+	end
+end
+
+function StartAttackingFromSmallBase3()
+	g_Base3ForcedAttackCounter = g_Base3ForcedAttackCounter+1
+	for i=1,3 do
+		if EGroup_Exists("eg_SmallBase0"..i) and EGroup_GetAvgHealth("eg_SmallBase0"..i) < 1 then
+			Rule_AddInterval(AttackFromSmallBase3, g_AttackFromSmallBase3Timer)
+			Rule_AddInterval(MoveSB3GuysToRelic, 1)
+			Rule_Remove(StartAttackingFromSmallBase3)
+			return true
+		elseif g_Base3ForcedAttackCounter >= g_Base3ForcedAttackTimer then
+			Rule_AddInterval(AttackFromSmallBase3, g_AttackFromSmallBase3Timer)
+			Rule_AddInterval(MoveSB3GuysToRelic, 1)
+			Rule_Remove(StartAttackingFromSmallBase3)
+			return true
+		end
+	end
+end
+
+function AttackFromSmallBase3()
+	for i=1,3 do
+		local Chance = 0
+		if i==1 or i==2 then
+			Chance = World_GetRand(1,6)
+		elseif i == 3 then
+			Chance = World_GetRand(7,9)
+		end
+		
+		if Chance == 1 or Chance == 2 then
+			--flash gitz
+			SGroup = "sg_Flashgitz"
+			Counter = g_FlashGitzCounter
+			Blueprint = "ork_flash_gitz_squad"
+			SquadNum =  World_GetRand(6, 7)
+			MaxPop = g_MaxFlashGitz
+			Building = "eg_SmallBase3Building3"
+			SpawnMarker = "mkr_smallbase3hut1"
+		elseif Chance == 3 or Chance == 4 then
+			-- mega nobs
+			SGroup = "sg_MegaNobs"
+			Counter =g_MegaNobsCounter
+			Blueprint = "ork_squad_armored_nob"
+			SquadNum =  4
+			MaxPop = g_MaxMegaNobs
+			Building = "eg_SmallBase3Building3"
+			SpawnMarker = "mkr_smallbase3hut1"
+		elseif Chance == 5 or Chance == 6 then
+			-- tankbustaz
+			SGroup = "sg_TankBusta"
+			Counter =g_TankBustaCounter
+			Blueprint = "ork_squad_tankbusta"
+			SquadNum =  World_GetRand(4,5)
+			MaxPop = g_MaxTankBusta
+			Building = "eg_SmallBase3Building4"
+			SpawnMarker = "mkr_smallbase3hut2"
+		elseif Chance == 7 then
+			-- looted tank
+			SGroup = "sg_LootedTank"
+			Counter = g_LootedTankCounter
+			Blueprint = "ork_squad_looted_tank" 
+			SquadNum = 1
+			MaxPop = g_MaxLootedTank
+			Building = "eg_SmallBase3Building6"
+			SpawnMarker = "mkr_smallbase3mek2"
+		elseif Chance == 8 or Chance == 9 then
+			-- killakan
+			SGroup = "sg_KillaKan"
+			Counter = g_KillaKanCounter
+			Blueprint = "ork_squad_killa_kan"
+			SquadNum = 1
+			MaxPop = g_MaxKillaKan
+			Building = "eg_SmallBase3Building5"
+			SpawnMarker = "mkr_smallbase3mek1"
+		end
+		if EGroup_Exists("eg_SmallBase3Building1") and EGroup_Count("eg_SmallBase3Building1") > 0 then
+			if PopCheck(Counter, SGroup, MaxPop) == true and EGroup_Exists(Building) and EGroup_Count(Building) > 0 then
+				Util_CreateSquadsAtMarkerEx(g_Player3, SGroup..Counter, Blueprint, SpawnMarker, 1, SquadNum)
+				if SGroup_Exists(SGroup..Counter) and SGroup_CountSpawned(SGroup..Counter) > 0 then
+					Cmd_AttackMoveMarker(SGroup..Counter, "mkr_relicarea")
+					if Blueprint == "ork_flash_gitz_squad" then
+						g_FlashGitzCounter = g_FlashGitzCounter + 1
+					elseif Blueprint == "ork_squad_looted_tank" then
+						g_LootedTankCounter = g_LootedTankCounter + 1
+					elseif Blueprint == "ork_squad_armored_nob" then
+						g_MegaNobsCounter = g_MegaNobsCounter + 1
+					elseif Blueprint == "ork_squad_tankbusta" then
+						g_TankBustaCounter = g_TankBustaCounter + 1
+					elseif Blueprint == "ork_squad_killa_kan" then
+						g_KillaKanCounter = g_KillaKanCounter + 1
+						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"ork_rokkit_launcha_killakan", 1)
+					end
+				end
+			end
+		end
+	end
+end
+
+function MoveSB3GuysToRelic()
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player3, "mkr_smallbase3_attmovemarker"..i) then
+			Player_GetAllSquadsNearMarker(g_Player3, "sg_SideOfRelic"..g_SB3AttMoveCounter, "mkr_smallbase3_attmovemarker"..i)
+			Cmd_AttackMoveMarker("sg_SideOfRelic"..g_SB3AttMoveCounter, "mkr_relicarea")
+			g_SB3AttMoveCounter = g_SB3AttMoveCounter + 1
+		end
+	end
+end
+function StormboyPatrolCreate()
+	if SGroup_Exists("sg_StormBoyTopPatrol") and SGroup_Count("sg_StormBoyTopPatrol") == 0 then
+		-- if the group exists, but is dead, recreate it
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_StormBoyTopPatrol", "ork_squad_stormboy", "mkr_mainhut3", 1, World_GetRand(13,15))
+		Cmd_AttackMoveMarker("sg_StormBoyTopPatrol", "mkr_stormboypatrol1_point1")
+	elseif SGroup_Exists("sg_StormBoyTopPatrol") == false then
+		-- if the group doesnt exist yet, create it
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_StormBoyTopPatrol", "ork_squad_stormboy", "mkr_mainhut3", 1, World_GetRand(13,15))
+		Cmd_AttackMoveMarker("sg_StormBoyTopPatrol", "mkr_stormboypatrol1_point1")
+	end
+	if SGroup_Exists("sg_StormBoyBottomPatrol") and SGroup_Count("sg_StormBoyBottomPatrol") == 0 then
+		-- if the group exists, but is dead, recreate it
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_StormBoyBottomPatrol", "ork_squad_stormboy", "mkr_mainhut3", 1, World_GetRand(13,15))
+		Cmd_AttackMoveMarker("sg_StormBoyBottomPatrol", "mkr_stormboypatrol2_point1")
+	elseif SGroup_Exists("sg_StormBoyBottomPatrol") == false then
+		-- if the group doesnt exist yet, create it
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_StormBoyBottomPatrol", "ork_squad_stormboy", "mkr_mainhut3", 1, World_GetRand(13,15))
+		Cmd_AttackMoveMarker("sg_StormBoyBottomPatrol", "mkr_stormboypatrol2_point1")
+	end
+end
+
+function StormboyPatrol()
+	if SGroup_Exists("sg_StormBoyTopPatrol") and SGroup_Count("sg_StormBoyTopPatrol") > 0 then
+		for i=1,4 do
+			if Prox_AnySquadNearMarker("sg_StormBoyTopPatrol", "mkr_stormboypatrol1_point"..i) == true then
+				if i < 4 then
+					Cmd_AttackMoveMarker("sg_StormBoyTopPatrol", "mkr_stormboypatrol1_point"..i+1)
+				else
+					Cmd_AttackMoveMarker("sg_StormBoyTopPatrol", "mkr_stormboypatrol1_point1")
+				end
+			end
+		end
+	end
+	if SGroup_Exists("sg_StormBoyBottomPatrol") and SGroup_Count("sg_StormBoyBottomPatrol") > 0 then
+		for i=1,3 do
+			if Prox_AnySquadNearMarker("sg_StormBoyBottomPatrol", "mkr_stormboypatrol2_point"..i) == true then
+				if i < 3 then
+					Cmd_AttackMoveMarker("sg_StormBoyBottomPatrol", "mkr_stormboypatrol2_point"..i+1)
+				else
+					Cmd_AttackMoveMarker("sg_StormBoyBottomPatrol", "mkr_stormboypatrol2_point1")
+				end
+			end
+		end
+	end
+end
+
+
+function StealthedGretchinRepair()
+	local Count = 1
+	local t_DamagedBuildings = {}
+	for i=1,12 do
+		if EGroup_GetAvgHealth("eg_SmallBase3Building"..i) < 1 then
+			t_DamagedBuildings[Count] = i
+			Count = Count + 1
+		end
+	end
+	
+	if table.getn(t_DamagedBuildings) > 0 then
+		Point = "eg_SmallBase3Building"..t_DamagedBuildings[World_GetRand(1,table.getn(t_DamagedBuildings))]
+		for i=1,g_GretchinCounter do
+			if SGroup_Exists("sg_Gretchin"..i) and SGroup_Count("sg_Gretchin"..i) > 0 then
+				Command_SquadEntity(g_Player2, "sg_Gretchin"..i, SCMD_Repair, Point)
+			end
+		end
+		if PopCheck(g_GretchinCounter, "sg_Gretchin", g_MaxGretchin) and EGroup_Exists("eg_MainOrkBase01") and EGroup_Count("eg_MainOrkBase01") > 0 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Gretchin"..g_GretchinCounter, "ork_squad_grot", "mkr_mainbase", 1, 5)
+			Command_SquadEntity(g_Player2, "sg_Gretchin"..g_GretchinCounter, SCMD_Repair, Point)
+			g_GretchinCounter = g_GretchinCounter + 1
+		end
+	end
+end
+
+function GrantInitialResearch()
+	Player_GrantResearch(g_Player2, "ork_research_grot_infiltrate")
+	Player_GrantResearch(g_Player3, "ork_research_grot_infiltrate")
+	Player_GrantResearch(g_Player4, "ork_research_grot_infiltrate")
+	
+	Player_GrantResearch(g_Player2, "ork_research_big_mek_1")
+	Player_GrantResearch(g_Player3, "ork_research_big_mek_1")
+	Player_GrantResearch(g_Player4, "ork_research_big_mek_1")
+	
+	Player_GrantResearch(g_Player2, "ork_research_speed_boost")
+	Player_GrantResearch(g_Player3, "ork_research_speed_boost")
+	Player_GrantResearch(g_Player4, "ork_research_speed_boost")
+end
+
+function MadDokBombSetup()
+	-- one squad of sluggas
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_BurnerFodder1", "ork_squad_slugga", "mkr_burnabombfodder1", 1, 12)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_BurnerFodder1"), 1),"ork_burna_slugga", 4)
+	SGroup_AddLeaders("sg_BurnerFodder1")
+	-- one squad of shootas
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_BurnerFodder2", "ork_squad_shoota_boy", "mkr_burnabombfodder2", 2, 12)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_BurnerFodder2"), 1),"ork_big_shoota_shoota", 6)
+	SGroup_AddLeaders("sg_BurnerFodder2")
+	-- mad doks on both
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Dok", "ork_squad_bad_dok_advance_sp", "mkr_maddok", 1, 12)
+	Cmd_SetStance("sg_Dok", STANCE_CeaseFire)
+	-- bombs on the ground
+	for i=1,4 do
+		Entity_CreateBuildingMarker(g_Player2, "eg_Bomb"..i, "burna_bomb_sp_dxp3", "mkr_burnabomb"..i,1)
+	end
+	--Cmd_AttachSquads("sg_BurnerFodder1", "sg_Dok1")
+	--Cmd_AttachSquads("sg_BurnerFodder2", "sg_Dok2")
+end
+function MadDokBomb()
+	-- if player is near marker
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_burnabombtrap")  or SGroup_GetAvgHealth("sg_Dok") < 1 then
+		Cmd_MoveToMarker("sg_Dok", "mkr_burnabomb1")
+		FOW_RevealMarker("mkr_burnabombtrap", 60)
+		Util_StartIntel(EVENTS.IE_Boom)
+		Rule_AddInterval(CheckForDok, 1)
+		Rule_Remove(MadDokBomb)
+	end
+end
+
+function CheckForDok()
+	if SGroup_Exists("sg_Dok") and SGroup_Count("sg_Dok") > 0 and Prox_AllSquadsNearMarker("sg_Dok", "mkr_burnabomb1") then
+		Rule_Remove(CheckForDok)
+		Rule_AddInterval(BlowUpBombs, 2)
+	elseif SGroup_Exists("sg_Dok") and SGroup_Count("sg_Dok") == 0 then
+		Rule_Remove(CheckForDok)
+	end
+end
+
+function BlowUpBombs()
+	if g_BombDestroyCounter < 5 then
+		if EGroup_Exists("eg_Bomb"..g_BombDestroyCounter) and EGroup_Count("eg_Bomb"..g_BombDestroyCounter) > 0 then
+			EGroup_SelfDestroy("eg_Bomb"..g_BombDestroyCounter, true)
+		end
+	else
+		Rule_Remove(BlowUpBombs)
+	end
+	g_BombDestroyCounter = g_BombDestroyCounter + 1
+end
+
+function MainBaseReact()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_mainbaseproximity") then
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerNearMainBase"..g_MainBaseP1Counter, "mkr_mainbaseproximity")
+		if SGroup_Exists("sg_PlayerNearMainBase"..g_MainBaseP1Counter) and SGroup_Count("sg_PlayerNearMainBase"..g_MainBaseP1Counter) >= 3 then
+			-- turn on the super quick barracks building
+			Rule_AddInterval(MainBaseQuickSluggas, 2)
+			Rule_AddInterval(MainBaseQuickSluggasCooldown, 1)
+			Cmd_AttackSGroup("sg_MainBaseDefense", "sg_PlayerNearMainBase"..g_MainBaseP1Counter)
+			-- send a squad from each remaining base to backdoor the player
+			if g_Debug_TurnOffFinalRetribution == false then
+				if EGroup_Exists("eg_TankBase01") and EGroup_Count("eg_TankBase01") > 0 then
+					for i=1,2 do
+						if EGroup_Exists("eg_TankBaseMek"..i) and EGroup_Count("eg_TankBaseMek"..i) > 0 then
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackTanks"..i, "ork_squad_wartrak", "mkr_tankbasemek"..i, 1, 1)
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackTanks"..i, "mkr_mainbase")
+						end
+					end
+				end
+				if EGroup_Exists("eg_NobBase01") and EGroup_Count("eg_NobBase01") > 0 then
+					for i=1,3 do
+						if EGroup_Exists("eg_NobBaseHut"..i) and EGroup_Count("eg_NobBaseHut"..i) > 0 then
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackNobs"..i, "ork_squad_nob", "mkr_nobbasehut"..i, 1, 8)
+							SGroup_AddLeaders("sg_FinalBaseAttackNobs"..i)
+							Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseAttackNobs"..i), 1),"ork_power_claw_nobz", 8)
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackNobs"..i, "mkr_mainbase")
+						end
+					end
+				end
+				if EGroup_Exists("eg_SmallBase01") and EGroup_Count("eg_SmallBase01") > 0 then
+					for i=1,2 do
+						if EGroup_Exists("eg_SmallBase1Hut"..i) and EGroup_Count("eg_SmallBase1Hut"..i) > 0 then
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB1Sluggas"..i, "ork_squad_slugga", "mkr_nobbasehut"..i, 1, 12)
+							Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseAttackSB1Sluggas"..i), 1),"ork_burna_slugga", 5)
+							SGroup_AddLeaders("sg_FinalBaseAttackSB1Sluggas"..i)
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB1Shootas"..i, "ork_squad_shoota_boy", "mkr_nobbasehut"..i, 1, 12)
+							Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseAttackSB1Shootas"..i), 1),"ork_big_shoota_shoota", 7)
+							SGroup_AddLeaders("sg_FinalBaseAttackSB1Shootas"..i)
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB1Shootas"..i, "mkr_mainbase")
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB1Sluggas"..i, "mkr_mainbase")
+						end
+					end
+				end
+				if EGroup_Exists("eg_SmallBase02") and EGroup_Count("eg_SmallBase02") > 0 then
+					for i=1,2 do
+						if EGroup_Exists("eg_SmallBase2Hut"..i) and EGroup_Count("eg_SmallBase2Hut"..i) > 0 then
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB2Stormboys"..i, "ork_squad_stormboy", "mkr_smallbase2hut"..i, 1, 15)
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB2Shootas"..i, "ork_squad_shoota_boy", "mkr_smallbase2hut"..i, 1, 12)
+							Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseAttackSB2Shootas"..i), 1),"ork_big_shoota_shoota", 7)
+							SGroup_AddLeaders("sg_FinalBaseAttackSB2Shootas"..i)
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB2Shootas"..i, "mkr_mainbase")
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB2Stormboys"..i, "mkr_mainbase")
+						end
+					end
+				end
+				if EGroup_Exists("eg_SmallBase3Building1") and EGroup_Count("eg_SmallBase3Building1") > 0 then
+					for i=3,4 do
+						if EGroup_Exists("eg_SmallBase3Building"..i) and EGroup_Count("eg_SmallBase3Building"..i) > 0 then
+							local Point = 1
+							if i==3 then
+								Point = 1
+							elseif i==4 then
+								Point = 2
+							end
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB3FlashGitz"..Point, "ork_flash_gitz_squad", "mkr_smallbase3hut"..Point, 1, 7)
+							Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseAttackSB3MegaNobs"..Point, "ork_squad_armored_nob", "mkr_smallbase3hut"..Point, 1, 4)
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB3FlashGitz"..Point, "mkr_mainbase")
+							Cmd_AttackMoveMarker("sg_FinalBaseAttackSB3MegaNobs"..Point, "mkr_mainbase")
+						end
+					end
+				end
+			end
+			Rule_Remove(MainBaseReact)
+		end
+		g_MainBaseP1Counter = g_MainBaseP1Counter + 1
+	end
+end
+
+function MainBaseQuickSluggas()
+	g_QuickSluggaRatchet = g_QuickSluggaRatchet + 1
+	if g_QuickSluggaRatchet > 11 then
+		g_QuickSluggaRatchet = 1
+	end
+	
+	local i = g_QuickSluggaRatchet
+	if EGroup_Exists("eg_MainOrkBaseHuts"..i) and EGroup_Count("eg_MainOrkBaseHuts"..i) > 0 then
+		if PopCheck(g_MainBaseSluggaCounter, "sg_MainBaseSluggas", g_MaxMainBaseSluggas) and g_QuickSluggaSend[i] == true then
+			Util_CreateSquadsAtPositionEx(g_Player2, "sg_MainBaseSluggas"..g_MainBaseSluggaCounter, "ork_squad_slugga", EGroup_GetPosition("eg_MainOrkBaseHuts"..i), 1, World_GetRand(3,5))
+			g_QuickSluggaSend[i] = false
+			if World_GetRand(1,10) > 8 then
+				--SGroup_AddLeaders("sg_MainBaseSluggas"..g_MainBaseSluggaCounter)
+			end
+			Cmd_AttackMoveMarker("sg_MainBaseSluggas"..g_MainBaseSluggaCounter, "mkr_slugga_attackmove")
+			g_MainBaseSluggaCounter = g_MainBaseSluggaCounter + 1
+		end
+	end
+end
+
+function MainBaseQuickSluggasCooldown()
+	for i=1,11 do
+		if g_QuickSluggaSend[i] == false then
+			g_QuickSluggaCooldown[i] = g_QuickSluggaCooldown[i] + 1
+			if g_QuickSluggaCooldown[i] >= g_QuickSluggasTimer then
+				g_QuickSluggaCooldown[i] = 0
+				g_QuickSluggaSend[i] = true
+			end
+		end
+	end
+end
+
+--[[
+Original function.  Changed for RC2 to make it less system intensive while maintaining the same idea...
+function MainBaseQuickSluggas()
+	for i=1,11 do
+		if EGroup_Exists("eg_MainOrkBaseHuts"..i) and EGroup_Count("eg_MainOrkBaseHuts"..i) then
+			if PopCheck(g_MainBaseSluggaCounter, "sg_MainBaseSluggas", g_MaxMainBaseSluggas) then
+				Util_CreateSquadsAtPositionEx(g_Player2, "sg_MainBaseSluggas"..g_MainBaseSluggaCounter, "ork_squad_slugga", EGroup_GetPosition("eg_MainOrkBaseHuts"..i), 1, World_GetRand(4,6))
+				if World_GetRand(1,10) > 8 then
+					--SGroup_AddLeaders("sg_MainBaseSluggas"..g_MainBaseSluggaCounter)
+				end
+				Cmd_AttackMoveMarker("sg_MainBaseSluggas"..g_MainBaseSluggaCounter, "mkr_slugga_attackmove")
+				g_MainBaseSluggaCounter = g_MainBaseSluggaCounter + 1
+			end
+		end
+	end
+end]]
+
+function GrantResearch()
+	
+	g_ManditoryResearchCounter = g_ManditoryResearchCounter + 1
+	
+	if t_TierResearched[1] == false then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_relicarea") or g_ManditoryResearchCounter >= g_ManditoryResearchTimer then
+			t_TierResearched[1] = true
+			g_ManditoryResearchCounter = 0
+			Player_GrantResearch(g_Player2, "ork_research_moredakka")
+			Player_GrantResearch(g_Player3, "ork_research_moredakka")
+			Player_GrantResearch(g_Player4, "ork_research_moredakka")
+			Player_GrantResearch(g_Player5, "ork_research_moredakka")
+			
+			Player_GrantResearch(g_Player2, "ork_research_eavy_armor_boyz")
+			Player_GrantResearch(g_Player3, "ork_research_eavy_armor_boyz")
+			Player_GrantResearch(g_Player4, "ork_research_eavy_armor_boyz")
+			
+			Player_GrantResearch(g_Player2, "ork_research_tougher_bosses")
+			Player_GrantResearch(g_Player3, "ork_research_tougher_bosses")
+			Player_GrantResearch(g_Player4, "ork_research_tougher_bosses")
+			
+			Player_GrantResearch(g_Player2, "ork_research_burna")
+			Player_GrantResearch(g_Player3, "ork_research_burna")
+			Player_GrantResearch(g_Player4, "ork_research_burna")
+		end
+	elseif t_TierResearched[2] == false then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase2area") or Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase1area") or g_ManditoryResearchCounter >= g_ManditoryResearchTimer then	
+			t_TierResearched[2] = true
+			g_ManditoryResearchCounter = 0
+			Player_GrantResearch(g_Player2, "ork_research_warboss_ranged_1")
+			Player_GrantResearch(g_Player3, "ork_research_warboss_ranged_1")
+			Player_GrantResearch(g_Player4, "ork_research_warboss_ranged_1")
+			
+			Player_GrantResearch(g_Player2, "ork_research_bigshoota")
+			Player_GrantResearch(g_Player3, "ork_research_bigshoota")
+			Player_GrantResearch(g_Player4, "ork_research_bigshoota")
+			
+			Player_GrantResearch(g_Player2, "ork_research_morechoppy")
+			Player_GrantResearch(g_Player3, "ork_research_morechoppy")
+			Player_GrantResearch(g_Player4, "ork_research_morechoppy")
+			Player_GrantResearch(g_Player5, "ork_research_morechoppy")
+			
+			g_NobTierReached = true
+		end
+	elseif t_TierResearched[3] == false then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_nobbasearea") or Player_AreSquadsNearMarker(g_Player1, "mkr_tankbasearea") or g_ManditoryResearchCounter >= g_ManditoryResearchTimer then	
+			t_TierResearched[3] = true
+			g_ManditoryResearchCounter = 0
+			Player_GrantResearch(g_Player2, "ork_research_evenmoredakka")
+			Player_GrantResearch(g_Player3, "ork_research_evenmoredakka")
+			Player_GrantResearch(g_Player4, "ork_research_evenmoredakka")
+			Player_GrantResearch(g_Player5, "ork_research_evenmoredakka")
+			
+			Player_GrantResearch(g_Player2, "ork_research_evenmorechoppy")
+			Player_GrantResearch(g_Player3, "ork_research_evenmorechoppy")
+			Player_GrantResearch(g_Player4, "ork_research_evenmorechoppy")
+			Player_GrantResearch(g_Player5, "ork_research_evenmorechoppy")
+			
+			Player_GrantResearch(g_Player2, "ork_research_tank_busta_infiltrate")
+			Player_GrantResearch(g_Player3, "ork_research_tank_busta_infiltrate")
+			Player_GrantResearch(g_Player4, "ork_research_tank_busta_infiltrate")
+			
+			Player_GrantResearch(g_Player2, "ork_research_eavy_armour")
+			Player_GrantResearch(g_Player3, "ork_research_eavy_armour")
+			Player_GrantResearch(g_Player4, "ork_research_eavy_armour")
+			Player_GrantResearch(g_Player5, "ork_research_eavy_armour")
+			
+			Player_GrantResearch(g_Player2, "ork_research_extra_armour")
+			Player_GrantResearch(g_Player3, "ork_research_extra_armour")
+			Player_GrantResearch(g_Player4, "ork_research_extra_armour")
+			Player_GrantResearch(g_Player5, "ork_research_extra_armour")
+		end
+	elseif t_TierResearched[4] == false then
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_squiggarea") or Player_AreSquadsNearMarker(g_Player1, "mkr_otherbasearea") or g_ManditoryResearchCounter >= g_ManditoryResearchTimer then	
+			t_TierResearched[4] = true
+			g_ManditoryResearchCounter = 0
+			Player_GrantResearch(g_Player2, "ork_research_eavy_armor_boyz_2")
+			Player_GrantResearch(g_Player3, "ork_research_eavy_armor_boyz_2")
+			Player_GrantResearch(g_Player4, "ork_research_eavy_armor_boyz_2")
+			Player_GrantResearch(g_Player5, "ork_research_eavy_armor_boyz_2")
+			
+			Player_GrantResearch(g_Player2, "ork_research_tougher_bosses_2")
+			Player_GrantResearch(g_Player3, "ork_research_tougher_bosses_2")
+			Player_GrantResearch(g_Player4, "ork_research_tougher_bosses_2")
+			
+			Player_GrantResearch(g_Player2, "ork_research_burna_2")
+			Player_GrantResearch(g_Player3, "ork_research_burna_2")
+			Player_GrantResearch(g_Player4, "ork_research_burna_2")
+		end
+	end
+	
+	local Count = 0
+	for i=1,4 do		
+		if t_TierResearched[i] == true then
+			Count = Count + 1
+		end
+	end
+	
+	if Count == 4 then
+		Rule_Remove(GrantResearch)
+	end
+end
+
+function MainObjectiveHelper()
+	Rule_AddInterval(Rule_Objective_DestroyBase, 1)
+	Rule_AddOneShot(IntroIE, 10)
+end
+
+function IntroIE()
+	Util_StartIntel(EVENTS.IE_Intro)
+end
+
+function Rule_Objective_DestroyBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and EGroup_Exists("eg_MainOrkBase01") and EGroup_Count("eg_MainOrkBase01") == 0 then
+		Util_ObjectiveComplete( Objective_DestroyBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyBase)
+		Objective_PingRemove(Objective_DestroyBase.title_id, g_ping_obj)
+		Rule_Add(CompleteScenario)
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyBase.title_id) == false then
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyBase, true)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyBase.title_id, "mkr_mainbase", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_mainbase", false, "default")				
+			Objective_SetDefaultPrimary(g_PrimaryObjectives)
+			g_PrimaryObjectives = g_PrimaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			--FOW_RevealMarker( "mkr_mainbase", -1 )
+		end
+	end
+end
+
+function CompleteScenario()
+	Rule_RemoveAll()
+	-- JOSH: uncomment the lines in this function to make the closing nis play.
+	if g_Debug == false then
+		WXP_OpeningNISPreset( )
+		Util_StartNIS( EVENTS.NIS_Closing )
+	end
+	Rule_AddInterval(CompleteScenarioWin, 1)
+end
+
+function CompleteScenarioWin()
+	if Event_IsAnyRunning() == false then
+		World_SetGameOver() 	
+	end
+end
+
+function Rule_Objective_DestroySquiggBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and ((EGroup_Exists("eg_SquiggBase02") and EGroup_Count("eg_SquiggBase02") == 0) or (EGroup_Exists("eg_SquiggBaseObj") and EGroup_Count("eg_SquiggBaseObj") == 0)) then
+		Util_ObjectiveComplete( Objective_DestroySquiggBases.title_id )
+		Rule_Remove( Rule_Objective_DestroySquiggBase)
+		Objective_PingRemove(Objective_DestroySquiggBases.title_id, g_ping_obj)
+		g_SquiggObjectiveComplete = true
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroySquiggBases.title_id) == false then
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroySquiggBases, false)
+			g_ping_obj = Objective_PingMarker(Objective_DestroySquiggBases.title_id, "mkr_squiggbase2", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_squiggbase2", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			FOW_RevealMarker( "mkr_squiggbase2", 30 )
+		end
+	end
+end
+
+function Rule_Objective_DestroyTankBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and ((EGroup_Count("eg_TankBase01") == 0 and EGroup_Exists("eg_TankBase01")) or (EGroup_Count("eg_TankBaseObj") == 0 and EGroup_Exists("eg_TankBaseObj"))) then
+		Util_ObjectiveComplete( Objective_DestroyTankBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyTankBase)
+		Objective_PingRemove(Objective_DestroyTankBase.title_id, g_ping_obj)
+		g_TankObjectiveComplete = true
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyTankBase.title_id) == false then
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyTankBase, false)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyTankBase.title_id, "mkr_tankbase", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_tankbase", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			FOW_RevealMarker( "mkr_tankbase", 30 )
+		end
+	end
+end
+
+function Rule_Objective_DestroyNobBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and ((EGroup_Count("eg_NobBase01") == 0 and EGroup_Exists("eg_NobBase01")) or (EGroup_Count("eg_NobBaseObj") == 0 and EGroup_Exists("eg_NobBaseObj"))) then
+		Util_ObjectiveComplete( Objective_DestroyNobBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyNobBase)
+		Objective_PingRemove(Objective_DestroyNobBase.title_id, g_ping_obj)
+		g_NobObjectiveComplete = true
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyNobBase.title_id) == false then
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyNobBase, false)
+			
+			g_ping_obj = Objective_PingMarker(Objective_DestroyNobBase.title_id, "mkr_nobbase", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_nobbase", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			FOW_RevealMarker( "mkr_nobbase", 30 )
+		end
+	end
+end
+
+function Rule_Objective_DestroyAirBase()
+	--[[ Objective Successfull ]]
+	if Event_IsAnyRunning() == false and ((EGroup_Count("eg_AirBase") == 0 and EGroup_Exists("eg_AirBase")) or (EGroup_Count("eg_AirBaseObj") == 0 and EGroup_Exists("eg_AirBaseObj"))) then
+		Util_ObjectiveComplete( Objective_DestroyAirBase.title_id )
+		Rule_Remove( Rule_Objective_DestroyAirBase)
+		Objective_PingRemove(Objective_DestroyAirBase.title_id, g_ping_obj)
+		g_AirObjectiveComplete = true
+	--[[If the objective doesn't exist, we're going to create it ]]
+	else
+		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyAirBase.title_id) == false then
+			--[[Utility function to add objectives]]
+			Util_ObjectiveCreate(Objective_DestroyAirBase, false)
+			g_ping_obj = Objective_PingMarker(Objective_DestroyAirBase.title_id, "mkr_squiggbase1", true, "default")
+			g_ping_obj_mini = Ping_Marker("mkr_squiggbase1", false, "default")
+			Objective_SetDefaultSecondary(g_SecondaryObjectives)
+			g_SecondaryObjectives = g_SecondaryObjectives + 1
+			if g_Debug == false then Objective_ShowScreen() end
+			FOW_RevealMarker( "mkr_squiggbase1", 30 )
+		end
+	end
+end
+
+function MakeSureObjIsAssigned()
+	if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyNobBase.title_id) == false and Player_AreSquadsNearMarker(g_Player1, "mkr_nobbasearea") and t_ObjAssigned[1] == false then
+		Rule_AddInterval(Rule_Objective_DestroyNobBase, 1)
+		t_ObjAssigned[1] = true
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyNobBase.title_id) == false and t_ObjAssigned[1] == false then
+		for i=0,g_NobCounter do
+			if SGroup_Exists("sg_Nobs"..i) and SGroup_Count("sg_Nobs"..i) > 0 and SGroup_IsUnderAttack("sg_Nobs"..i, false) then
+				t_ObjAssigned[1] = true
+				Rule_AddInterval(Rule_Objective_DestroyNobBase, 1)
+				break
+			end
+		end
+	end
+	if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyTankBase.title_id) == false and Player_AreSquadsNearMarker(g_Player1, "mkr_tankbasearea") and t_ObjAssigned[2] == false then
+		Rule_AddInterval(Rule_Objective_DestroyTankBase, 1)
+		t_ObjAssigned[2] = true
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyTankBase.title_id) == false and t_ObjAssigned[2] == false then
+		for i=0,g_TrakkCounter do
+			if SGroup_Exists("sg_Wartrakk"..i) and SGroup_Count("sg_Wartrakk"..i) > 0 and SGroup_IsUnderAttack("sg_Wartrakk"..i, false) then
+				t_ObjAssigned[2] = true
+				Rule_AddInterval(Rule_Objective_DestroyTankBase, 1)
+				break
+			end
+		end
+	end
+	if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroySquiggBases.title_id) == false and Player_AreSquadsNearMarker(g_Player1, "mkr_squiggarea") and t_ObjAssigned[3] == false then
+		Rule_AddInterval(Rule_Objective_DestroySquiggBase, 1)
+		t_ObjAssigned[3] = true
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroySquiggBases.title_id) == false and t_ObjAssigned[3] == false then
+		for i=0,g_SquiggCounter do
+			if SGroup_Exists("sg_Squiggoth"..i) and SGroup_Count("sg_Squiggoth"..i) > 0 and SGroup_IsUnderAttack("sg_Squiggoth"..i, false) then
+				t_ObjAssigned[3] = true
+				Rule_AddInterval(Rule_Objective_DestroySquiggBase, 1)
+				break
+			end
+		end
+	end
+	if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyAirBase.title_id) == false and Player_AreSquadsNearMarker(g_Player1, "mkr_otherbasearea") and t_ObjAssigned[4] == false then
+		Rule_AddInterval(Rule_Objective_DestroyAirBase, 1)
+		t_ObjAssigned[4] = true
+	elseif Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyAirBase.title_id) == false and t_ObjAssigned[4] == false then
+		for i=0,g_FightaBombaCounter do
+			if SGroup_Exists("sg_FightaBomba"..i) and SGroup_Count("sg_FightaBomba"..i) > 0 and SGroup_IsUnderAttack("sg_FightaBomba"..i, false) then
+				t_ObjAssigned[4] = true
+				Rule_AddInterval(Rule_Objective_DestroyAirBase, 1)
+				break
+			end
+		end
+	end
+	
+	-- remove function if its no longer useful
+	local Count = 0
+	for i=1,4 do
+		if t_ObjAssigned[i] == true then
+			Count = Count + 1
+		end
+	end
+	if Count == 4 then
+		Rule_Remove(MakeSureObjIsAssigned)
+	end
+end
+
+function SetupGorgutzBase()
+	--[[gorgutz's elite squads]]
+	SGroup_Create("sg_GorgutzsElite")
+	-- gorgutz
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_Gorgutz", "ork_squad_warboss_sp_dxp3_enemy", "mkr_gorgutzelite_gorgutz", 1, 1)
+	
+	-- killakans
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzKan1", "ork_squad_killa_kan", "mkr_gorgutzelite_killakan1", 1, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzKan2", "ork_squad_killa_kan", "mkr_gorgutzelite_killakan2", 1, 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzKan1"), 1),"ork_rokkit_launcha_killakan", 1)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzKan2"), 1),"ork_rokkit_launcha_killakan", 1)
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzKan1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzKan2")
+	
+	-- mega nob
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzMegaNob1", "ork_squad_armored_nob", "mkr_gorgutzelite_meganob1", 1, 4)
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzMegaNob1")
+	
+	-- nobs
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzNob1", "ork_squad_nob", "mkr_gorgutzelite_nob1", 1, 20)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzNob2", "ork_squad_nob", "mkr_gorgutzelite_nob2", 1, 20)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzNob1"), 1),"ork_power_claw_nobz", 10)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzNob2"), 1),"ork_power_claw_nobz", 10)
+	SGroup_AddLeaders("sg_GorgutzNob1")
+	SGroup_AddLeaders("sg_GorgutzNob2")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzNob1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzNob2")
+	
+	-- shoota
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzShoota1", "ork_squad_shoota_boy", "mkr_gorgutzelite_shoota1", 1, 20)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzShoota1"), 1),"ork_big_shoota_shoota", 6)
+	SGroup_AddLeaders("sg_GorgutzShoota1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzShoota1")
+	
+	-- slugga
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzSlugga1", "ork_squad_slugga", "mkr_gorgutzelite_slugga1", 1, 20)
+	Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_GorgutzSlugga1"), 1),"ork_burna_slugga", 6)
+	SGroup_AddLeaders("sg_GorgutzSlugga1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzSlugga1")
+	
+	-- tankbustas
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzTankbusta1", "ork_squad_tankbusta", "mkr_gorgutzelite_tankbusta1", 1, 20)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzTankbusta2", "ork_squad_tankbusta", "mkr_gorgutzelite_tankbusta2", 1, 20)
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzTankbusta1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzTankbusta2")
+	
+	-- wartrak
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzWartrak1", "ork_squad_wartrak", "mkr_gorgutzelite_wartrak1", 1, 20)
+	SGroup_FaceMarker("sg_GorgutzWartrak1", "mkr_gorgutzelite_facemarker")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzWartrak1")
+	
+	-- looted tank
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzLootedTank1", "ork_squad_looted_tank", "mkr_gorgutzelite_lootedtank1", 1, 1)
+	SGroup_FaceMarker("sg_GorgutzLootedTank1", "mkr_gorgutzelite_facemarker")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzLootedTank1")
+	
+	-- doks
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzDok1", "ork_squad_bad_dok", "mkr_gorgutzelite_dok1", 1, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_GorgutzDok2", "ork_squad_bad_dok", "mkr_gorgutzelite_dok2", 1, 1)
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzDok1")
+	SGroup_AddGroup("sg_GorgutzsElite", "sg_GorgutzDok2")
+	
+	Cmd_AttachSquads("sg_GorgutzNob1", "sg_GorgutzDok1")
+	Cmd_AttachSquads("sg_GorgutzNob2", "sg_GorgutzDok2")
+end
+
+function GorgutzBase()
+	for i=1,2 do
+		if Player_AreSquadsNearMarker(g_Player1, "mkr_gorgutzbaseactivate"..i) or Player_AreSquadsNearMarker(g_Player1, "mkr_otherbasearea") then
+			FOW_RevealMarker("mkr_otherbasearea", 50)
+			Cmd_AttackMoveMarker("sg_GorgutzsElite", "mkr_gorgutzbaseactivate"..i)
+			Util_StartIntel(EVENTS.IE_EliteCamp)
+			Cmd_JumpToMarker("sg_Gorgutz", "mkr_mainbase")
+			SGroup_DeSpawn("sg_Gorgutz")	
+			Rule_Remove(GorgutzBase)
+			break
+		end		
+	end
+end
+
+function InternallyDefendAllBases()
+	for i=1,6 do
+		if i == 1 then
+			Marker = "mkr_smallbase1area"
+			DefenseSGroup = "sg_SmallBase1Defense"
+			DefendAgainstNumber = g_SB1DefenseNumber
+		elseif i == 2 then
+			Marker = "mkr_smallbase2area"
+			DefenseSGroup = "sg_SmallBase2Defense"
+			DefendAgainstNumber = g_SB2DefenseNumber
+		elseif i == 3 then
+			Marker = "mkr_smallbase3area"
+			DefenseSGroup = "sg_SmallBase3Defense"
+			DefendAgainstNumber = g_SB3DefenseNumber
+		elseif i == 4 then
+			Marker = "mkr_nobbasearea"
+			DefenseSGroup = "sg_NobBaseDefense"
+			DefendAgainstNumber = g_NBDefenseNumber
+		elseif i == 5 then
+			Marker = "mkr_tankbasearea"
+			DefenseSGroup = "sg_TankBaseDefense"
+			DefendAgainstNumber = g_TBDefenseNumber
+		elseif i == 6 then
+			Marker = "mkr_squiggarea"
+			DefenseSGroup = "sg_SquiggBaseDefense"
+			DefendAgainstNumber = g_SBDefenseNumber
+		end
+		
+		if Player_AreSquadsNearMarker(g_Player1, Marker) then
+			Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerAttackingSquad"..g_PlayerAttackingSquadCounter, Marker)
+			if SGroup_Count("sg_PlayerAttackingSquad"..g_PlayerAttackingSquadCounter) >= DefendAgainstNumber and SGroup_Exists(DefenseSGroup) and SGroup_Count(DefenseSGroup) > 0 then
+				Cmd_AttackSGroup(DefenseSGroup, "sg_PlayerAttackingSquad"..g_PlayerAttackingSquadCounter)
+				if i==1 then
+					if g_SB1DefenseNumber > 1 then
+						g_SB1DefenseNumber = 1
+					end
+				elseif i == 2 then
+					if g_SB2DefenseNumber > 1 then
+						g_SB2DefenseNumber = 1
+					end
+				elseif i == 3 then
+					if g_SB3DefenseNumber > 1 then
+						g_SB3DefenseNumber = 1
+					end
+				elseif i == 4 then
+					if g_NBDefenseNumber > 1 then
+						g_NBDefenseNumber = 1
+					end
+				elseif i == 5 then
+					if g_TBDefenseNumber > 1 then
+						g_TBDefenseNumber = 1
+					end
+				elseif i == 6 then
+					if g_SBDefenseNumber > 1 then
+						g_SBDefenseNumber = 1
+					end
+				end
+			end
+			g_PlayerAttackingSquadCounter = g_PlayerAttackingSquadCounter+ 1
+		end
+	end
+end
+
+function InitialFightaBomba()
+	FightaBomba(1)
+	FightaBomba(2)
+	FightaBomba(3)
+	--FightaBomba(4)
+	--FightaBomba(5)
+	Rule_AddInterval(FightaBomba, g_FightaBombaReplacementTimer)
+	Rule_AddOneShot(AttGroundDelay, 30)
+end
+
+function FightaBomba(pos)
+	-- reinforce fighta bombas
+	if g_AirObjectiveComplete == false then
+		if EGroup_Exists("eg_AirBase") and EGroup_Count("eg_AirBase") > 0 then
+			if PopCheck(g_FightaBombaCounter, "sg_FightaBomba", g_MaxFightaBomba) and EGroup_Exists("eg_AirBaseMek1") and EGroup_Count("eg_AirBaseMek1") > 0 then
+				g_FightaBombaCounter = g_FightaBombaCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player3, "sg_FightaBomba"..g_FightaBombaCounter, "ork_squad_fighta_bomba_noFF_sp_dxp3", "mkr_squigg1mek1", 1, 1)
+				if pos then
+					Cmd_AttackMoveMarker("sg_FightaBomba"..g_FightaBombaCounter, "mkr_fightabomba"..pos)
+				else
+					Cmd_AttackMoveMarker("sg_FightaBomba"..g_FightaBombaCounter, "mkr_fightabomba"..World_GetRand(1,6))
+				end
+			elseif EGroup_Exists("eg_AirBaseMek1") and EGroup_Count("eg_AirBaseMek1") == 0 then
+				Rule_Remove(FightaBomba)
+			end
+		end
+	else
+		Rule_Remove(FightaBomba)
+		Rule_Remove(FightaBomba_AttackGround)
+	end
+end
+
+function AttGroundDelay()
+	Rule_AddInterval(FightaBomba_AttackGround, 15)
+end
+
+function FightaBomba_AttackGround()
+	for i=0, g_FightaBombaCounter do
+		if SGroup_Exists("sg_FightaBomba"..i) and SGroup_Count("sg_FightaBomba"..i) > 0 then
+			Cmd_AttackGroundMarker("sg_FightaBomba"..i, "mkr_fightabomba_attackground"..World_GetRand(1,12))
+		end
+	end
+end
+
+function MiddlePass()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_fightabomba_ie") then
+		IE_MiddlePass()
+		if t_ObjAssigned[4] == false then
+			t_ObjAssigned[4] = true
+			Rule_AddInterval(Rule_Objective_DestroyAirBase,1)
+		end
+		Rule_Remove(MiddlePass)
+	end
+end
+
+function RecaptureRelicPoint()
+	if EGroup_IsCapturedByPlayer("eg_Relic", g_Player1, true) then
+		if EGroup_Exists("eg_SmallBase3Building1") and EGroup_Count("eg_SmallBase3Building1") > 0 and PopCheck(g_CaptureCounter, "sg_CaptureSluggas", 2) then
+			g_CaptureCounter = g_CaptureCounter + 1
+			Util_CreateSquadsAtMarkerEx(g_Player4, "sg_CaptureSluggas"..g_CaptureCounter, "ork_squad_slugga", "mkr_smallbase3", 1, 15)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_CaptureSluggas"..g_CaptureCounter), 1),"ork_burna_slugga", 6)
+			SGroup_AddLeaders("sg_CaptureSluggas"..g_CaptureCounter)
+			Cmd_AttackMoveMarker("sg_CaptureSluggas"..g_CaptureCounter, "mkr_force_relic_capture")
+		elseif EGroup_Exists("eg_SmallBase3Building1") and EGroup_Count("eg_SmallBase3Building1") == 0 then
+			Rule_Remove(ForceCapture)
+			Rule_Remove(RecaptureRelicPoint)
+		end
+	end
+end
+
+function ForceCapture()
+	-- loop through all capture guys
+	for j=1,g_CaptureCounter do
+		if SGroup_Exists("sg_CaptureSluggas"..j) and SGroup_Count("sg_CaptureSluggas"..j) > 0 then
+			if Prox_AnySquadNearMarker("sg_CaptureSluggas"..j, "mkr_force_relic_capture") and EGroup_IsCapturedByPlayer("eg_Relic", g_Player1, true) == true then
+				Cmd_Capture("sg_CaptureSluggas"..j, "eg_Relic")
+			end
+		end
+	end
+end
+
+function IdleRelicSquads()
+	if g_PlayerTookRelic == true then
+		if Player_AreSquadsNearMarker(g_Player2, "mkr_relicarea") or Player_AreSquadsNearMarker(g_Player3, "mkr_relicarea") then
+			g_SquadsNearRelicCounter = g_SquadsNearRelicCounter+ 1
+			Player_GetAllSquadsNearMarker(g_Player2, "sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter, "mkr_relicarea")
+			Player_GetAllSquadsNearMarker(g_Player3, "sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter, "mkr_relicarea")
+			if SGroup_Exists("sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter) and SGroup_Count("sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter) > 0 and SGroup_IsUnderAttack("sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter, false) == false then
+				--Cmd_AttackMoveMarker("sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_P2SquadsNearRelic"..g_SquadsNearRelicCounter, g_GlobalAttackPos)
+			end
+			if SGroup_Exists("sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter) and SGroup_Count("sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter) > 0 and SGroup_IsUnderAttack("sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter, false) == false then
+				--Cmd_AttackMoveMarker("sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_P3SquadsNearRelic"..g_SquadsNearRelicCounter, g_GlobalAttackPos)
+			end
+		end
+	end
+end
+
+-- only happens if the difficulty is 2 or 3
+function StormboyAttack_HighLvlStronghold(pos)
+	if EGroup_Exists("eg_MainOrkBaseHuts1") and EGroup_Count("eg_MainOrkBaseHuts1") > 0 then
+		if g_Difficulty == 2 then
+			if PopCheck(g_StormboyJumpAttackCounter, "sg_StormboyJumpAttack", 4) == true then
+				g_StormboyJumpAttackCounter = g_StormboyJumpAttackCounter + 1
+				Util_CreateSquadsAtMarkerEx(g_Player5, "sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "ork_squad_stormboy", "mkr_mainhut1", 1, World_GetRand(7,14))
+				SGroup_AddLeaders("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter)
+				if pos then
+					if pos == "top" then
+						Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_topwaypoint")
+					elseif pos == "bottom" then
+						Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_bottomwaypoint")
+					end
+				else
+					Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_bottomwaypoint")
+				end
+			end
+		elseif g_Difficulty == 3 then
+			for i=1,3 do
+				if PopCheck(g_StormboyJumpAttackCounter, "sg_StormboyJumpAttack", 4) == true then
+					if i ==1 or i ==2 then
+						g_StormboyJumpAttackCounter = g_StormboyJumpAttackCounter + 1
+						Util_CreateSquadsAtMarkerEx(g_Player5, "sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "ork_squad_stormboy", "mkr_mainhut1", 1, World_GetRand(10,15))
+						SGroup_AddLeaders("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter)
+					elseif World_GetRand(1,10) >= 8 then
+						g_StormboyJumpAttackCounter = g_StormboyJumpAttackCounter + 1
+						Util_CreateSquadsAtMarkerEx(g_Player5, "sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "ork_squad_stormboy", "mkr_mainhut1", 1, World_GetRand(12,15))
+						SGroup_AddLeaders("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter)
+					end
+					if pos then
+						if pos == "top" then
+							Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_topwaypoint")
+						elseif pos == "bottom" then
+							Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_bottomwaypoint")
+						end
+					else
+						Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..g_StormboyJumpAttackCounter, "mkr_stormboy_bottomwaypoint")
+					end
+				end
+			end
+		end
+	end
+end
+
+-- jumps the storm boy attack into the player base
+function StormboyAttack_HighLvlStronghold_Jumpto()
+	-- top
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_stormboy_jumpto_top") then
+		for i=1,g_StormboyJumpAttackCounter do
+			if Prox_AnySquadNearMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_top") then
+				Cmd_JumpToMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_top"..World_GetRand(1,5))
+			end
+		end
+	end
+	
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_stormboy_topwaypoint") then
+		for i=1,g_StormboyJumpAttackCounter do
+			if Prox_AnySquadNearMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_topwaypoint") then
+				Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_top")
+			end
+		end
+	end
+	
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_stormboy_jumpto_top1") then
+		for i=1,g_StormboyJumpAttackCounter do
+			if Prox_AnySquadNearMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_top1") then
+				--Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..i, "mkr_Player_HQ")
+				Cmd_AttackMovePos("sg_StormboyJumpAttack"..i, g_GlobalAttackPos)				
+			end
+		end
+	end
+	
+	-- bottom
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_stormboy_jumpto_bottom") then
+		for i=1,g_StormboyJumpAttackCounter do
+			if Prox_AnySquadNearMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_bottom") then
+				Cmd_JumpToMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_bottom"..World_GetRand(1,5))
+			end
+		end
+	end
+	
+	if Player_AreSquadsNearMarker(g_Player5, "mkr_stormboy_bottomwaypoint") then
+		for i=1,g_StormboyJumpAttackCounter do
+			if Prox_AnySquadNearMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_bottomwaypoint") then
+				Cmd_AttackMoveMarker("sg_StormboyJumpAttack"..i, "mkr_stormboy_jumpto_bottom")
+			end
+		end
+	end
+end
+
+function StormboyAttack_SendIt()
+	-- cooldown
+	if g_CanSendStormboyFlag == false then
+		g_StormboyCooldown = g_StormboyCooldown + 1
+		if g_StormboyCooldown >= 160 then
+			g_CanSendStormboyFlag = true
+			g_StormboyCooldown = 0
+		end
+	end
+	
+	-- actually send them
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase1area") and t_StormBoyAttackSent[1] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[1] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("top")
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_nobbasearea") and t_StormBoyAttackSent[2] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[2] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("top")
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_otherbasearea") and t_StormBoyAttackSent[3] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[3] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("top")
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_squiggarea") and t_StormBoyAttackSent[4] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[4] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("bottom")
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_tankbasearea") and t_StormBoyAttackSent[5] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[5] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("bottom")
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase2area") and t_StormBoyAttackSent[6] == false and g_CanSendStormboyFlag == true then
+		t_StormBoyAttackSent[6] = true
+		g_CanSendStormboyFlag = false
+		StormboyAttack_HighLvlStronghold("bottom")
+	end
+end
+
+
+function IntelligentlyMoveAttacks()
+	if EGroup_Exists("eg_Player_HQ") and EGroup_Count("eg_Player_HQ") == 0 then
+		-- find the next HQ to attack
+		Race = MetaMap_GetPlayerNRaceName(0)
+		if Race == "chaos_marine_race" then
+			hqbp = "chaos_hq"
+		elseif Race == "guard_race" then
+			hqbp = "guard_hq"
+		elseif Race == "ork_race" then	
+			hqbp = "ork_hq"
+		elseif Race == "space_marine_race" then
+			hqbp = "space_marine_hq"
+		elseif Race == "tau_race" then
+			hqbp = "tau_hq"
+		elseif Race == "necron_race" then
+			hqbp = "monolith"
+		elseif Race == "eldar_race" then
+			hqbp = "eldar_hq"
+		elseif Race == "dark_eldar_race" then
+			hqbp = "dark_eldar_hq"
+		elseif Race == "sisters_race" then
+			hqbp = "sisters_hq"
+		end
+		Player_GetEntities( g_Player1 )
+		if EGroup_Exists("__Player1000Entities") and EGroup_CountSpawned("__Player1000Entities") > 0 then
+			EGroup_CreateIfNotFound("eg_targettemp")
+			EGroup_CreateIfNotFound("eg_GlobalAttackTarget")
+			EGroup_Clear("eg_targettemp")
+			EGroup_Clear("eg_GlobalAttackTarget")
+			Util_GetEntitiesByBP( "__Player1000Entities", "eg_targettemp", hqbp )
+			if EGroup_Exists("eg_targettemp") and EGroup_Count("eg_targettemp") > 0 then
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_targettemp"), 1))
+			end
+			if EGroup_Exists("eg_GlobalAttackTarget") and EGroup_Count("eg_GlobalAttackTarget") > 0 then
+				-- pick the first item in the egroup to attack 
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			else
+				-- search for another building to attack
+				EGroup_Clear("eg_GlobalAttackTarget")
+				local Rand = World_GetRand(1,EGroup_CountSpawned("__Player1000Entities"))
+				EGroup_Add("eg_GlobalAttackTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("__Player1000Entities"), Rand))
+				g_GlobalAttackPos = EGroup_GetPosition("eg_GlobalAttackTarget")
+			end
+		else
+			-- the player should lose if they have no entities left
+			Lose()
+		end
+	else
+		g_GlobalAttackPos = EGroup_GetPosition("eg_Player_HQ")
+	end
+end
+
+function Lose()
+	if Player_HasBuildingsExcept(g_Player1, t_building_exceptions) == false then
+		if Player_HasSquadsExcept(g_Player1, t_unit_exceptions ) == false then
+			Rule_RemoveAll()
+			Fade_Start(4, false)
+			World_SetTeamWin( g_Player2, "" )
+			Rule_AddIntervalEx( GameOver,5,1 )
+		end
+	end
+end
+
+function GameOver()
+	World_SetGameOver()
+end
+
+---------------------------------------------
+--[[--------------IEs-------------]]
+---------------------------------------------
+
+function IE_PushingUpMiddle()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase3area") then
+		g_PlayerSquadsNearBase3Counter = g_PlayerSquadsNearBase3Counter + 1
+		Player_GetAllSquadsNearMarker(g_Player1, "sg_PlayerSquadsNearBase3"..g_PlayerSquadsNearBase3Counter, "mkr_smallbase3area")
+		if SGroup_Exists("sg_PlayerSquadsNearBase3"..g_PlayerSquadsNearBase3Counter) and SGroup_Count("sg_PlayerSquadsNearBase3"..g_PlayerSquadsNearBase3Counter) > 2 then
+			Util_StartIntel(EVENTS.IE_PushingUpMiddle)
+			Rule_Remove(IE_PushingUpMiddle)
+		end
+	end
+end
+
+function IE_MiddlePass()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_MiddlePass)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_MiddlePass)
+	end
+	Rule_AddInterval(IE_PushingUpMiddle, 10)
+end
+
+function IE_PlayerTakesRelic()
+	if EGroup_IsCapturedByPlayer("eg_Relic", g_Player1, false) then
+		Util_StartIntel(EVENTS.IE_GotTheRelic)
+		g_PlayerTookRelic = true
+		Rule_Remove(IE_PlayerTakesRelic)
+	end
+end
+
+function IE_Taunts()
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase2area") or Player_AreSquadsNearMarker(g_Player1, "mkr_smallbase1area") then
+		if t_ProximityIEs[1] == false then
+			Util_StartIntel(EVENTS.IE_EnterSmallBase1or2Taunt)
+			t_ProximityIEs[1] = true
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_nobbasearea") or Player_AreSquadsNearMarker(g_Player1, "mkr_tankbasearea") then
+		if t_ProximityIEs[2] == false then
+			t_ProximityIEs[2] = true
+			Util_StartIntel(EVENTS.IE_LateCampTaunt)
+		end		
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_squiggarea") --[[or Player_AreSquadsNearMarker(g_Player1, "mkr_otherbasearea")]] then
+		if t_ProximityIEs[3] == false then
+			t_ProximityIEs[3] = true
+			Util_StartIntel(EVENTS.IE_EnterSmallBase3Taunt)
+		end
+	elseif Player_AreSquadsNearMarker(g_Player1, "mkr_mainbaseproximity") then
+		if t_ProximityIEs[4] == false then
+			t_ProximityIEs[4] = true
+			Util_StartIntel(EVENTS.IE_EnterMainBase)
+			Rule_AddOneShot(IE_MoreSluggas, 35)
+		end
+	end
+	for i=1,4 do
+		local Count = 0
+		if t_ProximityIEs[i] == true then
+			Count = Count + 1
+		end
+		if Count >= 4 then
+			Rule_Remove(IE_Taunts)
+		end
+	end
+end
+
+function IE_MoreSluggas()
+	Util_StartIntel(EVENTS.IE_MoreSluggaBoys)
+end
+
+function IE_NobBaseObj()
+	for i=0,10 do
+		if SGroup_Exists("sg_Nobs"..i) and SGroup_GetAvgHealth("sg_Nobs"..i) < 1 then
+			if MetaMap_GetPlayerRaceName() == "eldar_race" then
+				Util_StartIntel(EVENTS.IE_Eldar_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+				Util_StartIntel(EVENTS.IE_IG_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+				Util_StartIntel(EVENTS.IE_Necron_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+				Util_StartIntel(EVENTS.IE_Chaos_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+				Util_StartIntel(EVENTS.IE_SM_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+				Util_StartIntel(EVENTS.IE_Tau_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+				Util_StartIntel(EVENTS.IE_Sisters_NobBase)
+			elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+				Util_StartIntel(EVENTS.IE_DE_NobBase)
+			end
+			Rule_Remove(IE_NobBaseObj)
+			return
+		end
+	end
+end
+
+function IE_TankBaseObj()
+	for i=0,10 do
+		if SGroup_Exists("sg_Wartrakk"..i) and SGroup_GetAvgHealth("sg_Wartrakk"..i) < 1 then
+			if MetaMap_GetPlayerRaceName() == "eldar_race" then
+				Util_StartIntel(EVENTS.IE_Eldar_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+				Util_StartIntel(EVENTS.IE_IG_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+				Util_StartIntel(EVENTS.IE_Necron_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+				Util_StartIntel(EVENTS.IE_Chaos_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+				Util_StartIntel(EVENTS.IE_SM_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+				Util_StartIntel(EVENTS.IE_Tau_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+				Util_StartIntel(EVENTS.IE_Sisters_TankBase)
+			elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+				Util_StartIntel(EVENTS.IE_DE_TankBase)
+			end
+			Rule_Remove(IE_TankBaseObj)
+			return
+		end
+	end
+end
+
+function IE_SquiggBaseObj()
+	for i=0,10 do
+		if SGroup_Exists("sg_Squiggoth"..i) and SGroup_GetAvgHealth("sg_Squiggoth"..i) < 1 then
+			if MetaMap_GetPlayerRaceName() == "eldar_race" then
+				Util_StartIntel(EVENTS.IE_Eldar_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+				Util_StartIntel(EVENTS.IE_IG_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+				Util_StartIntel(EVENTS.IE_Necron_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+				Util_StartIntel(EVENTS.IE_Chaos_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+				Util_StartIntel(EVENTS.IE_SM_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+				Util_StartIntel(EVENTS.IE_Tau_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+				Util_StartIntel(EVENTS.IE_Sisters_SquiggBase)
+			elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+				Util_StartIntel(EVENTS.IE_DE_SquiggBase)
+			end
+			Ping_Position(SGroup_GetPosition("sg_Squiggoth"..g_SquiggCounter), false, "default")
+			Rule_Remove(IE_SquiggBaseObj)
+			return
+		end
+	end
+end
+
+function GiantWaaghBannerIEHelper()
+	if EGroup_Exists("eg_BigWaagh_WaaghWall") and EGroup_Count("eg_BigWaagh_WaaghWall") > 0 then
+		if EGroup_GetAvgHealth("eg_BigWaagh_WaaghWall") < 1 and g_GiantWaaghBannerSeen == false then
+			IE_SeeGiantWaaghBanner()
+			g_GiantWaaghBannerSeen = true
+		end
+	elseif EGroup_Exists("eg_BigWaagh_WaaghWall") and EGroup_Count("eg_BigWaagh_WaaghWall") == 0 then
+		if g_GiantWaaghBannerDestroyed == false then
+			g_GiantWaaghBannerDestroyed = true
+			DestroyGiantWaaghBanner()
+		end
+	end		
+end
+
+function IE_SeeGiantWaaghBanner()
+	if MetaMap_GetPlayerRaceName() == "eldar_race" then
+		Util_StartIntel(EVENTS.IE_Eldar_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "guard_race" then
+		Util_StartIntel(EVENTS.IE_IG_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "necron_race" then
+		Util_StartIntel(EVENTS.IE_Necron_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "chaos_marine_race" then
+		Util_StartIntel(EVENTS.IE_Chaos_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "space_marine_race" then
+		Util_StartIntel(EVENTS.IE_SM_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "tau_race" then
+		Util_StartIntel(EVENTS.IE_Tau_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "sisters_race" then
+		Util_StartIntel(EVENTS.IE_Sisters_SeeGiantWaaghBanner)
+	elseif MetaMap_GetPlayerRaceName() == "dark_eldar_race" then
+		Util_StartIntel(EVENTS.IE_DE_SeeGiantWaaghBanner)
+	end
+end
+
+
+function DestroyGiantWaaghBanner()
+	Util_StartIntel(EVENTS.IE_DestroyFirstGiantWaaghBanner)
+end

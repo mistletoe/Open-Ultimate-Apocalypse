@@ -1,0 +1,1866 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Stronghold_Tau.nis
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Declares an Event Table
+EVENTS = {}
+
+import("CameraShake.scar")
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+--INTEL EVENTS
+	-- Initial_Beachhead (Race Based) : We must destroy the outpost & Establish Our Own base
+	-- DefendFirstBase : Protect the base from Attack
+	-- FirstBase_Destroyed (Race Based) : Player Destroys the first small base -- Here is your HQ & Builders
+	-- DispatchScouts : Dispatch the Scouts to Find the Player
+	-- ScoutsFoundPlayer : Scouts found the player base
+	-- ScoutsKilled : Player has killed enough scouts without them finding the player base
+	-- PlayerAttacksFirst : Player attacks a Tau base before the Scouts Find the Player
+	-- BeaconObjective : Assign Beacon Objective & Talk of the Beacons
+	-- LaserCharging : Prepare the Laser Gun (Dont Fire Yet)
+	-- FirstLaserAttack : First time the Tau Fire the Laser Cannon
+	-- OrbitalAttack_Announcement : Tau Firing the Laser Cannon
+	-- PlayerNearsBigGun : Player Gets near the begin gun... tau reacts to it
+	-- PlayerCapturedLaser : Player Takes Control of the Laser Gun
+	-- TauCapturedLaser : (repeatable) Tau Take Control Back of the Laser Gun
+	-- Beacon_Destroyed : A Guidance beacon has been destroyed
+	-- Fleet_Soon : (REPEATABLE) Fleet Arrives Soon
+	-- Fleet_Arrived : A Guidance beacon has been destroyed
+	-- LastStand : Tau Last Stand -- Call in Air Caste Attack
+	-- Taunt_One-Four : Four Taunts by Tau that occur during level 
+	
+	-- Tags Not Used: 5300311-14, 5300333, 5300336-40, 5300359-98
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Initial_Beachhead (Race Based) : We must destroy the outpost & Establish Our Own base
+	-- EVENTS.IE_Initial_Beachhead_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_Initial_Beachhead_DarkEldar : ACT.Archon
+	-- EVENTS.IE_Initial_Beachhead_Eldar : ACT.Taldeer
+	-- EVENTS.IE_Initial_Beachhead_Guard : ACT.Stubbs, 
+	-- EVENTS.IE_Initial_Beachhead_Necron : ACT.Macabee
+	-- EVENTS.IE_Initial_Beachhead_Ork : ACT.Gorgutz
+	-- EVENTS.IE_Initial_Beachhead_Sisters : ACT.Canoness
+	-- EVENTS.IE_Initial_Beachhead_Space : ACT.Boreale
+	-- EVENTS.IE_Initial_Beachhead_Tau : not used since this is tau mission
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Initial_Beachhead_Chaos = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_Chaos_Lord : Listen to me, Alpha Legion. First, we blast through the outer defenses, here. Then we must establish a base camp. We move quickly. Attaaack!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300689)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_DE_Archon : Listen to me, you dogs. We must move as a single, lethal blade. We must cut through the defenses ahead of us, and then, as swift as lightning, clear a foothold for ourselves. Do you understand? Do you? Good. Then we go.
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300691)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Eldar = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_Eldar_Farseer : We must prepare to move with deadly speed and accuracy. It is critical that we break through the outer defenses and establish a foothold within the Tau base, before they can pinpoint our location.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300690)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Guard = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_IG_Commander : Alright, men. We need to make a beachhead, and fast. First, we need to break through these outer defenses.
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300686)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Necron = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_Necron_Lord : Go... in... there...
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300693)	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Ork = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_Orks_Gorgutz : Lissen up 'ere. Dis 'ere's da plan. We move, fast, see? We knock through 'em all fast, till we're inside. Then we build a camp. Got it? Good. 
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300692)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Sisters = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_Sisters_Canoness : Sisters, our aim is to breach these outer defenses with all due haste. From there we must establish a beachhead, from which to launch our attack.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300688)	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Space = function()
+	Util_SetIE( true )
+	
+	-- TAU_Beachhead_SM_Commander : Blood Ravens! Our objective is to establish a foothold. We will have to blast through these perimeter defenses, and quickly. 
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300687)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Beachhead_Tau = function()
+	-- not used since this is tau mission
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- DefendFirstBase : Protect the base from Attack
+	-- EVENTS.IE_DefendFirstBase : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_DefendFirstBase = function()
+	Util_SetIE( true )
+
+	-- TAU_DefendFirstBase_FireWarrior : We are under attack! Fire Warriors, hold your ground! We must hold them back for as long as possible!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300694)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- FirstBase_Destroyed (Race Based) : Player Destroys the first small base -- Here is your HQ & Builders
+	-- EVENTS.IE_FirstBase_Destroyed_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_FirstBase_Destroyed_DarkEldar : ACT.Archon
+	-- EVENTS.IE_FirstBase_Destroyed_Eldar : ACT.Taldeer, ACT.Bonesinger
+	-- EVENTS.IE_FirstBase_Destroyed_Guard : ACT.Stubbs, ACT.Techpriest
+	-- EVENTS.IE_FirstBase_Destroyed_Necron : ACT.Macabee
+	-- EVENTS.IE_FirstBase_Destroyed_Ork : ACT.Gorgutz, ACT.SluggaBoy (For Orks Cheering)
+	-- EVENTS.IE_FirstBase_Destroyed_Sisters : Need Actors For
+	-- EVENTS.IE_FirstBase_Destroyed_Space : ACT.Boreale, (Need Actor For HQ)
+	-- EVENTS.IE_FirstBase_Destroyed_Tau : not used since this is tau mission
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_FirstBase_Destroyed_Chaos = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Chaos_Commander_1 : Great God Khorne, the blood spilled here is your blood. Give us our Stronghold, give us our strength… grant us victory! <laughs>
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300323)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Chaos_Commander_2 : Do you see? Do you see? Our gods hear our words! They fill us with might! They fill the foe with terror! Death shall blaze and blood will flow! Will flow and flow!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300324)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_DarkEldar_Commander_1 : A landing spot! Good. <giving orders> Summon a Black Fortress, and the slaves!
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300328)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_DarkEldar_Commander_2 : Make haste, cretins. There is much sport – and many souls – to be had, but only if we strike swiftly.
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300329)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Eldar = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Eldar_Commander_1 : It is well, a space has been cleared. Let us summon our forces from the Webway.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300325)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Eldar_Builder : We are at your command, Farseer.
+	CTRL.Actor_PlaySpeech( ACT.Bonesinger, 5300326)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Eldar_Commander_2 : Good. We must build our army swiftly, and prepare for the strike.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300327)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Guard = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Guard_Commander_1 : Relay, this is General Stubbs. The area’s cleared. Do you have a present for us?
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300315)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Guard_HQ : <radio static> Wrapped in ribbons. <sounding more official, but sounding glad> We’re ready to de-ploy. 
+	CTRL.Actor_PlaySpeech( ACT.Techpriest, 5300316)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Guard_Commander_2 : Excellent work, soldiers. We’ve got to make our base, and quickly. I don’t think these xenos are going to wait for us to come knocking.
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300317)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Necron = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Necron_Commander_2 : Now… we… build…
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300334)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Necron_Commander_3 : Now… they… die…
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300335)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Ork = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Ork_Commander_1 : Awright, now listen up boyz. We gots’d dis far. Dat’s good. Dat’s cuz we’s da Orks, and I’m Gorgutz ‘Ead’unter, and nobody stops me. Send in da little Grotz and da Fort.
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300330)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Ork_Orks : ORKS: <cheers>
+	CTRL.Actor_PlaySpeech( ACT.SluggaBoy, 5300331)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Ork_Commander_2 : Dat’s wot I like ta see! Get ‘dem buildings put up, and quick like, so’s we can get down to the fightin’.
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300332)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Sisters = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Sisters_Commander_1 : Excellent, the area has been cleared.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300321)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Sisters_Commander_2 : Sisters, hear me. Make ready for war. Do so with haste. We must not tarry from our holy purpose.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300322)	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Space = function()
+	Util_SetIE( true )
+	
+	-- TAU_FirstBase_Destroyed_Space_Commander_1 : This Force Commander Boreale to Central. Area is secured. Deploy Field Command.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300318)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Space_HQ : We read you. Drop ships… deployed.
+	CTRL.Actor_PlaySpeech( ACT.Techpriest, 5300319)	
+	CTRL.WAIT()
+	
+	-- TAU_FirstBase_Destroyed_Space_Commander_2 : That’s what I like to see. Alright, Marines. Put together this base and get ready to show those xenos what we’re made of.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300320)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_FirstBase_Destroyed_Tau = function()
+	-- not used since this is tau mission
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- DispatchScouts : Dispatch the Scouts to Find the Player
+	-- EVENTS.IE_DispatchScouts : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_DispatchScouts = function()
+	Util_SetIE( true )
+
+	-- TAU_DispatchScouts_Commander : We must find the location of our security breach. Have scouts sent. Let them scour every possible breach location, and report back immediately.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300341)	
+	CTRL.WAIT()
+
+	-- TAU_DispatchScouts_FireWarrior : They shall be sent immediately.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300342)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- ScoutsFoundPlayer : Scouts found the player base
+	-- EVENTS.IE_ScoutsFoundPlayer : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_ScoutsFoundPlayer = function()
+	Util_SetIE( true )
+
+	-- TAU_ScoutsFoundPlayer_FireWarrior : 
+	CTRL.Actor_PlaySpeech(ACT.Fire_Warrior, 5300343)	
+	CTRL.WAIT()
+
+	-- TAU_ScoutsFoundPlayer_Commander : 
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300344)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- ScoutsKilled : Player has killed enough scouts without them finding the player base
+	-- EVENTS.IE_ScoutsKilled : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_ScoutsKilled = function()
+	Util_SetIE( true )
+	
+	-- TAU_ScoutsKilled_Commander_1 : Ah! How many scouts have we dispatched, and no news! Where did these scouts last report from?
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300345)	
+	CTRL.WAIT()
+
+	-- TAU_ScoutsKilled_FireWarrior : Commander, they have all been in sector 3-Red.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300346)	
+	CTRL.WAIT()
+
+	-- TAU_ScoutsKilled_Commander_1 : <musing to himself> Then we should direct our forces there.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300347)
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- PlayerAttacksFirst : Player attacks a Tau base before the Scouts Find the Player
+	-- EVENTS.IE_PlayerAttacksFirst : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_PlayerAttacksFirst = function()
+	Util_SetIE( true )
+
+	-- TAU_PlayerAttacksFirst_FireWarrior : Commander! We are under attack! 
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300348)	
+	CTRL.WAIT()
+
+	-- TAU_PlayerAttacksFirst_Commander : <musing, craftily> Then they have shown their hand! Good, then we know where they are.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300349)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- BeaconObjective : Assign Beacon Objective & Talk of the Beacons
+	-- EVENTS.IE_BeaconObjective : ACT.Shas, ACT.Aunroyr
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_BeaconObjective = function()
+	Util_SetIE( true )
+
+	-- TAU_BeaconObjective_1_Ethereal : The strength of this surprise attack is worrying to me, Commander. Tell me, when can we expect the fleet of reinforcements that followed my own ship?
+	CTRL.Actor_PlaySpeech(ACT.Aunroyr, 5300695)	
+	CTRL.WAIT()
+	
+	-- TAU_BeaconObjective_2_Commander : Wise One, as you know, the Warp Storm has made our normal navigation equipment useless. The fleet is guided by three beacons within Nan Yanoi. As long as all three signals operate, it should not be long.
+	CTRL.Actor_PlaySpeech(ACT.Shas, 5300696)	
+	CTRL.WAIT()
+
+	-- TAU_BeaconObjective_3_Ethereal : This is well. I fear we may yet need these extra troops.
+	CTRL.Actor_PlaySpeech(ACT.Aunroyr, 5300697)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- LaserCharging : Prepare the Laser Gun (Dont Fire Yet)
+	-- EVENTS.IE_LaserCharging : ACT.Shas, ACT.Aunroyr
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_LaserCharging = function()
+	Util_SetIE( true )
+
+	-- TAU_LaserCharging_Ethereal_1 : Commander Or’es’Ka,  how close to ready is this base defense system?
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300350)	
+	CTRL.WAIT()
+
+	-- TAU_LaserCharging_Commander_1 : <caught off guard> It – it will fire, but it is not calibrated, and security codes have not been installed.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300351)	
+	CTRL.WAIT()
+	
+	-- TAU_LaserCharging_Ethereal_2 : Have it readied. That is sufficient to fire on the intruder.
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300352)	
+	CTRL.WAIT()
+
+	-- TAU_LaserCharging_Commander_2 : But Wise One, it will not fire with great accuracy. Some of our own troops may –
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300353)	
+	CTRL.WAIT()
+	
+	-- TAU_LaserCharging_Ethereal_3 : Then they are sacrificed for the Greater Good. Do as I say, and victory is ours.
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300354)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- FirstLaserAttack : First time the Tau Fire the Laser Cannon
+	-- EVENTS.IE_FirstLaserAttack : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_FirstLaserAttack = function()
+	Util_SetIE( true )
+
+	-- TAU_FirstLaserAttack_FireWarrior_1 : Commander – Ethereal – the orbital  defense system has been activated and primed, and is now and ready to fire.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300355)	
+	CTRL.WAIT()
+
+	-- TAU_FirstLaserAttack_Commander_1 : Is the enemy in our sights?
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300356)	
+	CTRL.WAIT()
+
+	-- TAU_FirstLaserAttack_FireWarrior_2 : Yes, Commander Or’es’Ka. But – not all cooling systems are in place, and the cannon will overheat if fired too often.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300357)	
+	CTRL.WAIT()
+
+	-- TAU_FirstLaserAttack_Commander_2 : Well, fire as often as it is safe to do so. We must hold hold them off until our reinforcement fleet arrives.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300358)	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- OrbitalAttack_Announcement : Tau Firing the Laser Cannon
+	-- EVENTS.IE_OrbitalAttack_Announcement : ACT.Tau_Lasergun
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_OrbitalAttack_Announcement = function()
+	Util_SetIE( true )
+
+	-- TAU_OrbitalAttack_Announcement : Orbital Defenses ready to fire.
+	CTRL.Actor_PlaySpeech( ACT.Tau_Lasergun, 5300698)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- PlayerNearsBigGun : Player Gets near the begin gun... tau reacts to it
+	-- EVENTS.IE_PlayerNearsBigGun : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_PlayerNearsBigGun = function()
+	Util_SetIE( true )
+
+	-- TAU_PlayerNearsBigGun_FireWarrior : They are attempting to seize the Orbital Defense controls! We must stop them at all costs!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300699)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- PlayerCapturedLaser : Player Takes Control of the Laser Gun
+	-- EVENTS.IE_PlayerCapturedLaser_FirstTime : ACT.Fire_Warrior, ACT.Shas
+	-- EVENTS.IE_PlayerCapturedLaser : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_PlayerCapturedLaser_FirstTime = function()
+	Util_SetIE( true )
+
+	-- TAU_PlayerTakesBigGun_1_FireWarrior : Commander, they have taken control of the orbital defense system. They use our defenses against us.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300700)	
+	CTRL.WAIT()
+	
+	-- TAU_PlayerTakesBigGun_2_Commander : It must be retaken. See to it.
+	CTRL.Actor_PlaySpeech( ACT.Shas,5300701)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PlayerCapturedLaser = function()
+	Util_SetIE( true )
+
+	-- TAU_PlayerTakesBigGunBack_FireWarrior : No! They have taken back the defensive cannon!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300703)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- TauCapturedLaser : (repeatable) Tau Take Control Back of the Laser Gun
+	-- EVENTS.IE_TauCapturedLaser : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_TauCapturedLaser = function()
+	Util_SetIE( true )
+
+	-- TAU_TakeBigGunBack_FireWarrior : We have reclaimed the orbital defenses!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300702)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Beacon_Destroyed : A Guidance beacon has been destroyed
+	-- EVENTS.IE_Beacon_Destroyed_One : ACT.Shas, ACT.Fire_Warrior
+	-- EVENTS.IE_Beacon_Destroyed_Two : ACT.Shas, ACT.Fire_Warrior
+	-- EVENTS.IE_Beacon_Destroyed_Three : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Beacon_Destroyed_One = function()
+	Util_SetIE( true )
+
+	-- TAU_Beacon1Out_1_FireWarrior : They have destroyed one of the guidance beacons!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300704)	
+	CTRL.WAIT()
+
+	-- TAU_Beacon1Out_2_Commander : Ah... this is unfortunate. Still, on the strength of two guidance signals, our fleet will not be greatly delayed.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300705)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Beacon_Destroyed_Two = function()
+	Util_SetIE( true )
+
+	-- TAU_Beacon2Out_1_FireWarrior : Commander! Another guidance beacon was destroyed!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300706)	
+	CTRL.WAIT()
+
+	-- TAU_Beacon2Out_2_Commander : This is a great setback. To follow a single guidance beacon will be exceedingly difficult. We cannot expect the fleet any time soon.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300707)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Beacon_Destroyed_Three = function()
+	Util_SetIE( true )
+
+	-- TAU_Beacon3Out_1_FireWarrior : All three guidance beacons taken out. Commander, is all hope lost?
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300708)	
+	CTRL.WAIT()
+
+	-- TAU_Beacon3Out_2_Commander : We will receive no reinforcements. Without a signal, the fleet must turn back. We must defeat the enemy as we are.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300709)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Fleet_Soon : (REPEATABLE) Fleet Arrives Soon
+	-- EVENTS.IE_Fleet_Soon : ACT.Shas, ACT.Aunroyr
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Fleet_Soon = function()
+	Util_SetIE( true )
+
+	-- TAU_FleetSoon_1_Commander : Excellent new, Ethereal. Our fleet will not be long.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300710)	
+	CTRL.WAIT()
+
+	-- TAU_FleetSoon_2_Ethereal : It is exceedingly good fortune. We have only to hold out until then.
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300711)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Fleet_Arrived : A Guidance beacon has been destroyed
+	-- EVENTS.IE_Fleet_Arrived : ACT.Shas, ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Fleet_Arrived = function()
+	Util_SetIE( true )
+
+	-- TAU_FleetArrives_1_FireWarrior1 : Commander, the fleet has arrived!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300712)	
+	CTRL.WAIT()
+
+	-- TAU_FleetArrives_2_FireWarrior2 : All soldiers are armed and ready for combat.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300713)	
+	CTRL.WAIT()
+	
+	-- TAU_FleetArrives_3_Commander : Excellent, my advanced orders were received. Come, it is time to drive these intruders off of Nan Yanoi.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300714)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- LastStand : Tau Last Stand -- Call in Air Caste Attack
+	-- EVENTS.IE_LastStand : ACT.Aunroyr, ACTAirCaste)
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_LastStand = function()
+	Util_SetIE( true )
+
+	-- TAU_LastStand_1_Ethereal : Air Caste! The enemy is close upon us. We require your assistance. This is our last chance. Strike at the coordinates I give you, and do not hold fire for any reason.
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300715)	
+	CTRL.WAIT()
+
+	-- TAU_LastStand_2_AirCaste : Coordinates received. We will commence at once!
+	CTRL.Actor_PlaySpeech( ACT.AirCaste, 5300716)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Taunt_One-Four : Four Taunts by Tau that occur during level 
+	-- EVENTS.IE_Taunt_One : ACT.Aunroyr
+	-- EVENTS.IE_Taunt_Two : ACT.Shas
+	-- EVENTS.IE_Taunt_Three : ACT.Shas
+	-- EVENTS.IE_Taunt_Four : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Taunt_One = function()
+	Util_SetIE( true )
+	
+	-- TAU_Taunt_1_Ethereal : The speed with which we crush our enemy shall be a testament to the superior organization and power of the Tau.
+	CTRL.Actor_PlaySpeech( ACT.Aunroyr, 5300399)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Two = function()
+	Util_SetIE( true )
+	
+	-- TAU_Taunt_2_Commander : Fools – the allies of the Greater Good shall prevail.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300400)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Three = function()
+	Util_SetIE( true )
+	
+	-- TAU_Taunt_3_Commander : <stressed out> Why have we not yet crushed them? If we had only finished construction, Nan Yanoi would have been unassailable!
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300401)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Four = function()
+	Util_SetIE( true )
+	
+	-- TAU_Taunt_4_Firewarrior : They have reached the central command! We must fight to protect the Ethereal!
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300402)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF INTEL EVENTS
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- NIS EVENTS
+	-- EVENTS.NIS_Opening
+		--Intro NIS Cutscene
+	-- EVENTS.NIS_Closing
+		-- Victory Cutscene
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------
+-----------[OPENING NIS]------------
+-----------------------------------------
+
+EVENTS.NIS_Opening = function()
+
+	--Silvey 08/28/07
+	-- Copied this from ScarUtil.scar, edited it to use functions that actually exist.
+	--? @shortdesc Muffles / Unmuffles all background FX sounds for NIS's
+	--? @result Void
+	--? @args Boolean mute
+	function Util_MuffleNISSoundCopy( mute )
+		-- init global flags
+		if util_g_muffle == nil then util_g_muffle = false end
+		if util_g_muffle_vol == nil then util_g_muffle_vol = 1.0 end
+		
+		--
+		if mute and util_g_muffle == false then
+			-- muffle sound
+			util_g_muffle = true
+		
+			-- store old volume
+			util_g_muffle_vol = 1.0
+			
+			Sound_SetVolumeModifierSfx(0.5)
+			
+		elseif not mute and util_g_muffle == true then
+			-- unmuffle sound
+			util_g_muffle = false
+			
+			if util_g_muffle_vol == nil then 
+				util_g_muffle_vol = 1.0
+			end
+			
+			-- restore old volume
+			Sound_SetVolumeModifierSfx( util_g_muffle_vol )
+			
+		end
+	end
+	
+	EventCue_Enable(false)
+	
+	Util_MuffleNISSoundCopy(true)
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)	
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+		
+		g_Nis_Blueprint = "chaos_squad_cultist"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_obliterator"
+		
+	elseif humanplayer == "eldar_race" then
+		
+		g_Nis_Blueprint = "eldar_guardian_squad"
+		g_Nis_Blueprint2 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint3 = "eldar_squad_wraithlord"
+		
+	elseif humanplayer == "guard_race" then
+		
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+		
+	elseif humanplayer == "ork_race" then
+		
+		g_Nis_Blueprint = "ork_squad_slugga"	
+		g_Nis_Blueprint2 = "ork_squad_shoota_boy"
+		g_Nis_Blueprint3 = "ork_squad_armored_nob"
+	
+	elseif humanplayer =="space_marine_race" then
+		
+		g_Nis_Blueprint = "space_marine_squad_scout"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_tactical"
+	
+	elseif humanplayer == "tau_race" then
+		
+		g_Nis_Blueprint = "tau_pathfinder_squad"
+		g_Nis_Blueprint2 = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint3 = "tau_crisis_suit_squad"
+	
+	elseif humanplayer == "necron_race" then
+		
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_tomb_spyder_squad"
+		
+	elseif humanplayer =="dark_eldar_race" then
+		
+		g_Nis_Blueprint = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint2 = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint3 = "dark_eldar_squad_dais_of_destruction"
+				
+	elseif humanplayer == "sisters_race" then
+		
+		g_Nis_Blueprint = "sisters_squad_battle_sister"
+		g_Nis_Blueprint2 = "sisters_squad_battle_sister"
+		g_Nis_Blueprint3 = "sisters_squad_battle_sister"		
+		
+	end
+
+	--set the music	
+	t_ambient_sound = {"MU_IG_STR_Tau_perc_brass"}
+	
+	--Sound_PlaylistClear(PC_Music)
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_ambient_sound, true, true , {2, 4})
+	
+	
+	Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )	
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+
+	Util_MissionTitle("$3900024")
+	
+	CTRL.Event_Delay( 4 )
+		
+		Fade_Start( 0, false )
+		
+	CTRL.WAIT()
+	
+	Fade_Start( 2.0, true )
+	
+	-----------------------------------------
+	--Spawn Tau Army
+	-----------------------------------------
+	
+	g_BuildingNames = "eg_opening_buildings"
+	
+	-- Always builds the building (prevents crashes and speeds things up)
+	function user_CreateBuilding(p_PlayerID, p_EGroupID, p_MarkerName, p_Blueprint)
+		l_EntityID = Entity_Create(p_Blueprint, p_PlayerID, Marker_GetPosition(Marker_FromName(p_MarkerName, "basic_marker" )))
+		
+		EGroup_Add(EGroup_CreateIfNotFound(p_EGroupID), l_EntityID)
+		EGroup_AddGroup(EGroup_CreateIfNotFound(g_BuildingNames), EGroup_FromName(p_EGroupID))
+		Entity_Spawn(l_EntityID)		
+		
+	end
+	
+	--actor commander
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_commander", "tau_commander_squad", "nis_opening_commander_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_commander"))	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_commander"))
+	SGroup_FaceMarker("sg_opening_commander", "nis_etherealface")
+	
+	--actor commander
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_commander2", "tau_commander_squad", "nis_opening_commander_walk", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_commander2"))
+	SGroup_FaceMarker("sg_opening_commander2", "nis_opening_cannon_face")
+	
+	--actor ethereal
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_ethereal2", "tau_ethereal_squad_stronghold_sp", "nis_opening_ethereal_walk", 1, 1)	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_ethereal2"))
+	SGroup_FaceMarker("sg_opening_ethereal2", "nis_opening_cannon_face")
+	
+	--actor commander
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_commander3", "tau_commander_squad", "nis_opening_commander_runner", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_commander3"))
+	SGroup_FaceMarker("sg_opening_commander3", "nis_opening_cannon_face")
+	
+	--actor ethereal
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_ethereal3", "tau_ethereal_squad_stronghold_sp", "nis_opening_ethereal_runner", 1, 1)	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_ethereal3"))
+	SGroup_FaceMarker("sg_opening_ethereal3", "nis_opening_cannon_face")
+	
+	
+	
+	--Silvey Polish 08/21/07  (Don't know what this was supposed to be...)
+	--extra commander support
+	--[[Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_support", "tau_honor_guard_fire_warrior_squad_advance_sp", "nis_opening_commander_spawn", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening1_actors"), SGroup_FromName("sg_opening_gorgutz"))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_support"))
+	Cmd_SetStance("sg_opening_commander", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_commander", true)
+	SGroup_FaceMarker("sg_opening_commander", "nis_etherealface")]]--
+		
+	--extra orca
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_orca", "tau_orca_dropship_sp_dxp3", "nis_opening_orca_spawn", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening1_actors"), SGroup_FromName("sg_opening_gorgutz"))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_orca"))
+	Cmd_SetStance("sg_opening_orca", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_orca", true)
+	SGroup_FaceMarker("sg_opening_orca", "nis_opening_orca_face")
+	
+	--extra orca
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_orca2", "tau_orca_dropship_sp_dxp3", "nis_opening_orca_spawn2", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening1_actors"), SGroup_FromName("sg_opening_gorgutz"))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_orca2"))
+	Cmd_SetStance("sg_opening_orca2", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_orca2", true)
+	SGroup_FaceMarker("sg_opening_orca2", "nis_opening_orca_face")	
+	
+	for i = 1, 2 do
+		--extra firewarrior commanders
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_fireleaders"..i, "tau_fire_warrior_squad", "nis_opening_fireleader_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_fireleaders"..i))
+		Cmd_SetStance("sg_opening_fireleaders"..i, STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_fireleaders"..i, true)		
+		Anim_PlaySGroupAnim("sg_opening_fireleaders"..i, "capture_strategic_point")
+	end
+	
+	--Silvey Polish 08/21/07
+	SGroup_FaceMarker("sg_opening_fireleaders1", "nis_opening_firewarrior_spawn14")
+	SGroup_FaceMarker("sg_opening_fireleaders2", "nis_opening_firewarrior_spawn5")
+	
+	for i = 1, 30 do		
+		--extra firewarriors
+		if i > 24 then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_firewarriors"..i, "tau_fire_warrior_squad", "nis_opening_firewarrior_spawn"..i, 2, 1)
+		else
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_firewarriors"..i, "tau_fire_warrior_squad", "nis_opening_firewarrior_spawn"..i, 1, 1)
+		end
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_firewarrior_group"), SGroup_FromName("sg_opening_firewarriors"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_firewarrior_group"))
+		SGroup_FaceMarker("sg_opening_firewarrior_group", "nis_etherealface")
+		--Anim_PlaySGroupAnim("sg_opening_firewarrior_group", "capture_strategic_point")		
+	end
+	
+	--Silvey Polish 08/21/07
+	--Scramble
+	for i = 1, 12 do				
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_firewarrior_scramble"..i, "tau_fire_warrior_squad", "nis_opening_firewarrior_scramble"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_firewarrior_scramblers"), SGroup_FromName("sg_opening_firewarrior_scramble"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_firewarrior_scramblers"))		
+	end
+	SGroup_FaceMarker("sg_opening_firewarrior_scramblers", "nis_opening_firewarrior_goto2")
+	
+	--Lineup
+	for i = 1, 6 do				
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_firewarrior_line"..i, "tau_fire_warrior_squad", "nis_opening_firewarrior_lineup"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_firewarrior_lineup"), SGroup_FromName("sg_opening_firewarrior_line"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_firewarrior_lineup"))		
+		if i < 4 then
+			SGroup_FaceMarker("sg_opening_firewarrior_line"..i, "nis_opening_firewarrior_lineup"..(i+3))
+		else
+			SGroup_FaceMarker("sg_opening_firewarrior_line"..i, "nis_opening_firewarrior_lineup"..(i-3))
+		end
+	end	
+		
+	for i = 1,6 do	
+		--extra broadside guards
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_broadsideguards"..i, "tau_broadside_battlesuit_squad", "nis_opening_broadsideguards_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_broadsideguards_group"), SGroup_FromName("sg_opening_broadsideguards"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_broadsideguards_group"))
+		Cmd_SetStance("sg_opening_broadsideguards_group", STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_broadsideguards_group", true)
+		
+		Anim_PlaySGroupAnim("sg_opening_broadsideguards_group", "deployed_default")				
+		
+		-- Silvey's note:   Interesting logical choice...haha!  win
+		if i < 4 then 
+			SGroup_FaceMarker("sg_opening_broadsideguards_group", "nis_opening_broadsideguards_face")
+		else
+			SGroup_FaceMarker("sg_opening_broadsideguards_group", "nis_opening_broadsideguards_face")
+		end
+	end
+	
+	for i = 1,2 do		
+		--builders
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_builders"..i, "tau_builder_squad", "nis_opening_builders_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_builders_group"), SGroup_FromName("sg_opening_builders"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_builders_group"))
+		Cmd_SetStance("sg_opening_builders_group", STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_builders_group", true)
+		--SGroup_FaceMarker("sg_opening_builders_group", "mkr_laserGunBase_Barracks1")
+		--Anim_PlaySGroupAnim("sg_opening_builders_group", "deployed_default")		
+	end
+	
+
+	--Spawn Buildings
+	user_CreateBuilding(g_Player2, "eg_tau_kroot_center", "nis_opening_kroot_center", "tau_kroot_nest")
+	Anim_PlayEGroupAnim(EGroup_FromName("eg_tau_kroot_center"), "build_2")		
+	Entity_SetBuildingProgress(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_tau_kroot_center"), 1 ), 0.4)			
+	
+	user_CreateBuilding(g_Player2, "eg_tau_coalition_center", "nis_opening_coalition_center", "tau_shrine_of_purpose")
+	Anim_PlayEGroupAnim(EGroup_FromName("eg_tau_coalition_center"), "build_shrine_blue_prints")
+	Entity_SetBuildingProgress(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_tau_coalition_center"), 1 ), 0.4)			
+	
+	for i = 1,2 do		
+		--builders
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_builder"..i, "tau_builder_squad", "nis_opening_builder"..i, 1, 1)		
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_builder"..i))
+		Cmd_SetStance("sg_opening_builder"..i, STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_builders_group", true)		
+	end
+	
+	SGroup_FaceMarker("sg_opening_builders1", "nis_opening_coalition_center")
+	SGroup_FaceMarker("sg_opening_builders2", "nis_opening_kroot_center")
+	
+	
+	--------------------------------------------------
+	--Spawn Defense Force and Messenger
+	--------------------------------------------------
+	
+	for i = 1,3 do
+	
+		--extra crysis suit defense
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_crisisdefense"..i, "tau_crisis_suit_squad", "nis_opening_crisisdefense_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_crisisdefense"..i))
+		--Cmd_SetStance("sg_opening_crisisdefense"..i, STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_crisisdefense"..i, true)
+		SGroup_FaceMarker("sg_opening_crisisdefense"..i, "nis_opening_drillsgt_goto")
+		--Anim_PlaySGroupAnim("sg_opening_crisisdefense"..i, "deployed_default")
+		
+	end
+	
+	for i = 1, 24 do
+	
+		--extra firewarriors defense
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_defensewarriors"..i, "tau_fire_warrior_squad", "nis_opening_defense_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_defensewarrior_group"), SGroup_FromName("sg_opening_defensewarriors"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_defensewarrior_group"))
+		Cmd_SetStance("sg_opening_defensewarrior_group", STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_defensewarrior_group", true)
+		SGroup_FaceMarker("sg_opening_defensewarrior_group", "nis_opening_drillsgt_goto")
+		--Anim_PlaySGroupAnim("sg_opening_defensewarrior_group", "capture_strategic_point")
+	
+	end
+	
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_firewarrior_scout", "tau_fire_warrior_squad", "nis_opening_firewarrior_scout", 1, 5)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_firewarrior_scout"))
+	Cmd_SetStance("sg_opening_firewarrior_scout", STANCE_CeaseFire)
+		
+	
+	
+	
+	--drill sgt
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_drillsgt", "tau_honor_guard_fire_warrior_squad_advance_sp", "nis_opening_drillsgt_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_drillsgt"))
+	Cmd_SetStance("sg_opening_drillsgt", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_drillsgt", true)
+	SGroup_SetAvgHealth("sg_opening_drillsgt", 0.5)
+	SGroup_FaceMarker("sg_opening_drillsgt", "nis_opening_drillsgt_goto")
+	
+	--laser fodder
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_laserfodder", g_Nis_Blueprint2, "nis_opening_deathmartch_spawn", 10, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_laserfodder"))
+	Cmd_SetStance("sg_opening_laserfodder", STANCE_CeaseFire)
+	--SGroup_SetHealthInvulnerable("sg_opening_laserfodder", true)
+	SGroup_SetAvgHealth("sg_opening_laserfodder", 0.5)
+	SGroup_FaceMarker("sg_opening_laserfodder", "nis_opening_deathmartch_goto")
+	
+	for i = 1, 3 do
+		--extra kroot defense
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_defensekroot"..i, "tau_kroot_carnivore_squad", "nis_opening_kroot_spawn"..i, 10, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_defensekroot_group"), SGroup_FromName("sg_opening_defensekroot"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_defensekroot_group"))
+		Cmd_SetStance("sg_opening_defensekroot_group", STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_defensekroot_group", true)
+		SGroup_FaceMarker("sg_opening_defensekroot_group", "nis_opening_kroot_goto")
+		--Anim_PlaySGroupAnim("sg_opening_defensewarrior_group", "capture_strategic_point")
+	end
+	
+	--krootox
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_krootox", "tau_krootox_squad", "nis_opening_krootox_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_krootox"))
+	Cmd_SetStance("sg_opening_krootox", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_krootox", true)
+	SGroup_SetAvgHealth("sg_opening_krootox", 0.5)
+	--SGroup_FaceMarker("sg_opening_krootox", "mkr_krootEastSideBase_KrootNest1")
+	
+	--scouts
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_scouts", g_Nis_Blueprint, "nis_opening_scouts_spawn", 2, 2)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_scouts"))
+	Cmd_SetStance("sg_opening_scouts", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_scouts", true)
+	SGroup_SetAvgHealth("sg_opening_scouts", 0.5)
+	SGroup_FaceMarker("sg_opening_scouts", "nis_opening_scouts_goto")
+		
+	for i = 1, 2 do
+	
+		--drones
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_drones"..i, "tau_drone_squad", "nis_opening_drones_spawn"..i, 5, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_drones_group"), SGroup_FromName("sg_opening_drones"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_drones_group"))
+		Cmd_SetStance("sg_opening_drones_group", STANCE_CeaseFire)
+		SGroup_SetHealthInvulnerable("sg_opening_drones_group", true)
+		SGroup_FaceMarker("sg_opening_drones_group", "nis_opening_scouts_goto")
+		--Anim_PlaySGroupAnim("sg_opening_defensewarrior_group", "capture_strategic_point")
+	
+	end
+	
+	--messenger bodyguard
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_messenger", "tau_honor_guard_fire_warrior_squad_advance_sp", "nis_opening_messenger_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_messenger"))
+	Cmd_SetStance("sg_opening_messenger", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_messenger", true)
+	SGroup_SetAvgHealth("sg_opening_messenger", 0.5)
+	SGroup_FaceMarker("sg_opening_messenger", "nis_opening_messenger_goto")
+	
+	--knarloc
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_knarloc", "tau_greater_knarloc_squad", "nis_opening_knarloc_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_knarloc"))
+	Cmd_SetStance("sg_opening_knarloc", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_knarloc", true)
+	SGroup_SetAvgHealth("sg_opening_knarloc", 0.5)
+	SGroup_FaceMarker("sg_opening_knarloc", "nis_opening_knarloc_goto")
+
+	Cmd_SetStance("sg_opening_actors", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_actors", true)
+	
+	--------------------------------------------------
+	--END
+	--------------------------------------------------
+	
+	
+	
+	------------------------------------
+	--Opening Sequence
+	------------------------------------
+
+	
+	CPath_Start("canim_starter", "start", "end")
+	
+	------------------------------------------------------------------------------BLOCK 1----------------------------------------------------------------------------
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_orca"), "sp_land" )
+	
+	--Silvey Polish 08/21/07
+	--CPath_CutToPath("canim_etherialinbound", "start","end")		
+	CPath_CutToPath("canim_nis_opening_landing1d", "start","end")	
+	
+	
+	CTRL.Event_Delay(6)
+	CTRL.WAIT()
+	
+	Anim_PlaySGroupAnim("sg_opening_builder1", "build")
+	Anim_PlaySGroupAnim("sg_opening_builder2", "build")
+	
+	
+	CTRL.Event_Delay( 2 )
+	Fade_Start( 2, false )
+	CTRL.WAIT()
+	Fade_Start( 1, true )
+	
+	------------------------------------
+	--Spawn The Etherial
+	------------------------------------
+	--actor ethereal
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_ethereal", "tau_ethereal_squad_stronghold_sp", "nis_opening_ethereal_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_ethereal"))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_ethereal"))
+	Cmd_SetStance("sg_opening_ethereal", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_ethereal", true)
+	SGroup_FaceMarker("sg_opening_ethereal", "nis_etherealface")
+	
+	
+	--Silvey Polish 08/20/07
+	--CPath_CutToPath("canim_leaderscloseup_03", "start","mid")
+	CPath_CutToPath("canim_nis_opening_commander", "start","end")
+	
+	Cmd_MoveToMarker("sg_opening_commander", "nis_commander_goto")
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_firewarrior_group"), "capture_strategic_point" )
+	
+	CTRL.Event_Delay(5)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200000) --We welcome your gracious presence, Aun’Ro’Yr
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_commander"), "capture_strategic_point" )
+	CTRL.WAIT()
+	
+	--Silvey Polish 08/20/07
+	CPath_CutToPoint("canim_nis_opening_ethereal", "start")
+	
+	CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200001)  --I see that our earth caste engineers have made splendid progress in constructing the Nan Yanoi base station.
+	CTRL.WAIT()
+	
+	--Silvey Polish 08/20/07
+	--CPath_CutToPath("canim_leaderscloseup_03", "mid","end")
+	CPath_CutToPath("canim_nis_opening_ethereal", "start","end")
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_orca"), "sp_take_off" )
+	
+	CTRL.Event_Delay( 3.5 )
+	Fade_Start( 3.5, false )
+	CTRL.WAIT()
+	Fade_Start( 1, true )
+	
+	------------------------------------------------------------------------------BLOCK 2----------------------------------------------------------------------------	
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5200002) --Yes, your Eminence, it is nearly complete. There are only a few gaps remaining in our perimeter defenses, and they are heavily guarded until construction is finished. 	
+		CTRL.SUB()
+			
+			--Silvey Polish (11/08/07):  Added some firewarrior activity
+			Cmd_MoveToMarker("sg_opening_firewarrior_scout", "nis_opening_firewarrior_scout_goto")
+			
+			--Silvey Polish 08/21/07
+			--CTRL.CPath_CutToPath("canim_defenses2", "start","end")		
+			CTRL.Event_Delay( 8 )
+			CPath_CutToPath("canim_nis_opening_defenses", "start","end")			
+			CTRL.WAIT()
+						
+			CTRL.Event_Delay( 1 )
+			Fade_Start( .5, false )
+			CTRL.WAIT()
+			Fade_Start( .5, true )
+			
+			CTRL.CPath_CutToPath("canim_defenses", "start","end")
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_broadsideguards_group"), "deploy_setup" )
+			CTRL.WAIT()		
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 1 )
+	Fade_Start( .5, false )
+	CTRL.WAIT()
+	Fade_Start( .5, true )
+	
+	
+	--Silvey Polish 08/21/07
+	CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200003) --Excellent. And this Ar’Ka Cannon you have built – quite a marvel. It is a modified ion cannon, is it not?
+		CPath_CutToPoint("canim_nis_opening_cannon_face", "start")
+	CTRL.WAIT()
+			
+			CPath_CutToPath("canim_nis_opening_cannon_scan", "start", "end")
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200004) --Indeed. From this moon, we can fire on any habitable territory in the Kaurava System. Do you wish to inspect it yourself?
+		--CTRL.SUB()
+						
+			
+			--Silvey Polish (11/08/07):  Removed this timing logic
+			--[[CTRL.Event_Delay( 9.5 )
+			CTRL.WAIT()]]--			
+			--Fade_Start( 1.0, false )
+			
+		--CTRL.END()
+	CTRL.WAIT()
+	
+	--Silvey Polish (11/08/07):  Moved fade to here
+	CTRL.Fade_Start( 1.0, false )
+	CTRL.WAIT()
+	--------------------------------------
+	--Respawn The Two
+	--------------------------------------
+	
+	--[[actor ethereal2
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_ethereal", "tau_ethereal_squad_stronghold_sp", "nis_opening_ethereal_spawn2", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_ethereal"))
+	Cmd_SetStance("sg_opening_ethereal", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_ethereal", true)
+	SGroup_FaceMarker("sg_opening_ethereal", "nis_etherealface")
+	
+	--actor commander2
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_commander", "tau_commander_squad", "nis_opening_commander_spawn2", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_commander"))
+	Cmd_SetStance("sg_opening_commander", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_commander", true)
+	SGroup_FaceMarker("sg_opening_commander", "nis_etherealface")]]
+		
+	--Silvey Polish 08/21/07 (Deleted Scene)
+	--[[CTRL.Actor_PlaySpeech(  ACT.Shas, 5200004) --Indeed. From this moon, we can fire on any habitable territory in the Kaurava System. Do you wish to inspect it yourself?
+		CTRL.SUB()
+			
+			CTRL.CPath_CutToPath("canim_gunfires", "start","end")
+			CTRL.WAIT()
+			
+		CTRL.END()
+	CTRL.WAIT()]]--
+		
+	------------------------------------------------------------------------------BLOCK 3----------------------------------------------------------------------------	
+	--Silvey Polish (11/08/07):
+	--[[  NOTE:  	I redid this block entirely.  Didn't make sense to test the cannon
+						on the invading army and then be surprised later that there being
+						invaded.   ]]--
+
+	--[[ Change up the background music/ambience  ]]--
+	Sound_SetVolumeModifierAmbient(1.0)
+	--set the music	
+	t_ambient_sound = {"Snowy_wind_1"}	
+	Sound_PlaylistClear(PC_Ambient)
+	Playlist_Manager( PC_Ambient, t_ambient_sound, true, true , {2, 4})
+	
+	--[[  Create the buildings for this scene (make it appear as if on another planet/map  ]]-- 
+	for i = 1, 6 do	
+		user_CreateBuilding(g_Player2, "eg_opening_snowtree"..i, "nis_opening_snowtree"..i, "forest_tree_01_snow")		
+		EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_fodderscene"), "eg_opening_snowtree"..i)
+	end
+	user_CreateBuilding(g_Player2, "eg_opening_snowbags", "nis_opening_snowbags", "sandbags_snow_02")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_fodderscene"), "eg_opening_snowbags")
+	user_CreateBuilding(g_Player2, "eg_opening_barrel", "nis_opening_barrel", "fx_barrel_fire_01")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_fodderscene"), "eg_opening_barrel")
+	user_CreateBuilding(g_Player2, "eg_opening_snowfx", "nis_opening_snowfx", "fx_snow_light_01")
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_fodderscene"), "eg_opening_snowfx")	
+	if humanplayer == "guard_race" then
+		user_CreateBuilding(g_Player2, "eg_opening_generator", "nis_opening_generator", "ork_bigger_generator")
+	else
+		user_CreateBuilding(g_Player2, "eg_opening_generator", "nis_opening_generator", "guard_thermo_plasma")
+	end
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_opening_fodderscene"), "eg_opening_generator")
+	-----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	--[[  Create the campers at this location who will be killed by the cannon  ]]--
+	for i = 1, 3 do
+		if humanplayer == "guard_race" then
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_fodder"..i, "ork_squad_slugga", "nis_opening_fodder"..i, 1, 1)
+		else
+			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_opening_fodder"..i, "guard_squad_guardsmen", "nis_opening_fodder"..i, 1, 1)
+		end
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_fodder"..i))
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_laserfodder"), SGroup_FromName("sg_opening_fodder"..i))
+		Cmd_SetStance("sg_opening_fodder"..i, STANCE_CeaseFire)
+		SGroup_FaceMarker("sg_opening_fodder"..i, "nis_opening_generator")		
+	end
+	-------------------------------------------------------------------------------------------------------------------------
+		
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200005) --It harms only advanced life forms, thus avoiding damage to structures and plant life.
+		CTRL.SUB()
+			
+			--Old
+			--CPath_CutToPath("canim_lasershot", "start","end")
+			
+			CPath_CutToPoint("canim_opening_lasershot", "start")
+			Fade_Start( .5, true )
+			
+			--Old
+			--Cmd_MoveToMarker("sg_opening_laserfodder", "nis_opening_deathmartch_goto")
+					
+			--[[ Fade music out (3 second delay)  ]]--
+			for i = 1.0, 0.0, -0.1 do
+				Sound_SetVolumeModifierMusic(i)
+				CTRL.Event_Delay( 0.3 )
+				CTRL.WAIT()
+			end
+			----
+			
+			-- Warmup the cannon effect --
+			Util_MarkerFX( "nis_opening_cannon", "data:Art/Events/Tau/Abilities/ION_Cannon_Warmup.events")			
+			SGroup_SetAvgMorale("sg_opening_laserfodder", 0.0)
+			
+			CameraShake_Medium(SGroup_GetPosition("sg_opening_fodder2"), 5.0 )
+			CTRL.Event_Delay( 1 )	
+			CTRL.WAIT()
+			
+			-- Crazy color effect
+			Fade_StartColor(2.5, World_Color(230, 230, 255), false )
+			
+			CTRL.Event_Delay( 0.5 )	
+			CTRL.WAIT()
+			
+			-- Freakout the campers
+			Cmd_MoveToMarker("sg_opening_fodder1", "nis_opening_fodder1_goto")
+			Cmd_MoveToMarker("sg_opening_fodder2", "nis_opening_fodder2_goto")
+			Cmd_MoveToMarker("sg_opening_fodder3", "nis_opening_fodder3_goto")
+			
+			CTRL.Event_Delay( 1.0 )	
+			CTRL.WAIT()
+			
+			-- Kill them with a blast!
+			SGroup_SelfDestroy("sg_opening_laserfodder", false)
+			Util_MarkerFX( "nis_opening_cannon", "data:Art/Events/Tau/Abilities/ION_Cannon.events")
+			
+			-- Restore natural color scheme
+			Fade_Start( .5, true )
+			
+			CTRL.Event_Delay( 3.5 )	
+			CTRL.WAIT()
+			
+			CTRL.Fade_Start(2.0, false )
+			CTRL.WAIT()
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	--[[  Ensure the buildings are destroyed and removed from the game ]]--
+	EGroup_DeSpawn("eg_opening_fodderscene")
+	EGroup_DestroyAllEntities("eg_opening_fodderscene")
+	
+	--[[  Restore audio settings  ]]--
+	Sound_SetVolumeModifierMusic(1.0)
+	Sound_PlaylistClear(PC_Ambient)
+	
+	
+	------------------------------------------------------------------------------BLOCK 4----------------------------------------------------------------------------	
+	CPath_CutToPoint("canim_nis_opening_cannon_face", "start")
+	Fade_Start(0.5, true )
+	CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200006) --This is indeed most commendable.
+	CTRL.WAIT()
+	
+	CPath_CutToPath("canim_nis_opening_cannon_face", "commander", "end")
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200176) --Our orbital defenses were built using the same technology. Both are controlled from this location.
+	CTRL.WAIT()
+	--user_CreateBuilding(g_Player2, "eg_opening_flare1", "nis_opening_flare1", "flare_02")
+	--user_CreateBuilding(g_Player2, "eg_opening_flare2", "nis_opening_flare2", "flare_02")
+	
+	--Silvey Polish (10/18/07):  Music cue!
+	--Fade Music out			
+	for i = 1.0, 0.0, -0.2 do
+		Sound_SetVolumeModifierMusic(i)
+		CTRL.Event_Delay( 0.2 )
+		CTRL.WAIT()
+	end
+	----
+
+	
+	CPath_CutToPath("canim_nis_opening_cannon_face", "end", "alarm")
+	
+	--Silvey Polish (11/07/07):  Moved code into a nice little function and added sound
+	--Alarms
+	function Alarm_GFX_Sound()
+		Sound_Play("Races/Shared_ALL/TauAlarm")
+		Fade_StartColor(0.6, World_Color(128, 0, 0), false )
+		CTRL.Event_Delay(0.5)
+		CTRL.WAIT()
+		
+		
+		CTRL.Event_Delay(0.7)
+		Fade_StartColor(0.2, World_Color(156, 0, 0), true )
+		CTRL.WAIT()
+	end
+	
+	Sound_SetVolumeModifierSfx(0.60)
+	Alarm_GFX_Sound()
+	Alarm_GFX_Sound()
+	
+	
+	--[[CTRL.Fade_StartColor(0.2, World_Color(128, 0, 0), false )
+	CTRL.WAIT()
+			
+	CTRL.Event_Delay(1.0)
+	Fade_StartColor(0.2, World_Color(128, 0, 0), true )
+	CTRL.WAIT()
+	
+	CTRL.Fade_StartColor(0.2, World_Color(128, 0, 0), false )
+	CTRL.WAIT()
+			
+	CTRL.Event_Delay(1.0)
+	Fade_StartColor(0.2, World_Color(128, 0, 0), true )
+	CTRL.WAIT()]]--
+	
+	CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200007) --What is that?
+		CTRL.SUB()
+		
+		Alarm_GFX_Sound()
+		Alarm_GFX_Sound()	
+		
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.Fade_Start(1.0, false )
+	Sound_Play("Races/Shared_ALL/TauAlarm")
+	CTRL.WAIT()
+	Fade_Start(0.5, true )
+		
+	
+	--Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_drones_group"), "burrow_in_motion" )
+	Command_Squad(g_Player2, "sg_opening_drones_group", SCMD_BurrowToggle)
+	
+	--Silvey Polish (10/18/07):  Kick off more dramatic music
+	--set the music	
+	t_ambient_sound = {"MU_IG_STR_Tau"}
+	
+	--Sound_PlaylistClear(PC_Music)
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_ambient_sound, true, true , {2, 4})
+	Sound_SetVolumeModifierMusic(1.0)
+	--Silvey Polish (11/07/07):  Muffled sfx so alarm sounds in the distance
+	Sound_SetVolumeModifierSfx(0.35)
+	
+	
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200008) --The perimeter has somehow been breached. Wise One, I must attend to this. Please, your Excellence, return to the Coalition Center.
+		CTRL.SUB()
+		
+			--Silvey Polish (11/07/07):  Added alarm sound to this scene as well
+			Sound_Play("Races/Shared_ALL/TauAlarm")
+			CPath_CutToPath("canim_scoutsdead", "start","end")
+			Cmd_MoveToMarker("sg_opening_scouts", "nis_opening_scouts_goto")
+			CTRL.Event_Delay( 2 )
+			CTRL.WAIT()
+			
+			Sound_Play("Races/Shared_ALL/TauAlarm")
+			CTRL.Event_Delay( 2 )
+			CTRL.WAIT()
+			Sound_Play("Races/Shared_ALL/TauAlarm")
+			SGroup_SetHealthInvulnerable("sg_opening_scouts", false)
+			SGroup_SetAvgHealth("sg_opening_scouts", 0.1)
+			Cmd_SetStance("sg_opening_scouts", STANCE_Attack)
+			Command_Squad(g_Player2, "sg_opening_drones_group", SCMD_BurrowToggle)
+			--Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_drones_group"), "burrow_out_motion" )
+			Cmd_SetStance("sg_opening_drones_group", STANCE_Attack)
+			CTRL.Event_Delay( 2 )
+			CTRL.WAIT()
+			Sound_Play("Races/Shared_ALL/TauAlarm")
+			
+			
+		CTRL.END()
+	CTRL.WAIT()
+	Sound_SetVolumeModifierSfx(0.5)
+		
+	--Silvey Polish (11/07/07):  Increased time to see a little more of the battle
+	CTRL.Event_Delay( 2 )	
+	CTRL.WAIT()
+	CTRL.Fade_Start( .5, false )
+	CTRL.WAIT()
+	
+	
+	SPath_StartEx("manim_nis_opening_runner1", "start", "end", "sg_opening_ethereal3", 0.7, false)
+	SPath_StartEx("manim_nis_opening_runner2", "start", "end", "sg_opening_commander3", 0.7, false)
+	SGroup_FaceEachOther("sg_opening_messenger", "sg_opening_firewarriors25")
+	for i = 1, 6 do
+		Anim_PlaySGroupAnim("sg_opening_firewarrior_line"..i, "capture_strategic_point")		
+	end
+	for i = 1,12 do
+		Cmd_MoveToMarker("sg_opening_firewarrior_scramble"..i, "nis_opening_firewarrior_goto"..World_GetRand(1,3))
+	end
+		
+	CTRL.CPath_CutToPath("canim_nis_opening_runner", "start","end")
+		CTRL.SUB()
+		
+			Fade_Start( .5, true )
+			CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200009) --Yes, that may be best.
+			CTRL.WAIT()
+			
+			SGroup_FaceEachOther("sg_opening_commander3", "sg_opening_messenger")
+			Actor_PlaySpeech(  ACT.Shas, 5200010) --	Dispatch Path Finders. Locate the source of the breach and see that they do not gain entrance and establish a foothold. Notify all Fire Warriors and Kroot Carnivore squads.			
+			CTRL.WAIT()
+			
+		CTRL.END()
+	CTRL.WAIT()
+	--Silvey Polish 08/21/07 (Deleted Scene)
+	--[[CTRL.CPath_CutToPath("canim_closeup02", "start","end")
+		CTRL.SUB()
+			
+			-- Changementization!
+			CTRL.Actor_PlaySpeech(  ACT.Tau_Ethereal, 5200009) --Yes, that may be best.
+			CTRL.WAIT()
+			CTRL.Actor_PlaySpeech(  ACT.Shas, 5200010) --	Dispatch Path Finders. Locate the source of the breach and see that they do not gain entrance and establish a foothold. Notify all Fire Warriors and Kroot Carnivore squads.
+				Cmd_MoveToMarker("sg_opening_messenger", "nis_opening_messenger_goto")
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_opening_messenger", "nis_opening_messenger_spawn")
+			
+		CTRL.END()
+	CTRL.WAIT()]]--
+	
+	Cmd_JumpToMarker("sg_opening_crisisdefense1", "nis_opening_defcrisis_goto1")
+	Cmd_JumpToMarker("sg_opening_crisisdefense2", "nis_opening_defcrisis_goto2")
+	Cmd_JumpToMarker("sg_opening_crisisdefense3", "nis_opening_defcrisis_goto3")
+	
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	
+	CPath_CutToPath("canim_lineoftroops", "start","end")
+	Cmd_MoveToMarker("sg_opening_drillsgt", "nis_opening_drillsgt_goto")
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_defensewarrior_group"), "capture_strategic_point" )
+
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+
+	CTRL.Event_Delay(4)
+		CTRL.SUB()
+			
+			CPath_CutToPath("canim_krootrally", "start","end")
+			Cmd_MoveToMarker("sg_opening_knarloc", "nis_opening_knarloc_goto")
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_defensekroot_group"), "capture_strategic_point" )
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_defensekroot_group"), "default" )
+			Cmd_MoveToMarker("sg_opening_defensekroot_group", "nis_opening_kroot_goto")
+			
+		CTRL.END()
+	CTRL.WAIT()	
+	
+	--[[CTRL.Event_Delay( 3 )
+	Fade_Start( 2, false )
+	CTRL.WAIT()
+	Fade_Start( 1, true )]]--
+	------------------------------------------------------------------------------BLOCK 5----------------------------------------------------------------------------	
+	CPath_CutToPath("canim_nis_opening_closeup", "start", "end")
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5200011) --Let us hope that our defensives are strong enough to hold them.
+		CTRL.SUB()
+			CTRL.Event_Delay( 3 )
+			CTRL.WAIT()
+	
+			--CTRL.Event_Delay( 4 )
+			Fade_Start( 3, false )
+			--CTRL.WAIT()
+			
+			--Silvey Polish (10/18/07):  Music cue!
+			--Fade Music out			
+			for i = 1.0, 0.0, -0.1 do
+				Sound_SetVolumeModifierMusic(i)
+				CTRL.Event_Delay( 0.5 )
+				CTRL.WAIT()
+			end
+			----
+
+		CTRL.END()
+	CTRL.WAIT()
+	
+	Fade_Start( 1, true )
+	
+	--[[ Restore everything for mission play  ]]--
+	Util_MuffleNISSoundCopy(false)
+	Util_NIS_ToggleModifierEvents(g_Player1, true)
+	Util_NIS_ToggleModifierEvents(g_Player2, true)	
+	Util_NIS_ToggleModifierEvents(g_Player4, true)
+	
+	EventCue_Enable(true)
+	
+	
+	CPath_CutToPoint("canim_end", "start")
+		
+	
+	
+	SGroup_DeSpawn("sg_opening_actors")
+	SGroup_DestroyAllSquads("sg_opening_actors")
+	SGroup_Destroy(SGroup_FromName("sg_opening_actors"))
+	
+	EGroup_DeSpawn("eg_opening_buildings")
+	EGroup_DestroyAllEntities("eg_opening_buildings")	
+	EGroup_Destroy(EGroup_FromName("eg_opening_buildings"))
+	
+	
+	CTRL.W40k_Letterbox( false, 2)
+		
+		FOW_Reset()
+		CPath_Blendout( 1 )
+		
+	CTRL.WAIT()
+	
+end
+
+--------------------------------
+--[[CLOSING NIS]]
+--------------------------------
+EVENTS.NIS_Closing = function()
+--EVENTS.NIS_Opening = function()
+	
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+		
+		g_Nis_Blueprint = "chaos_squad_cultist"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_obliterator"
+		
+	elseif humanplayer == "eldar_race" then
+		
+		g_Nis_Blueprint = "eldar_guardian_squad"
+		g_Nis_Blueprint2 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint3 = "eldar_squad_wraithlord"
+		
+	elseif humanplayer == "guard_race" then
+		
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+		
+	elseif humanplayer == "ork_race" then
+		
+		g_Nis_Blueprint = "ork_squad_slugga"	
+		g_Nis_Blueprint2 = "ork_squad_shoota_boy"
+		g_Nis_Blueprint3 = "ork_squad_armored_nob"
+	
+	elseif humanplayer =="space_marine_race" then
+		
+		g_Nis_Blueprint = "space_marine_squad_scout"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_tactical"
+	
+	elseif humanplayer == "tau_race" then
+		
+		g_Nis_Blueprint = "tau_pathfinder_squad"
+		g_Nis_Blueprint2 = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint3 = "tau_crisis_suit_squad"
+	
+	elseif humanplayer == "necron_race" then
+		
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_tomb_spyder_squad"
+		
+	elseif humanplayer =="dark_eldar_race" then
+		
+		g_Nis_Blueprint = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint2 = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint3 = "dark_eldar_squad_dais_of_destruction"
+				
+	elseif humanplayer == "sisters_race" then
+		
+		g_Nis_Blueprint = "sisters_squad_battle_sister"
+		g_Nis_Blueprint2 = "sisters_squad_battle_sister"
+		g_Nis_Blueprint3 = "sisters_squad_penitent_engine"		
+		
+	end
+
+	--Remove all the buildings and units to clear the Nis scenes
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	--SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player8))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	--EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player8))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, .5 )	
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	CTRL.Event_Delay( 4 )
+		
+		Fade_Start( 0, false )
+		
+	CTRL.WAIT()
+	
+	---------------------------------------
+	--Spawn Closing Units
+	---------------------------------------
+	
+	--closing ethereal
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_ethereal", "tau_ethereal_squad_stronghold_sp", "nis_closing_ethereal_spawn", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_ethereal"))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_ethereal"))
+	Cmd_SetStance("sg_closing_ethereal", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_closing_ethereal", true)
+	SGroup_FaceMarker("sg_closing_ethereal", "nis_closing_ethereal_face")
+
+	--[[closing assassin
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_assassin", g_Nis_Blueprint, "nis_closing_assassin_spawn", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_ethereal"))
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_ethereal"))
+	Cmd_SetStance("sg_closing_assassin", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_closing_assassin", true)
+	SGroup_FaceMarker("sg_closing_assassin", "nis_etherealface")]]
+	
+	--closing enemy runner squad
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_runners", g_Nis_Blueprint, "nis_closing_runner_spawn", 3, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_commander"))	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_runners"))
+	--Cmd_SetStance("sg_closing_runners", STANCE_CeaseFire)
+	--SGroup_SetHealthInvulnerable("sg_closing_runners", true)
+	SGroup_FaceMarker("sg_closing_runners", "nis_closing_runner_goto")
+	
+	for i = 1, 2 do
+	
+	--extra firewarriors defense
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_bodyguards"..i, "tau_fire_warrior_squad_clone_sp", "nis_closing_tau_spawn"..i, 5, 2)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_defensewarrior_group"), SGroup_FromName("sg_opening_defensewarriors"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_bodyguards"..i))
+	SGroup_SetHealthInvulnerable("sg_closing_bodyguards"..i, true)
+	SGroup_FaceMarker("sg_closing_bodyguards"..i, "nis_closing_runner_goto")
+	Cmd_SetStance("sg_closing_bodyguards"..i, STANCE_Hold)
+	
+	end
+
+	SGroup_FaceMarker("sg_closing_bodyguards1", "nis_closing_enemy_spawn2")
+	SGroup_FaceMarker("sg_closing_bodyguards2", "nis_closing_enemy_spawn3")
+	Entity_CreateBuildingMarker(g_Player2,"nis_eg_laserGun_Weapon", "tau_lasergun","mkr_laserGun_Location", 1)
+	
+	for i = 1, 4 do
+
+	--extra closing enemy army
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_enemyarmy"..i, g_Nis_Blueprint2, "nis_closing_enemy_spawn"..i, 8, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_defensewarrior_group"), SGroup_FromName("sg_opening_defensewarriors"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_enemyarmy"..i))
+	--Cmd_SetStance("sg_closing_enemyarmy"..i, STANCE_CeaseFire)
+	--SGroup_SetHealthInvulnerable("sg_closing_enemyarmy"..i, true)
+	--SGroup_FaceMarker("sg_closing_bodyguards", "nis_opening_drillsgt_goto")
+	--Anim_PlaySGroupAnim("sg_opening_defensewarrior_group", "capture_strategic_point")
+	
+	end
+	
+	CPath_Start("canim_starter", "start", "end")
+	
+	Cmd_MoveToMarker("sg_closing_enemyarmy1", "nis_closing_enemy_goto1")
+	CPath_CutToPath("canim_out_lasergun", "start","end")
+	SGroup_SetHealthInvulnerable("sg_closing_bodyguards1", false)
+	
+	Fade_Start( 1.0, true )
+	
+	CTRL.Event_Delay(6)
+	CTRL.WAIT()
+	
+	SGroup_SetHealthInvulnerable("sg_closing_bodyguards2", false)
+	
+	CPath_CutToPath("canim_out_etherealdies", "start","end")
+		
+	SGroup_SetAvgHealth( "sg_closing_bodyguards2", .2 )
+	SPath_Start("manim_ethereal1", "1", "2", "sg_closing_ethereal")
+	
+	CTRL.Event_Delay(6)
+	CTRL.WAIT()
+	
+	SGroup_SelfDestroy("sg_closing_ethereal", false)
+	--Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_ethereal"), "diel" )
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+
+	
+	--CTRL.CPath_CutToPath("canim_closingsequence02", "start","end")
+	--CTRL.WAIT()
+	
+	--CTRL.CPath_CutToPath("canim_closingsequence04", "start","end")
+	--CTRL.WAIT()
+	
+	----------------------------------------------
+	--Spawn Commander and Guards
+	-----------------------------------------------
+	
+	Entity_CreateBuildingMarker(g_Player2,"nis_eg_hq", "tau_hq","nis_closing_hq", 1)
+	Entity_CreateBuildingMarker(g_Player2,"nis_eg_hq2", "tau_hq","nis_closing_hq2", 1)
+	Entity_CreateBuildingMarker(g_Player2,"nis_eg_barracks", "tau_barracks","nis_closing_barracks", 1)
+	Entity_CreateBuildingMarker(g_Player2,"nis_eg_power", "tau_plasma_generator","nis_closing_power1", 1)
+	
+	--actor commander
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_commander", "tau_commander_squad", "nis_closing_commander_spawn", 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_thetwo"), SGroup_FromName("sg_opening_commander"))	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_commander"))
+	Cmd_SetStance("sg_closing_commander", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_closing_commander", true)
+	SGroup_FaceMarker("sg_closing_commander", "nis_closing_ethereal_face")
+	
+	--extra commander defense
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_commandguards", "tau_fire_warrior_squad_clone_sp", "nis_closing_commanderguards_spawn1", 3, 2)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_defensewarrior_group"), SGroup_FromName("sg_opening_defensewarriors"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_commandguards"))
+	SGroup_SetHealthInvulnerable("sg_closing_commandguards", true)
+	SGroup_FaceMarker("sg_closing_commandguards", "nis_closing_runner_goto")
+	Cmd_SetStance("sg_closing_commandguards", STANCE_Hold)
+		
+	--extra closing enemy army
+	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_commanderkill", g_Nis_Blueprint2, "nis_closing_commanderkill_spawn1", 4, 3)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_commanderkill"))
+	--Cmd_SetStance("sg_closing_enemyarmy"..i, STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_closing_commanderkill", true)
+	--SGroup_FaceMarker("sg_closing_bodyguards", "nis_opening_drillsgt_goto")
+	Cmd_SetStance("sg_closing_commanderkill", STANCE_Hold)
+	
+	-----------------------------------------------
+	-- End Spawn Commander and Guards
+	-----------------------------------------------
+	
+	CTRL.CPath_CutToPath("canim_out_wickedzoom", "start","end")
+		CTRL.SUB()
+			EGroup_SelfDestroy("nis_eg_hq2", true)
+			
+			SPath_Start("manim_out_commander", "1", "2", "sg_closing_commander")
+			
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			
+			EGroup_SelfDestroy("nis_eg_hq", true)
+			
+			Actor_PlaySpeech(  ACT.Shas, 5200107)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			EGroup_SelfDestroy("nis_eg_barracks", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			EGroup_SelfDestroy("nis_eg_power", true)
+			
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			Fade_Start( .5, false )
+		CTRL.END()
+	CTRL.WAIT()
+
+	CPath_CutToPath("canim_starter", "start","end")
+	
+	SGroup_DeSpawn("sg_closing_actors")
+	SGroup_DestroyAllSquads("sg_closing_actors")
+	SGroup_Destroy(SGroup_FromName("sg_closing_actors"))
+	
+	CTRL.W40k_Letterbox( false, 2)	
+		CPath_Blendout( .5 )
+	CTRL.WAIT()
+	
+end
+	

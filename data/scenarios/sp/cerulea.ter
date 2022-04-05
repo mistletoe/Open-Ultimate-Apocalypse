@@ -1,0 +1,104 @@
+Model = "Cerulea"
+Planet = "Kaurava_II"
+
+Name = "$3900016"
+Description = "$3900144"
+TerrainDescription = "$3900145"
+History = 
+{
+"$3900146",
+"$3900147",
+"$3900148",
+"$3900149",
+"$3900150",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "8P_Cerulea"
+MissionFileAttackingConquered = "8P_Cerulea"
+MissionFileDefending = "8P_Cerulea"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Irridene",
+	"Solitude",
+	"Trivian_Groves",
+	"Skerries",
+	--"Knocknarea",
+	"Clooth-na-Bare",
+	"Rokclaw_Mountains",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_sorcerer_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_scout_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_slugga_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_guardsmen_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_dark_reaper_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_battle_sister_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_hellion_leader_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "space_marine_race"
+OwnerSecondary = "ork_race"
+
+StartingResourceBonus = 0.0

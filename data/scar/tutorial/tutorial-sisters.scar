@@ -1,0 +1,2769 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--    Sisters Tutorial 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Lessons:
+-- 1	Selection of Ecclesiarchal Chapel
+-- 2	Build Missionary
+-- 3	Capture Point
+-- 4	Build Ecclesiarchal Servitor
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Adepta Sororitas Convent (Barracks)
+-- 8	Build Battle Sister Squad
+-- 9	Reinforce Battle Sister Squad
+-- 10	Health (skipped if tutorial has been played before)
+-- 11	Morale (skipped if tutorial has been played before)
+-- 12	Text about Barracks Squad Cap
+
+-- 13	Text about Faith / Faithful Unit
+-- Holy Icons
+
+-- 14	Build Canoness (Commander)
+-- 15	Build Pristine Sanctuary (Upgrade Building)
+-- 16	Upgrade a Battle Sister Squad with Heavy Bolters
+-- 17	Research Ecclesiarchal Chapel (HQ)
+-- 18	Add Leader to Battle Sisters Squad
+-- 19	Take Cover (skipped if tutorial has been played before)
+-- 20	Capture 3 Strategic Points (with LPs)
+-- 21	Capture Critical Location
+-- 22	Capture Relic
+-- 23	Build Adepta Sororitas Manufactorum (Vehicle Building)
+-- Vehicle Cap (Tag 53)
+-- 24	Build a  Immolator
+
+-- Victory
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+-- sisters building, units & researches used for Sisters Tutorial (Array is Located in: Tutorial.scar)
+--	sisters = {
+--		hq = "sisters_hq",
+--		basic_infantry = "sisters_squad_missionary",
+--		builder = "sisters_squad_servitor",
+--		listening_post = "sisters_listening_post",
+--		generator = "sisters_plasma_generator",
+--		barracks = "sisters_infantry",
+--		infantry = "sisters_squad_battle_sister",
+--		commander = "sisters_squad_canoness",
+--		research_facility = "sisters_sanctuary",
+--		infantry_weapon = "sisters_flamer_battle_sister"
+--		infantry_leader = "sisters_veteran_superior",
+--		hq_addon = "addon_sisters_hq_1",
+--		vehicle_building = "sisters_vehicle_building",
+--		vehicle_immolator = "sisters_squad_immolator_tank"		
+--	}
+
+---------------------------------------------------------------------------------------------
+--  Start the Sisters Portion of the Tutorial
+	-- Called from Tutorial.Scar
+---------------------------------------------------------------------------------------------
+-- Start the Sisters Portion of the Tutorial
+function Rule_Sisters_Start()
+	-- Add the First Lesson: Selection of Ecclesiarchal Chapel
+	Rule_AddOneShot(Rule_Sisters_Selection, 0)
+
+	--testing
+--	Rule_AddOneShot(Rule_Sisters_BuildImmolator, 0)
+
+	-- Add Rules to Check for Low Resources
+	Rule_AddInterval(Rule_Sisters_LowResource, 10)
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 1 - Selection of Ecclesiarchal Chapel
+---------------------------------------------------------------------------------------------
+-- Assign "Select the HQ" Lesson & Objective
+function Rule_Sisters_Selection()
+	-- Define Objective: Select the HQ
+	obj_Selection = {title_id = 3950098, short_desc_id = 3950099, help_tip_id = 3950098 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Get what is currently selected
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Make Sure the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_Sisters_Selection)
+		
+		-- Play Intel Event
+		Util_StartIntel(EVENTS.IE_Sisters_Selection)
+		
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_SelectionCheck, 0)
+
+	-- If they do have the HQ selected...
+	else
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Sisters_SelectionDone, 0)
+	end
+end
+
+-- Checks if Player has selected the HQ
+function Rule_Sisters_SelectionCheck()
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+
+	-- If Player has selected the HQ
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_SelectionCheck)
+		Rule_AddInterval(Rule_Sisters_SelectionDone, 0)
+	end
+end
+
+-- Finish "Select the HQ" Lesson
+function Rule_Sisters_SelectionDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Missionary
+		Rule_AddOneShot(Rule_Sisters_BuildMissionary, 0)
+		Rule_Remove(Rule_Sisters_SelectionDone)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 2 - Build Missionary Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Build Missionary Squad" Lesson & Objective
+function Rule_Sisters_BuildMissionary()
+	-- Define Objective: Build a Missionary Squad
+	obj_BuildMissionary = { title_id = 3950100, short_desc_id = 3950101, help_tip_id = 3950100 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Missionary squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMissionary , true, EVENTS.IE_Sisters_BuildMissionary)
+		
+		-- Play IE
+		Util_StartIntel(EVENTS.IE_Sisters_BuildMissionary)
+		
+		-- Ping the HQ
+		ping_BuildMissionary= Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_BuildMissionaryDoing, 0)
+
+	-- if they already have a Missionary squad
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMissionary, true)
+		Tut_Util_ObjectiveComplete(obj_BuildMissionary.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildMissionary_Complete)
+		
+		-- Ping Missionary Squad once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_BuildMissionaryDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Missionary Squad
+function Rule_Sisters_BuildMissionaryDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+
+	-- Is player currently producing Missionary
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true)
+	then
+		-- Play IE: Talks about Production Bar filling up
+		Util_StartIntel(EVENTS.IE_Sisters_BuildMissionary_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Sisters_BuildMissionaryDoing)
+		Rule_AddInterval(Rule_Sisters_BuildMissionaryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Missionary Squad
+function Rule_Sisters_BuildMissionaryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built Missionary squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMissionary.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildMissionary_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildMissionary)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildMissionaryCheck)
+		Rule_AddInterval(Rule_Sisters_BuildMissionaryDone, 0)
+	end
+end
+
+-- Finish the "Build Missionary" Lesson
+function Rule_Sisters_BuildMissionaryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Strategic Point
+		Rule_Remove(Rule_Sisters_BuildMissionaryDone)
+		Rule_AddOneShot(Rule_Sisters_CapturePoint, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 3 - Capture Strategic Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Strategic Point" Lesson & Objective
+function Rule_Sisters_CapturePoint()
+	-- Define Objective: Capture a Strategic Point
+	obj_CapturePoint = { title_id = 1100606, short_desc_id = 3950102, help_tip_id = 1100606 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 200
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create/Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_CapturePointDone, 0)
+		
+	-- If they haven't captured a point (but have a missionary squad)...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Sisters_CapturePoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_CapturePoint)
+		
+		-- Ping points & Missionary squad
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Sisters_CapturePointDoing, 0)	
+	end
+end
+
+-- Check if the Player has started capturing the strategic point
+function Rule_Sisters_CapturePointDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Is the Player currently capturing a Strategic Point
+	if (Cmd_IsCapturing("sg_Player1All", false) == true)
+	then
+		-- Play IE: Capturing Takes Time, Don't Move Squad
+		Util_StartIntel(EVENTS.IE_Sisters_CapturePoint_Doing)
+		
+		-- Triggers the check for completed capture rule
+		Rule_AddInterval(Rule_Sisters_CapturePointCheck, 0)
+		Rule_Remove(Rule_Sisters_CapturePointDoing)
+	end
+end
+
+-- Check if the Player has finished capturing the first strategic point
+function Rule_Sisters_CapturePointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Is the point fully captured...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Complete Objective & Play IE: 
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_CapturePointCheck)
+		Rule_AddInterval(Rule_Sisters_CapturePointDone, 0)
+	end
+end
+
+-- Finish the "Capture Strategic Point" Lesson
+function Rule_Sisters_CapturePointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Builder (Ecclesiarchal Servitor)
+		Rule_Remove(Rule_Sisters_CapturePointDone)
+		Rule_AddOneShot(Rule_Sisters_BuildBuilder, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 4 - Build Ecclesiarchal Servitor Builder
+--------------------------------------------------------------------------------------------
+-- Assign "Build Ecclesiarchal Servitor Builder" Lesson & Objective
+function Rule_Sisters_BuildBuilder()
+	-- Define Objective: Build a Ecclesiarchal Servitor
+	obj_BuildBuilder = { title_id = 3950103, short_desc_id = 3950104, help_tip_id = 3950103 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have a builder...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder , true, EVENTS.IE_Sisters_BuildBuilder)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBuilder)
+		
+		-- Ping the HQ & Flash Production Button of the Ecclesiarchal Servitor
+		ping_BuildBuilder = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Sisters_BuildBuilderDoing, 0)
+
+	-- else if they DO have a builder already...
+	else
+		-- Create/Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder, true)
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBuilder_Doing)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_BuildBuilderDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Builder
+function Rule_Sisters_BuildBuilderDoing()
+	local mylist = {}
+	
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Is player currently producing a builder
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true)
+	then
+		-- Play IE: Role of a Builder	
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBuilder_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Sisters_BuildBuilderDoing)
+		Rule_AddInterval(Rule_Sisters_BuildBuilderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Ecclesiarchal Servitor Squad
+function Rule_Sisters_BuildBuilderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the Builder is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBuilder_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBuilder)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildBuilderCheck)
+		Rule_AddInterval(Rule_Sisters_BuildBuilderDone, 0)		
+	end	
+end
+
+-- Finish the "Build Ecclesiarchal Servitor Builder" Lesson
+function Rule_Sisters_BuildBuilderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Listening Post
+		Rule_Remove(Rule_Sisters_BuildBuilderDone)
+		Rule_AddInterval(Rule_Sisters_BuildPost, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 5 - Build Listening Post
+--------------------------------------------------------------------------------------------
+-- Assign "Build Listening Post" Lesson & Objective
+function Rule_Sisters_BuildPost()
+	-- Define Objective: Build Listening Post
+	obj_BuildPost = { title_id = 1100612, short_desc_id = 3950105, help_tip_id = 1100612 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post (& have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) and
+		Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Sisters_BuildPost)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPost)
+		
+		-- Ping the captured flag & the builder
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Flash the Build Button & the Listening Post Building
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Sisters_BuildPost)
+		Rule_AddInterval(Rule_Sisters_BuildPostDoing, 0)
+		
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Sisters_BuildPost
+		Rule_Remove(Rule_Sisters_BuildPost)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Sisters_NoBuilder)
+		
+	-- esle if they do somehow have a listening post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPost_Doing)
+		
+		-- Ping Already built Listening Post
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildPost)
+		Rule_AddInterval(Rule_Sisters_BuildPostDone, 0)		
+	end
+end
+
+-- Check if the Player has started building the Listening Post
+function Rule_Sisters_BuildPostDoing()
+	-- Has the player started building the listening post
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true)
+	then
+		-- Play IE: Remind Player that Building build without the builders
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPost_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildPostDoing)
+		Rule_AddInterval(Rule_Sisters_BuildPostCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Listening Post
+function Rule_Sisters_BuildPostCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the Listening Post is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildPostCheck)
+		Rule_AddInterval(Rule_Sisters_BuildPostDone, 0)
+	end
+end
+
+-- Finish the "Build Listening Post" Lesson
+function Rule_Sisters_BuildPostDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Power Generator
+		Rule_Remove(Rule_Sisters_BuildPostDone)
+		Rule_AddInterval(Rule_Sisters_BuildGenerator, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 6 - Build Power Generator
+--------------------------------------------------------------------------------------------
+-- Assign "Build Power Generator" Lesson & Objective
+function Rule_Sisters_BuildGenerator()
+	-- Define Objective: Build a Plasma Generator
+	obj_BuildGenerator = { title_id = 1100615, short_desc_id = 3950106, help_tip_id = 1100615 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Sisters_BuildGenerator)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildGenerator)
+		
+		-- Flash Build Button & Generator Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_BuildGenerator)
+		Rule_AddInterval(Rule_Sisters_BuildGeneratorDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Sisters_BuildGenerator
+		Rule_Remove(Rule_Sisters_BuildGenerator)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Sisters_NoBuilder)
+	
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildGenerator_Complete)
+		
+		-- Ping the Already Built Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildGenerator)
+		Rule_AddInterval(Rule_Sisters_BuildGeneratorDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Power Generator
+function Rule_Sisters_BuildGeneratorDoing()
+	-- Has the player started building the power generator 
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true)
+	then
+		-- Play IE: More power generators equal faster power resource gathering
+		Util_StartIntel(EVENTS.IE_Sisters_BuildGenerator_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Sisters_BuildGeneratorCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Power Generator
+function Rule_Sisters_BuildGeneratorCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Power Generator is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildGenerator_Complete)
+		
+		-- Plays IE about Control Zone if Players First Time playing tutorial
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+		then
+			Util_StartIntel(EVENTS.IE_Sisters_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Sisters_BuildGeneratorDone, 0)		
+	end
+end
+
+-- Finish the "Build Generator" Lesson
+function Rule_Sisters_BuildGeneratorDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Barracks (Adepta Sororitas Convent)
+		Rule_Remove(Rule_Sisters_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Sisters_BuildBarracks, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 7 - Build Barracks (Adepta Sororitas Convent)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Adepta Sororitas Convent" Lesson & Objective
+function Rule_Sisters_BuildBarracks()
+	-- Define Objective: Build a Barracks (Adepta Sororitas Convent)
+	obj_BuildBarracks = { title_id = 3950107, short_desc_id = 3950108, help_tip_id = 3950107 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Adepta Sororitas Convent (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Sisters_BuildBarracks)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBarracks)
+		
+		-- Flash Build Button & Barracks Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_BuildBarracks)
+		Rule_AddInterval(Rule_Sisters_BuildBarracksDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Sisters_BuildBarracks
+		Rule_Remove(Rule_Sisters_BuildBarracks)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Sisters_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBarracks_Doing)
+		
+		-- Ping the Already Built Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildBarracks)
+		Rule_AddInterval(Rule_Sisters_BuildBarracksDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Barracks
+function Rule_Sisters_BuildBarracksDoing()
+	-- Has the player started building the barracks
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBarracks_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Sisters_BuildBarracksCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Barracks
+function Rule_Sisters_BuildBarracksCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Barracks is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Sisters_BuildBarracksDone, 0)
+	end
+end
+
+-- Finish the "Build Barracks" Lesson
+function Rule_Sisters_BuildBarracksDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Building Battle Sister Squad
+		Rule_Remove(Rule_Sisters_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Sisters_BuildInfantry, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 8 - Build a Battle Sister Squad 
+---------------------------------------------------------------------------------------------
+-- Assign "Build Battle Sister Squad" Lesson & Objective
+function Rule_Sisters_BuildInfantry()
+	-- Define Objective: Build a Battle Sister Squad
+	obj_BuildInfantry = { title_id = 3950109, short_desc_id = 3950110, help_tip_id = 3950109 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Battle Sister Squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true, EVENTS.IE_Sisters_BuildInfantry)
+		
+		-- Play IE: Build a Battle Sister Squad
+		Util_StartIntel(EVENTS.IE_Sisters_BuildInfantry)
+		
+		-- Ping the HQ
+		ping_BuildInfantry = Tut_PingBlueprint(blueprint.barracks, true)
+		
+		-- Flash Battle Sister Button:
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_BuildInfantryDoing, 0)
+		
+	-- else if the do have a Battle Sister Squad already...
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true)
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildInfantry_Complete)
+		
+		-- Ping the Already Built Battle Sister Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_BuildInfantryDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Battle Sister Squad
+function Rule_Sisters_BuildInfantryDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the Battle Sister squad
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildInfantry_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildInfantryDoing)
+		Rule_AddInterval(Rule_Sisters_BuildInfantryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Battle Sister Squad
+function Rule_Sisters_BuildInfantryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Battle Sister Squad is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildInfantry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildInfantry)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildInfantryCheck)
+		Rule_AddInterval(Rule_Sisters_BuildInfantryDone, 0)
+	end
+end
+
+-- Finish the "Build Battle Sister Squad" Lesson
+function Rule_Sisters_BuildInfantryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Reinforcing Troops
+		Rule_Remove(Rule_Sisters_BuildInfantryDone)
+		Rule_AddOneShot(Rule_Sisters_Reinforce, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 9 - Reinforce Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Reinforce Battle Sister Squad" Lesson & Objective
+function Rule_Sisters_Reinforce()
+	-- Define Objective : Reinforce your Battle Sister Squad
+	obj_Reinforce = { title_id = 3950111, short_desc_id = 3950112, help_tip_id = 3950111 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Create Objective with Repeating Intel Event
+	Tut_Util_ObjectiveCreate(obj_Reinforce , true, EVENTS.IE_Sisters_Reinforce)
+	
+	-- Check if the Battle Sister Squad has already reinforced (& complete if so)
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_Reinforce_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_AddInterval(Rule_Sisters_ReinforceDone, 0)
+	
+	-- Otherwise Play IE & Assign Objective
+	else
+		-- PLay IE:
+		Util_StartIntel(EVENTS.IE_Sisters_Reinforce)
+		
+		-- Ping the Battle Sister Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Flash Reinforcement Button
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_ReinforceDoing, 0)
+	end	
+end
+
+-- Check if the Player has started reinforcing the Battle Sister squad
+function Rule_Sisters_ReinforceDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Function to Filter Squad List
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- throw away any player squads that aren't Battle Sister squads
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	-- Has the Player Started Reinforcing the Battle Sister squad
+	if (Cmd_IsReinforcing("sg_Player1All", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_Reinforce_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_ReinforceDoing)
+		Rule_AddInterval(Rule_Sisters_ReinforceCheck, 0)
+	end
+end
+
+-- Check if the Player has finished Reinforcing the Battle Sister Squad (First Member only)
+function Rule_Sisters_ReinforceCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Battle Sister Squad has reinforced
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_Reinforce_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_ReinforceCheck)
+		Rule_AddInterval(Rule_Sisters_ReinforceDone, 0)
+	end
+end
+
+-- Finish the "Reinforcing Troops" Lesson
+function Rule_Sisters_ReinforceDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Health
+		Rule_Remove(Rule_Sisters_ReinforceDone)
+		Rule_AddOneShot(Rule_Sisters_Health, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 10 - Health Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Health if Players First Time playing tutorial
+function Rule_Sisters_Health()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_Health)
+		Rule_AddInterval(Rule_Sisters_HealthDone, 0)
+	else
+		-- Skip to Next Lesson: Morale
+		Rule_AddOneShot(Rule_Sisters_Morale, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson (Morale)
+function Rule_Sisters_HealthDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Morale
+		Rule_Remove(Rule_Sisters_HealthDone)
+		Rule_AddOneShot(Rule_Sisters_Morale, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 11 - Morale Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Morale if Players First Time playing tutorial
+function Rule_Sisters_Morale()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_Morale)
+		Rule_AddInterval(Rule_Sisters_MoraleDone, 0)
+	else
+		-- Skip to Next Lesson: Population
+		Rule_AddOneShot(Rule_Sisters_Population, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson: Squad Cap
+function Rule_Sisters_MoraleDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Squad Cap
+		Rule_Remove(Rule_Sisters_MoraleDone)
+		Rule_AddOneShot(Rule_Sisters_Population, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 12 - Text about Squad Cap
+---------------------------------------------------------------------------------------------
+-- Plays IE about Squad Cap
+function Rule_Sisters_Population()
+	-- Play IE:
+	Util_StartIntel(EVENTS.IE_Sisters_SquadCap)
+	Rule_AddInterval(Rule_Sisters_PopulationDone, 0)
+end
+
+-- IE is finished, move on to the next lesson: Faith / Faithful Units
+function Rule_Sisters_PopulationDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Faith / Faithful Units
+		Rule_Remove(Rule_Sisters_PopulationDone)
+		Rule_AddOneShot(Rule_Sisters_Faith, 0)
+		
+		-- Add Rules to Remind the Player to research more squad cap  if population reaches limit
+		Rule_AddInterval(Rule_Sisters_SquadCap, 10)
+		Rule_AddInterval(Rule_Sisters_SquadLimit, 10)		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 13 - Faith & Build Holy Icon
+---------------------------------------------------------------------------------------------
+-- Assign "Faith & Build Holy Icon" Lesson & Objective
+function Rule_Sisters_Faith()
+	-- Define Objective: Build a Holy Icon
+	obj_Faith = { title_id = 3950268, short_desc_id = 5400368, help_tip_id = 3950268 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they haven't upgraded the Listening Post to Holy Icon
+	if Tut_AddonIsDone(blueprint.holyIcon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_Faith , true, EVENTS.IE_Sisters_BuildHolyIcon)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildHolyIcon)
+		
+		-- Ping the Listening Post & Flash the Holy Icon Button
+		t_Faith = Tut_PingBlueprint(blueprint.listening_post, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.holyIcon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_Faith)
+		Rule_AddInterval(Rule_Sisters_FaithDoing, 0)
+
+	-- else if they have upgraded to Holy Icon Already
+	elseif Tut_AddonIsDone(blueprint.holyIcon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_Faith , true)
+		Tut_Util_ObjectiveComplete(obj_Faith.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildHolyIcon_EarlyComplete)
+		
+		-- Ping the Listening Post (where research is done)
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_Faith)
+		Rule_AddInterval(Rule_Sisters_FaithDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Holy Icon
+function Rule_Sisters_FaithDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Holy Icon
+	if (Prod_DoesListContainAddOn(blueprint.holyIcon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildHolyIcon_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_AddOn, blueprint.holyIcon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_FaithDoing)
+		Rule_AddInterval(Rule_Sisters_FaithCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Holy Icon
+function Rule_Sisters_FaithCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Holy Icon is finished
+	if Tut_AddonIsDone(blueprint.holyIcon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Faith.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildHolyIcon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_Faith)
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_FaithCheck)
+		Rule_AddInterval(Rule_Sisters_FaithDone, 0)
+	end
+end
+
+-- Finish the "Faith & Holy Icon" Lesson
+function Rule_Sisters_FaithDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build an Canoness
+		Rule_Remove(Rule_Sisters_FaithDone)
+		Rule_AddOneShot(Rule_Sisters_BuildCommander, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 14 - Build an Canoness (Commander)
+---------------------------------------------------------------------------------------------
+-- Assign "Build Canoness (Commander)" Lesson & Objective
+function Rule_Sisters_BuildCommander()
+	-- Define Objective: Build an Canoness
+	obj_BuildCommander = { title_id = 3950115, short_desc_id = 3950116, help_tip_id = 3950115 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't have a commander...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Sisters_BuildCommander)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.barracks, true)
+		
+		-- Flash Build Canoness Button on the Barracks
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Sisters_BuildCommander)
+		Rule_AddInterval(Rule_Sisters_BuildCommanderDoing, 0)
+		
+	-- else if they have the Commander...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildCommander_Doing)
+		
+		-- Ping the Already Built Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildCommander)
+		Rule_AddInterval(Rule_Sisters_BuildCommanderDone, 0)
+	end	
+end
+
+-- Check if the Player has started building the Commander
+function Rule_Sisters_BuildCommanderDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the Commander
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true)
+	then
+		--Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildCommander_Doing)
+		
+		-- Turn off the Flashing Construction Buttons		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Sisters_BuildCommanderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Commander
+function Rule_Sisters_BuildCommanderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Commander is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Sisters_BuildCommanderDone, 0)		
+	end	
+end
+
+-- Finish the "Build Canoness (Commander)" Lesson
+function Rule_Sisters_BuildCommanderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Pristine Sanctuary (Upgrade Building)
+		Rule_Remove(Rule_Sisters_BuildCommanderDone)
+		Rule_AddInterval(Rule_Sisters_BuildPristineSanctuary, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 15 - Build Pristine Sanctuary
+--------------------------------------------------------------------------------------------
+-- Assign "Build Pristine Sanctuary" Lesson & Objective
+function Rule_Sisters_BuildPristineSanctuary()
+	-- Define Objective: Build a Pristine Sanctuary
+	obj_BuildPristineSanctuary = { title_id = 3950117, short_desc_id = 3950118, help_tip_id = 3950117 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Pristine Sanctuary (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPristineSanctuary , true, EVENTS.IE_Sisters_BuildPristineSanctuary)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPristineSanctuary)
+		
+		-- Flash Build Button & Pristine Sanctuary Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuary)
+		Rule_AddInterval(Rule_Sisters_BuildPristineSanctuaryDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Sisters_BuildPristineSanctuary
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuary)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Sisters_NoBuilder)
+		
+	-- Else if they do have a Pristine Sanctuary already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildPristineSanctuary , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPristineSanctuary.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPristineSanctuary_Doing)
+		
+		-- Ping the Already Built Pristine Sanctuary
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuary)
+		Rule_AddInterval(Rule_Sisters_BuildPristineSanctuaryDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Pristine Sanctuary
+function Rule_Sisters_BuildPristineSanctuaryDoing()
+	-- Has the player started building the Pristine Sanctuary
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPristineSanctuary_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuaryDoing)
+		Rule_AddInterval(Rule_Sisters_BuildPristineSanctuaryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Pristine Sanctuary
+function Rule_Sisters_BuildPristineSanctuaryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Pristine Sanctuary is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildPristineSanctuary.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildPristineSanctuary_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuaryCheck)
+		Rule_AddInterval(Rule_Sisters_BuildPristineSanctuaryDone, 0)
+	end
+end
+
+-- Finish the "Build Pristine Sanctuary" Lesson
+function Rule_Sisters_BuildPristineSanctuaryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Upgrade a Battle Sister Squad with Flamers
+		Rule_Remove(Rule_Sisters_BuildPristineSanctuaryDone)
+		Rule_AddOneShot(Rule_Sisters_UpgradeWeaponry, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 16 - Upgrade a Battle Sister Squad with Heavy Bolters
+--------------------------------------------------------------------------------------------
+-- Assign "Upgrade Battle Sister Squad" Lesson & Objective
+function Rule_Sisters_UpgradeWeaponry()
+	-- Define Objective: Upgrade a Battle Sister Squad with Heavy Bolters
+	obj_UpgradeWeaponry = { title_id = 3950119, short_desc_id = 3950120, help_tip_id = 3950119 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 420
+
+	-- If they don't already have weapon upgrade...
+	if not SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.infantry_weapon, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry , true, EVENTS.IE_Sisters_UpgradeWeaponry)
+		
+		-- PLay IE:
+		Util_StartIntel(EVENTS.IE_Sisters_UpgradeWeaponry)
+		
+		-- Ping the Battle Sister Squad  & the Upgrade Weapon Button
+		ping_BattleSisters = Tut_PingBlueprint(blueprint.infantry, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.infantry, blueprint.infantry_weapon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Sisters_UpgradeWeaponryDoing, 0)
+
+	-- else if they have upgraded their weapons already...
+	elseif SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.infantry_weapon, 1, false)
+	then
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry, true)
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_UpgradeWeaponry_Doing)
+		
+		-- Ping the Battle Sister Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Sisters_UpgradeWeaponryDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Weapon Upgrade
+function Rule_Sisters_UpgradeWeaponryDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Function to throw away any squads that aren't Battle Sisters
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry)
+		then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- Filter out the Battle Sisters Squads
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	-- Check if any of the Battle Sisters squads are upgrading
+	if (Cmd_IsUpgrading("sg_Player1All", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_UpgradeWeaponry_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_UpgradeWeaponryDoing)
+		Rule_AddInterval(Rule_Sisters_UpgradeWeaponryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished upgrading weapons for battle sister squad
+function Rule_Sisters_UpgradeWeaponryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the weapon is upgraded
+	if SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.infantry_weapon, 1, false)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_UpgradeWeaponry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BattleSisters)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_UpgradeWeaponryCheck)
+		Rule_AddInterval(Rule_Sisters_UpgradeWeaponryDone, 0)
+	end
+end
+
+-- Finish the "Upgrade Battle Sister Squad" Lesson
+function Rule_Sisters_UpgradeWeaponryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Ecclesiarchal Chapel (hq addon)
+		Rule_Remove(Rule_Sisters_UpgradeWeaponryDone)
+		Rule_AddInterval(Rule_Sisters_EcclesiarchalChapel, 0)
+	end	
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 17 - Ecclesiarchal Chapel (hq addon)
+--------------------------------------------------------------------------------------------
+-- Assign "Ecclesiarchal Chapel" Lesson & Objective
+function Rule_Sisters_EcclesiarchalChapel()
+	-- Define Objective: Research Ecclesiarchal Chapel Add-on
+	obj_EcclesiarchalChapel = { title_id = 3950121, short_desc_id = 3950122, help_tip_id = 3950121 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+	
+	-- If they haven't upgraded the HQ to Ecclesiarchal Chapel
+	if Tut_AddonIsDone(blueprint.hq_addon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_EcclesiarchalChapel , true, EVENTS.IE_Sisters_EcclesiarchalChapel)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_EcclesiarchalChapel)
+		
+		-- Ping the HQ & Flash the Ecclesiarchal Chapel Button
+		t_EcclesiarchalChapel = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_EcclesiarchalChapel)
+		Rule_AddInterval(Rule_Sisters_EcclesiarchalChapelDoing, 0)
+		
+	-- else if they have upgraded to Ecclesiarchal Chapel Already
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_EcclesiarchalChapel , true)
+		Tut_Util_ObjectiveComplete(obj_EcclesiarchalChapel.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_EcclesiarchalChapel_Complete)
+		
+		-- Ping the HQ (where research is done)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_EcclesiarchalChapel)
+		Rule_AddInterval(Rule_Sisters_EcclesiarchalChapelDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Ecclesiarchal Chapel
+function Rule_Sisters_EcclesiarchalChapelDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Ecclesiarchal Chapel
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_EcclesiarchalChapel_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_EcclesiarchalChapelDoing)
+		Rule_AddInterval(Rule_Sisters_EcclesiarchalChapelCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Ecclesiarchal Chapel
+function Rule_Sisters_EcclesiarchalChapelCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Ecclesiarchal Chapel is finished
+	if Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_EcclesiarchalChapel.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_EcclesiarchalChapel_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_EcclesiarchalChapel)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_EcclesiarchalChapelCheck)
+		Rule_AddInterval(Rule_Sisters_EcclesiarchalChapelDone, 0)
+	end
+end
+
+-- Finish the "Ecclesiarchal Chapel" Lesson
+function Rule_Sisters_EcclesiarchalChapelDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add Leader to Battle Sisters Squad
+		Rule_Remove(Rule_Sisters_EcclesiarchalChapelDone)
+		Rule_AddOneShot(Rule_Sisters_BuildLeader, 0)
+		
+		-- Add Rule to Remind Player to build thermo generators if power level gets low
+			-- thermos require tier 2 tech
+		Rule_AddInterval(Rule_Sisters_LowPower, 10)		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 18 - Add Leader to Battle Sisters Squad
+--------------------------------------------------------------------------------------------
+-- Assign "Add Leader to Battle Sisters" Lesson & Objective
+function Rule_Sisters_BuildLeader()
+	-- Define Objective: Add Leader
+	obj_BuildLeader = { title_id = 3950123, short_desc_id = 3950124, help_tip_id = 3950123 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get the Battle Sisters
+	Rule_Sisters_Get_BattleSistersSquad()
+
+	-- If they haven't got a Leader of warrior squad already (or even a warrior squad)
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) or
+		SGroup_CountLeaders("sg_BattleSistersSquad") == 0
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true, EVENTS.IE_Sisters_BuildLeader)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildLeader)
+		
+		-- Ping the BattleSisters & Flash "Add Leader Button"
+		t_BuildLeader = Tut_PingBlueprint(blueprint.infantry, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_BuildLeader)
+		Rule_AddInterval(Rule_Sisters_BuildLeaderDoing, 0)
+
+	-- else if the do have a Leader of BattleSisters already...
+	elseif SGroup_CountLeaders("sg_BattleSistersSquad") >= 1
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildLeader_Complete)
+		
+		-- Ping the Already Created Leader
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildLeader)
+		Rule_AddInterval(Rule_Sisters_BuildLeaderDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Leader
+function Rule_Sisters_BuildLeaderDoing()
+	-- Has the player started building the leader in last 2 secs
+	if Command_HasBeenIssuedSquad(SCMD_ReinforceLeader, 2)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildLeader_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildLeaderDoing)
+		Rule_AddInterval(Rule_Sisters_BuildLeaderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building the leader
+function Rule_Sisters_BuildLeaderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get the BattleSisters Squad
+	Rule_Sisters_Get_BattleSistersSquad()
+	
+	-- Check to see if the Leader is built (& they have Battle Sisters squad)
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) and
+		SGroup_CountLeaders("sg_BattleSistersSquad") >= 1
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildLeader_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildLeader)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildLeaderCheck)
+		Rule_AddInterval(Rule_Sisters_BuildLeaderDone, 0)
+	end
+end
+
+-- Finish the "Add Leader to Battle Sisters Squad" Lesson
+function Rule_Sisters_BuildLeaderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Take Cover
+		Rule_Remove(Rule_Sisters_BuildLeaderDone)
+		Rule_AddOneShot(Rule_Sisters_TakeCover, 0)
+	end
+end
+
+--Grab the BattleSisters Squad
+function Rule_Sisters_Get_BattleSistersSquad()
+	-- Function to Filter Squad List
+	local StripBattleSistersSquad = function(sgroupid, itemindex, squadID )
+		if 	Squad_GetBlueprintName(squadID) == blueprint.infantry then
+			SGroup_Add(SGroup_CreateIfNotFound("sg_BattleSistersSquad"), squadID)
+		end
+	end
+	
+	-- throw away any player squads that aren't Battle Sisters Squad
+	SGroup_ForEach(Player_GetSquads(g_Player1), StripBattleSistersSquad)
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 19 - Take Cover (skipped if tutorial played before)
+--------------------------------------------------------------------------------------------
+-- Assign "Take Cover" Lesson & Objective
+function Rule_Sisters_TakeCover()
+	-- Define Objective: Take Cover
+	obj_TakeCover = { title_id = 500310, short_desc_id = 500311, help_tip_id = 500310 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Enable the AI to begin attacking
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- loop through all the covers on the map & choose the closest to player squads
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			-- If this cover is closer, make it the new closest cover
+			if currDistance < closestDist
+			then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Sisters_TakeCover)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_TakeCover)
+		
+		-- Ping the Closest Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_TakeCoverDone, 0)
+	end	
+end
+
+-- Check if the Player has taken cover in the nearest cover point
+function Rule_Sisters_TakeCoverCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Loop through all the covers
+	for i = 1, 9 do
+		-- Check if Player Squad is in cover
+		if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..i)  and
+			Event_IsAnyRunning() == false
+		then
+			-- Complete Objective & Play IE:
+			Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+			Util_StartIntel(EVENTS.IE_Sisters_TakeCover_Complete)
+			
+			-- Stop Looping Ping
+			Ping_Stop(ping_TakeCover)
+			
+			-- Triggers the end of Lesson
+			Rule_Remove(Rule_Sisters_TakeCoverCheck)
+			Rule_AddInterval(Rule_Sisters_TakeCoverDone, 0)			
+			
+			--Break out of For Loop
+			break
+		end
+	end	
+end
+
+-- Finish the "Take Cover" Lesson
+function Rule_Sisters_TakeCoverDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture 3 Strategic Pts (with LPs)
+		Rule_Remove(Rule_Sisters_TakeCoverDone)
+		Rule_AddOneShot(Rule_Sisters_PointCount, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 20 - Capture 3 Strategic Points (with LPs)
+--------------------------------------------------------------------------------------------
+-- Assign "Capture 3 Listening Posts" Lesson & Objective
+function Rule_Sisters_PointCount()
+	-- Define Objective:  Capture & Secure 3 Strategic Points
+	obj_PointCount = { title_id = 500250, short_desc_id = 500251, help_tip_id = 500250 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If player doesn't have three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or
+		not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Sisters_PointCount)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_PointCount)
+		
+		-- Ping Looping:
+		t_PointCount = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_PointCountDoing, 0)
+
+	-- if player has 3 points already
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_PointCount , true)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_PointCount_Complete)
+		
+		-- Ping the Listening Posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_PointCountDone, 0)
+	end
+end
+
+-- Checks if the Player has Captured the 3 Points yet
+function Rule_Sisters_PointCountDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- when player captures the three points, remind them to building the listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_PointCount_Doing)
+		
+		-- Triggers the Check for Listening Posts
+		Rule_Remove(Rule_Sisters_PointCountDoing)
+		Rule_AddInterval(Rule_Sisters_PointCountCheck, 0)		
+	end
+end
+
+-- Check if the Player has finished building all the Listening Posts
+function Rule_Sisters_PointCountCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Are the points captured & have listening posts built on them
+	if Tut_PointsCaptured(g_Player1, 1, 3) and
+		Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_PointCountCheck)
+		Rule_AddInterval(Rule_Sisters_PointCountDone, 0)
+	end
+end
+
+-- Finish the "Capture 3 Listening Posts" Lesson
+function Rule_Sisters_PointCountDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Critical Point
+		Rule_Remove(Rule_Sisters_PointCountDone)
+		Rule_AddOneShot(Rule_Sisters_CaptureCriticalPoint, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 21 - Capture Critical Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Critical Point" Lesson & Objective
+function Rule_Sisters_CaptureCriticalPoint()
+	-- Define Objective: Capture the Critical Point
+	obj_CaptureCriticalPoint = { title_id = 500260, short_desc_id = 500261, help_tip_id = 500260}
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't alreay have a Critical Point...
+	if Tut_PointsCaptured(g_Player1, 2, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Sisters_CaptureCriticalPoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_CaptureCriticalPointCheck, 0)
+		
+	-- else if the do have a critical point...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureCriticalPoint_Complete)
+		
+		-- Ping the Already captured critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_CaptureCriticalPointDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing the critical point
+function Rule_Sisters_CaptureCriticalPointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the critical point is captured
+	if Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Sisters_CaptureCriticalPointDone, 0)
+	end
+end
+
+-- Finish the "Capture Critical Point" Lesson
+function Rule_Sisters_CaptureCriticalPointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Relic
+		Rule_Remove(Rule_Sisters_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Sisters_CaptureRelic, 0)		
+	end	
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 22 - Capture Relic
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Relic" Lesson & Objective
+function Rule_Sisters_CaptureRelic()
+	-- Define Objective: Capture Relic
+	obj_CaptureRelic = { title_id = 500270, short_desc_id = 5400314, help_tip_id = 500270 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Sisters_CaptureRelic)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else		
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing relic
+function Rule_Sisters_CaptureRelicCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the relic is captured
+	if Tut_PointsCaptured(g_Player1, 3, 1)
+	then		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Sisters_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Finish the "Capture Relic" Lesson
+function Rule_Sisters_CaptureRelicDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Vehicle Bay (Adepta Sororitas Manufactorum)
+		Rule_Remove(Rule_Sisters_CaptureRelicDone)
+		Rule_AddInterval(Rule_Sisters_BuildVehicleBuilding, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 23 - Build Vehicle Bay (Adepta Sororitas Manufactorum)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Adepta Sororitas Manufactorum" Lesson & Objective
+function Rule_Sisters_BuildVehicleBuilding()
+	-- Define Objective: Build a Adepta Sororitas Manufactorum (Vehicle Building)
+	obj_BuildVehicleBuilding = { title_id = 3950125, short_desc_id = 3950126, help_tip_id = 3950125 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Adepta Sororitas Manufactorum (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true, EVENTS.IE_Sisters_BuildVehicleBuilding)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildVehicleBuilding)
+		
+		-- Flash Build Button & Adepta Sororitas Manufactorum Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Sisters_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_Sisters_BuildVehicleBuildingDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Sisters_BuildVehicleBuilding
+		Rule_Remove(Rule_Sisters_BuildVehicleBuilding)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Sisters_NoBuilder)
+		
+	-- Else if they do have a Adepta Sororitas Manufactorum already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true)
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildVehicleBuilding_Doing)
+		
+		-- Ping the Already Built Adepta Sororitas Manufactorum
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_Sisters_BuildVehicleBuildingDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Adepta Sororitas Manufactorum
+function Rule_Sisters_BuildVehicleBuildingDoing()
+	-- Has the player started building the Adepta Sororitas Manufactorum
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildVehicleBuilding_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Sisters_BuildVehicleBuildingDoing)
+		Rule_AddInterval(Rule_Sisters_BuildVehicleBuildingCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Adepta Sororitas Manufactorum
+function Rule_Sisters_BuildVehicleBuildingCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Adepta Sororitas Manufactorum is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildVehicleBuilding_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Sisters_BuildVehicleBuildingCheck)
+		Rule_AddInterval(Rule_Sisters_BuildVehicleBuildingDone, 0)
+	end
+end
+
+-- Finish the "Build Adepta Sororitas Manufactorum" Lesson
+function Rule_Sisters_BuildVehicleBuildingDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Immolator
+		Rule_Remove(Rule_Sisters_BuildVehicleBuildingDone)
+		Rule_AddOneShot(Rule_Sisters_BuildImmolator, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Lesson 24 - Build an Immolator
+--------------------------------------------------------------------------------------------
+-- Assign "Build Immolator" Lesson & Objective
+function Rule_Sisters_BuildImmolator()
+	-- Define Objective: Build a Immolator from the Adepta Sororitas Manufactorum
+	obj_BuildImmolator = { title_id = 3950127, short_desc_id = 3950128, help_tip_id = 3950127 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Immolator already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_immolator, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildImmolator , true, EVENTS.IE_Sisters_BuildImmolator)
+		
+		-- Play IE: 
+		Util_StartIntel(EVENTS.IE_Sisters_BuildImmolator)
+		
+		-- Ping the Adepta Sororitas Manufactorum & Flash Immolator Production Button
+		ping_BuildImmolator = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.vehicle_immolator, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Sisters_BuildImmolatorDoing, 0)
+
+	-- if they already have a Immolator
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildImmolator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildImmolator.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildImmolator_Doing)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildImmolator_Complete)
+		
+		-- Ping Immolator once
+		Tut_PingBlueprint(blueprint.vehicle_immolator, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Sisters_BuildImmolatorDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Immolator
+function Rule_Sisters_BuildImmolatorDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Is player currently producing Immolator
+	if (Prod_DoesListContainSquad(blueprint.vehicle_immolator, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Sisters_BuildImmolator_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Sisters_BuildImmolatorDoing)
+		Rule_AddInterval(Rule_Sisters_BuildImmolatorCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Immolator
+function Rule_Sisters_BuildImmolatorCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built Immolator
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_immolator, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildImmolator.title_id)
+		Util_StartIntel(EVENTS.IE_Sisters_BuildImmolator_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildImmolator)
+		Tut_PingBlueprint(blueprint.vehicle_immolator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Sisters_BuildImmolatorCheck)
+		Rule_AddInterval(Rule_Sisters_BuildImmolatorDone, 0)
+	end
+end
+
+-- Finish the "Build Immolator" Lesson
+function Rule_Sisters_BuildImmolatorDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Complete the Tutorial:
+		Rule_Remove(Rule_Sisters_BuildImmolatorDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Hint A1 - Squad Cap Reached
+---------------------------------------------------------------------------------------------
+-- Remind Player to Build a Slave Chamber for Squad Cap
+function Rule_Sisters_SquadCap()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at their current max pop, but less than the 20 max
+		if ( current == cap) and
+			(cap ~= maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_Sisters_SquadCap)
+			
+			-- Flash Upgrade Buttons on Barracks?
+			
+			--Remove Rule
+			Rule_Remove(Rule_Sisters_SquadCap)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Hint A2 - Squad Limit Reached
+---------------------------------------------------------------------------------------------
+-- Let PLayer know they are at MAX Squad Cap
+function Rule_Sisters_SquadLimit()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at max pop
+		if ( current == cap) and
+			(cap == maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_Sisters_SquadLimit)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_Sisters_SquadLimit)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Hint A3 - Low Resource
+---------------------------------------------------------------------------------------------
+-- Checks Player Requisition is Getting Low
+function Rule_Sisters_LowResource()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players requisition is getting low
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Sisters_LowResource)
+			
+			-- Remove Rule:
+			Rule_Remove(Rule_Sisters_LowResource)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Hint A4 - Low Power
+---------------------------------------------------------------------------------------------
+-- Checks Player Power is Getting Low
+function Rule_Sisters_LowPower()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players power is getting low
+		if (Player_GetResource(g_Player1, RT_Power) < 100)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Sisters_LowPower)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_Sisters_LowPower)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Sisters Hint A5 - No Builder Unit
+---------------------------------------------------------------------------------------------
+-- PLayer has no builder, but needs to build something
+function Rule_Sisters_NoBuilder()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- if player has no builders
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Sisters_NoBuilder)
+			
+			-- Add Rule to Check for when builder builds
+			Rule_Remove(Rule_Sisters_NoBuilder)
+			Rule_AddInterval(Rule_Sisters_NoBuilderDone,0)
+		end
+	end
+end
+
+-- Readd the Rule that player was up to when they had no builder
+function Rule_Sisters_NoBuilderDone()
+	-- Player has built a builder
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Readd the Rule for what they where told to build but had no builders
+		Rule_Add( g_tutorialRuleState )
+		Rule_Remove(Rule_Sisters_NoBuilderDone)
+	end
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--  Selection
+EVENTS.IE_Sisters_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400002 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400292 )
+	CTRL.WAIT()
+end
+
+-- Build a Missionary Squad
+EVENTS.IE_Sisters_BuildMissionary = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400005 )
+	CTRL.WAIT()
+end
+
+-- (Progress Bar filling)
+EVENTS.IE_Sisters_BuildMissionary_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400293 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_BuildMissionary_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400006 )
+	CTRL.WAIT()
+end
+
+-- Capture Point
+EVENTS.IE_Sisters_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+	
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400008 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400296 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400297 )
+	CTRL.WAIT()
+end
+
+-- Build Builder
+EVENTS.IE_Sisters_BuildBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400011 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildBuilder_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400012 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildBuilder_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400013 )
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_Sisters_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400015 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400298 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400299 )
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_Sisters_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400300 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400017 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400301 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400018 )
+	CTRL.WAIT()
+end
+
+-- Control Zones
+EVENTS.IE_Sisters_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400350 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400351 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400352 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400353 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Barracks (Adepta Sororitas Convent)
+EVENTS.IE_Sisters_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400021 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400022 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400023 )
+	CTRL.WAIT()
+end
+
+-- Build Battle Sister Squad 
+EVENTS.IE_Sisters_BuildInfantry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400026 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildInfantry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400027 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildInfantry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400028 )
+	CTRL.WAIT()
+end
+
+-- Reinforce Battle Sister Squad 
+EVENTS.IE_Sisters_Reinforce = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400302 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400031 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_Reinforce_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400032 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400303 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_Reinforce_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400033)
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_Sisters_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400346 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400347 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400348 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400349 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_Sisters_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400325 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400326 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400327 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400328 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400329 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400330 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400331 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400332 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- SquadCap
+EVENTS.IE_Sisters_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400304 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400305 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400306 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400376 )	-- Researches are available at the Adepta Sororitas Convent to increase your Squad Cap, but there is always a maximum beyond which you cannot go.
+	CTRL.WAIT()
+end
+
+-- Faith / Holy Icon
+EVENTS.IE_Sisters_BuildHolyIcon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400035 )	-- Faith is a third resource type that is unique to the Sisters of Battle. Your current level of Faith is displayed slightly below your Requisition and Power resources.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400036 )	-- Faith is used for special abilities called Acts of Faith. These are much more powerful than normal abilities, and can easily turn the tide of a battle.  Use them wisely.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400367 )	-- Holy Icons, built on top of Listening Posts, increase your maximum Faith.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400368 )	-- Select a Listening Post now and upgrade it by clicking the Holy Icon button, now.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_BuildHolyIcon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400378 )	-- Holy Icons are vital to the Sisters war effort. Guard them with your life - the power of your army depends on keeping them from falling to the enemy.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Sisters_BuildHolyIcon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400369 )	-- Excellent! Your Listening Post is now adorned with a Holy Icon, a blessed symbol of the Emperor's favor.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400371 )	-- Now that you have a Holy Icon, you have unlocked the first tier of your Faith meter. Located in the upper-left corner of the screen, the Faith Meter shows your current stores of this important resource.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400372 )	-- Note that most of the meter is still blocked off - by building more Holy Icons, you will unlock more potential Faith, which will in turn allow you to call upon ever more powerful Acts of Faith.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400373 )	-- So far, however, you have only unlocked the potential of Faith. To generate Faith, you must make Faithful units.
+	CTRL.WAIT()
+end
+
+-- Built Holy Icon Early IE Variation:
+EVENTS.IE_Sisters_BuildHolyIcon_EarlyComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400035 )	-- Faith is a third resource type that is unique to the Sisters of Battle. Your current level of Faith is displayed slightly below your Requisition and Power resources.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400036 )	-- Faith is used for special abilities called Acts of Faith. These are much more powerful than normal abilities, and can easily turn the tide of a battle.  Use them wisely.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400367 )	-- Holy Icons, built on top of Listening Posts, increase your maximum Faith.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400371 )	-- Now that you have a Holy Icon, you have unlocked the first tier of your Faith meter. Located in the upper-left corner of the screen, the Faith Meter shows your current stores of this important resource.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400372 )	-- Note that most of the meter is still blocked off - by building more Holy Icons, you will unlock more potential Faith, which will in turn allow you to call upon ever more powerful Acts of Faith.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400373 )	-- So far, however, you have only unlocked the potential of Faith. To generate Faith, you must make Faithful units.
+	CTRL.WAIT()
+end
+
+-- Build Commander
+EVENTS.IE_Sisters_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400044 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400047 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400048 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400049 )
+	CTRL.WAIT()
+end
+
+-- Build a Pristine Sanctuary
+EVENTS.IE_Sisters_BuildPristineSanctuary = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400052 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildPristineSanctuary_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400053 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildPristineSanctuary_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400054 )
+	CTRL.WAIT()
+end
+
+-- Upgrade Weapons on Battle Sisters
+EVENTS.IE_Sisters_UpgradeWeaponry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400057 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400058 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_UpgradeWeaponry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400060 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_UpgradeWeaponry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400061 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400059 )
+	CTRL.WAIT()
+end
+
+-- Research Ecclesiarchal Chapel Add-on on HQ
+EVENTS.IE_Sisters_EcclesiarchalChapel = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400064 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400065 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_EcclesiarchalChapel_Doing = function()
+	-- NOT USED
+end
+EVENTS.IE_Sisters_EcclesiarchalChapel_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400260 )
+	CTRL.WAIT()
+end
+
+-- Add Leader to Battle Sisters Squad
+EVENTS.IE_Sisters_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400066 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400069 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400070 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400071 )
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_Sisters_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400333 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400334 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400335 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400336 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400337 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_TakeCover_Complete = function()
+CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400338 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_Sisters_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400307 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400308 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400072 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400309 )
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_Sisters_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400310 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400311 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400312 )
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_Sisters_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400313 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400314 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400315 )
+	CTRL.WAIT()
+end
+
+-- Build Vehicle Bay (Adepta Sororitas Manufactorum)
+EVENTS.IE_Sisters_BuildVehicleBuilding = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400075 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildVehicleBuilding_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400076 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400316 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildVehicleBuilding_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400077)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400078)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400374)	-- Once you have reached your maximum, you cannot build any more vehicles. You can increase your Vehicle Cap by researching the appropriate upgrade at your Adepta Sororitas Manufactorum, much like Squad Cap.
+	CTRL.WAIT()
+end
+
+-- Build Immolator
+EVENTS.IE_Sisters_BuildImmolator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400080 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildImmolator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400081)
+--	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400082)	-- FEATURE CUT: Additionally, Immolators have holding space for infantry squads, which can operate the Immolator's internal weapon systems to fire at enemies outside.
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_BuildImmolator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400083)
+	CTRL.WAIT()
+end
+
+-- Tutorial Complete
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400084 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400319 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400359 )	-- Build additional squads and vehicles. Make sure to upgrade your Squad Cap and Vehicle Cap when necessary.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400320 )
+	CTRL.WAIT()
+end
+
+-- Squad Cap Warnings
+EVENTS.IE_Sisters_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400377)	-- To increase the number of squads you can field as the Sisters of Battle, you need to build research squad cap upgrades from your Adepta Sororitas Convent.
+	CTRL.WAIT()
+end
+EVENTS.IE_Sisters_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400345)	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+EVENTS.IE_Sisters_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400321 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+
+-- Low Power Warnings
+EVENTS.IE_Sisters_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400322 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400323 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400324 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+EVENTS.IE_Sisters_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400339)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400340)
+	CTRL.WAIT()
+end

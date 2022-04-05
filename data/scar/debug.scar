@@ -1,0 +1,25 @@
+function Debug_PrintTable( T, msg ,indent )
+	local outputStr = ""
+	if( msg ~= nil ) then
+		print( msg )
+	end
+	
+	if( indent == nil ) then indent = 0 end
+	
+	-- print indent
+	local indentStr = ""
+	for i = 0, ( indent - 1) do 
+		indentStr = indentStr.."\t"
+	end
+	
+	-- print all key values
+	for k,v in pairs( T ) do
+		if( type( v ) == "table" ) then
+			--print( "T["..k.."]=tableref" )
+			Debug_PrintTable( v, indentStr.."T["..k.."]=tableref:", indent + 1 )
+		else
+			print( indentStr.."T["..k.."]="..v )
+		end
+	end
+	
+end

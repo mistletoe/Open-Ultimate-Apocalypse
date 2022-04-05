@@ -1,0 +1,34 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+GameData["modifiers"]["modifier_01"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
+GameData["modifiers"]["modifier_01"]["value"] = 1.5
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\required_total_pop.lua]])
+GameData["requirements"]["required_1"]["population_required"] = 250
+GameData["requirements"]["required_2"] = Reference([[requirements\required_ownership.lua]])
+GameData["requirements"]["required_2"]["own_name"] = [[strategic_objective_struct]]
+GameData["requirements"]["required_2"]["owned_count"] = 1
+GameData["requirements"]["required_3"] = Reference([[requirements\required_ownership.lua]])
+GameData["requirements"]["required_3"]["own_name"] = [[relic_struct]]
+GameData["requirements"]["required_3"]["owned_count"] = 1
+GameData["requirements"]["required_10"] = Reference([[requirements\required_total_pop.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["power"] = 3000
+GameData["time_cost"]["cost"]["requisition"] = 900
+GameData["time_cost"]["time_seconds"] = 225
+GameData["ui_hotkey_name"] = [[hotkey_s]]
+GameData["ui_index_hint"] = 6
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$95521]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$18210898]] -- - Because of the high Ork population, Grot Scavengers will loot productions of other Strategic Points around the map.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$18210899]] -- - Greatly increases the requisition resource income rates compared to the standard income researches.
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$18210900]] -- - First of two possible upgrades.
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[ork_icons/req_inc_research_1]]
+GameData["ui_info"]["screen_name_id"] = [[$18210897]] -- Supa Dupa Money
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["override_help_text_list"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["ui_info"]["use_override_table_for_non_requisition_races"] = nil

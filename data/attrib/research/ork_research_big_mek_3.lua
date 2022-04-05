@@ -1,0 +1,37 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+GameData["modifiers"]["modifier_01"] = Reference([[modifiers\keen_sight_radius_modifier.lua]])
+GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
+GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_mek_boy]]
+GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
+GameData["modifiers"]["modifier_01"]["value"] = 10
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_1"]["research_name"] = [[research\commander_level3_research.lua]]
+GameData["requirements"]["required_1"]["hide_the_button_when_failed"] = nil
+GameData["requirements"]["required_1"]["research_must_not_be_complete"] = nil
+GameData["requirements"]["required_10"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["requirements"]["required_10"]["research_name"] = [[research\commander_level1_research.lua]]
+GameData["requirements"]["required_10"]["hide_the_button_when_failed"] = nil
+GameData["requirements"]["required_10"]["research_must_not_be_complete"] = nil
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["power"] = 45
+GameData["time_cost"]["cost"]["requisition"] = 45
+GameData["time_cost"]["time_seconds"] = 1
+GameData["ui_hotkey_name"] = [[hotkey_d]]
+GameData["ui_index_hint"] = 11
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$96011]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$96012]] -- - Equips the Big Mek with a Kustom Tellyporta.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[- Dis ring thing protects dem Ork Boyz fro' harm!]]
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$700053]] -- - Allows the Big Mek to detect infiltrated units from a greater distance.
+GameData["ui_info"]["help_text_list"]["text_04"] = [[]]
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[ork_icons/kustom_tellyporta_research]]
+GameData["ui_info"]["screen_name_id"] = [[$96010]] -- Kustom Tellyporta Research
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["override_help_text_list"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["ui_info"]["use_override_table_for_non_requisition_races"] = nil

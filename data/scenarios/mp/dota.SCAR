@@ -1,0 +1,16 @@
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+import("WCUtil.scar")
+
+
+function OnInit()
+g_Player1 = World_GetPlayerAt(0)
+g_Player2 = World_GetPlayerAt(1)
+PlayerName = "1"
+Rule_AddOneShot(Rule_Start,0)
+t_ResearchList ={
+"marine_frag_grenade_research",
+}
+end
+
+Scar_AddInit(OnInit)

@@ -1,0 +1,102 @@
+Model = "Tristram_Plains"
+Planet = "Kaurava_IV"
+
+Name = "$3900037"
+Description = "$3900350"
+TerrainType = "$2851002"
+TerrainDescription = "$3900351"
+History = 
+{
+"$3900352",
+"$3900353",
+"$3900354",
+"$3900355",
+"$3900356",
+}
+
+
+MissionFileAttacking = "6P_Tristram_Plains"
+MissionFileAttackingConquered = "6P_Tristram_Plains"
+MissionFileDefending = "6P_Tristram_Plains"
+
+SkirmishWinConditions =
+{
+	"StrategicObjective",
+	"GameTimer",	
+}
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = .75
+
+NeighborTerritories = 
+{
+	"Peninsula_of_Iseult",
+	"Gurmuns_Pass",
+	"Marconia",
+	"Parmenie",
+	"Parmenian_Steppe",
+	"Clooth-na-Bare",
+	"Jalaganda_Lowlands",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_khorne_berserker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_wartrak_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_assassin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	]]--
+}
+
+Stronghold = false
+WarpGate = true
+ScriptedMission = false
+
+PlanetaryRequisition = 25
+StartingMilitaryStrength = 4
+
+OwnerPrimary = "dark_eldar_race"
+OwnerSecondary = "chaos_marine_race"
+
+StartingResourceBonus = 0.0

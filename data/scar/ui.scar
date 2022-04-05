@@ -1,0 +1,125 @@
+----------------------------------------------------------------------------------------------------------------
+-- UI helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+--? @group UI
+
+--? @shortdesc Add a new objective using an objective table.
+--? @extdesc Example obj_table:\n
+--? obj_table = { title_id = 400009,	short_desc_id = 400010, help_tip_id = 400011 }
+--? @args LuaTable obj_table, Boolean is_primary_obj
+--? @result Void
+function Objective_Add( obj_table, is_primary_obj )
+	-- validate table
+	if obj_table.title_id == nil or obj_table.short_desc_id == nil or obj_table.help_tip_id == nil then
+		error( "obj_table is not valid.  it must contain keys title_id, short_desc_id and help_tip_id")
+	end
+	
+	-- create the objective
+	Objective_AddInternal( obj_table.title_id, obj_table.short_desc_id, obj_table.help_tip_id, is_primary_obj )
+end
+
+--? @shortdesc Use this to stop a looping ping
+--? @args PingID pingID
+--? @result Void
+function Ping_Stop( pingID )
+	-- validate pingID
+	if pingID[1] == nil or pingID[2] == nil then
+		error("invalid pingID")
+	end
+	
+	-- only stop fxevent if it is a looping event
+	if pingID[1] ~= -1 then
+		-- stop group fx
+		World_FXEventDestroy( pingID[1] )
+	end
+	
+	-- stop minimap ping
+	W40k_StopMinimapPing( pingID[2] )
+end
+
+--? @shortdesc Scar ping at a position.  Scar ping will show up on terrain and minimap.  use ping_type 'attack' for attack pings otherwise default ping will be used
+--? @args ScarPosition pos, Boolean is_looping, String ping_type
+--? @result PingID
+function Ping_Position( pos, is_looping, ping_type )
+	
+	-- play scar ping ground fx		
+	local fx_id
+	if is_looping then 
+		fx_id = World_FXEventLooping( [[data:art\events\order_confirm_events\objective_ping_loop.events]], pos)
+	else
+		fx_id = -1	-- there is no way to get an id for a non-looping event
+		World_FXEvent( [[data:art\events\order_confirm_events\objective_ping.events]], pos)
+	end
+	
+	-- play minimap ping
+	local lifetime = 12
+	if is_looping then lifetime = -1 end
+	
+	local minimap_id
+	if type(ping_type) == "string" and ping_type == "attack"  then
+		minimap_id= W40k_MinimapPing( [[data:art\ui\minimap\attack_here_ping]], pos, lifetime )
+	else
+		minimap_id= W40k_MinimapPing( [[data:art\ui\minimap\scar_ping]], pos, lifetime )
+	end
+	
+	-- return handles to ping
+	return { fx_id, minimap_id }
+end
+
+--? @shortdesc Scar ping at a marker position. use ping_type 'attack' for attack pings otherwise default ping will be used
+--? @args String markername, Boolean is_looping, String ping_type
+--? @result PingID
+function Ping_Marker( markername, is_looping, ping_type )
+	return Ping_Position( Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ), is_looping, ping_type )
+end
+
+
+-- DO NOT SCARDOC - PRIVATE RULE
+function UI_ShowCountdown1SecRule()
+	
+	if( g_UI_ShowCountdownSecsRemaining <= 0 ) then
+		UI_HideCountdown()
+		return -- done
+	end
+	
+	-- display seconds
+	WinWarning_SetText( "ui_sp_countdown", Loc_FormatText1( g_UI_ShowCountdownFormatID, Loc_FormatTime( 60409, g_UI_ShowCountdownSecsRemaining ) ) )
+	
+	-- decrement seconds
+	g_UI_ShowCountdownSecsRemaining = g_UI_ShowCountdownSecsRemaining - 1
+		
+end
+
+--? @shortdesc Start a countdown displaying secsRemaining.  Timer will automagically countdown and hide once done.
+--? @extdesc Pass in a formatID with format 'Timer title: %1TIME%'
+--? @args Integer formatID, Real secsRemaining
+--? @result Void
+function UI_ShowCountdown(  formatID, secsRemaining )
+	-- validate params
+	if secsRemaining <= 0 then error("secsRemaining must be greater than or equal to 0") end
+	
+	-- add a new one if it doesnt exist
+	if not WinWarning_Exists( "ui_sp_countdown" ) then
+		WinWarning_Add( "ui_sp_countdown", World_GetPlayerAt(0), "", "", "" )
+		Rule_AddInterval( UI_ShowCountdown1SecRule, 1.0 )
+	end
+	
+	g_UI_ShowCountdownSecsRemaining = secsRemaining
+	g_UI_ShowCountdownFormatID = formatID
+	
+	-- call once straight away
+	UI_ShowCountdown1SecRule()
+	
+end
+
+--? @shortdesc Prematurely hide/remove a countdown
+--? @args Void
+--? @result Void
+function UI_HideCountdown( )
+	-- hide if exists
+	if WinWarning_Exists( "ui_sp_countdown" ) then
+		WinWarning_Remove( "ui_sp_countdown" )
+		Rule_Remove( UI_ShowCountdown1SecRule )
+	end
+end

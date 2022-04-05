@@ -1,0 +1,117 @@
+Model = "Trivian_Groves"
+Planet = "Kaurava_II"
+
+Name = "$3900017"
+Description = "$3900151"
+TerrainDescription = "$3900152"
+History = 
+{
+"$3900153",
+"$3900154",
+"$3900223",
+"$3900155",
+"$3900156",
+"$3900157",
+"$3900160",
+"$3900161",
+"$3900223",
+"$3900162",
+"$3900163",
+"$3900164",
+"$3900165",
+"$3900223",
+"$3900166",
+"$3900167",
+"$3900168",
+"$3900169",
+"$3900170",
+"$3900171",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "6P_Trivian_Groves"
+MissionFileAttackingConquered = "6P_Trivian_Groves"
+MissionFileDefending = "6P_Trivian_Groves"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Cerulea",
+	"Solitude",
+	"Rokclaw_Mountains",
+	"Rokclaw_Foothills",
+	"Forgotten_Isles",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_aspiring_champion_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_stormboy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_sentinel_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_fire_dragon_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_shaper_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_immortal_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_seraphim_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_haemonculus_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 2
+
+OwnerPrimary = "ork_race"
+OwnerSecondary = "space_marine_race"
+
+StartingResourceBonus = 0.0

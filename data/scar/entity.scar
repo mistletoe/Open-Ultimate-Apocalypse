@@ -1,0 +1,14 @@
+----------------------------------------------------------------------------------------------------------------
+-- Entity helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+--? @group Entity
+
+--? @shortdesc Returns true if entity is in cover.
+--? @args EntityID entityId
+--? @result Boolean
+function Entity_IsInCover( entityId )
+	return (Entity_GetCoverType( entityId ) ~= CT_None)
+end
+
+

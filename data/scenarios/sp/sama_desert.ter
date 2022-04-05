@@ -1,0 +1,281 @@
+Model = "Sama_Desert"
+Planet = "Kaurava_I"
+
+Name = "$3900008"
+Description = "$3900082"
+TerrainDescription = "$3900083"
+History = 
+{
+"$3900084",
+"$3900085",
+"$3900086",
+"$3900087",
+"$3900088",
+"$3900089",
+"$3900090",
+}
+
+TerrainType = "$2851402"
+
+ Nuggets = 
+{
+	{
+		Race = "guard_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100197",
+			"$2850018",
+			"$5100198",
+			"$2850018",
+			"$5100199",
+		},
+		Speech =
+		{
+			5100197,
+			5100198,
+			5100199,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550630",
+		Text =
+		{
+			"$5100200",
+			"$2850018",
+			"$5100201",
+			"$2850018",
+			"$5100202",
+		},
+		Speech =
+		{
+			5100200,
+			5100201,
+			5100202,
+		}
+	},
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100203",
+			"$2850018",
+			"$5100204",
+			"$2850018",
+			"$5100205",
+		},
+		Speech =
+		{
+			5100203,
+			5100204,
+			5100205,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550220",
+		Text =
+		{
+			"$5100206",
+			"$2850018",
+			"$5100207",
+		},
+		Speech =
+		{
+			5100206,
+			5100207,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550220",
+		Text =
+		{
+			"$5100208",
+			"$2850018",
+			"$5100209",
+		},
+		Speech =
+		{
+			5100208,
+			5100209,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550530",
+		Text =
+		{
+			"$5100210",
+			"$2850018",
+			"$5100211",
+		},
+		Speech =
+		{
+			5100210,
+			5100211,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550730",
+		Text =
+		{
+			"$5100212",
+			"$2850018",
+			"$5100213",
+			"$2850018",
+			"$5100214",
+		},
+		Speech =
+		{
+			5100212,
+			5100213,
+			5100214,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550430",
+		Text =
+		{
+			"$5100215",
+			"$2850018",
+			"$5100216",
+		},
+		Speech =
+		{
+			5100215,
+			5100216,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100093",
+		"$2851718",
+		"$5100094",
+		"$2851718",
+		"$5100095",
+	},
+	Speech = 
+	{
+		5100093,
+		--5100094,
+		--5100095,
+	},
+}
+
+
+
+MissionFileAttacking = "Stronghold_Sisters"
+MissionFileAttackingConquered = "8P_Sama_Desert_Attack_Skirmish"
+MissionFileDefending = "8P_Sama_Desert"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Jalaganda_Lowlands",
+	--"Eastern_Kauravia",
+	"Vyasastan",
+	"Kaurav_City",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_khorne_berserker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_wartrak_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_assassin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	]]--
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "sisters_race"
+OwnerSecondary = "sisters_race"
+
+KeyLocationAbility =
+{
+	ID = "forward_base",
+	Name = "$3900068",
+	HelpText =
+	{
+		"$3900409",
+		"$3900410",
+		"$3900411",
+		"$3900412"
+	},
+  CommanderScreenName = "$3900474",
+	CommanderScreenHelpText =
+	{
+		"$3900475",
+		"$3900476",
+		"$3900409",
+		"$3900410",
+		"$3900411",
+		"$3900412"
+	},
+  CommanderScreenLostName = "$3900474",
+	CommanderScreenLostHelpText =
+	{
+		"$3900475",
+		"$3900477"
+
+	}  
+}
+
+StartingResourceBonus = 0.0

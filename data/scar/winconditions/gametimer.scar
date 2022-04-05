@@ -1,0 +1,19 @@
+import("ScarUtil.scar");
+
+function GameTimerInit()
+
+	Rule_AddInterval( Rule_Timer, 1 )
+end
+
+
+function Rule_Timer()
+	if g_time == nil then
+		g_time = 0
+		WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+	end
+	g_time = g_time+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_time ) ) )
+end
+
+
+Scar_AddInit( GameTimerInit )

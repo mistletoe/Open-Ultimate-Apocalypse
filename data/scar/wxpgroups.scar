@@ -1,0 +1,153 @@
+----------------------------------------------------------------------------------------------------------------
+-- SGroup and EGroup helper functions.
+-- (c) 2005 Relic Entertainment Inc.
+----------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------
+-- EGroup
+
+--? @shortdesc Returns whether all or any of the entities in the group have the specified modifier applied to them.
+--? @extdesc If 'all' is true, all entities must have the modifier applied for the function to return true. If 'all' is false, at least one entity must have the modifier.
+--? @args String groupName, String modifierType, Boolean all
+--? @result Boolean
+function EGroup_HasModifier(groupName, modifierType, all)
+	local HasModifier = function(groupID, itemindex, itemID)
+		local has_modifier = Modifier_IsAppliedToEntity(itemID, modifierType)
+		return has_modifier;
+	end
+	
+	return EGroup_ForEachAllOrAny(groupName, all, HasModifier)
+end
+
+--? @group Entity
+--? @shortdesc Returns whether all or any entities in the group are relocating
+--? @extdesc If 'all' is true, all entities must be relocating for the function to return true. If 'all' is false, at least one entity must be relocating.
+--? @args String groupName, Boolean all
+--? @result Boolean
+function EGroup_IsRelocating(groupName, all)
+	local IsRelocating = function(groupID, itemIndex, itemID)
+		return Entity_IsRelocating(itemID)
+	end
+	
+	return EGroup_ForEachAllOrAny(groupName, all, IsRelocating)
+end
+
+--? @group Entity
+--? @shortdesc Returns the sum of the current healths of all entities in the group.
+--? @args String groupName
+--? @result Real
+function EGroup_GetTotalHealthCurrent(groupName)
+	local total_health = 0
+	
+	local GetHealth = function(groupID, itemIndex, itemID)
+		total_health = total_health + Entity_GetHealth(itemID)
+		return true
+	end
+	
+	EGroup_ForEachAllOrAny(groupName, true, GetHealth)
+	
+	return total_health
+end
+
+--? @group Entity
+--? @shortdesc Returns the sum of the maximum healths of all entities in the group.
+--? @args String groupName
+--? @result Real
+function EGroup_GetTotalHealthMax(groupName)
+	local total_health = 0
+	
+	local GetHealthMax = function(groupID, itemIndex, itemID)
+		total_health = total_health + Entity_GetHealthMax(itemID)
+		return true
+	end
+	
+	EGroup_ForEachAllOrAny(groupName, true, GetHealthMax)
+	
+	return total_health
+end
+
+--? @group Entity
+--? @shortdesc Uncaptures any captured strategic point or relic in the group
+--? @args String groupName
+--? @result Void
+function EGroup_Uncapture(groupName)
+	local Uncapture = function(groupID, itemIndex, itemID)
+		Entity_Uncapture(itemID)
+		return true;
+	end
+	
+	EGroup_ForEachAllOrAny(groupName, true, Uncapture)
+end
+
+----------------------------------------------------------------------------------------------------------------
+-- SGroup
+
+--? @group Squad
+--? @shortdesc Respawns the group at a location and triggers the event file at the location of every entity belonging to every squad in the group
+--? @extdesc Example: SGroup_ReSpawnWithEffect("my_group", "mymarker", "data:Art/Events/Unit_Upgrade_Morale_FX/Reinforce_Trooper")
+--? @args String groupName, String markername, string eventFilename
+--? @result Void
+function SGroup_ReSpawnMarkerWithEffect(groupName, markername, eventFilename)
+	SGroup_ReSpawnMarker(groupName, markername)
+	World_FXEventSquad(eventFilename, SGroup_FromName(groupName))
+end
+
+--? @group Squad
+--? @shortdesc Returns the sum of the current healths of all entities in all squads in the group.
+--? @args String groupName
+--? @result Real
+function SGroup_GetTotalHealthCurrent(groupName)
+	local total_health = 0
+	
+	local GetHealth = function(groupID, itemIndex, itemID)
+		total_health = total_health + Squad_GetHealth(itemID)
+		return true
+	end
+	
+	SGroup_ForEachAllOrAny(groupName, true, GetHealth)
+	
+	return total_health
+end
+
+--? @group Squad
+--? @shortdesc Returns the sum of the maximum healths of all entities in all squads in the group.
+--? @args String groupName
+--? @result Real
+function SGroup_GetTotalHealthMax(groupName)
+	local total_health = 0
+	
+	local GetHealthMax = function (groupID, itemIndex, itemID)
+		total_health = total_health + Squad_GetHealthMax(itemID)
+		return true
+	end
+	
+	SGroup_ForEachAllOrAny(groupName, true, GetHealthMax)
+	
+	return total_health
+end
+
+--? @groupSquad
+--? @shortdesc Returns true if all or any squads in the sgroup are in the hold of any of the buildings in the buildings egroup
+--? @extdesc It is not required that all (or even any) buildings in the buildings group have a hold
+--? @args String groupName, String buildingsGroupName, Boolean all
+--? @result Boolean
+function SGroup_IsInHold( groupName, buildingsGroupName, all )
+	local IsInHold = function( groupID, itemIndex, itemID )
+		return Squad_IsInHold( itemID, EGroup_FromName( buildingsGroupName ) )
+	end
+
+	return SGroup_ForEachAllOrAnyEx( groupName, all, IsInHold, false, true)
+end
+
+--? @groupSquad
+--? @shortdesc Adds a leader at the given index to all squads in a group that can take a leader.
+--? @extdesc This function will bypass all cost and queue prereqs
+--? @result Void
+--? @args String sgroupname, Integer leaderIndex
+function SGroup_AddLeadersAtIndex( sgroupname, leaderIndex)	
+	local AddLeader = function( groupid, itemindex, itemid )
+		Squad_AddLeaderAtIndex( itemid, leaderIndex )
+	end
+	
+	SGroup_ForEach( SGroup_FromName(sgroupname), AddLeader )
+end

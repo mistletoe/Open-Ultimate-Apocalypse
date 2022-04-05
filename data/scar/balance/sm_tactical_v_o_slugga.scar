@@ -1,0 +1,46 @@
+-------------------------------------------------
+--IMPORTS
+-------------------------------------------------
+import("ScarUtil.scar")
+import("BalanceTool.scar")
+
+function OnInit()
+	load_out_table_marines =
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	load_out_table_ork = 
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	g_Player1 = World_GetPlayerAt(0)
+	g_Player2 = World_GetPlayerAt(1)
+	
+	Balance_CreateSquadsAtMarkerByResource( g_Player1, "foogroup", "space_marine_squad_tactical", load_out_table_marines, "marker1", 400, 0 )
+	Cmd_SetStance( "foogroup", STANCE_StandGround ) 
+	Cmd_SetMeleeStance( "foogroup", MSTANCE_Ranged ) 
+	Balance_CreateSquadsAtMarkerByResource( g_Player2, "foogroup2", "ork_squad_slugga", load_out_table_ork, "marker2", 400, 0 )
+end
+
+Balance_SetInit( OnInit )

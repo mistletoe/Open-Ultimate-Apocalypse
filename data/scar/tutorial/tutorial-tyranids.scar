@@ -1,0 +1,2817 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--    Tyranids Tutorial 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Genestealer
+-- 3	Capture Point
+-- 4	select Hivefleet
+-- 5	Build Listening Post
+-- 6	Build Reclamation Pool (3) (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Slave Chamber (3)
+-- 8	Build Hive Node (Barracks)
+-- 9	Build Termagaunt Squad
+-- 10	Reinforce Termagaunts
+-- 11	Health (skipped if tutorial has been played before)
+-- 12	Morale (skipped if tutorial has been played before)
+-- 13	Build Broodlord (Commander)
+-- 14	Add Incubus to Commander Squad
+-- 15	Build Birthing Sacs
+-- 16	Add Leader to Warrior Squad
+-- 17	Research Synaptic Resonance Beacon (HQ)
+-- 18	Add on Torture Pit to Slave Chamer
+-- 19	Harvest Souls
+-- 20	Use Soul Power: Corrosion
+-- 21	Take Cover (skipped if tutorial has been played before)
+-- 22	Capture 3 Strategic Points (with LPs)
+-- 23	Capture Critical Location
+-- 24	Capture Relic
+-- 25	Build Carnifex Chamber (Vehicle Building)
+-- 26	Build a Carnifex
+-- 27	Put Troops into Raider
+-- 28	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+--	Util_CreateSquadsAtPosition( World_GetPlayerAt(Tut_GetLocalPlayerIndex()), "sg_tut_builder", "tyranids_squad_woth", Util_ScarPos(0, 0), 1)
+--	Misc_PlayerTeamColor( PlayerID, "default_1" )
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 1 - Selection of Kabal Fortress
+---------------------------------------------------------------------------------------------
+-- Start the Tyranids Portion of the Tutorial
+function Rule_Tyranids_Start()
+	Player_SetResource( World_GetPlayerAt(Tut_GetLocalPlayerIndex()), RT_Faith, 20 )
+--	Misc_PlayerTeamColor( World_GetPlayerAt(Tut_GetLocalPlayerIndex()), "default_2" )
+	-- Add the First Lesson: Selection of Hive Spire
+	Rule_AddOneShot(Rule_Tyranids_Selection, 0)
+	
+	-- Add Rules to Check for Low Resources
+	Rule_AddInterval(Rule_Tyranids_LowResource, 10)
+
+
+--	Rule_AddOneShot(Rule_TutorialComplete, 0)
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 1 - Selection of Hive Spire
+---------------------------------------------------------------------------------------------
+-- Assign "Select the HQ" Lesson & Objective
+function Rule_Tyranids_Selection()
+	-- Define Objective: Select the HQ
+	obj_Selection = {title_id = 3950129, short_desc_id = 3950130, help_tip_id = 3950129 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Get what is currently selected
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Make Sure the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_Tyranids_Selection)
+		
+		-- Play Intel Event
+		Util_StartIntel(EVENTS.IE_Tyranids_Selection)
+		
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_SelectionCheck, 0)
+
+	-- If they do have the HQ selected...
+	else
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Tyranids_SelectionDone, 0)
+	end
+end
+
+-- Checks if Player has selected the HQ
+function Rule_Tyranids_SelectionCheck()
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+
+	-- If Player has selected the HQ
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_SelectionCheck)
+		Rule_AddInterval(Rule_Tyranids_SelectionDone, 0)
+	end
+end
+
+-- Finish "Select the HQ" Lesson
+function Rule_Tyranids_SelectionDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Genestealer
+		Rule_AddOneShot(Rule_Tyranids_BuildGenestealer, 0)
+		Rule_Remove(Rule_Tyranids_SelectionDone)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 2 - Build Genestealer Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Build Genestealer Squad" Lesson & Objective
+function Rule_Tyranids_BuildGenestealer()
+	-- Define Objective: Build a Genestealer Squad
+	obj_BuildGenestealer = { title_id = 3950131, short_desc_id = 3950132, help_tip_id = 3950131 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Genestealer squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenestealer, true, EVENTS.IE_Tyranids_BuildGenestealer)
+		
+		-- Play IE
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenestealer)
+		
+		-- Ping the HQ
+		ping_BuildGenestealer = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_BuildGenestealerDoing, 0)
+
+	-- if they already have a Genestealer squad
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenestealer, true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenestealer.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenestealer_Complete)
+		
+		-- Ping Genestealer team once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_BuildGenestealerDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Genestealer Squad
+function Rule_Tyranids_BuildGenestealerDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+
+	-- Is player currently producing Genestealer
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true)
+	then
+		-- Play IE: Talks about Production Bar filling up
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenestealer_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tyranids_BuildGenestealerDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildGenestealerCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Genestealer Squad
+function Rule_Tyranids_BuildGenestealerCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built Genestealer squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenestealer.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenestealer_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildGenestealer)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Stop the Ping on the Production Button
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, false, true)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildGenestealerCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildGenestealerDone, 0)
+	end
+end
+
+-- Finish the "Build Genestealer" Lesson
+function Rule_Tyranids_BuildGenestealerDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Strategic Point
+		Rule_Remove(Rule_Tyranids_BuildGenestealerDone)
+		Rule_AddOneShot(Rule_Tyranids_CapturePoint, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 3 - Capture Strategic Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Strategic Point" Lesson & Objective
+function Rule_Tyranids_CapturePoint()
+	-- Define Objective: Capture a Strategic Point
+	obj_CapturePoint = { title_id = 1100606, short_desc_id = 3950133, help_tip_id = 1100606 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 200
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create/Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Tyranids_CapturePoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_CapturePoint)
+		
+		-- Ping points & Genestealer squad
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Tyranids_CapturePointDoing, 0)	
+	end
+end
+
+-- Check if the Player has started capturing the strategic point
+function Rule_Tyranids_CapturePointDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Is the Player currently capturing a Strategic Point
+	if (Cmd_IsCapturing("sg_Player1All", false) == true)
+	then
+		-- Play IE: Capturing Takes Time, Don't Move Squad
+		Util_StartIntel(EVENTS.IE_Tyranids_CapturePoint_Doing)
+		
+		-- Triggers the check for completed capture rule
+		Rule_AddInterval(Rule_Tyranids_CapturePointCheck, 0)
+		Rule_Remove(Rule_Tyranids_CapturePointDoing)
+	end
+end
+
+-- Check if the Player has finished capturing the first strategic point
+function Rule_Tyranids_CapturePointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Is the point fully captured...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Complete Objective & Play IE: 
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_CapturePointCheck)
+		Rule_AddInterval(Rule_Tyranids_CapturePointDone, 0)
+	end
+end
+
+-- Finish the "Capture Strategic Point" Lesson
+function Rule_Tyranids_CapturePointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Builder (Tortured Slave)
+		Rule_Remove(Rule_Tyranids_CapturePointDone)
+		Rule_AddOneShot(Rule_Tyranids_BuildBuilder, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 4 - Select Builder
+--------------------------------------------------------------------------------------------
+-- Assign "Contact de Hive Fleet" Lesson & Objective
+function Rule_Tyranids_BuildBuilder()
+	-- Define Objective: Contact de Hive Fleet
+	obj_BuildBuilder = { title_id = 3950134, short_desc_id = 3950135, help_tip_id = 3950134 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Get what is currently selected
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_P1Selected"))
+
+	-- Make Sure the builder isn't already selected
+	if not Tut_SGBlueprintCheck("sg_P1Selected", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder, true, EVENTS.IE_Tyranids_BuildBuilder)
+		
+		-- Play Intel Event
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBuilder)
+		
+		-- Ping the HQ
+		--ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_SelectBuilderCheck, 0)
+
+	-- If they do have the HQ selected...
+	else
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Tyranids_SelectBuilderDone, 0)
+	end	
+end
+
+-- Checks if Player has selected the Builder
+function Rule_Tyranids_SelectBuilderCheck()
+	-- Get all the selected items
+	Misc_GetSelectedSquads(SGroup_FromName("sg_P1Selected"))
+
+	-- If Player has selected the builder
+	if SGroup_ContainsBlueprints("sg_P1Selected", Util_MakeBlueprintTable(blueprint.builder), false)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBuilder_Complete)
+		
+		-- Stop Looping Ping
+		--Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_SelectBuilderCheck)
+		Rule_AddInterval(Rule_Tyranids_SelectBuilderDone, 0)
+	end
+end
+
+-- Finish the "Contact the Hivefleet" Lesson
+function Rule_Tyranids_SelectBuilderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Listening Post
+		Rule_Remove(Rule_Tyranids_SelectBuilderDone)
+		Rule_AddInterval(Rule_Tyranids_BuildPost, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 5 - Build Listening Post
+--------------------------------------------------------------------------------------------
+-- Assign "Build Listening Post" Lesson & Objective
+function Rule_Tyranids_BuildPost()
+	-- Define Objective: Build Listening Post (Tower of Loathing)
+	obj_BuildPost = { title_id = 3950136, short_desc_id = 3950137, help_tip_id = 3950136 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post (& have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) and
+		Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Tyranids_BuildPost)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildPost)
+		
+		-- Ping the captured flag & the builder
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		--Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Flash the Build Button & the Listening Post Building
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Tyranids_BuildPost)
+		Rule_AddInterval(Rule_Tyranids_BuildPostDoing, 0)
+		
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Tyranids_BuildPost
+		Rule_Remove(Rule_Tyranids_BuildPost)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Tyranids_NoBuilder)
+		
+	-- esle if they do somehow have a listening post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildPost_Doing)
+		
+		-- Ping Already built Listening Post
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildPost)
+		Rule_AddInterval(Rule_Tyranids_BuildPostDone, 0)		
+	end
+end
+
+-- Check if the Player has started building the Listening Post
+function Rule_Tyranids_BuildPostDoing()
+	-- Has the player started building the listening post (Tower of Loathing) 
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true)
+	then
+		-- Play IE: Remind Player that Building build without the builders
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildPost_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildPostDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildPostCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Listening Post
+function Rule_Tyranids_BuildPostCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the Listening Post is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildPostCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildPostDone, 0)
+	end
+end
+
+-- Finish the "Build Listening Post" Lesson
+function Rule_Tyranids_BuildPostDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Power Generator
+		Rule_Remove(Rule_Tyranids_BuildPostDone)
+		Rule_AddInterval(Rule_Tyranids_BuildGenerator, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 6 - Build Power Generator
+--------------------------------------------------------------------------------------------
+-- Assign "Build Power Generator" Lesson & Objective
+function Rule_Tyranids_BuildGenerator()
+	-- Define Objective: Build a Plasma Generator
+	obj_BuildGenerator = { title_id = 1100615, short_desc_id = 3950138, help_tip_id = 1100615 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Tyranids_BuildGenerator)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenerator)
+		
+		-- Flash Build Button & Generator Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Builder
+		--Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_BuildGenerator)
+		Rule_AddInterval(Rule_Tyranids_BuildGeneratorDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Tyranids_BuildGenerator
+		Rule_Remove(Rule_Tyranids_BuildGenerator)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Tyranids_NoBuilder)
+	
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenerator_Complete)
+		
+		-- Ping the Already Built Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildGenerator)
+		Rule_AddInterval(Rule_Tyranids_BuildGeneratorDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Power Generator
+function Rule_Tyranids_BuildGeneratorDoing()
+	-- Has the player started building the power generator 
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true)
+	then
+		-- Play IE: More power generators equal faster power resource gathering
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenerator_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildGeneratorCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Power Generator
+function Rule_Tyranids_BuildGeneratorCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Power Generator is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildGenerator_Complete)
+		
+		-- Tyranids have no control zones!
+		Util_StartIntel(EVENTS.IE_Tyranids_ControlZone)
+
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildGeneratorDone, 0)		
+	end
+end
+
+-- Finish the "Build Generator" Lesson
+function Rule_Tyranids_BuildGeneratorDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Slave Chambers & Population
+		Rule_Remove(Rule_Tyranids_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Tyranids_BuildSlaveChamber, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 7 - Slave Chambers & Population Lesson
+--------------------------------------------------------------------------------------------
+-- Assign "Build 3 Slave Chambers" Lesson & Objective
+function Rule_Tyranids_BuildSlaveChamber()
+	-- Define Objective: Build a Hive node
+	obj_BuildSlaveChamber = { title_id = 3950145, short_desc_id = 3950146, help_tip_id = 3950145 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Hive node
+	if Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 1, true) ~= true then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildSlaveChamber)
+		
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSlaveChamber , true, EVENTS.IE_Tyranids_BuildSlaveChamber)
+		
+		-- Flash Build Button & Hive node Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.population, true, true)
+		
+		-- Ping the Builder
+		--Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_BuildSlaveChamber)
+		Rule_AddInterval(Rule_Tyranids_BuildSlaveChamberDoing, 0)
+		
+	-- Else if they do have a Hive node already...
+	elseif Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildSlaveChamber , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSlaveChamber.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildSlaveChamber_Doing)
+		
+		-- Ping the Already Built SlaveChambers
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildSlaveChamber)
+		Rule_AddInterval(Rule_Tyranids_BuildSlaveChamberDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Hive node
+function Rule_Tyranids_BuildSlaveChamberDoing()
+	-- Has the player started building the SlaveChambers
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.population) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildSlaveChamber_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildSlaveChamberDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildSlaveChamberCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building a Hive node
+function Rule_Tyranids_BuildSlaveChamberCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Hive node is built
+	if Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildSlaveChamber.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildSlaveChamber_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.population, false, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildSlaveChamberCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildSlaveChamberDone, 0)
+	end
+end
+
+-- Finish the "Build a Hive node" Lesson
+function Rule_Tyranids_BuildSlaveChamberDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Barracks (Hall of Blood)
+		Rule_Remove(Rule_Tyranids_BuildSlaveChamberDone)
+		Rule_AddOneShot(Rule_Tyranids_BuildBarracks, 0)
+		
+		-- Add Rules to Remind the Player to build more slave chambers if population reaches limit
+		Rule_AddInterval(Rule_Tyranids_SquadCap, 10)
+		Rule_AddInterval(Rule_Tyranids_SquadLimit, 10)		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 8 - Build Barracks (Hall of Blood)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Hall of Blood" Lesson & Objective
+function Rule_Tyranids_BuildBarracks()
+	-- Define Objective: Build a Barracks (Hall of Blood)
+	obj_BuildBarracks = { title_id = 3950139, short_desc_id = 3950140, help_tip_id = 3950139 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Hall of Blood (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Tyranids_BuildBarracks)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBarracks)
+		
+		-- Flash Build Button & Barracks Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Builder
+		--Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_BuildBarracks)
+		Rule_AddInterval(Rule_Tyranids_BuildBarracksDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Tyranids_BuildBarracks
+		Rule_Remove(Rule_Tyranids_BuildBarracks)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Tyranids_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBarracks_Doing)
+		
+		-- Ping the Already Built Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildBarracks)
+		Rule_AddInterval(Rule_Tyranids_BuildBarracksDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Barracks
+function Rule_Tyranids_BuildBarracksDoing()
+	-- Has the player started building the barracks
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBarracks_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildBarracksCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Barracks
+function Rule_Tyranids_BuildBarracksCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Barracks is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildBarracksDone, 0)
+	end
+end
+
+-- Finish the "Build Barracks" Lesson
+function Rule_Tyranids_BuildBarracksDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Building Warrior Squad
+		Rule_Remove(Rule_Tyranids_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Tyranids_BuildInfantry, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 9 - Build a Warrior Squad 
+---------------------------------------------------------------------------------------------
+-- Assign "Build Warrior" Lesson & Objective
+function Rule_Tyranids_BuildInfantry()
+	-- Define Objective: Build a Warrior Squad
+	obj_BuildInfantry = { title_id = 3950141, short_desc_id = 3950142, help_tip_id = 3950141 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Warrior Squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true, EVENTS.IE_Tyranids_BuildInfantry)
+		
+		-- Play IE: Build a Warrior Squad
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildInfantry)
+		
+		-- Ping the HQ
+		ping_BuildInfantry = Tut_PingBlueprint(blueprint.barracks, true)
+		
+		-- Flash Warrior Button:
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_BuildInfantryDoing, 0)
+		
+	-- else if the do have a Warrior Squad already...
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true)
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildInfantry_Complete)
+		
+		-- Ping the Already Built Warrior Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_BuildInfantryDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Warrior Squad
+function Rule_Tyranids_BuildInfantryDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the warrior squad
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildInfantry_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildInfantryDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildInfantryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Warrior Squad
+function Rule_Tyranids_BuildInfantryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Warrior Squad is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildInfantry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildInfantry)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		--Stop the Flashing Production Button
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildInfantryCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildInfantryDone, 0)
+	end
+end
+
+-- Finish the "Build Warriors" Lesson
+function Rule_Tyranids_BuildInfantryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Reinforcing Troops
+		Rule_Remove(Rule_Tyranids_BuildInfantryDone)
+		Rule_AddOneShot(Rule_Tyranids_Reinforce, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 10 - Reinforce Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Reinforce Warrior Squad" Lesson & Objective
+function Rule_Tyranids_Reinforce()
+	-- Define Objective : Reinforce your Warrior Squad
+	obj_Reinforce = { title_id = 3950143, short_desc_id = 3950144, help_tip_id = 3950143 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Create Objective with Repeating Intel Event
+	Tut_Util_ObjectiveCreate(obj_Reinforce , true, EVENTS.IE_Tyranids_Reinforce)
+	
+	-- Check to see if the Warrior Squad has reinforced (& complete if so)
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_Reinforce_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_AddInterval(Rule_Tyranids_ReinforceDone, 0)
+	
+	-- Otherwise Play IE & Assign Objective
+	else	
+		-- PLay IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_Reinforce)
+		
+		-- Ping the Warrior Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Flash Reinforcement Button
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_ReinforceDoing, 0)
+	end
+end
+
+-- Check if the Player has started reinforcing the warrior squad
+function Rule_Tyranids_ReinforceDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Function to Filter Squad List
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- throw away any player squads that aren't warrior squads
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	-- Has the Player Started Reinforcing the warrior squad
+	if (Cmd_IsReinforcing("sg_Player1All", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_Reinforce_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_ReinforceDoing)
+		Rule_AddInterval(Rule_Tyranids_ReinforceCheck, 0)
+	end
+end
+
+-- Check if the Player has finished Reinforcing the Warrior Squad (First Member only)
+function Rule_Tyranids_ReinforceCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Warrior Squad has reinforced
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_Reinforce_Complete)
+		
+		--Stop the Flashing Reinforcement Button
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_ReinforceCheck)
+		Rule_AddInterval(Rule_Tyranids_ReinforceDone, 0)
+	end
+end
+
+-- Finish the "Reinforcing Troops" Lesson
+function Rule_Tyranids_ReinforceDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Health
+		Rule_Remove(Rule_Tyranids_ReinforceDone)
+		Rule_AddOneShot(Rule_Tyranids_Health, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 11 - Health Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Health if Players First Time playing tutorial
+function Rule_Tyranids_Health()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_Health)
+		Rule_AddInterval(Rule_Tyranids_HealthDone, 0)
+	else
+		-- Skip to Next Lesson: Morale
+		Rule_AddOneShot(Rule_Tyranids_Morale, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson (Morale)
+function Rule_Tyranids_HealthDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Morale
+		Rule_Remove(Rule_Tyranids_HealthDone)
+		Rule_AddOneShot(Rule_Tyranids_Morale, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 12 - Morale Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Morale if Players First Time playing tutorial
+function Rule_Tyranids_Morale()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_Morale)
+		Rule_AddInterval(Rule_Tyranids_MoraleDone, 0)
+	else
+		-- Clean Up & Move onto the next Lesson: Build an Archon (Commander) 
+		Rule_AddOneShot(Rule_Tyranids_BuildCommander, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson (Morale)
+function Rule_Tyranids_MoraleDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build an Archon (Commander) 
+		Rule_Remove(Rule_Tyranids_MoraleDone)
+		Rule_AddOneShot(Rule_Tyranids_BuildCommander, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 13 - Build an Archon (Commander) 
+---------------------------------------------------------------------------------------------
+-- Assign "Build Archon (Commander)" Lesson & Objective
+function Rule_Tyranids_BuildCommander()
+	-- Define Objective: Build an Archon
+	obj_BuildCommander = { title_id = 3950153, short_desc_id = 3950154, help_tip_id = 3950153 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't have a commander...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Tyranids_BuildCommander)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.hq, true)
+		
+		-- Flash Build Archon Button on the Barracks
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Tyranids_BuildCommander)
+		Rule_AddInterval(Rule_Tyranids_BuildCommanderDoing, 0)
+		
+	-- else if they have the Commander...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildCommander_Doing)
+		
+		-- Ping the Already Built Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildCommander)
+		Rule_AddInterval(Rule_Tyranids_BuildCommanderDone, 0)
+	end	
+end
+
+-- Check if the Player has started building the Commander
+function Rule_Tyranids_BuildCommanderDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the Commander
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true)
+	then
+		--Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildCommander_Doing)
+		
+		-- Turn off the Flashing Construction Buttons		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildCommanderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Commander
+function Rule_Tyranids_BuildCommanderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Commander is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildCommanderDone, 0)		
+	end	
+end
+
+-- Finish the "Build Archon (Commander)" Lesson
+function Rule_Tyranids_BuildCommanderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add Incubus to Command Squad
+		Rule_Remove(Rule_Tyranids_BuildCommanderDone)
+		Rule_AddInterval(Rule_Tyranids_BuildTorturePit, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 18 - Add a Torture Pit to Slave Chamber
+--------------------------------------------------------------------------------------------
+-- Assign "Add a Torture Pit to Slave Chamber" Lesson & Objective
+function Rule_Tyranids_BuildTorturePit()
+	-- Define Objective: Add a Torture Pit to Slave Chamber
+	obj_TorturePit = { title_id = 3950147, short_desc_id = 3950148, help_tip_id = 3950147 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they haven't researched Genestealer Acc.1
+	if Tut_ResearchIsDone(g_Player1, blueprint.slaveChamber_addon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_TorturePit , true, EVENTS.IE_Tyranids_BuildTorturePit)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildTorturePit)
+		
+		-- Ping the Slave Chamber & Flash the Toture Pit Button
+		t_TorturePit = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Research, blueprint.slaveChamber_addon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_BuildTorturePit)
+		Rule_AddInterval(Rule_Tyranids_BuildTorturePitDoing, 0)
+		
+	-- else if they have upgraded to Torture Pit Already
+	elseif Tut_ResearchIsDone(g_Player1, blueprint.slaveChamber_addon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_TorturePit , true)
+		Tut_Util_ObjectiveComplete(obj_TorturePit.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildTorturePit_Complete)
+		
+		-- Ping the Slave Chamber (where research is done)
+		--Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildTorturePit)
+		Rule_AddInterval(Rule_Tyranids_BuildTorturePitDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Torture Pit
+function Rule_Tyranids_BuildTorturePitDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Torture Pit
+	if (Prod_DoesListContainResearch(blueprint.slaveChamber_addon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildTorturePit_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_Research, blueprint.slaveChamber_addon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildTorturePitDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildTorturePitCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Torture Pit
+function Rule_Tyranids_BuildTorturePitCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Torture Pit is finished
+	if Tut_ResearchIsDone(g_Player1, blueprint.slaveChamber_addon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_TorturePit.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildTorturePit_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_TorturePit)
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildTorturePitCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildTorturePitDone, 0)
+	end
+end
+
+-- Finish the "Torture Pit" Lesson
+function Rule_Tyranids_BuildTorturePitDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Harvesting Souls
+		Rule_Remove(Rule_Tyranids_BuildTorturePitDone)
+		Rule_AddOneShot(Rule_Tyranids_ReinforceCommandSquad,0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 14 - Add Incubus to Command Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Add Incubus to Command Squad" Lesson & Objective
+function Rule_Tyranids_ReinforceCommandSquad()
+	-- Define Objective: Add Incubus to Command Squad
+	obj_ReinforceCommandSquad = { title_id = 3950155, short_desc_id = 3950156, help_tip_id = 3950155 }
+	
+	--Grab the Archon Command Squad
+	Rule_Tyranids_Get_CommandSquad()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 60
+
+	-- If they haven't already reinforced the Command Squad (Added Incubus)...
+	if SGroup_CountLeaders("sg_CommandSquad") < 1
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad , true, EVENTS.IE_Tyranids_ReinforceCommandSquad)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_ReinforceCommandSquad)
+		
+		-- Ping the Command Squad
+		ping_CommandSquad = Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Flash Incubus Button
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.commander_leader, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_Tyranids_ReinforceCommandSquadDoing, 0)
+		
+	-- else if the Command Squad has an Incubus added to it already...
+	elseif SGroup_CountLeaders("sg_CommandSquad") >= 1
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad, true)
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_ReinforceCommandSquadDoing)
+		
+		-- Ping the Already Reinforced Command Squad
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_Tyranids_ReinforceCommandSquadDone, 0)
+	end
+end
+
+-- Check if the Player has started reinforcing the Command Squad
+function Rule_Tyranids_ReinforceCommandSquadDoing()
+	--Grab the Archon Command Squad
+	Rule_Tyranids_Get_CommandSquad()
+	
+	-- Has the player started reinforcing the command squad
+	if (Cmd_IsReinforcingLeader("sg_CommandSquad", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_ReinforceCommandSquadDoing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_ReinforceCommandSquadDoing)
+		Rule_AddInterval(Rule_Tyranids_ReinforceCommandSquadCheck, 0)
+	end
+end
+
+-- Check if the Player has finished Adding an Icubus to Command Squad
+function Rule_Tyranids_ReinforceCommandSquadCheck()
+	--Grab the Archon Command Squad
+	Rule_Tyranids_Get_CommandSquad()
+
+	-- Check to see if the Command Squad has an Incubus Added to it
+	if 	SGroup_CountLeaders("sg_CommandSquad") >= 1
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_ReinforceCommandSquadDone)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CommandSquad)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_ReinforceCommandSquadCheck)
+		Rule_AddInterval(Rule_Tyranids_ReinforceCommandSquadDone, 0)
+	end
+end
+
+-- Finish the "Add an Incubus" Lesson
+function Rule_Tyranids_ReinforceCommandSquadDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		--Turn off the flashing button
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.commander_leader, false, true)
+		
+		-- Clean Up & Move onto the next Lesson: Build Harmonculus Lab
+		Rule_Remove(Rule_Tyranids_ReinforceCommandSquadDone)
+		Rule_AddInterval(Rule_Tyranids_PlanetaryRaid, 0)
+	end
+end
+
+--Grab the Archon Command Squad
+function Rule_Tyranids_Get_CommandSquad()
+	-- Function to Filter Squad List
+	local StripCommandSquad = function(sgroupid, itemindex, squadID )
+		if 	Squad_GetBlueprintName(squadID) == "tyranids_squad_broodlord" then
+			SGroup_Add(SGroup_CreateIfNotFound("sg_CommandSquad"), squadID)
+		end
+	end
+	
+	-- throw away any player squads that aren't Archon Command Squads
+	SGroup_ForEach(Player_GetSquads(g_Player1), StripCommandSquad)
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 17 - Planetary Raid
+--------------------------------------------------------------------------------------------
+-- Assign "Planetary Raid" Lesson & Objective
+function Rule_Tyranids_PlanetaryRaid()
+	-- Define Objective: Research Planetary Raid Add-on
+	obj_PlanetaryRaid = { title_id = 3950161, short_desc_id = 3950162, help_tip_id = 3950161 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+	
+	-- If they haven't upgraded the HQ to Planetary Raid
+	if Tut_AddonIsDone(blueprint.hq_addon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_PlanetaryRaid , true, EVENTS.IE_Tyranids_PlanetaryRaid)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_PlanetaryRaid)
+		
+		-- Ping the HQ & Flash the Planetary Raid Button
+		t_PlanetaryRaid = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_PlanetaryRaid)
+		Rule_AddInterval(Rule_Tyranids_PlanetaryRaidDoing, 0)
+		
+	-- else if they have upgraded to Planetary Raid Already
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_PlanetaryRaid , true)
+		Tut_Util_ObjectiveComplete(obj_PlanetaryRaid.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_PlanetaryRaid_Complete)
+		
+		-- Ping the HQ (where research is done)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_PlanetaryRaid)
+		Rule_AddInterval(Rule_Tyranids_PlanetaryRaidDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Planetary Raid
+function Rule_Tyranids_PlanetaryRaidDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Planetary Raid
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_PlanetaryRaid_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_PlanetaryRaidDoing)
+		Rule_AddInterval(Rule_Tyranids_PlanetaryRaidCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Planetary Raid
+function Rule_Tyranids_PlanetaryRaidCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Planetary Raid is finished
+	if Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_PlanetaryRaid.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_PlanetaryRaid_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_PlanetaryRaid)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_PlanetaryRaidCheck)
+		Rule_AddInterval(Rule_Tyranids_PlanetaryRaidDone, 0)
+	end
+end
+
+-- Finish the "Planetary Raid" Lesson
+function Rule_Tyranids_PlanetaryRaidDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add a Torture Pit to Slave Chamber
+		Rule_Remove(Rule_Tyranids_PlanetaryRaidDone)
+		Rule_AddOneShot(Rule_Tyranids_PointCount, 0)
+		
+		-- Add Rule to Remind Player to build thermo generators if power level gets low
+			-- thermos require tier 2 tech
+		Rule_AddInterval(Rule_Tyranids_LowPower, 10)	
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 22 - Capture 3 Strategic Points (with LPs)
+--------------------------------------------------------------------------------------------
+-- Assign "Capture 3 Listening Posts" Lesson & Objective
+function Rule_Tyranids_PointCount()
+	-- Define Objective:  Capture & Secure 3 Strategic Points
+	obj_PointCount = { title_id = 500250, short_desc_id = 3950163, help_tip_id = 500250 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If player doesn't have three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or
+		not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Tyranids_PointCount)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_PointCount)
+		
+		-- Ping Looping:
+		t_PointCount = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_PointCountDoing, 0)
+
+	-- if player has 3 points already
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_PointCount , true)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_PointCount_Complete)
+		
+		-- Ping the Listening Posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_PointCountDone, 0)
+	end
+end
+
+-- Checks if the Player has Captured the 3 Points yet
+function Rule_Tyranids_PointCountDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- when player captures the three points, remind them to building the listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_PointCount_Doing)
+		
+		-- Triggers the Check for Listening Posts
+		Rule_Remove(Rule_Tyranids_PointCountDoing)
+		Rule_AddInterval(Rule_Tyranids_PointCountCheck, 0)		
+	end
+end
+
+-- Check if the Player has finished building all the Listening Posts
+function Rule_Tyranids_PointCountCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Are the points captured & have listening posts built on them
+	if Tut_PointsCaptured(g_Player1, 1, 3) and
+		Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_PointCountCheck)
+		Rule_AddInterval(Rule_Tyranids_PointCountDone, 0)
+	end
+end
+
+-- Finish the "Capture 3 Listening Posts" Lesson
+function Rule_Tyranids_PointCountDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Critical Point
+		Rule_Remove(Rule_Tyranids_PointCountDone)
+		Rule_AddOneShot(Rule_Tyranids_HarvestSouls, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 19 - Harvest 100 Souls
+--------------------------------------------------------------------------------------------
+-- Assign "Harvest 100 Souls" Lesson & Objective
+function Rule_Tyranids_HarvestSouls()
+	-- Define Objective: Add a Torture Pit to Slave Chamber
+	obj_HarvestSouls = { title_id = 3950149, short_desc_id = 3950150, help_tip_id = 3950149 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they haven't gathered 100 soul yet
+	if Player_GetResource(g_Player1, RT_Faith) < 40
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_HarvestSouls , true, EVENTS.IE_Tyranids_HarvestSouls)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_HarvestSouls)
+		
+		--ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_HarvestSouls)
+		Rule_AddInterval(Rule_Tyranids_HarvestSoulsDoing, 0)
+		
+	-- else if they have harvested 100 soul
+	elseif Player_GetResource(g_Player1, RT_Faith) >= 50
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_HarvestSouls , true)
+		Tut_Util_ObjectiveComplete(obj_HarvestSouls.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_HarvestSouls_Complete)
+		
+		-- Ping the Slave Chamber (where souls harvested from)
+		--Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_HarvestSouls)
+		Rule_AddInterval(Rule_Tyranids_HarvestSoulsDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Torture Pit
+function Rule_Tyranids_HarvestSoulsDoing()
+	-- Has the harvested some soul resource
+	if Player_GetResource(g_Player1, RT_Faith) >= 40
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_HarvestSouls_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_HarvestSoulsDoing)
+		Rule_AddInterval(Rule_Tyranids_HarvestSoulsCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Torture Pit
+function Rule_Tyranids_HarvestSoulsCheck()
+	-- Check to see if has harvested 100 souls
+	if Player_GetResource(g_Player1, RT_Faith) >= 50
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_HarvestSouls.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_HarvestSouls_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_HarvestSoulsCheck)
+		Rule_AddInterval(Rule_Tyranids_HarvestSoulsDone, 0)
+	end
+end
+
+-- Finish the "Harvest 100 Souls" Lesson
+function Rule_Tyranids_HarvestSoulsDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Give the Player 100 Extra Soul (So have enough to cast Corrosion)
+		--Player_AddResource(g_Player1, RT_faith, 100)
+	
+		-- Clean Up & Move onto the next Lesson: Cast Soul Power: Corrosion
+		Rule_Remove(Rule_Tyranids_HarvestSoulsDone)
+		Rule_AddOneShot(Rule_Tyranids_SoulPower,0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 20 - Use Slave Powers -- Corrosion
+--------------------------------------------------------------------------------------------
+-- Assign "Cast Soul Power: Corrosion " Lesson & Objective
+function Rule_Tyranids_SoulPower()
+	-- Define Objective: Cast Corrosion
+	obj_SoulPower = { title_id = 3950151, short_desc_id = 3950152, help_tip_id = 3950152 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Store Current Amount of Souls
+	g_Amount_Soul = Player_GetResource(g_Player1, RT_Faith)
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 60
+	
+	-- Create Objective with Repeating Intel Event
+	Tut_Util_ObjectiveCreate(obj_SoulPower , true, EVENTS.IE_Tyranids_SoulPower)
+
+	-- Play IE:
+	Util_StartIntel(EVENTS.IE_Tyranids_SoulPower)
+	
+	-- Flash the Corrosion Icon
+	Flash_OtherButton("soul_ability_4", 0, true, true)
+
+	-- Triggers the checking rule
+	Rule_Remove(Rule_Tyranids_SoulPower)
+	Rule_AddInterval(Rule_Tyranids_SoulPowerCheck, 1)
+end
+
+-- Check if the Player has cast a soul power (actually works off any soul power since no real way to track corrosion directly)
+function Rule_Tyranids_SoulPowerCheck()
+	-- Check if Player Current Soul Total is Less than the Previous Amount they had (basically if they fired a soul power)
+	if Player_GetResource(g_Player1, RT_Faith) < g_Amount_Soul
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_SoulPower.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_SoulPower_Complete)
+		
+		--Stop the Flashing of the Corrosion Icon
+		Flash_OtherButton("soul_ability_4", 0, false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_SoulPowerCheck)
+		Rule_AddInterval(Rule_Tyranids_SoulPowerDone, 0)
+
+	else
+		-- Store the new Current Amount of Souls
+		g_Amount_Soul = Player_GetResource(g_Player1, RT_Faith)
+	end
+end
+
+-- Finish the "Cast Soul Power: Corrosion" Lesson
+function Rule_Tyranids_SoulPowerDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Take Cover
+		Rule_Remove(Rule_Tyranids_SoulPowerDone)
+		Rule_AddOneShot(Rule_Tyranids_TakeCover, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 21 - Take Cover (skipped if tutorial played before)
+--------------------------------------------------------------------------------------------
+-- Assign "Take Cover" Lesson & Objective
+function Rule_Tyranids_TakeCover()
+	-- Define Objective: Take Cover
+	obj_TakeCover = { title_id = 500310, short_desc_id = 500311, help_tip_id = 500310 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Enable the AI to begin attacking
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- loop through all the covers on the map & choose the closest to player squads
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			-- If this cover is closer, make it the new closest cover
+			if currDistance < closestDist
+			then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Tyranids_TakeCover)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_TakeCover)
+		
+		-- Ping the Closest Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_TakeCoverDone, 0)
+	end	
+end
+
+-- Check if the Player has taken cover in the nearest cover point
+function Rule_Tyranids_TakeCoverCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Loop through all the covers
+	for i = 1, 9 do
+		-- Check if Player Squad is in cover
+		if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..i) and
+			Event_IsAnyRunning() == false
+		then
+			-- Complete Objective & Play IE:
+			Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+			Util_StartIntel(EVENTS.IE_Tyranids_TakeCover_Complete)
+			
+			-- Stop Looping Ping
+			Ping_Stop(ping_TakeCover)
+			
+			-- Triggers the end of Lesson
+			Rule_Remove(Rule_Tyranids_TakeCoverCheck)
+			Rule_AddInterval(Rule_Tyranids_TakeCoverDone, 0)			
+			
+			--Break out of For Loop
+			break
+		end
+	end	
+end
+
+-- Finish the "Take Cover" Lesson
+function Rule_Tyranids_TakeCoverDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture 3 Strategic Pts (with LPs)
+		Rule_Remove(Rule_Tyranids_TakeCoverDone)
+		Rule_AddOneShot(Rule_Tyranids_CaptureCriticalPoint, 0)
+	end
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 23 - Capture Critical Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Critical Point" Lesson & Objective
+function Rule_Tyranids_CaptureCriticalPoint()
+	-- Define Objective: Capture the Critical Point
+	obj_CaptureCriticalPoint = { title_id = 500260, short_desc_id = 500261, help_tip_id = 500260}
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't alreay have a Critical Point...
+	if Tut_PointsCaptured(g_Player1, 2, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Tyranids_CaptureCriticalPoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_CaptureCriticalPointCheck, 0)
+
+	-- else if the do have a critical point...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureCriticalPoint_Complete)
+		
+		-- Ping the Already captured critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_CaptureCriticalPointDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing the critical point
+function Rule_Tyranids_CaptureCriticalPointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the critical point is captured
+	if Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Tyranids_CaptureCriticalPointDone, 0)
+	end
+end
+
+-- Finish the "Capture Critical Point" Lesson
+function Rule_Tyranids_CaptureCriticalPointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Relic
+		Rule_Remove(Rule_Tyranids_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Tyranids_CaptureRelic, 0)		
+	end	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 24 - Capture Relic
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Relic" Lesson & Objective
+function Rule_Tyranids_CaptureRelic()
+	-- Define Objective: Capture Relic
+	obj_CaptureRelic = { title_id = 500270, short_desc_id = 5400314, help_tip_id = 500270 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Tyranids_CaptureRelic)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_CaptureRelicCheck, 0)
+
+	-- else if they do have a relic already
+	else		
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing relic
+function Rule_Tyranids_CaptureRelicCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the relic is captured
+	if Tut_PointsCaptured(g_Player1, 3, 1)
+	then		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Tyranids_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Finish the "Capture Relic" Lesson
+function Rule_Tyranids_CaptureRelicDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Vehicle Bay (Dark Foundry)
+		Rule_Remove(Rule_Tyranids_CaptureRelicDone)
+		Rule_AddInterval(Rule_Tyranids_BuildVehicleBuilding, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 25 - Build Vehicle Bay (Dark Foundry)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Dark Foundry" Lesson & Objective
+function Rule_Tyranids_BuildVehicleBuilding()
+	-- Define Objective: Build a Dark Foundry (Vehicle Building)
+	obj_BuildVehicleBuilding = { title_id = 3950164, short_desc_id = 3950165, help_tip_id = 3950164 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Dark Foundry (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true, EVENTS.IE_Tyranids_BuildVehicleBuilding)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildVehicleBuilding)
+		
+		-- Flash Build Button & Dark Foundry Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Ping the Builder
+		--Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_Tyranids_BuildVehicleBuildingDoing, 0)
+
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_Tyranids_BuildVehicleBuilding
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuilding)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_Tyranids_NoBuilder)
+
+	-- Else if they do have a Dark Foundry already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true)
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildVehicleBuilding_Doing)
+		
+		-- Ping the Already Built Dark Foundry
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_Tyranids_BuildVehicleBuildingDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Dark Foundry
+function Rule_Tyranids_BuildVehicleBuildingDoing()
+	-- Has the player started building the Dark Foundry
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildVehicleBuilding_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuildingDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildVehicleBuildingCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Dark Foundry
+function Rule_Tyranids_BuildVehicleBuildingCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Dark Foundry is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildVehicleBuilding_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuildingCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildVehicleBuildingDone, 0)
+	end
+end
+
+-- Finish the "Build Dark Foundry" Lesson
+function Rule_Tyranids_BuildVehicleBuildingDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Raider
+		Rule_Remove(Rule_Tyranids_BuildVehicleBuildingDone)
+		Rule_AddOneShot(Rule_Tyranids_BuildRaider, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Lesson 26 - Build a Raider
+--------------------------------------------------------------------------------------------
+-- Assign "Build Raider" Lesson & Objective
+function Rule_Tyranids_BuildRaider()
+	-- Define Objective: Build a Raider from the Dark Foundry
+	obj_BuildRaider = { title_id = 3950166, short_desc_id = 3950167, help_tip_id = 3950166 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Raider already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_raider, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildRaider , true, EVENTS.IE_Tyranids_BuildRaider)
+		
+		-- Play IE: 
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildRaider)
+		
+		-- Ping the Dark Foundry & Flash Raider Production Button
+		ping_BuildRaider = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.vehicle_raider, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tyranids_BuildRaiderDoing, 0)
+
+	-- if they already have a Raider
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildRaider , true)
+		Tut_Util_ObjectiveComplete(obj_BuildRaider.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildRaider_Doing)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildRaider_Complete)
+		
+		-- Ping Raider once
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tyranids_BuildRaiderDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Raider
+function Rule_Tyranids_BuildRaiderDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Is player currently producing Raider
+	if (Prod_DoesListContainSquad(blueprint.vehicle_raider, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildRaider_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tyranids_BuildRaiderDoing)
+		Rule_AddInterval(Rule_Tyranids_BuildRaiderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Raider
+function Rule_Tyranids_BuildRaiderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built Raider
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_raider, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildRaider.title_id)
+		Util_StartIntel(EVENTS.IE_Tyranids_BuildRaider_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildRaider)
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tyranids_BuildRaiderCheck)
+		Rule_AddInterval(Rule_Tyranids_BuildRaiderDone, 0)
+	end
+end
+
+-- Finish the "Build Raider" Lesson
+function Rule_Tyranids_BuildRaiderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Load Warriors into Raider
+		Rule_Remove(Rule_Tyranids_BuildRaiderDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+	end
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Hint A1 - Squad Cap Reached
+---------------------------------------------------------------------------------------------
+-- Remind Player to Build a Slave Chamber for Squad Cap
+function Rule_Tyranids_SquadCap()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at their current max pop, but less than the 20 max
+		if ( current == cap) and
+			(cap ~= maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_Tyranids_SquadCap)
+			
+			-- Ping Builder & Flash Slave Chamber Contruction Icons
+			--Tut_PingBlueprint(blueprint.builder, false)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.population, true, true)
+			
+			--Remove Rule
+			Rule_Remove(Rule_Tyranids_SquadCap)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Hint A2 - Squad Limit Reached
+---------------------------------------------------------------------------------------------
+-- Let PLayer know they are at MAX Squad Cap
+function Rule_Tyranids_SquadLimit()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at max pop
+		if ( current == cap) and
+			(cap == maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_Tyranids_SquadLimit)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_Tyranids_SquadLimit)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Hint A3 - Low Resource
+---------------------------------------------------------------------------------------------
+-- Checks Player Requisition is Getting Low
+function Rule_Tyranids_LowResource()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players requisition is getting low
+		if (Player_GetResource(g_Player1, RT_Faith) < 10)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Tyranids_LowResource)
+			
+			-- Remove Rule:
+			Rule_Remove(Rule_Tyranids_LowResource)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Hint A4 - Low Power
+---------------------------------------------------------------------------------------------
+-- Checks Player Power is Getting Low
+function Rule_Tyranids_LowPower()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players power is getting low
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Tyranids_LowPower)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_Tyranids_LowPower)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Hint A5 - No Builder Unit
+---------------------------------------------------------------------------------------------
+-- PLayer has no builder, but needs to build something
+function Rule_Tyranids_NoBuilder()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- if player has no builders (slaves)
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_Tyranids_NoBuilder)
+			
+			-- Add Rule to Check for when builder builds
+			Rule_Remove(Rule_Tyranids_NoBuilder)
+			Rule_AddInterval(Rule_Tyranids_NoBuilderDone,0)
+		end
+	end
+end
+
+-- Readd the Rule that player was up to when they had no builder
+function Rule_Tyranids_NoBuilderDone()
+	-- Player has built a builder
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Readd the Rule for what they where told to build but had no builders
+		Rule_Add( g_tutorialRuleState )
+		Rule_Remove(Rule_Tyranids_NoBuilderDone)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tyranids Support Function to Count Number of Caravels
+---------------------------------------------------------------------------------------------
+function Tut_EGBlueprintCheck_AllSlaveChambers(egroupname, blueprint, num, boolean)
+
+	local blueprinttable = { { name = blueprint, count = num } }
+	local local_blueprint = blueprint
+	local hasRequiredCount = EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	
+	local t_Building = Util_MakeBlueprintTable( "tyranids_gaunt_hive" )
+
+	countbuildings = EGroup_Count(EGroup_FromName("eg_Player1All"))
+
+	-- Loop through all Player Buildings
+	for i = 1, countbuildings
+	do
+		-- Get the Next Player Building
+		EGroup_Clear(EGroup_CreateIfNotFound("eg_Potential_Caravel"..i))
+		EGroup_Add(EGroup_FromName("eg_Potential_Caravel"..i), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Player1All"), i))
+	
+		-- If the Building is a Slave Caravel & is Completed
+		if EGroup_ContainsBlueprints(EGroup_FromName("eg_Potential_Caravel"..i), t_Building, true) and
+			Entity_GetBuildingProgress(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Caravel"..i), 1)) == 1.0
+		then
+			-- Add the New Caravel to the Existing Caravel Groups 
+			EGroup_Add(EGroup_CreateIfNotFound("eg_Caravel"), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Caravel"..i), 1))
+			local num_caravel = EGroup_Count(EGroup_FromName("eg_Caravel"))
+			
+			-- If the number of Completed Caravels equals number passed in... return true
+			if num_caravel == num then
+				return true
+			end
+		end
+	end
+end
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--  Selection
+EVENTS.IE_Tyranids_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400088 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400292 )
+	CTRL.WAIT()
+end
+
+-- Build a Genestealer Squad
+EVENTS.IE_Tyranids_BuildGenestealer = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400089 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_BuildGenestealer_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400293 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_BuildGenestealer_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400092 )
+	CTRL.WAIT()
+end
+
+-- Capture Point
+EVENTS.IE_Tyranids_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+	
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400094 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400296 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400297 )
+	CTRL.WAIT()
+end
+
+-- Build Tortured Slave (Builder)
+EVENTS.IE_Tyranids_BuildBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400097 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildBuilder_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400098 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildBuilder_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400099 )
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_Tyranids_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400102 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400103 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400104 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400105 )
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_Tyranids_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400300 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400107 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400301 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400108 )
+	CTRL.WAIT()
+end
+
+-- Control Zones
+EVENTS.IE_Tyranids_ControlZone = function()	-- Edit  to explain no use for control zones!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400350 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400351 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400352 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400353 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Barracks (Hall of Blood)
+EVENTS.IE_Tyranids_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400111 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400112 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400113 )
+	CTRL.WAIT()
+end
+
+-- Build Warriors
+EVENTS.IE_Tyranids_BuildInfantry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400116 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildInfantry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400117 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildInfantry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400118 )
+	CTRL.WAIT()
+end
+
+-- Reinforce Warriors
+EVENTS.IE_Tyranids_Reinforce = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400302 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400121 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_Reinforce_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400122 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400303 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_Reinforce_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400123)		-- Congratulations! You have Reinforced your Fire Warrior Team. 
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_Tyranids_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400346 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400347 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400348 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400349 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_Tyranids_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400325 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400326 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400327 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400328 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400329 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400330 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400331 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400332 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- Build Slave Chamber
+EVENTS.IE_Tyranids_BuildSlaveChamber = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400304 )	-- Your field base has supplies and logistics to support a finite number of squads. The number of squads you can support at any given time is called your Squad Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400305 )	-- You can see your current Squad Cap in the Resource Area at the top of your screen.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400306 )	-- Once you have reached your maximum Squad Cap, you will not be able to call in any additional troops, so it's very important to keep an eye on this as you're building up your forces.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400124 )	-- You can increase your Squad Cap by building Slave Chambers, but there is always a maximum beyond which you cannot go.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400127 )	-- Select a Tortured Slave and build 3 Slave Chambers.  Remember: the Tortured Slave can freely move away from a structure once it has begun and it will complete itself.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildSlaveChamber_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400128 )	-- Dark Eldar society is greatly dependent on the labor of slaves. As such, they rely on Slave Chambers to enhance their army.  Slave Chambers are extremely versatile and provide many benefits, expanding your Control Zone, and increasing your Squad and Vehicle Caps.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_BuildSlaveChamber_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400129 )
+	CTRL.WAIT()
+end
+
+-- Build Torture Pit Add-On
+EVENTS.IE_Tyranids_BuildTorturePit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400130 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400133 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildTorturePit_Doing = function()
+--	NO IE OCCURS HERE
+
+--	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400129 )
+--	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildTorturePit_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400134 )
+	CTRL.WAIT()
+end
+
+-- Harvest 100 Souls
+EVENTS.IE_Tyranids_HarvestSouls = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400138 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_HarvestSouls_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400139 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_HarvestSouls_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400259 )
+	CTRL.WAIT()
+end
+
+-- Soul Power: Corrosion
+EVENTS.IE_Tyranids_SoulPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400142 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tyranids_SoulPower_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400143 )
+	CTRL.WAIT()
+end
+
+-- Build Commander
+EVENTS.IE_Tyranids_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400146 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400147 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400148 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400149 )
+	CTRL.WAIT()
+end
+
+-- Reinforce Command Squad
+EVENTS.IE_Tyranids_ReinforceCommandSquad = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400152 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_ReinforceCommandSquadDoing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400153 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_ReinforceCommandSquadDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400154 )
+	CTRL.WAIT()
+end
+
+-- Build a Harmonculus Lab
+EVENTS.IE_Tyranids_BuildHarmonculusLab = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400157 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildHarmonculusLab_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400158 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400159 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildHarmonculusLab_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400160 )
+	CTRL.WAIT()
+end
+
+-- Add Leader to Warrior Squad
+EVENTS.IE_Tyranids_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400163 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400164 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400165 )
+	CTRL.WAIT()
+end
+
+-- Research Planetary Raid Add-on on HQ
+EVENTS.IE_Tyranids_PlanetaryRaid = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400168 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_PlanetaryRaid_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400169 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_PlanetaryRaid_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400170 )
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_Tyranids_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400333 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400334 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400335 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400336 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400337 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400194 )	-- While in Cover, most units will slow down to navigate the difficult terrain. Due to their incredible agility, however, the Dark Eldar can move through Cover at full speed.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400338 )
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_Tyranids_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400307 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400308 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400172 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400173 )
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_Tyranids_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400310 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400311 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400174 )
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_Tyranids_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400313 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400314 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400175 )
+	CTRL.WAIT()
+end
+
+-- Build Dark Foundry (Vehicle Building)
+EVENTS.IE_Tyranids_BuildVehicleBuilding = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400178 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildVehicleBuilding_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400179 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400180 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildVehicleBuilding_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400181)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400182)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400183)
+	CTRL.WAIT()
+end
+
+-- Build Raider
+EVENTS.IE_Tyranids_BuildRaider = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400186 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildRaider_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400187 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_BuildRaider_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400190)
+	CTRL.WAIT()
+end
+
+-- Put Warriors in Raider
+EVENTS.IE_Tyranids_Transport_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400191)
+	CTRL.WAIT()
+end
+
+
+
+
+-- Tutorial Complete
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400192 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400319 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400193 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400320 )
+	CTRL.WAIT()
+end
+
+
+
+
+-- Squad Cap Warnings
+EVENTS.IE_Tyranids_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400344 )
+	CTRL.WAIT()
+end
+EVENTS.IE_Tyranids_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400345 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+EVENTS.IE_Tyranids_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400321 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+
+-- Low Power Warnings
+EVENTS.IE_Tyranids_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400322 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400323 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400324 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+EVENTS.IE_Tyranids_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400341 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400342 )
+	CTRL.WAIT()
+end

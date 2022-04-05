@@ -1,0 +1,65 @@
+----------------------------------------------------------------------------------------------------------------
+-- Command helper functions.
+-- (c) 2005 Relic Entertainment Inc.
+----------------------------------------------------------------------------------------------------------------
+
+--? @shortdesc Add a new objective using an objective table and associates it with a specific player
+--? @extdesc Example obj_table:\n
+--? obj_table = { title_id = 400009,	short_desc_id = 400010, help_tip_id = 400011 }
+--? @args LuaTable obj_table, Boolean is_primary_obj, PlayerID player
+--? @result Void
+function Objective_AddPlayer( obj_table, is_primary_obj, player )
+	-- validate table
+	if obj_table.title_id == nil or obj_table.short_desc_id == nil or obj_table.help_tip_id == nil then
+		error( "obj_table is not valid.  it must contain keys title_id, short_desc_id and help_tip_id")
+	end
+	
+	-- create the objective
+	Objective_AddInternalPlayer( obj_table.title_id, obj_table.short_desc_id, obj_table.help_tip_id, is_primary_obj, player )
+end
+
+--? @shortdesc Add a new sub objective using an objective table and associates it with the specified parent objective
+--? @extdesc Please note the only one level of sub objectives is supported (i.e.  an objective cannot be added as a sub objective of an existing sub objective)\n\n
+--? Example obj_table:\n
+--? obj_table = { title_id = 400009, short_desc_id = 400010, help_tip_id = 400011 }
+--? @args LuaTable obj_table, Integer parent_id
+--? @result Void
+function Objective_SubAdd( obj_table, parent_id )
+	-- validate table
+	if obj_table.title_id == nil or obj_table.short_desc_id == nil or obj_table.help_tip_id == nil then
+		error( "obj_table is not valid.  it must contain keys title_id, short_desc_id and help_tip_id")
+	end
+	
+	-- create the objective
+	Objective_AddSubInternal( obj_table.title_id, obj_table.short_desc_id, obj_table.help_tip_id, parent_id)
+end
+
+--? @shortdesc Associates a ping with an objective
+--? @extdesc The ping will be shown at the specified position on the mini map in the objectives dialog when the objective it is associated with is selected. Use ping_type 'attack' for attack pings, otherwise default ping will be used.
+--? @args Integer title_id, ScarPosition position, Boolean is_looping, String ping_type
+--? @result PingID
+function Objective_PingPosition( title_id, position, is_looping, ping_type )
+
+	local lifetime = 12
+	
+	if is_looping then 
+		lifetime = -1
+	end
+	
+	local ping_id
+	if type(ping_type) == "string" and ping_type == "attack"  then
+		ping_id = Objective_PingAdd( title_id, [[data:art\ui\minimap\scar_ping]], position, lifetime )
+	else
+		ping_id = Objective_PingAdd( title_id, [[data:art\ui\minimap\scar_ping]], position, lifetime )
+	end
+	
+	return ping_id
+end
+
+--? @shortdesc Associates a ping with an objective
+--? @extdesc The ping will be shown at the specified marker on the mini map in the objectives dialog when the objective it is associated with is selected. Use ping_type 'attack' for attack pings, otherwise default ping will be used.
+--? @args Integer title_id, String marker_name, Boolean is_looping, String ping_type
+--? @result PingID
+function Objective_PingMarker( title_id, marker_name, is_looping, ping_type )
+	return Objective_PingPosition( title_id, Marker_GetPosition( Marker_FromName( marker_name, "basic_marker" ) ), is_looping, ping_type )
+end

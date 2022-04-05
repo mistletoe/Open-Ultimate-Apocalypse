@@ -1,0 +1,102 @@
+Model = "Parmenie"
+Planet = "Kaurava_IV"
+
+Name = "$3900039"
+Description = "$3900360"
+TerrainType = "$2851002"
+TerrainDescription = "$3900361"
+
+History = 
+{
+"$3900362",
+"$3900363",
+"$3900223",
+"$3900364",
+"$3900365",
+}
+
+MissionFileAttacking = "6p_Parmenie"
+MissionFileAttackingConquered = "6p_Parmenie"
+MissionFileDefending = "6p_Parmenie"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	-- "Gurmuns_Pass",
+	"Tristram_Plains",
+	"Marconia",
+	"Parmenian_Steppe",
+	-- "Lacunae",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_raptor_champion_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_terminator_assault_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_mek_boy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_ogryns_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_fire_dragon_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_broadside_battlesuit_squad_hg_dxp3",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_flayed_one_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_assassin_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_hellion_leader_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "dark_eldar_race"
+OwnerSecondary = "chaos_marine_race"
+
+StartingResourceBonus = 0.0

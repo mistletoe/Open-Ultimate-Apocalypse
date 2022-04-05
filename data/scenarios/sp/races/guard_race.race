@@ -1,0 +1,2321 @@
+IntroMovie = "" 
+IntroMovieText =
+{
+
+}
+
+OutroMovie = "ss_guard_race_outro"
+OutroMovieText =
+{
+	{
+		Text = "$5200181",
+		Start = 7.150,
+		End = 34.020,
+	},
+	{
+		Text = "$5200182",
+		Start = 37.100,
+		End = 67.190,
+	},
+	{
+		Text = "$5200183",
+		Start = 71.170,
+		End = 99.100,
+	},	
+}
+
+NuggetMovie = "guard_race_nugget"
+
+ForceName = "$3950219"
+TeamColourForceName = "252nd Kauravan Conservator"
+TeamColour = "default_4"
+CommanderName = "guard_squad_command_squad_advance_sp"
+
+ArmyModel = "Art/UI/3D_Models/MM_Imperial_Captain"
+ArmyModelScale = 0.15
+ArmyModelBone = "master"
+
+TerritoryColour = { 64, 48, 24 }
+
+-- Delays used for army move fx
+TeleportFXLength = 0.5
+SpacePortTeleportFXLength = 0.5
+
+ApplyTeamColours = true
+
+CommanderScreenModel = "Art/UI/3D_Models/Race_Guard"
+CommanderScreenBackgroundImage = "Art/UI/RaceImages/Race_Guard"
+CommanderScreenAction = "sp_wargear"
+
+WargearScreenModel = "Art/EBPs/Races/Imperial_Guard/Troops/Imperial_Captain_TGD"
+WargearScreenBackgroundImage = "Art/UI/Wargear/ig wargear backdrop"
+WargearScreenAction = "default"
+
+RetractedStartingSquads = {}
+
+-- Territory special ability values
+IndustrialProductionRequisitionBonus = 1000
+IndustrialProductionPowerBonus = 0
+
+IncreasedManpowerStartingSquadCapBonus = 4
+IncreasedManpowerMaximumSquadCapBonus = 4
+IncreasedManpowerStartingVehicleCapBonus = 2
+IncreasedManpowerMaximumVehicleCapBonus = 2
+
+RequisitionReducedCostBonus = 0.85
+
+PopulationGrowthTerritoryRate = 3
+PopulationGrowthTerritoryChance = 0.33
+PopulationGrowthArmyRate = 3
+PopulationGrowthMilitaryStrengthIncrement = 1
+PopulationGrowthAIRankIncrement = 1
+
+RessurectionChancePlayer = 0.33
+RessurectionChanceAI = 0.33
+
+TauGunMinDamageAI = 0
+TauGunMaxDamageAI = 1
+TauGunMinDamagePlayer = 0
+TauGunMaxDamagePlayer = 1
+
+RoadwaySeedsMaxDistance = 3
+
+DisconnectedSupplyModifier = 0.0
+
+RaceSelectionScreen =
+{
+	Model = "Race_Guard",
+	RaceImage = "Race_Guard",
+	ExitAnimationLength = 2,
+	AmbientLight = { 128, 128, 128 }
+}
+
+VictoryScreen =
+{
+	ImageVictory = "GuardVictory",
+	ImageDefeat = "GuardDefeat",
+
+	TextVictoryAttacking = "$3000700",
+	TextVictoryDefending = "$3000701",
+
+	TextDefeatAttacking = "$3000702",
+	TextDefeatDefending = "$3000703",
+
+	TextDescription_chaos_marine_race = "$3000704",
+	TextDescription_eldar_race = "$3900004",
+	TextDescription_space_marine_race = "$3900005",
+	TextDescription_necron_race = "$3000707",
+	TextDescription_ork_race = "$3000708",
+	TextDescription_tau_race = "$3900006",
+	TextDescription_dark_eldar_race  = "$3900440",
+	TextDescription_sisters_race  = "$3900447",
+}
+
+Messages =
+{
+	-- Bonus Units
+	NewBonusUnit = "$3003010",
+	PreservedBonusUnit = "$3003011",
+	FailedToGainBonusUnit = "$3003013",
+	LostBonusUnit = "$3003012",
+
+	-- Abilities
+	NewAbility = "$3003010",
+	PreservedAbility = "$3003011",
+	FailedToGainAbility = "$3003013",
+	LostAbility = "$3003012",
+
+	-- Race elimination
+	DefeatedRace = "$3003014",
+}
+
+BonusSquadCosts =
+{
+	guard_squad_enginseer_advance_sp = 100,
+	guard_squad_guardsmen_advance_sp = 300,
+	guard_heavy_weapons_team_squad_hg_dxp3 = 475,
+	guard_squad_assassin_advance_sp = 350,
+	guard_squad_kasrkin_advance_sp = 500,
+	guard_squad_ogryns_advance_sp = 650,
+	guard_squad_psyker_advance_sp = 300,
+	guard_squad_commissar_advance_sp = 350,
+	guard_squad_sentinel_advance_sp = 400,
+	guard_squad_hellhound_advance_sp = 800,
+}
+
+ReinforcementStructures =
+{
+	{
+		Blueprint = "guard_plasma_generator",
+		Cost = 50,
+		Markers =
+		{
+			"MM_Reinforcement0", "MM_Reinforcement1", "MM_Reinforcement2", "MM_Reinforcement3"
+		}
+	},
+	{
+		Blueprint = "guard_turret_heavy_bolter",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement6", "MM_Reinforcement7", "MM_Reinforcement8", "MM_Reinforcement9"
+		}
+	},
+	{
+		Blueprint = "guard_infantry",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement10"
+		}
+	},
+	{
+		Blueprint = "guard_tactica",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement11"
+		}
+	},
+}
+
+ReinforcementSquads = 
+{
+		{
+		Blueprint = "guard_squad_enginseer",
+		Cost = 35,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_squad_guardsmen",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_heavy_weapons_team_squad",
+		Cost = 125,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_squad_hellhound",
+		Cost = 225,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+}
+
+DeepStrikeSquads = 
+{
+	{
+		Blueprint = "guard_squad_enginseer",
+		Cost = 125,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_squad_guardsmen",
+		Cost = 325,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_heavy_weapons_team_squad",
+		Cost = 500,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "guard_squad_hellhound",
+		Cost = 875,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+}
+
+TechLevel2Structures =
+{
+	"addon_guard_hq_1"
+}
+
+TechLevel3Structures =
+{
+	"addon_guard_hq_2"
+}
+
+WarGear =
+{
+
+	{
+	Research = "guard_wargear_upgrade_03_storm_bolter_research",
+	WeaponName = "guard_storm_bolter_captain",
+	WeaponNameDefault = "guard_laspistol_captain",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Guard_Storm_Bolter",
+	ClauseValueDefault = "Guard_Bolt_Pistol",
+	Name = "$3001500",
+	Icon = 03,
+	Description  = "$3001501",
+	Specification  = "$3001502",
+  AIVictoriesRequired = 1,
+	},
+	{
+	Research = "guard_wargear_upgrade_04",
+	WeaponName = "guard_plasma_pistol_captain",
+	WeaponNameDefault = "guard_laspistol_captain",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Guard_Plasma_Pistol",
+	ClauseValueDefault = "Guard_Bolt_Pistol",
+	Name = "$4000098",
+	Icon = 04,
+	Description  = "$4000099",
+	Specification  = "$4000100",
+  AIVictoriesRequired = 2,
+	},
+	{
+	Research = "guard_wargear_upgrade_01_master_power_claws_research",
+	WeaponName = "guard_master_power_claws_captain",
+	WeaponNameDefault = "guard_power_gauntlet_captain",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Guard_Power_Claw",
+	ClauseValueDefault = "Guard_Dual_Power_Gauntlets",
+	Name = "$3001520",
+	Icon = 01,
+	Description  = "$3001521",
+	Specification  = "$3001522",
+  AIVictoriesRequired = 3,
+	},
+	{
+	Research = "guard_wargear_upgrade_02",
+	WeaponName = "guard_power_fist_captain",
+	WeaponNameDefault = "guard_power_gauntlet_captain",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Guard_Power_Fist",
+	ClauseValueDefault = "Guard_Dual_Power_Gauntlets",
+	Name = "$4000095",
+	Icon = 02,
+	Description  = "$4000096",
+	Specification  = "$4000097",
+  AIVictoriesRequired = 4,
+	},
+	{
+	Research = "guard_wargear_upgrade_09",
+	WeaponName = "guard_captain_sash",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_01",
+	ClauseValueOn = "Wargear_01",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000104",
+	Icon = 09,
+	Description  = "$4000105",
+	Specification  = "$4000106",
+  AIVictoriesRequired = 5,
+	},
+	{
+	Research = "guard_wargear_upgrade_08",
+	WeaponName = "guard_captain_greaves",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_02",
+	ClauseValueOn = "Wargear_02",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000101",
+	Icon = 08,
+	Description  = "$4000102",
+	Specification  = "$4000103",
+  AIVictoriesRequired = 6,
+	},
+	{
+	Research = "guard_wargear_upgrade_05_targeting_optics_research",
+	WeaponName = "guard_captain_targeting_optics",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_03",
+	ClauseValueOn = "Wargear_03",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001560",
+	Icon = 05,
+	Description  = "$3001561",
+	Specification  = "$3001562",
+  AIVictoriesRequired = 7,
+	},
+	{
+	Research = "guard_wargear_upgrade_06_pauldrons_research",
+	WeaponName = "guard_captain_pauldrons",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_04",
+	ClauseValueOn = "Wargear_04",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001570",
+	Icon = 06,
+	Description  = "$3001571",
+	Specification  = "$3001572",
+  AIVictoriesRequired = 8,
+	},
+	{
+	Research = "guard_wargear_upgrade_07_chest_plate_research",
+	WeaponName = "guard_captain_chest_plate",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_05",
+	ClauseValueOn = "Wargear_05",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001580",
+	Icon = 07,
+	Description  = "$3001581",
+	Specification  = "$3001582",
+  AIVictoriesRequired = 9,
+	},
+	{
+	Research = "guard_wargear_upgrade_10",
+	WeaponName = "guard_captain_governor_raiment",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_06",
+	ClauseValueOn = "Wargear_06",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000107",
+	Icon = 10,
+	Description  = "$4000108",
+	Specification  = "$4000109",
+  AIVictoriesRequired = 10,
+	},
+	
+}
+
+Promotions =
+{
+	{
+		Name = "$3002000",
+		Description = "$3003001",
+		Conditions = 
+		{
+			ConqueredTerritories = 1
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003002",
+		Conditions = 
+		{
+			ConqueredTerritories = 5
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003003",
+		Conditions = 
+		{
+			ConqueredTerritories = 15
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003004",
+		Conditions = 
+		{
+			UnitKillsLifetime = 2000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003005",
+		Conditions = 
+		{
+			UnitKillsLifetime = 5000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003006",
+		Conditions = 
+		{
+			ConqueredStrongholds = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003000",
+		Conditions = 
+		{
+			UnitKillsMission = 200,
+			KillRatioMission = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003007",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 1,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003008",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 3,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003009",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 5,
+		}
+	},
+}
+
+AIStartingStructuresAttacking =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+	
+	{
+		MilitaryStrength = 3,
+		Structures =
+		{
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingStructuresDefending =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+		},
+	},
+
+	{
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 3,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "guard_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "guard_infantry",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "guard_tactica",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "guard_turret_missile_launcher",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "guard_mechanized",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+--[[			{
+				Blueprint = "chaos_sacrificial_circle",
+				Markers =
+				{
+					"start9_",
+				},
+			},]]
+		},
+	},	
+}
+
+AIStartingSquadsAttacking =
+{
+	{
+
+		MilitaryStrength = 2,
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 3,
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+	
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},		
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingSquadsDefending =
+{
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+}
+
+ArmyRanks =
+{
+	-- Rank 1
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 2
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 3
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 4
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 5
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 6
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_sentinel",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 7
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_sentinel",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_ogryns",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 8
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_sentinel",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_ogryns",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_hellhound",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 9
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_sentinel",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_ogryns",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_hellhound",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_assassin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 10
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+				{
+				Blueprint = "guard_squad_command_squad_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_guardsmen",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_kasrkin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_heavy_weapons_team_squad",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_sentinel",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_ogryns",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_hellhound",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_assassin",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "guard_squad_lemanruss",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+}

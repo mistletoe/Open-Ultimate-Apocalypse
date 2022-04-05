@@ -1,0 +1,60 @@
+Model = "Irridene_Moon"
+Planet = "Kaurava_II"
+
+Name = "$3900025"
+Description = "$3900258"
+TerrainDescription=""
+History = 
+{
+"$3900259",
+"$3900260",
+"$3900223",
+"$3900261",
+"$3900223",
+"$3900262",
+"$3900223",
+"$3900263",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "6P_Irridene"
+MissionFileAttackingConquered = "6P_Irridene"
+MissionFileDefending = "6P_Irridene"
+
+SkirmishWinConditions =
+{
+	"StrategicObjective",
+	"GameTimer",	
+}
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 0.5
+ArmyModelScaleZoomedOut = .75
+
+NeighborTerritories = 
+{
+	"Jalaganda_Lowlands",
+	--"Solitude",
+	"Cerulea",
+	"Skerries",
+	"Nirraein",
+}
+
+VictoryBonusSquads =
+{
+}
+
+Stronghold = false
+WarpGate = true
+ScriptedMission = false
+
+PlanetaryRequisition = 25
+StartingMilitaryStrength = 4
+
+OwnerPrimary = "space_marine_race"
+OwnerSecondary = "tau_race"
+
+StartingResourceBonus = 0.0

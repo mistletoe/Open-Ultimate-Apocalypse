@@ -1,0 +1,2347 @@
+IntroMovie = "" 
+IntroMovieText =
+{
+
+}
+
+OutroMovie = "ss_dark_eldar_race_outro"
+OutroMovieText =
+{
+	{
+		Text = "$5200202",
+		Start = 0.0,
+		End = 25.21,
+	},
+	{
+		Text = "$5200203",
+		Start = 25.21,
+		End = 50.11,
+	},
+	{
+		Text = "$5200204",
+		Start = 51.11,
+		End = 92.10,
+	},
+}
+
+NuggetMovie = "dark_eldar_race_nugget"
+
+ForceName = "$3900080"
+TeamColourForceName = "Black Heart"
+TeamColour = "default_1"
+CommanderName = "dark_eldar_squad_archon_hg_dxp3"
+
+ArmyModel = "Art/UI/3D_Models/MM_Dark_Archon"
+ArmyModelScale = 0.15
+ArmyModelBone = "master"
+
+TerritoryColour = { 240, 64, 240 } --{16, 32, 150 }
+
+-- Delays used for army move fx
+TeleportFXLength = 0.5
+SpacePortTeleportFXLength = 0.5
+
+ApplyTeamColours = true
+
+CommanderScreenModel = "Art/UI/3D_Models/Race_Dark_Eldar"
+CommanderScreenBackgroundImage = "Art/UI/RaceImages/Race_Dark_Eldar"
+CommanderScreenAction = "sp_wargear"
+
+WargearScreenModel = "Art/EBPs/Races/Dark_Eldar/Troops/Dark_Eldar_Archon_SP"
+WargearScreenBackgroundImage = "Art/UI/Wargear/DE wargear backdrop"
+WargearScreenAction = "sp_wargear"
+
+RetractedStartingSquads = {}
+
+-- Territory special ability values
+IndustrialProductionRequisitionBonus = 1000
+IndustrialProductionPowerBonus = 0
+
+IncreasedManpowerStartingSquadCapBonus = 4
+IncreasedManpowerMaximumSquadCapBonus = 4
+IncreasedManpowerStartingVehicleCapBonus = 2
+IncreasedManpowerMaximumVehicleCapBonus = 2
+
+RequisitionReducedCostBonus = 0.85
+
+PopulationGrowthTerritoryRate = 3
+PopulationGrowthTerritoryChance = 0.33
+PopulationGrowthArmyRate = 3
+PopulationGrowthMilitaryStrengthIncrement = 1
+PopulationGrowthAIRankIncrement = 1
+
+RessurectionChancePlayer = 0.33
+RessurectionChanceAI = 0.33
+
+TauGunMinDamageAI = 0
+TauGunMaxDamageAI = 1
+TauGunMinDamagePlayer = 0
+TauGunMaxDamagePlayer = 1
+
+RoadwaySeedsMaxDistance = 3
+
+DisconnectedSupplyModifier = 0.0
+
+RaceSelectionScreen =
+{
+	Model = "Race_Dark_Eldar",
+	RaceImage = "Race_Dark_Eldar",
+	ExitAnimationLength = 2,
+	AmbientLight = { 128, 128, 128 }
+}
+
+VictoryScreen =
+{
+	ImageVictory = "Dark_EldarVictory",
+	ImageDefeat = "Dark_EldarDefeat",
+
+	TextVictoryAttacking = "$3000700",
+	TextVictoryDefending = "$3000701",
+
+	TextDefeatAttacking = "$3000702",
+	TextDefeatDefending = "$3000703",
+
+	TextDescription_chaos_marine_race = "$3900457",
+	TextDescription_eldar_race = "$3900458",
+	TextDescription_guard_race = "$3900455",
+	TextDescription_space_marine_race = "$3900456",
+	TextDescription_necron_race = "$3900461",
+	TextDescription_ork_race = "$3900459",
+	TextDescription_tau_race = "$3900460",
+	TextDescription_sisters_race  = "$3900451",
+}
+
+Messages =
+{
+	-- Bonus Units
+	NewBonusUnit = "$3003010",
+	PreservedBonusUnit = "$3003011",
+	FailedToGainBonusUnit = "$3003013",
+	LostBonusUnit = "$3003012",
+
+	-- Abilities
+	NewAbility = "$3003010",
+	PreservedAbility = "$3003011",
+	FailedToGainAbility = "$3003013",
+	LostAbility = "$3003012",
+
+	-- Race elimination
+	DefeatedRace = "$3003014",
+}
+
+BonusSquadCosts =
+{
+	dark_eldar_squad_mandrake_hg_dxp3 = 225,
+	dark_eldar_squad_warrior_hg_dxp3 = 300,
+	dark_eldar_squad_warrior_leader_hg_dxp3 = 300,
+	dark_eldar_squad_hellion_hg_dxp3 = 375,
+	dark_eldar_squad_hellion_leader_hg_dxp3 = 375,
+	dark_eldar_squad_scourge_hg_dxp3 = 575,
+	dark_eldar_squad_wych_leader_hg_dxp3 = 500,
+	dark_eldar_squad_warp_beast_hg_dxp3 = 600,
+	dark_eldar_squad_incubus_hg_dxp3 = 525,
+	dark_eldar_squad_haemonculus_hg_dxp3 = 350,
+	dark_eldar_squad_reaver_hg_dxp3 = 650,
+	dark_eldar_squad_raider_hg_dxp3 = 800
+}
+
+ReinforcementStructures =
+{
+	{
+		Blueprint = "dark_eldar_plasma_generator",
+		Cost = 50,
+		Markers =
+		{
+			"MM_Reinforcement0", "MM_Reinforcement1", "MM_Reinforcement2", "MM_Reinforcement3"		
+		}
+	},
+	{
+		Blueprint = "dark_eldar_slave_caravel",
+		Cost = 100,
+		Markers =
+		{
+			"MM_Reinforcement6", "MM_Reinforcement8" --, "MM_Reinforcement9"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_hall_of_blood",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement10"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_haemonculus_laboratory",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement11"
+		}
+	},
+	--[[{
+		Blueprint = "dark_eldar_skimmer_shop",
+		Cost = 275,
+		Markers =
+		{
+			"MM_Reinforcement13"
+		}
+	},]]--
+}
+
+ReinforcementSquads = 
+{
+	{
+		Blueprint = "dark_eldar_squad_slave",
+		Cost = 45,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_squad_warrior",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_squad_hellion",
+		Cost = 110,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_squad_reaver",
+		Cost = 175,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	--[[{
+		Blueprint = "dark_eldar_squad_raider",
+		Cost = 350,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},]]--
+}
+
+DeepStrikeSquads = 
+{
+	{
+		Blueprint = "dark_eldar_squad_slave",
+		Cost = 175,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},	
+	{
+		Blueprint = "dark_eldar_squad_warrior",
+		Cost = 325,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_squad_hellion",
+		Cost = 400,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "dark_eldar_squad_reaver",
+		Cost = 700,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+
+}
+
+TechLevel2Structures =
+{
+	"addon_dark_eldar_hq_1"
+}
+
+TechLevel3Structures =
+{
+	"addon_dark_eldar_hq_2"
+}
+
+WarGear =
+{
+	{
+	Research = "dark_eldar_wargear_upgrade_01",
+	WeaponName = "dark_eldar_power_scythe_archon_sp",
+	WeaponNameDefault = "dark_eldar_sword_archon_sp",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Dark_Eldar_Power_Claw",
+	ClauseValueDefault = "Dark_Eldar_Claw",
+	Name = "$4000031",
+	Icon = 01,
+	Description  = "$4000032",
+	Specification  = "$4000033",
+  AIVictoriesRequired = 1,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_02",
+	WeaponName = "dark_eldar_agonizer_archon_sp",
+	WeaponNameDefault = "dark_eldar_sword_archon_sp",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Dark_Eldar_Agonizer",
+	ClauseValueDefault = "Dark_Eldar_Claw",
+	Name = "$4000034",
+	Icon = 02,
+	Description  = "$4000035",
+	Specification  = "$4000036",
+  AIVictoriesRequired = 2,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_03",
+	WeaponName = "dark_eldar_destructor_archon_sp",
+	WeaponNameDefault = "dark_eldar_splinter_rifle_archon_sp",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Dark_Eldar_Shredder",
+	ClauseValueDefault = "Dark_Eldar_Splinter_Pistol",
+	Name = "$4000037",
+	Icon = 03,
+	Description  = "$4000038",
+	Specification  = "$4000039",
+  AIVictoriesRequired = 3,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_04",
+	WeaponName = "dark_eldar_disintegrator_archon_sp",
+	WeaponNameDefault = "dark_eldar_splinter_rifle_archon_sp",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Dark_Eldar_Disintegrator",
+	ClauseValueDefault = "Dark_Eldar_Splinter_Pistol",
+	Name = "$4000040",
+	Icon = 04,
+	Description  = "$4000041",
+	Specification  = "$4000042",
+  AIVictoriesRequired = 4,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_05",
+	WeaponName = "dark_eldar_wargear_05",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_05",
+	ClauseValueOn = "Wargear_05",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000043",
+	Icon = 05,
+	Description  = "$4000044",
+	Specification  = "$4000045",
+  AIVictoriesRequired = 5,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_06",
+	WeaponName = "dark_eldar_wargear_06",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_06",
+	ClauseValueOn = "Wargear_06",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000046",
+	Icon = 06,
+	Description  = "$4000047",
+	Specification  = "$4000048",
+  AIVictoriesRequired = 6,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_07",
+	WeaponName = "dark_eldar_wargear_07",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_07",
+	ClauseValueOn = "Wargear_07",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000049",
+	Icon = 07,
+	Description  = "$4000050",
+	Specification  = "$4000051",
+  AIVictoriesRequired = 7,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_08",
+	WeaponName = "dark_eldar_wargear_08",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_08",
+	ClauseValueOn = "Wargear_08",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000052",
+	Icon = 08,
+	Description  = "$4000053",
+	Specification  = "$4000054",
+  AIVictoriesRequired = 8,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_09",
+	WeaponName = "dark_eldar_wargear_09",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_09",
+	ClauseValueOn = "Wargear_09",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000055",
+	Icon = 09,
+	Description  = "$4000056",
+	Specification  = "$4000057",
+  AIVictoriesRequired = 9,
+	},
+	{
+	Research = "dark_eldar_wargear_upgrade_10",
+	WeaponName = "dark_eldar_wargear_10",
+	WeaponNameDefault = nil,
+	ClauseKey = "Wargear_Upgrade_10",
+	ClauseValueOn = "Wargear_10",
+	ClauseValueDefault = "titan_maincannon",
+	Name = "$4000058",
+	Icon = 10,
+	Description  = "$4000059",
+	Specification  = "$4000060",
+  AIVictoriesRequired = 10,
+	},
+	
+}
+
+Promotions =
+{
+	{
+		Name = "$3002000",
+		Description = "$3003001",
+		Conditions = 
+		{
+			ConqueredTerritories = 1
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003002",
+		Conditions = 
+		{
+			ConqueredTerritories = 5
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003003",
+		Conditions = 
+		{
+			ConqueredTerritories = 15
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003004",
+		Conditions = 
+		{
+			UnitKillsLifetime = 2000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003005",
+		Conditions = 
+		{
+			UnitKillsLifetime = 5000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003006",
+		Conditions = 
+		{
+			ConqueredStrongholds = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003000",
+		Conditions = 
+		{
+			UnitKillsMission = 200,
+			KillRatioMission = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003007",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 1,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003008",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 3,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003009",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 5,
+		}
+	},
+}
+
+AIStartingStructuresAttacking =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},	
+	
+	{
+		MilitaryStrength = 3,
+		Structures =
+		{
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+--[[			{
+				Blueprint = "chaos_sacrificial_circle",
+				Markers =
+				{
+					"start9_",
+				},
+			},]]
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingStructuresDefending =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+		},
+	},
+
+	{
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 3,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			--[[{
+				Blueprint = "guard_turret_heavy_bolter",
+				Markers =
+				{
+					"start12_",
+				},
+			},]]--
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_plasma_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_hall_of_blood",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "dark_eldar_haemonculus_laboratory",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "dark_eldar_slave_caravel",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_skimmer_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+--[[			{
+				Blueprint = "chaos_sacrificial_circle",
+				Markers =
+				{
+					"start9_",
+				},
+			},]]
+		},
+	},	
+}
+
+AIStartingSquadsAttacking =
+{
+	{
+
+		MilitaryStrength = 2,
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 3,
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+	
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},		
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingSquadsDefending =
+{
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+}
+
+ArmyRanks =
+{
+	-- Rank 1
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 2
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 3
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_mandrake_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 4
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_mandrake_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 5
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_mandrake_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 6
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 7
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_wych",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 8
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_wych",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_raider",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 9
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_wych",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warp_beast",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_raider",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 10
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+				{
+				Blueprint = "dark_eldar_squad_archon_hg_dxp3",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warrior",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_scourge",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_wych",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_wych",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_warp_beast",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_reaver",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "dark_eldar_squad_raider",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+}

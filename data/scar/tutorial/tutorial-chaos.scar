@@ -1,0 +1,3304 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Chaos Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_Chaos_Start()
+	Rule_AddOneShot(Rule_Chaos_Info, 0)
+
+	Rule_AddInterval(Rule_Chaos_SquadCap, 10)
+	Rule_AddInterval(Rule_Chaos_SquadLimit, 10)
+	Rule_AddInterval(Rule_Chaos_LowResource, 10)
+	Rule_AddInterval(Rule_Chaos_LowPower, 10)
+end
+
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Scout
+-- 3	Capture Point
+-- 4	Build Servitor
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Barracks
+
+-- 7a	Chaos Taint information
+
+-- 8	Build Marines
+-- 9	Reinforce Marines
+
+-- 10	Health (skipped if tutorial has been played before)
+-- 11	Build Commander
+-- 12	Attach Commander
+-- 13	Morale (skipped if tutorial has been played before)
+-- 14	Build Armoury
+-- 15	Upgrade Weaponry
+-- 16	Build Addon
+-- 17	Build Leader
+-- 18	Build More Marines
+-- 19	Take Cover (skipped if tutorial has been played before)
+-- 20	Capture Points
+-- 21	Capture Critical Location
+-- 22	Capture Relic
+-- 22a Build Sacrificial Circle
+-- 22b Build Horrors
+-- 23	Build Vehicle Shop
+-- 24	Build Transport
+-- 25	Build Artillery
+
+-- 26	Build Daemon Pit (only occurs once player has built the second HQ addon)
+	
+-- 30	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder Unit
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 0 - Chaos Info
+
+function Rule_Chaos_Info()
+	
+	Util_StartIntel(EVENTS.IE_Chaos_Info)
+	Rule_AddInterval(Rule_Chaos_InfoDone, 0)
+	
+end
+
+function Rule_Chaos_InfoDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_InfoDone)
+		Rule_AddOneShot(Rule_Chaos_Selection, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 1 - Selection
+
+function Rule_Chaos_Selection()
+
+	-- Define Objective
+	obj_Selection = { title_id = 503070, short_desc_id = 503071, help_tip_id = 503070 }		-- Select the Stronghold
+
+	Tut_Player1GetAll()
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+	
+	-- Check to see if the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection , true, EVENTS.IE_Chaos_Selection)
+		Util_StartIntel(EVENTS.IE_Chaos_Selection)
+		
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Chaos_SelectionCheck, 0)
+		
+	-- If they do have it selected
+	else
+		
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Chaos_SelectionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_SelectionCheck()
+	
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+	
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_Selection_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_SelectionCheck)
+		Rule_AddInterval(Rule_Chaos_SelectionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_SelectionDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_SelectionDone)
+		Rule_AddOneShot(Rule_Chaos_BuildScout, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 2 - Build Scout 
+
+function Rule_Chaos_BuildScout()
+
+	-- Define Objective
+	obj_BuildScout = { title_id = 503100, short_desc_id = 503101, help_tip_id = 503100 }	-- Build a Scout Marine Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a scout marine already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScout , true, EVENTS.IE_Chaos_BuildScout)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildScout)
+		
+		-- Ping the HQ
+		ping_BuildScout = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Chaos_BuildScoutDoing, 0)
+		
+	-- if they already have a scout
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildScout , true)
+		Tut_Util_ObjectiveComplete(obj_BuildScout.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildScout_Complete)
+		
+		-- Ping scouts once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_BuildScoutDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildScoutDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildScout_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildScoutDoing)
+		Rule_AddInterval(Rule_Chaos_BuildScoutCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildScoutCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a scout marine already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildScout.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildScout_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildScout)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildScoutCheck)
+		Rule_AddInterval(Rule_Chaos_BuildScoutDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildScoutDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildScoutDone)
+		Rule_AddOneShot(Rule_Chaos_CapturePoint, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 3 - Capture Point
+
+function Rule_Chaos_CapturePoint()
+	
+	-- Define Objective
+	obj_CapturePoint = { title_id = 503110, short_desc_id = 503111, help_tip_id = 503110 }	-- Capture a Strategic Point
+
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 200
+	
+	-- need to do this check in reverse because function checks greater than or equal to (which if the player has 1, is greater than 0)
+	
+	-- If they haven't captured a point...
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_CapturePointDone, 0)
+	
+		
+	-- If they have a point captured already...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true,EVENTS.IE_Chaos_CapturePoint)
+		Util_StartIntel(EVENTS.IE_Chaos_CapturePoint)
+		
+		-- Ping points and infantry
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Chaos_CapturePointDoing, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CapturePointDoing()
+
+	Tut_Player1GetAll()
+	
+	if (Cmd_IsCapturing("sg_Player1All", false) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_CapturePoint_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_CapturePointDoing)
+		Rule_AddInterval(Rule_Chaos_CapturePointCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_CapturePointCheck()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_CapturePointCheck)
+		Rule_AddInterval(Rule_Chaos_CapturePointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CapturePointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_CapturePointDone)
+		Rule_AddOneShot(Rule_Chaos_BuildServitor, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 4 - Build Servitor
+
+function Rule_Chaos_BuildServitor()
+	
+	-- Define Objective
+	obj_BuildServitor = { title_id = 503120, short_desc_id = 503121, help_tip_id = 503120 }	-- Build a Servitor
+
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have a Servitor...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildServitor , true, EVENTS.IE_Chaos_BuildServitor )
+		Util_StartIntel(EVENTS.IE_Chaos_BuildServitor)
+		
+		-- Ping the HQ
+		ping_BuildServitor = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Chaos_BuildServitorDoing, 0)
+		
+	-- else if they DO have a Servitor already...
+	else
+		
+		-- Create/Complete Objective and give a quick Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildServitor , true)
+		Tut_Util_ObjectiveComplete(obj_BuildServitor.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildServitor_Doing)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_BuildServitorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildServitorDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildServitor_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildServitorDoing)
+		Rule_AddInterval(Rule_Chaos_BuildServitorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildServitorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildServitor.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildServitor_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildServitor)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildServitorCheck)
+		Rule_AddInterval(Rule_Chaos_BuildServitorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildServitorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildServitorDone)
+		Rule_AddInterval(Rule_Chaos_BuildPost, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 5 - Build Listening Post
+
+function Rule_Chaos_BuildPost()
+	
+	-- Define Objective
+	obj_BuildPost = { title_id = 503130, short_desc_id = 503131, help_tip_id = 503130 }	-- Build a Listening Post
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 300
+	
+	-- If they don't already have a listening post...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) 
+		and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) 
+		and Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Chaos_BuildPost)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildPost)
+		
+		-- Ping the captured flag and the Servitor
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildPost)
+		Rule_AddInterval(Rule_Chaos_BuildPostDoing, 0)
+		
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildPost
+		Rule_Remove(Rule_Chaos_BuildPost)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)
+	
+	
+	-- esle if they do somehow have a post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildPost_Doing)
+		
+		-- Ping Looping = true, Non = false
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildPost)
+		Rule_AddInterval(Rule_Chaos_BuildPostDone, 0)
+	
+	end
+	
+end
+
+function Rule_Chaos_BuildPostDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildPost_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildPostDoing)
+		Rule_AddInterval(Rule_Chaos_BuildPostCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildPostCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildPostCheck)
+		Rule_AddInterval(Rule_Chaos_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildPostDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildPostDone)
+		Rule_AddOneShot(Rule_Chaos_BuildGenerator, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 6 - Build Generator
+
+function Rule_Chaos_BuildGenerator()
+	
+	-- Define Objective
+	obj_BuildGenerator = { title_id = 503220, short_desc_id = 503221, help_tip_id = 503220 }	-- Build a Plasma Generator
+	
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Chaos_BuildGenerator)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildGenerator)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_BuildGenerator)
+		Rule_AddInterval(Rule_Chaos_BuildGeneratorDoing, 0)
+		
+		
+	-- else if the do have a Generator already...
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildGenerator
+		Rule_Remove(Rule_Chaos_BuildGenerator)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)
+		
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildGenerator_Complete)
+		
+		-- Ping the Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildGenerator)
+		Rule_AddInterval(Rule_Chaos_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildGeneratorDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildGenerator_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Chaos_BuildGeneratorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildGeneratorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildGenerator_Complete)
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+			Util_StartIntel(EVENTS.IE_Chaos_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Chaos_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildGeneratorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Chaos_BuildBarracks, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 7 - Build Barracks
+
+function Rule_Chaos_BuildBarracks()
+	
+	-- Define Objective
+	obj_BuildBarracks = { title_id = 503140, short_desc_id = 503141, help_tip_id = 503140 }	-- Build a Chapel-Barracks
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Chaos_BuildBarracks)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBarracks)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_BuildBarracks)
+		Rule_AddInterval(Rule_Chaos_BuildBarracksDoing, 0)
+	
+	
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildBarracks
+		Rule_Remove(Rule_Chaos_BuildBarracks)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)
+		
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBarracks_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildBarracks)
+		Rule_AddInterval(Rule_Chaos_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildBarracksDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBarracks_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Chaos_BuildBarracksCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildBarracksCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Chaos_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildBarracksDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Chaos_IETaintStart, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 7a - Chaos Taint
+
+-- a short seguay as we tell players about the taint
+function Rule_Chaos_IETaintStart()
+	Util_StartIntel(EVENTS.IE_Chaos_TaintInformation)
+	Rule_Remove(Rule_Chaos_IETaintStart)
+	Rule_AddInterval( Rule_Chaos_IETaintDone,0)
+end
+
+function Rule_Chaos_IETaintDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_IETaintDone)
+		Rule_AddInterval(Rule_Chaos_BuildMarines, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 8 - Build Marines
+
+function Rule_Chaos_BuildMarines()
+	
+	-- Define Objective
+	obj_BuildMarines = { title_id = 503150, short_desc_id = 503151, help_tip_id = 503150 }	-- Build a Space Marine Squad
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMarines , true, EVENTS.IE_Chaos_BuildMarines)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildMarines)
+		
+		-- Ping the Barracks
+		ping_BuildMarines = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildMarines)
+		Rule_AddInterval(Rule_Chaos_BuildMarinesCheck, 0) -- goes straight to the "check" function rather than via the "doing" function
+		
+	-- else if they have some Marines already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMarines , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildMarines_Complete)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildMarines)
+		Rule_AddInterval(Rule_Chaos_BuildMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildMarinesDoing() -- Not used (no speech for it!)
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildMarines_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildMarinesDoing)
+		Rule_AddInterval(Rule_Chaos_BuildMarinesCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildMarinesCheck()
+
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildMarines_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildMarines)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildMarinesCheck)
+		Rule_AddInterval(Rule_Chaos_BuildMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildMarinesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildMarinesDone)
+		Rule_AddOneShot(Rule_Chaos_ReinforceMarines, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 9 - Reinforce Marines
+
+function Rule_Chaos_ReinforceMarines()
+
+	-- Define Objective
+	obj_ReinforceMarines = { title_id = 503230, short_desc_id = 503231, help_tip_id = 503230 }	-- Reinforce your Space Marine Squad
+	
+	Tut_Player1GetAll()
+
+	-- Intel Event
+	Tut_Util_ObjectiveCreate(obj_ReinforceMarines , true,EVENTS.IE_Chaos_ReinforceMarines)
+	Util_StartIntel(EVENTS.IE_Chaos_ReinforceMarines)
+	
+	-- Ping the Marines
+	Tut_PingBlueprint(blueprint.infantry, false)
+	Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Chaos_ReinforceMarinesDoing, 0)
+	
+end
+
+function Rule_Chaos_ReinforceMarinesDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Marines
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsReinforcing("sg_Player1All", false)) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_ReinforceMarines_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_ReinforceMarinesDoing)
+		Rule_AddInterval(Rule_Chaos_ReinforceMarinesCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_ReinforceMarinesCheck()
+
+	
+	Tut_Player1GetAll()
+
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_ReinforceMarines.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_ReinforceMarines_Complete)
+		
+		-- Stop Looping Ping
+		-- Tut_PingBlueprintStop(ping_Marines)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_ReinforceMarinesCheck)
+		Rule_AddInterval(Rule_Chaos_ReinforceMarinesDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_ReinforceMarinesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_ReinforceMarinesDone)
+		Rule_AddOneShot(Rule_Chaos_Health, 0)
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 10 - Health
+
+function Rule_Chaos_Health()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Chaos_Health)
+		Rule_AddInterval(Rule_Chaos_HealthDone, 0)
+	else
+		Rule_AddOneShot(Rule_Chaos_BuildCommander, 0)
+	end
+	
+end
+
+function Rule_Chaos_HealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_HealthDone)
+		Rule_AddInterval(Rule_Chaos_BuildCommander, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 11 - Build Commander
+
+function Rule_Chaos_BuildCommander()
+	
+	-- Define Objective
+	obj_BuildCommander = { title_id = 503160, short_desc_id = 503161, help_tip_id = 503160 }	-- Build a Force Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Chaos_BuildCommander)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildCommander)
+		Rule_AddInterval(Rule_Chaos_BuildCommanderDoing, 0)
+		
+	-- else if they have got the Commander already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildCommander_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildCommander)
+		Rule_AddInterval(Rule_Chaos_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildCommanderDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildCommander_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Chaos_BuildCommanderCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildCommanderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Chaos_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildCommanderDone)
+		Rule_AddInterval(Rule_Chaos_AttachCommander, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 12 - Attach Commander
+
+function Rule_Chaos_AttachCommander()
+
+	-- Define Objective
+	obj_AttachCommander = { title_id = 503170, short_desc_id = 503171, help_tip_id = 503170 }	-- Attach your Force Commander to a Squad
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_AttachCommander , true, EVENTS.IE_Chaos_AttachCommander)
+		Util_StartIntel(EVENTS.IE_Chaos_AttachCommander)
+		
+		-- Ping the Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		Flash_OtherButton("attach_modal", 0, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_AttachCommander)
+		Rule_AddInterval(Rule_Chaos_AttachCommanderCheck, 0)
+	end
+	
+end
+
+function Rule_Chaos_AttachCommanderCheck()
+
+	Tut_Player1GetAll()
+	local attached = false
+	
+	local FilterList = function(gID, idx, sID)
+		if (Squad_IsAttached(sID) == true) then	
+			if (Squad_GetAttachedBlueprintName(sID) == blueprint.commander) then
+				attached = true		-- set a flag
+				g_tut_squad = sID	-- save the ID to check later
+			else
+				SGroup_Remove(gID, sID)
+			end
+		else
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (attached == true) then
+		
+		-- Intel Event
+		Util_StartIntel(EVENTS.IE_Chaos_AttachCommander_Complete)
+
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Chaos_AttachCommanderCheck)
+		Rule_AddInterval(Rule_Chaos_AttachCommanderCheck2, 0)
+		
+	end	
+
+end
+
+function Rule_Chaos_AttachCommanderCheck2()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		-- Intel Event
+		Util_StartIntel(EVENTS.IE_Chaos_AttachCommander_Complete2)
+		
+		Tut_Util_ObjectiveComplete(obj_AttachCommander.title_id)
+		
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Chaos_AttachCommanderCheck2)
+		Rule_AddInterval(Rule_Chaos_AttachCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_AttachCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_AttachCommanderDone)
+		Rule_AddOneShot(Rule_Chaos_Morale, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 13 - Morale
+
+function Rule_Chaos_Morale()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Chaos_Morale)
+		Rule_AddInterval(Rule_Chaos_MoraleDone, 0)
+	else
+		Rule_AddOneShot(Rule_Chaos_BuildArmoury, 0)
+	end
+	
+end
+
+function Rule_Chaos_MoraleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_MoraleDone)
+		Rule_AddInterval(Rule_Chaos_BuildArmoury, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 14 - Build Armoury
+
+function Rule_Chaos_BuildArmoury()
+	
+	-- Define Objective
+	obj_BuildArmoury = { title_id = 503200, short_desc_id = 503201, help_tip_id = 503200 }	-- Build an Armoury
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArmoury , true, EVENTS.IE_Chaos_BuildArmoury)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildArmoury)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_BuildArmoury)
+		Rule_AddInterval(Rule_Chaos_BuildArmouryDoing, 0)
+		
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildArmoury
+		Rule_Remove(Rule_Chaos_BuildArmoury)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)	
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildArmoury , true)
+		Tut_Util_ObjectiveComplete(obj_BuildArmoury.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildArmoury_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildArmoury)
+		Rule_AddInterval(Rule_Chaos_BuildArmouryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildArmouryDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildArmoury_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildArmouryDoing)
+		Rule_AddInterval(Rule_Chaos_BuildArmouryCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildArmouryCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildArmoury.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildArmoury_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildArmouryCheck)
+		Rule_AddInterval(Rule_Chaos_BuildArmouryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildArmouryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildArmouryDone)
+		Rule_AddInterval(Rule_Chaos_UpgradeWeaponry, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 15 - Upgrade Weaponry
+
+function Rule_Chaos_UpgradeWeaponry()
+	
+	-- Define Objective
+	obj_UpgradeWeaponry = { title_id = 503210, short_desc_id = 503211, help_tip_id = 503210 }	-- Upgrade your Space Marine Squad's weaponry
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 420
+
+	-- If they don't have any upgraded weapons...
+	if not SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry , true, EVENTS.IE_Chaos_UpgradeWeaponry)
+		Util_StartIntel(EVENTS.IE_Chaos_UpgradeWeaponry)
+		
+		-- Ping the Marines
+		ping_Marines = Tut_PingBlueprint(blueprint.infantry, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.infantry, blueprint.weapon1, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Chaos_UpgradeWeaponryDoing, 0)
+		
+	-- else if they have upgraded their weapons already...
+	elseif SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry, true)
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_UpgradeWeaponry_Doing)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Chaos_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_UpgradeWeaponryDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Marines
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsUpgrading("sg_Player1All", false)) then
+		Util_StartIntel(EVENTS.IE_Chaos_UpgradeWeaponry_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_UpgradeWeaponryDoing)
+		Rule_AddInterval(Rule_Chaos_UpgradeWeaponryCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_UpgradeWeaponryCheck()
+	
+	Tut_Player1GetAll()
+
+	if SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_UpgradeWeaponry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_Marines)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_UpgradeWeaponryCheck)
+		Rule_AddInterval(Rule_Chaos_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_UpgradeWeaponryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_UpgradeWeaponryDone)
+		Rule_AddInterval(Rule_Chaos_BuildLeader, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 17 - Build Leader
+
+function Rule_Chaos_BuildLeader()
+	
+	-- Define Objective
+	obj_BuildLeader = { title_id = 503190, short_desc_id = 503191, help_tip_id = 503190 }	-- Add a Sergeant to your Space Marine Squad
+	
+	Tut_Player1GetAll()
+
+	-- If they haven't got a Leader already
+	if not Tut_SGSquadLeader("sg_Player1All", false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true, EVENTS.IE_Chaos_BuildLeader)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildLeader)
+		
+		-- Ping the Marines
+		t_BuildLeader = Tut_PingBlueprint(blueprint.infantry, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildLeader)
+		Rule_AddInterval(Rule_Chaos_BuildLeaderDoing, 0)
+		
+	-- else if they haven't called in a Leader yet
+	elseif Tut_SGSquadLeader("sg_Player1All", true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildLeader_Complete)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildLeader)
+		Rule_AddInterval(Rule_Chaos_BuildLeaderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildLeaderDoing()
+
+	if Command_HasBeenIssuedSquad(SCMD_ReinforceLeader, 2) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildLeader_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildLeaderDoing)
+		Rule_AddInterval(Rule_Chaos_BuildLeaderCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildLeaderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGSquadLeader("sg_Player1All", true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildLeader_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildLeader)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_Chaos_BuildLeaderCheck)
+		Rule_AddInterval(Rule_Chaos_BuildLeaderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildLeaderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildLeaderDone)
+		Rule_AddInterval(Rule_Chaos_BuildAddon, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marines Lesson 16 - Build Addon
+
+function Rule_Chaos_BuildAddon()
+	
+	-- Define Objective
+	obj_BuildAddon = { title_id = 503180, short_desc_id = 503181, help_tip_id = 503180 }	-- Upgrade the Stronghold
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the HQ already
+	if Tut_AddonIsDone(blueprint.hq_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true, EVENTS.IE_Chaos_BuildAddon)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildAddon)
+		
+		-- Ping the HQ
+		t_BuildAddon = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildAddon)
+		Rule_AddInterval(Rule_Chaos_BuildAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildAddon_Complete)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildAddon)
+		Rule_AddInterval(Rule_Chaos_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildAddonDoing)
+		Rule_AddInterval(Rule_Chaos_BuildAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildAddon)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildAddonCheck)
+		Rule_AddInterval(Rule_Chaos_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildAddonDone)
+		Rule_AddOneShot(Rule_Chaos_BuildMoreMarines, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 18 - Build More Marines / Squad Count
+
+function Rule_Chaos_BuildMoreMarines()
+	
+	-- Define Objective
+	obj_BuildMoreMarines = { title_id = 503240, short_desc_id = 503241, help_tip_id = 503240 }	-- Build and Upgrade another Space Marine Squad
+	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_SavedSquads"), Player_GetSquads(g_Player1))
+
+	-- No if statement this time
+
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_BuildMoreMarines , true, EVENTS.IE_Chaos_BuildMoreMarines)
+	Util_StartIntel(EVENTS.IE_Chaos_BuildMoreMarines)
+	Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+
+	-- Ping Looping = true, Non = false
+	ping_BuildMoreMarines = Tut_PingBlueprint(blueprint.barracks, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Chaos_BuildMoreMarinesCheck, 0)
+	
+end
+
+g_Chaos_highlight_buttons = false
+
+function Rule_Chaos_BuildMoreMarinesCheck()
+	
+	Tut_Player1GetAll()
+
+	-- Filter out any squads that were there are the start on the lesson
+	local StripOutSavedSquads = function (gID, idx, sID)
+		if (SGroup_ContainsSquad(SGroup_FromName("sg_SavedSquads"),sID)) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- Test a squad to see if it fits all criteria
+	local TestSquad = function (gID, idx, sID)
+		-- is it a Marine?
+		if (Squad_GetBlueprintName(sID) == blueprint.infantry) then
+			
+			local cur_squadsize = Squad_Count(sID)
+			local max_squadsize = Squad_GetMax(sID) + 1
+			local cur_weapons = (Squad_WeaponCount(sID, blueprint.weapon1) + Squad_WeaponCount(sID, blueprint.weapon2) + Squad_WeaponCount(sID, blueprint.weapon3) + Squad_WeaponCount(sID, blueprint.weapon4))
+			local max_weapons = 2
+			local has_leader = Squad_HasLeader(sID)
+		
+			
+			-- is if fully upgraded?
+			if (cur_squadsize >= max_squadsize) and (cur_weapons >= max_weapons) and (has_leader) then
+				
+				-- Complete Objective and Intel Event
+				Tut_Util_ObjectiveComplete(obj_BuildMoreMarines.title_id)
+				Util_StartIntel(EVENTS.IE_Chaos_BuildMoreMarines_Complete)
+				
+				Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", false, false)
+				Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", false, false)
+				Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.infantry, blueprint.weapon1, false, false)
+				
+				-- Triggers the checker rules
+				Rule_Remove(Rule_Chaos_BuildMoreMarinesCheck)
+				Rule_AddInterval(Rule_Chaos_BuildMoreMarinesDone, 0)
+			   
+				return true
+				
+			end
+		end
+	end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), StripOutSavedSquads)
+	if not SGroup_IsEmpty("sg_Player1All") then
+		SGroup_ForEach(SGroup_FromName("sg_Player1All"), TestSquad)
+	end
+	
+	if SGroup_ContainsBlueprints("sg_Player1All", Util_MakeBlueprintTable(blueprint.infantry), false) and (g_Chaos_highlight_buttons == false) then
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, false, false)
+		Tut_PingBlueprintStop(ping_BuildMoreMarines)
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", true, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.infantry, blueprint.weapon1, true, false)
+		g_Chaos_highlight_buttons = true
+	end
+	
+end
+
+function Rule_Chaos_BuildMoreMarinesDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildMoreMarinesDone)
+		Rule_AddOneShot(Rule_Chaos_TakeCover, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 19 - Take Cover
+
+function Rule_Chaos_TakeCover()
+	
+	-- Define Objective
+	obj_TakeCover = { title_id = 503310, short_desc_id = 503311, help_tip_id = 503310 }	-- Take Cover
+
+	Tut_Player1GetAll()
+	
+	-- turn on ai attack
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- choose the closest cover
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			if currDistance < closestDist then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Chaos_TakeCover)
+		Util_StartIntel(EVENTS.IE_Chaos_TakeCover)
+		
+		-- Ping the Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Chaos_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_TakeCoverCheck()
+	
+	Tut_Player1GetAll()
+
+	if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..coverMarker) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_TakeCover_Complete)
+		
+		-- Stop Looping Ping
+		Ping_Stop(ping_TakeCover)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_TakeCoverCheck)
+		Rule_AddInterval(Rule_Chaos_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_TakeCoverDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_TakeCoverDone)
+		Rule_AddOneShot(Rule_Chaos_PointCount, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 20 - Point Count
+
+function Rule_Chaos_PointCount()
+	
+	-- Define Objective
+	obj_PointCount = { title_id = 503250, short_desc_id = 503251, help_tip_id = 503250 }	-- Capture and Secure more Strategic Points
+
+	Tut_Player1GetAll()
+	
+
+	-- if they haven't got three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Chaos_PointCount)
+		Util_StartIntel(EVENTS.IE_Chaos_PointCount)
+		
+		-- Ping Looping = true, Non = false
+		t_PointCount = Tut_PingBlueprint(blueprint.infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Chaos_PointCountDoing, 0)
+		
+	-- if they've got a load of points already
+	else
+		
+		--Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , false)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_PointCount_Complete)
+		
+		-- Ping the posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_PointCountDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Chaos_PointCountDoing()
+
+	Tut_Player1GetAll()
+
+	-- when you capture three points, mention building listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_PointCount_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_PointCountDoing)
+		Rule_AddInterval(Rule_Chaos_PointCountCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_PointCountCheck()
+	
+	Tut_Player1GetAll()
+	
+	if Tut_PointsCaptured(g_Player1, 1, 3) and Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_PointCountCheck)
+		Rule_AddInterval(Rule_Chaos_PointCountDone, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_PointCountDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_PointCountDone)
+		Rule_AddOneShot(Rule_Chaos_CaptureCriticalPoint, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 21 - Capture Critical Point
+
+function Rule_Chaos_CaptureCriticalPoint()
+	
+	-- Define Objective
+	obj_CaptureCriticalPoint = { title_id = 503260, short_desc_id = 503261, help_tip_id = 503260 }		-- Capture a Critical Location
+
+	Tut_Player1GetAll()
+	
+	-- Check they don't have a Critical Point already...
+	if Tut_PointsCaptured(g_Player1, 2, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Chaos_CaptureCriticalPoint)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Chaos_CaptureCriticalPointCheck,0)
+		
+	-- If they have already...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureCriticalPoint_Complete)
+		
+		-- Ping the critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CaptureCriticalPointCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		--Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Chaos_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CaptureCriticalPointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Chaos_CaptureRelic, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 22 - Capture Relic
+
+function Rule_Chaos_CaptureRelic()
+	
+	-- Define Objective
+	obj_CaptureRelic = { title_id = 503270, short_desc_id = 503271, help_tip_id = 503270 }	-- Capture a Relic
+	
+	Tut_Player1GetAll()
+
+	-- if they don't have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Chaos_CaptureRelic)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the Next Rule
+		Rule_AddInterval(Rule_Chaos_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CaptureRelicCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 3, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Chaos_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_CaptureRelicDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_CaptureRelicDone)
+		Rule_AddInterval(Rule_Chaos_BuildSacrificialCircle, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 9a - Build Sacrificial Circle
+
+function Rule_Chaos_BuildSacrificialCircle()
+	
+	-- Define Objective
+	obj_BuildSacCircle = { title_id = 503480, short_desc_id = 503481, help_tip_id = 503480 }	-- Build a Sacrificial-Circle
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.sacrificialcircle, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSacCircle , true, EVENTS.IE_Chaos_BuildSacrificialCircle)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildSacrificialCircle)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.sacrificialcircle, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircle)
+		Rule_AddInterval(Rule_Chaos_BuildSacrificialCircleDoing, 0)
+		
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildSacrificialCircle
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircle)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)	
+	
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.sacrificialcircle, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSacCircle , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSacCircle.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildSacrificialCircle_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.sacrificialcircle, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircle)
+		Rule_AddInterval(Rule_Chaos_BuildSacrificialCircleDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildSacrificialCircleDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.sacrificialcircle) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildSacrificialCircle_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.sacrificialcircle, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircleDoing)
+		Rule_AddInterval(Rule_Chaos_BuildSacrificialCircleCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildSacrificialCircleCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.sacrificialcircle, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildSacCircle.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildSacrificialCircle_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.sacrificialcircle, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircleCheck)
+		Rule_AddInterval(Rule_Chaos_BuildSacrificialCircleDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildSacrificialCircleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildSacrificialCircleDone)
+		Rule_AddInterval(Rule_Chaos_BuildHorrors, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 9b - Build Horrors
+
+function Rule_Chaos_BuildHorrors()
+	
+	-- Define Objective
+	obj_BuildHorrors = { title_id = 503490, short_desc_id = 503491, help_tip_id = 503490 }	-- Build a Space Marine Squad
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.sacrificialcircle, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.horror, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildHorrors , true, EVENTS.IE_Chaos_BuildHorrors)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildHorrors)
+		
+		-- Ping the Barracks
+		ping_BuildHorrors = Tut_PingBlueprint(blueprint.sacrificialcircle, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.horror, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Chaos_BuildHorrors)
+		Rule_AddInterval(Rule_Chaos_BuildHorrorsDoing, 0) 
+		
+	-- else if they have some Marines already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.horror, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildHorrors , true)
+		Tut_Util_ObjectiveComplete(obj_BuildHorrors.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildHorrors_Complete)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.horror, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildHorrors)
+		Rule_AddInterval(Rule_Chaos_BuildHorrorsDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildHorrorsDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.horror, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildHorrors_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.horror, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildHorrorsDoing)
+		Rule_AddInterval(Rule_Chaos_BuildHorrorsCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildHorrorsCheck()
+
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.horror, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildHorrors.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildHorrors_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildHorrors)
+		Tut_PingBlueprint(blueprint.horror, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildHorrorsCheck)
+		Rule_AddInterval(Rule_Chaos_BuildHorrorsDone, 0)
+		
+	end
+	
+end
+
+-- TODO: this is meant to tell the player to summon the horrors, but we cant do that right now
+function Rule_Chaos_BuildHorrorsSummon()
+
+	Tut_Player1GetAll()
+	-- check to see if player has summoned the horrors
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.horror, 1, true) then
+	
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildHorrors.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildHorrors_Summoned)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildHorrors)
+		Tut_PingBlueprint(blueprint.horror, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildHorrorsCheck)
+		Rule_AddInterval(Rule_Chaos_BuildHorrorsDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildHorrorsDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildHorrorsDone)
+		Rule_AddInterval(Rule_Chaos_BuildShop, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 23 - Build Vehicle Shop
+
+function Rule_Chaos_BuildShop()
+
+	-- Define Objective
+	obj_BuildShop = { title_id = 503280, short_desc_id = 503281, help_tip_id = 503280 }	-- Build a Machine Cult
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildShop , true, EVENTS.IE_Chaos_BuildShop )
+		Util_StartIntel(EVENTS.IE_Chaos_BuildShop)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Chaos_BuildShop)
+		Rule_AddInterval(Rule_Chaos_BuildShopDoing, 0)
+		
+	elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+	
+		g_tutorialRuleState = Rule_Chaos_BuildShop
+		Rule_Remove(Rule_Chaos_BuildShop)
+		
+		Rule_Add(Rule_Chaos_NoBuilder)		
+	
+	
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildShop , true)
+		Tut_Util_ObjectiveComplete(obj_BuildShop.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildShop_Doing)
+		
+		-- Ping the Machine Shop
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildShop)
+		Rule_AddInterval(Rule_Chaos_BuildShopDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildShopDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildShop_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildShopDoing)
+		Rule_AddInterval(Rule_Chaos_BuildShopCheck,0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildShopCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildShop.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildShop_Complete)
+		
+		-- Ping the Machine Shop
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildShopCheck)
+		Rule_AddInterval(Rule_Chaos_BuildShopDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildShopDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildShopDone)
+		Rule_AddInterval(Rule_TutorialComplete, 0)
+		
+		Rule_AddInterval(Rule_Chaos_BuildDaemonPit, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 26 - Build Daemon Pit
+
+function Rule_Chaos_BuildDaemonPit()
+	
+	-- if the player doesnt have the second HQ addon then dont do this at all
+	if Tut_AddonIsDone(blueprint.hq_addon2, true) then
+		
+		-- Define Objective
+		obj_BuildDaemonPit = { title_id = 503500, short_desc_id = 503501, help_tip_id = 503500 }	-- Build a  Daemon Pit
+		
+		Tut_Player1GetAll()
+	
+		
+		-- If they don't have a Daemon Pit
+		if Tut_EGBlueprintCheck("eg_Player1All", blueprint.daemonpit, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			-- Create Objective and Intel Event
+			Tut_Util_ObjectiveCreate(obj_BuildDaemonPit , true, EVENTS.IE_Chaos_BuildDaemonPit)
+			Util_StartIntel(EVENTS.IE_Chaos_BuildDaemonPit)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.daemonpit, true, true)
+			
+			-- Ping the Servitor
+			Tut_PingBlueprint(blueprint.builder, false)
+			
+			-- Triggers the checking rule
+			Rule_Remove(Rule_Chaos_BuildDaemonPit)
+			Rule_AddInterval(Rule_Chaos_BuildDaemonPitDoing, 0)
+			
+		elseif not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+			g_tutorialRuleState = Rule_Chaos_BuildDaemonPit
+			Rule_Remove(Rule_Chaos_BuildDaemonPit)
+			
+			Rule_Add(Rule_Chaos_NoBuilder)		
+			
+		-- Else if they do have a Barracks already...
+		elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.daemonpit, 1, true) then
+			
+			-- Create/Complete Objective and Intel Event
+			Tut_Util_ObjectiveCreate(obj_BuildDaemonPit , true)
+			Tut_Util_ObjectiveComplete(obj_BuildDaemonPit.title_id)
+			Util_StartIntel(EVENTS.IE_Chaos_BuildSacrificialCircle_Doing)
+			
+			-- Ping the Barracks
+			Tut_PingBlueprint(blueprint.daemonpit, false)
+			
+			-- Triggers the next lesson
+			Rule_Remove(Rule_Chaos_BuildDaemonPit)
+			Rule_AddInterval(Rule_Chaos_BuildDaemonPitDone, 0)
+			
+		end
+	end
+	
+end
+
+function Rule_Chaos_BuildDaemonPitDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.daemonpit) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildDaemonPit_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.daemonpit, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildDaemonPitDoing)
+		Rule_AddInterval(Rule_Chaos_BuildDaemonPitCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildDaemonPitCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.daemonpit, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildDaemonPit.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildDaemonPit_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.daemonpit, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildDaemonPitCheck)
+		Rule_AddInterval(Rule_Chaos_BuildDaemonPitDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildDaemonPitDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildDaemonPitDone)
+		Rule_AddOneShot(Rule_Chaos_BuildBloodthirster, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 27 - Build Bloodthirster
+
+function Rule_Chaos_BuildBloodthirster()
+	
+	-- Define Objective
+	obj_BuildBloodthirster = { title_id = 503520, short_desc_id = 503521, help_tip_id = 503520 }	-- Build a Space Marine Squad
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Marines...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.daemonpit, 1, true) and ( Tut_SGBlueprintCheck("sg_Player1All", blueprint.bloodthirster, 1, false) or Tut_ResearchIsDone( g_Player1, blueprint.bloodthirsterresearch, false) ) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBloodthirster , true, EVENTS.IE_Chaos_BuildBloodthirster)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBloodthirster)
+		
+		-- Ping the Barracks
+		ping_BuildBloodthirster = Tut_PingBlueprint(blueprint.daemonpit, true)
+		Flash_ProductionButton(PQ_Research, blueprint.bloodthirsterresearch, true, true)
+		
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Chaos_BuildBloodthirsterDoing, 0) 
+		
+	-- else if they have some Marines already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.bloodthirster, 1, true) or Tut_ResearchIsDone( g_Player1, blueprint.bloodthirsterresearch, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBloodthirster , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBloodthirster.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBloodthirster_Complete)
+		
+		-- Ping the Marines
+		Tut_PingBlueprint(blueprint.bloodthirster, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Chaos_BuildBloodthirsterDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildBloodthirsterDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainResearch(blueprint.bloodthirsterresearch, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBloodthirster_Doing)
+		
+		Flash_ProductionButton(PQ_Research, blueprint.bloodthirsterresearch, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Chaos_BuildBloodthirsterDoing)
+		Rule_AddInterval(Rule_Chaos_BuildBloodthirsterCheck, 0)
+		
+	end
+
+end
+
+function Rule_Chaos_BuildBloodthirsterCheck()
+
+	Tut_Player1GetAll()
+	
+	if Tut_ResearchIsDone( g_Player1, blueprint.bloodthirsterresearch, true) then
+		
+		-- Complete Objective and Intel Event
+--~ 		Tut_Util_ObjectiveComplete(obj_BuildBloodthirster.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBloodthirster_Complete)
+		
+		-- Stop Looping Ping
+--~ 		Tut_PingBlueprintStop(ping_BuildBloodthirster)
+--~ 		Tut_PingBlueprint(blueprint.bloodthirster, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildBloodthirsterCheck)
+		Rule_AddInterval(Rule_Chaos_BuildBloodthirsterSummon, 0)
+		
+	end
+	
+end
+
+-- TODO: this is meant to tell the player to summon the horrors, but we cant do that right now
+function Rule_Chaos_BuildBloodthirsterSummon()
+
+	Tut_Player1GetAll()
+	-- check to see if player has summoned the horrors
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.bloodthirster, 1, true) then
+	
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBloodthirster.title_id)
+		Util_StartIntel(EVENTS.IE_Chaos_BuildBloodthirster_Summoned)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBloodthirster)
+		Tut_PingBlueprint(blueprint.bloodthirster, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Chaos_BuildBloodthirsterSummon)
+		Rule_AddInterval(Rule_Chaos_BuildBloodthirsterDone, 0)
+		
+	end
+	
+end
+
+function Rule_Chaos_BuildBloodthirsterDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Chaos_BuildBloodthirsterDone)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Hint A1 - Squad Cap Reached
+
+function Rule_Chaos_SquadCap()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap ~= maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Chaos_SquadCap)
+			Flash_ProductionButton(PQ_Research, "squad_cap_research", true, true)
+			
+			Rule_Remove(Rule_Chaos_SquadCap)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Hint A2 - Squad Limit Reached
+
+function Rule_Chaos_SquadLimit()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap == maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Chaos_SquadLimit)
+			
+			Rule_Remove(Rule_Chaos_SquadLimit)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Hint A3 - Low Resource
+
+function Rule_Chaos_LowResource()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Chaos_LowResource)
+			
+			Rule_Remove(Rule_Chaos_LowResource)
+			
+		end
+		
+	end
+
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Hint A4 - Low Power
+
+function Rule_Chaos_LowPower()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Power) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Chaos_LowPower)
+			
+			Rule_Remove(Rule_Chaos_LowPower)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Hint A5 - No Builder Unit
+
+function Rule_Chaos_NoBuilder()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			Util_StartIntel(EVENTS.IE_Chaos_NoBuilder)
+			
+			Rule_Remove(Rule_Chaos_NoBuilder)
+			Rule_AddInterval(Rule_Chaos_NoBuilderDone,0)
+			
+		end
+		
+	end
+
+end
+
+-- once the player has a builder, continue where we left off
+function Rule_Chaos_NoBuilderDone()
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+		Rule_Add( g_tutorialRuleState )
+			
+		Rule_Remove(Rule_Chaos_NoBuilderDone)
+			
+	end
+		
+end
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--[[ Win Warnings ]]
+
+function Rule_ObjectiveChecker()
+	local num = World_GetNumStrategicObjectives()
+	if Player_GetNumStrategicObjectives(g_Player1) > (num*0.5) then
+	
+		Util_StartIntel(EVENTS.IE_ObjectiveWin)
+	
+	end
+
+end
+
+function Rule_ControlAreaChecker()
+	local num = World_GetNumStrategicPoints()
+	if  Player_GetNumStrategicPoints(g_Player1) > (num*0.5) then
+	
+		Util_StartIntel(EVENTS.IE_StrategicPointWin)
+	
+	end
+
+end
+
+function Rule_AnnihilateChecker()
+
+	--[[Set g_Player2]]
+	if g_Player2 == nil and Tut_GetLocalPlayerIndex() == 1 then
+		g_Player2 = World_GetPlayerAt(0)
+	elseif g_Player2 == nil and Tut_GetLocalPlayerIndex() == 0 then
+		g_Player2 = World_GetPlayerAt(1)
+	end
+	
+	local armycount = 0
+	
+	local CountArmourTypes = function( sgroupid, itemindex, squadID )
+		if Squad_HasArmourType( squadID, "tp_infantry_med" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_high" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_low" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_heavy_med" ) or 
+			Squad_HasArmourType( squadID, "tp_infantry_heavy_high" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_low" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_med" ) or 
+			Squad_HasArmourType( squadID, "tp_vehicle_high" ) or 
+			Squad_HasArmourType( squadID, "tp_commander" ) then
+			
+			armycount = armycount+1
+		end
+    end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), CountArmourTypes)
+ 
+	if  armycount >= 4 then
+	
+		local race = Player_GetRaceName(g_Player2)
+		if race == "space_marine_race" then
+			P2blueprint = marine
+		elseif race == "ork_race" then
+			P2blueprint = ork
+		elseif race == "eldar_race" then
+			P2blueprint = eldar
+		elseif race == "chaos_marine_race" then
+			P2blueprint = chaos
+		end
+		
+		--[[EGROUP]]
+		PingHQ = function( egroupid, itemindex, entityID )
+	
+			if Entity_GetBlueprintName(entityID) == P2blueprint.hq then
+				local pos = Entity_GetPosition(entityID)
+				local pingID = Ping_Position(pos, false,"attack")
+			else
+				return false
+			end
+			
+		end
+		
+		EGroup_AddGroup(EGroup_CreateIfNotFound("eg_Player2All"), Player_GetEntities(g_Player2))
+		EGroup_ForEach(EGroup_FromName("eg_Player2All"), PingHQ)
+	
+		Util_StartIntel(EVENTS.IE_Attack)
+	
+	end
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--~ EVENTS = {}
+
+-- Selection
+EVENTS.IE_Chaos_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503073 )	-- To select a unit or structure, simply click on it with the left mouse button. Go to your base and select the Stronghold. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_Selection_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503074 )	-- Congratulations! You have just learned how to select units and structures in the game.
+	CTRL.WAIT()
+end
+
+
+-- Build Scout
+EVENTS.IE_Chaos_BuildScout = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503103 )	-- Select your Stronghold and look for the Scout Marine Squad icon located in the lower-right corner of the screen. Click this button now.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildScout_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503104 )	-- Take note of the small bar that is gradually filling up. This Progress Bar gives you an indication of how close something is to being ready.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildScout_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503105 )	-- Excellent! You now have a Scout Marine Squad.
+	CTRL.WAIT()
+end
+
+
+-- Capture Point
+EVENTS.IE_Chaos_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503114 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503115 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503113 )	-- Order the Scout Marine Squad to capture a Strategic Point by right-clicking on the Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503114 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503115 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503116 )	-- Capturing a Strategic Point takes time. Do not move the capturing squad away from the Strategic Point until the progress bar is full. Otherwise, you will not take control of the Strategic Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503117 )	-- Excellent! The point is ours! You must continue to capture Strategic Points to get more Requisition Resource, which allows you to build more units and structures.
+	CTRL.WAIT()
+end
+
+
+-- Build Servitor
+EVENTS.IE_Chaos_BuildServitor = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503123 )	-- Select your Stronghold and build a Servitor.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildServitor_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503124 )	-- Servitors are required to build additional structures. Servitors are always available from the Stronghold. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildServitor_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503125 )	-- The Servitor has arrived! Servitors are the Space Marines' builder unit. Any time you wish to build a new structure, you must use a Servitor.
+	CTRL.WAIT()
+end
+
+
+-- Build Listening Post
+EVENTS.IE_Chaos_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503133 )	-- Select the Servitor and build a Listening Post on the captured Strategic Point. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503134 )	-- The Listening Post fortifies your hold of a Strategic Point, increasing your Requisition rate at the same time.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503135 )	-- Excellent! The point is now protected from enemy retaliation. You should continue to build Listening Posts on all your captured Strategic Points.
+	CTRL.WAIT()
+end
+
+
+-- Build Generator
+EVENTS.IE_Chaos_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503224 )	-- Some structures, vehicles, and research require Power to function. Building a Plasma Generator will supply you with the Power you need to keep your force going.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503223 )	-- Select your Servitor and build a Plasma Generator.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503225 )	-- The more Plasma Generators you have, the faster you will build up the Power Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503226 )	-- You now have Power! Plasma Generators will continue to produce Power at a constant rate. Note that there is a limit to how many Plasma Generators can be built per Stronghold.
+	CTRL.WAIT()
+end
+
+
+-- Control Zones
+EVENTS.IE_Chaos_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101193 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101194 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101195 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101196 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+
+-- Build Barracks
+EVENTS.IE_Chaos_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503143 )	-- Select your Servitor and build a Chapel-Barracks structure.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503144 )	-- The Chapel-Barracks is the structure where you can build more advanced Space Marine infantry units.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503145 )	-- Excellent, the Chapel-Barracks is finished. 
+	CTRL.WAIT()
+end
+
+-- Build Sacrificial Circle
+EVENTS.IE_Chaos_BuildSacrificialCircle = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503483 )	-- To get your first taste of Chaos daemons, get your Heretic to build a Sacrificial Circle.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildSacrificialCircle_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503484 )	-- A Sacrificial Circle is like a second barracks but for daemonic forces instead of mortal men.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildSacrificialCircle_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503485 )	-- The Sacrificial Circle is a mark of true devotion to the Dark Gods. Through it you can summon Horrors, enlist squads of Possessed Marines and unlock your second commander unit.
+	CTRL.WAIT()
+end
+
+
+-- Build Marines
+EVENTS.IE_Chaos_BuildMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503153 )	-- Select your Chapel-Barracks and build a Space Marine Squad. These elite warriors will form the core of your military force.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503154 )	-- Excellent! Space Marine Squads are your all-purpose fighting force. They are powerful and resilient and, with research, can be upgraded to counter almost any threat. They can also capture Strategic Points!
+	CTRL.WAIT()
+end
+
+-- Build Horrors
+EVENTS.IE_Chaos_BuildHorrors = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503493 )	-- It is time to Summon some daemons. Select the Sacrificial Circle and begin by building a Horror Squad
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildHorrors_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503494 )	-- When the Horror Squad is done building it will remain in reserve within the building until they are Summoned or the Sacrificial Circle is destroyed.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildHorrors_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503495 )	-- When you are ready to Summon the Horror Squad, click on the Summon Daemons icon on the Sacrificial Circle taskbar and then click on any visible area of the battlefield.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildHorrors_Summoned = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503496 )	-- Well Done! The Horrors have arrived. Horror Squads come in fixed sizes and cannot be reinforced. Their real gift is surprise.
+	CTRL.WAIT()
+end
+
+
+-- Reinforce Marines
+EVENTS.IE_Chaos_ReinforceMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503234 )	-- Reinforcing is the act of calling in additional troops to bring your squad to maximum combat effectiveness.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503233 )	-- Select a Space Marine Squad. Click the Reinforce Squad button to add one new unit to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_ReinforceMarines_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503235 )	-- You can Reinforce during battle, in the event that a brother Space Marine falls to the enemy. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503236 )	-- You can click the Reinforce Squad button multiple times to bring the squad to full strength.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_ReinforceMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503237 )	-- Congratulations! You have Reinforced your Space Marine Squad. 
+	CTRL.WAIT()
+end
+
+
+-- Health
+EVENTS.IE_Chaos_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503330 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503331 )	-- Remember, a squad takes damage as a whole. When enough damage has been inflicted on the squad, a unit will die.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503332 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503333 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503334 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+
+-- Take Cover
+EVENTS.IE_Chaos_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503313 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503314 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503315 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503316 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503317 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503318 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+
+-- Build Commander
+EVENTS.IE_Chaos_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503163 )	-- Select the Chapel-Barracks and build a Force Commander. The Force Commander acts as a hero for your army.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503164 )	-- The Force Commander is a veteran of thousands of battles, and his combat prowess is unrivalled. He will lead your force to victory.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503165 )	-- Excellent! The Force Commander has arrived. The Force Commander cannot capture points but is a skilled warrior who can be upgraded with powerful abilities.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503167 )	-- The Space Marines' other commander unit will become available as you build more facilities and unlock more research.
+	CTRL.WAIT()
+end
+
+
+-- Attach Commander
+EVENTS.IE_Chaos_AttachCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503173 )	-- Select your Force Commander and click the Attach button. Now, select a Space Marine Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_AttachCommander_Complete = function()
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503174 )	-- Notice how when the Force Commander joins the squad, they rearrange themselves to make room for their esteemed leader.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503175 )	-- This Space Marine Squad is greatly enhanced by the addition of the Force Commander, but he can also fight effectively on his own. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_AttachCommander_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503176 )	-- To detach the leader from this squad, simply select the squad, then click the Detach icon. It is located in the same place as the Attach icon.
+	CTRL.WAIT()
+end
+
+
+-- Morale
+EVENTS.IE_Chaos_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503320 )	-- Very good! You are mastering advanced concepts that will help you to annihilate your enemies!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503321 )	-- Select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503322 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503323 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503324 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503325 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. Also, certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503326 )	-- Morale can be an effective tool against your enemies.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503327 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503328 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+
+-- Build Addon
+EVENTS.IE_Chaos_BuildAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503183 )	-- Select the Stronghold and click the Monastery Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101470 )	-- We must upgrade the Stronghold to a Monastery to gain access to powerful research options and structures. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101471 )	-- The Monastery is complete! Your power grows. 
+	CTRL.WAIT()
+end
+
+
+-- Build Leader
+EVENTS.IE_Chaos_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503193 )	-- Select a Space Marine Squad and click the Add Leader: Sergeant icon.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503194 )	-- Sergeants are valiant leaders that improve the combat ability and morale of the squad they are part of.  They will inspire your Marines to greater feats of heroism. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503195 )	-- Excellent! Your Sergeant has arrived. Note that your Sergeants are part of the squad and cannot leave it. 
+	CTRL.WAIT()
+end
+
+
+-- Build Armoury
+EVENTS.IE_Chaos_BuildArmoury = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503203 )	-- Select your Servitor and build an Armoury now. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildArmoury_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101474 )	-- You must build an Armoury in order to access weapon upgrades. Squads can be equipped with a variety of weaponry, allowing you to prepare them against different enemy types.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildArmoury_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503206 )	-- Excellent, the Armoury is operational.
+	CTRL.WAIT()
+end
+
+
+-- Upgrade Weaponry
+EVENTS.IE_Chaos_UpgradeWeaponry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503213 )	-- Select your Space Marine Squad and click the Upgrade: Heavy Bolter icon to upgrade a squad member.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_UpgradeWeaponry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101472 )	-- Notice a Heavy Bolter appears in one of your squad member's hands.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_UpgradeWeaponry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503216 )	-- Excellent. You have upgraded your Space Marine Squad. You can upgrade your squads anywhere on the battlefield to weapons that are well suited to counter your enemy.
+	CTRL.WAIT()
+end
+
+
+-- Build More Marines
+EVENTS.IE_Chaos_BuildMoreMarines = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503243 )	-- Select your Chapel-Barracks and build another Space Marine Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildMoreMarines_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503248 )	-- Excellent! You have built a Space Marine Squad and brought it to full strength. To mount an effective attack, you should try to have several Space Marine Squads, fully Reinforced to maximum strength and Upgraded with special weapons and a Sergeant.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503244 )	-- Your field base has supplies and logistics to support a finite number of squads. The number of squads you can support at any given time is called your Squad Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503245 )	-- You can see your current Squad Cap in the Resource Area at the top of your screen.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503246 )	-- Once you have reached your maximum Squad Cap, you will not be able to call in any additional squads, so it's very important to keep an eye on this as you're building up your forces. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503247 )	-- You can increase your Squad Cap by building certain structures and researching upgrades, but there is always a maximum beyond which you cannot go.
+	CTRL.WAIT()
+end
+
+
+-- Point Count
+EVENTS.IE_Chaos_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503254 )	-- The best way to make sure you have enough Requisition Resource is to capture and secure Strategic Points.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503253 )	-- Explore the map around your base with your Space Marine Squads and capture any Strategic Points you encounter along the way. To complete this objective you must Capture 3 Strategic Points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503256 )	-- Make sure you use your Servitor to build Listening Posts on any captured Strategic Points. This fortifies them against your enemies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503257 )	-- Excellent! You have captured 3 Strategic Points and built Listening Posts on them. Taking and holding Strategic Points is key to defeating your enemies.
+	CTRL.WAIT()
+end
+
+
+-- Capture Objective
+EVENTS.IE_Chaos_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503264 )	-- You can capture Critical Locations just like Strategic Points. In some multiplayer games, capturing and holding one or more of these Critical Locations can win you the game! You also get Requisition from any Critical Locations you control.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503263 )	-- Use a squad to capture a Critical Location. Critical Locations are points on the map that represent locations of critical strategic importance. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503265 )	-- Excellent! You've captured a Critical Location. Note that Critical Locations cannot have Listening Posts built on them. You must find other ways to hold them.
+	CTRL.WAIT()
+end
+
+
+-- Capture Relic
+EVENTS.IE_Chaos_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503274 )	-- Holding Relics gives you access to your army's best units and vehicles. Hold on to them to ensure you have access to your best technology!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503273 )	-- Use a squad to capture a Relic. Relics are sacred points of great value. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503275 )	-- Excellent! You have captured a Relic. You can build Listening Posts to fortify captured Relics. You can also capture your opponent's Relics to deny them access to their best units and technology.
+	CTRL.WAIT()
+end
+
+
+-- Build Shop
+EVENTS.IE_Chaos_BuildShop = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503283 )	-- Use your Servitor to build a Machine Cult.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildShop_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503284 )	-- Just like the Chapel-Barracks is used to build infantry units, the Machine Cult is used to build vehicles. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503285 )	-- Vehicles are tough and nearly impervious to the attacks of non-upgraded infantry. They are a fundamental part of your army, and can carry powerful support weapons.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildShop_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503287)	-- Excellent! You now have a Machine Cult. You can build powerful vehicles from this building.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503286 )	-- Note that your field base can only support a finite number of vehicles. This limit is known as the Vehicle Cap. Just like Squad Cap, once you have reached your maximum, you cannot build any more vehicles. You can research technology at your Stronghold that will increase your Vehicle Cap.
+	CTRL.WAIT()
+end
+
+
+-- Squad Cap Warnings
+EVENTS.IE_Chaos_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503290 )	-- To increase the number of squads you can field in Dawn of War, you click on the research items located on your Stronghold.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503291 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them. If you have invested unwisely, you can press the 'Delete' button on your keyboard to terminate unwanted squads.
+	CTRL.WAIT()
+end
+
+
+-- Low Resource Warnings
+EVENTS.IE_Chaos_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503370 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503350 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503352 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503351 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- Chaos Taint information
+EVENTS.IE_Chaos_TaintInformation = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503470 )	-- The evil essense of Chaos seeps into everything they touch.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503471 )	-- Chaos structures are surround by a corrupting miasma know as the Chaos Taint, which reduces the morale recovery of enemy units and heals friendly units. 
+	CTRL.WAIT()
+end
+
+-- Chaos Information
+EVENTS.IE_Chaos_Information = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503510 )	-- The Chaos race is similar to the Space Marines in that the core of the army is a tough and versatile warrior equally capable of shooting and assault, but the similarities end there.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503511 )	-- Chaos has a lot more assault-oriented options than the Space Marines, but only has access to a much smaller selection of vehicles
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503512 )	-- Chaos also has the most methods of getting units straight from the building into combat; with summon Horrors, deepstriking Obliterators and of course the possession of the Bloodthirster.
+	CTRL.WAIT()
+end
+
+-- Build Daemon Pit
+EVENTS.IE_Chaos_BuildDaemonPit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503503 )	-- With the Stronghold upgraded to a Desecrated Fortress, we can now build a Daemon Pit, the source of the ultimate daemon power.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildDaemonPit_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503504 )	-- The Daemon Pit grants access to Obliterators and the ability to summon the Greater Daemon of Khorne.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildDaemonPit_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503505 )	-- At last! The Daemon Pit, source of ultimate evil.
+	CTRL.WAIT()
+end
+
+-- Build Bloodthirster
+EVENTS.IE_Chaos_BuildBloodthirster = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503523 )	--  It is time to summon then ultimate champion of the Dark Powers, the Bloodthirster. Select the Daemon Pit and begin by researching the Bloodthirster
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildBloodthirster_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503524 )	-- When the research is done, the Summon Bloodthirster icon will appear on the taskbar of your Chaos Lord, Sorceror and any Aspiring Champions.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildBloodthirster_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503525 )	-- When you are ready to Summon the Bloodthirster, click on the Summon Bloodthirster icon and watch the possession take place.
+	CTRL.WAIT()
+end
+EVENTS.IE_Chaos_BuildBloodthirster_Summoned = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503526 )	-- Quake in fear! The Bloodthirster has arrived! The Bloodthirster lives on battle. Keep him in the thick of combat or his health will ebb away.
+	CTRL.WAIT()
+end
+
+-- No Builder
+EVENTS.IE_Chaos_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503126 )	-- 	In order to further establish your base you need a Heretic.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503123 )	-- 	Select your Desecrated Stronghold and build a Heretic. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Chaos_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503510 )	-- 		The Chaos race is similar to the Space Marines in that the core of the army is a tough and versatile warrior equally capable of shooting and assault, but the similarities end there.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503511 )	-- 		Chaos has a lot more assault-oriented options than the Space Marines, but only has access to a much smaller selection of vehicles
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503512 )	-- 			Chaos also has the most methods of getting units straight from the building into combat; with summon Horrors, deepstriking Obliterators and of course the possession of the Bloodthirster.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tutorial_Complete2 = function()
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503300 )	-- 		Congratulations! You've completed the learning session of the tutorial. 
+--~ 	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503301 )	-- 		It is time to put what you have learned to work. Take control of the force and build up your strength so you can crush your enemy!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503302 )	-- 		Use infantry units to capture Strategic Points, and Heretics to build Listening Posts on them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503303 )	-- 		Continue to build structures, and carry out research that will increase your effectiveness in battle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503304 )	-- 	 	Build additional squads and vehicles. Make sure you research upgrades that will increase both your Squad Cap and Vehicle Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 503305 )	-- 	 	Take this battlefield, and the next, and the next after that. The fight will never end until your enemies are crushed.
+	CTRL.WAIT()
+end
+
+
+
+
+
+
+
+

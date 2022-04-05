@@ -1,0 +1,828 @@
+----------------------------------------------------------------------------------------------------------------
+-- Command helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+import("GroupCallers.scar")
+
+-- Commands
+
+--+ Cmd_MoveToMarker
+--+ Cmd_MoveToEGroup
+--+ Cmd_MoveToSGroup
+--+ Cmd_AttackSGroup
+--+ Cmd_AttackEntiyGroup
+--+ Cmd_SetStance
+-- Cmd_Reinforce AtMarker? ask chris
+
+-- Cmd_IsCaptured -- applies to entities and squads maybe?
+-- Cmd_IsPlayerBuilding
+-- Cmd_IsUnderAttack -- applies to entities and squads
+-- Cmd_IsPlayerUnderAttack
+
+----------------------------------------------------------------------------------------------------------------
+-- Private implementation
+_Cmd_Private = {
+	-- get the player owner of a group.  this function assumes that all items in a group belong to the same player
+	-- also assumes that the group is not empty
+	GetGroupPlayerOwner = function( group, groupcaller )
+		if( groupcaller.GetCount( group ) <= 0 ) then
+			error("Function cannot be called with empty group")
+		end
+		
+		local player = nil
+		
+		local CheckPlayer = function( groupid, itemindex, itemid )
+			player = groupcaller.GetItemPlayer( itemid )
+			return true
+		end
+		
+		groupcaller.ForEachAllOrAny( group, false, CheckPlayer )
+		
+		if( player == nil ) then
+			error("This should never happen")
+		end
+		
+		return player
+	end,
+	
+	-- checks if ALL or ANY items in a group have the active command
+	IsCommandActive = function( group, groupcaller, command, all )		
+		local count = groupcaller.GetCount( group )
+		
+		-- ignore empty group
+		if( count <= 0 ) then return false end
+		
+		local IsItemCommandActive = function( groupid, itemindex, itemid )
+			return ( command == groupcaller.GetItemActiveCommand( itemid ) )
+		end
+		
+		local result = groupcaller.ForEachAllOrAny( group, all, IsItemCommandActive )
+		return result
+	end,
+}
+
+--? @group Command
+
+----------------------------------------------------------------------------------------------------------------
+-- Commands
+
+
+--? @shortdesc Move a squad group to a given markers position.
+--? @extdesc The move command will be issued by the player owner of the first item in the group.  This function does nothing if the group is empty.
+--? @args String sgroupname, String markername
+--? @result Void
+function Cmd_MoveToMarker( sgroupname, markername )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_SquadPos(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_Move,
+		Marker_GetPosition ( Marker_FromName (markername, "basic_marker") )
+	)
+end
+
+
+--? @shortdesc Move a squad group to the center of an entity group.
+--? @extdesc The move command will be issued by the player owner of the first item in the group.  This function does nothing if the group is empty.
+--? @args String sgroupname, String egroupname
+--? @result Void
+function Cmd_MoveToEGroup( sgroupname, egroupname )
+	local squads = SGroup_FromName( sgroupname )
+	local entities = EGroup_FromName( egroupname )
+	
+	-- ignore empty groups
+	if( (SGroup_CountSpawned( squads ) <= 0)  or (EGroup_Count( entities ) <= 0) ) then return end
+		
+	Command_SquadPos(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_Move,
+		EGroup_GetPosition( entities )
+	)
+end
+
+
+--? @shortdesc Move a squad group to another squad group.  This function should track the target squad groups position. 
+--? @extdesc The source squads will not stop moving until they reach the targeted squad group.
+--? @args String sourcesquadgroup, String targetsquadgroup
+--? @result Void
+function Cmd_MoveToSGroup( sourcesquadgroup, targetsquadgroup )
+	local source = SGroup_FromName( sourcesquadgroup )
+	local target = SGroup_FromName( targetsquadgroup )
+	
+	-- ignore empty groups
+	if( (SGroup_CountSpawned( source ) <= 0)  or (SGroup_CountSpawned( target ) <= 0) ) then return end
+		
+	Command_SquadSquad(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_Move,
+		target
+	)
+end
+
+
+--? @shortdesc Order a squad group to attack another squad group.  This function should track the target squad groups position. 
+--? @extdesc The source squads will not stop moving until they reach the targeted squad group.
+--? @args String sourcesquadgroup, String targetsquadgroup
+--? @result Void
+function Cmd_AttackSGroup( sourcesquadgroup, targetsquadgroup )
+	local source = SGroup_FromName( sourcesquadgroup )
+	local target = SGroup_FromName( targetsquadgroup )
+	
+	-- ignore empty groups
+	if( (SGroup_CountSpawned( source ) <= 0)  or (SGroup_CountSpawned( target ) <= 0) ) then return end
+		
+	Command_SquadSquad(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_Attack,
+		target
+	)
+end
+
+
+--? @shortdesc Order a squad group to attack another squad group.  This function should track the target squad groups position. 
+--? @extdesc The source squads will not stop moving until they reach the targeted squad group.
+--? @args String sourcesquadgroup, String targetentitygroup
+--? @result Void
+function Cmd_AttackEGroup( sourcesquadgroup, targetentitygroup )
+	local source = SGroup_FromName( sourcesquadgroup )
+	local target = EGroup_FromName( targetentitygroup )
+	
+	-- ignore empty groups
+	if( (SGroup_CountSpawned( source ) <= 0)  or (EGroup_Count( target ) <= 0) ) then return end
+		
+	Command_SquadEntity(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_Attack,
+		target
+	)
+end
+
+--? @shortdesc Order a squad group to ground attack a position. 
+--? @args String sgroupname, Position targetposition
+--? @result Void
+function Cmd_AttackGroundPos( sgroupname, targetposition )
+	local source = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( source ) <= 0  ) then return end
+		
+	Command_SquadPos(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_AttackGround,
+		targetposition
+	)
+end
+
+--? @shortdesc Order a squad group to ground attack a marker position. 
+--? @args String sgroupname, String markername
+--? @result Void
+function Cmd_AttackGroundMarker( sgroupname, markername )
+	Cmd_AttackGroundPos( sgroupname, Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ) )
+end
+
+--? @shortdesc Order a squad group to attack move to a position. 
+--? @args String sgroupname, Position targetposition
+--? @result Void
+function Cmd_AttackMovePos( sgroupname, targetposition )
+	local source = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( source ) <= 0  ) then return end
+		
+	Command_SquadPos(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_AttackMove,
+		targetposition
+	)
+end
+
+--? @shortdesc Order a squad group to ground move to a marker position. 
+--? @args String sgroupname, String markername
+--? @result Void
+function Cmd_AttackMoveMarker( sgroupname, markername )
+	Cmd_AttackMovePos( sgroupname, Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ) )
+end
+
+--? @shortdesc Order a squad group set their stance.  Use STANCE_Hold, STANCE_StandGround, STANCE_Burn, STANCE_CeaseFire, or STANCE_Attack.
+--? @extdesc The order will be issued by the owner of the squad group.  This function does nothing if the squad group is empty.
+--? @args String squadgroupname, Integer stance
+--? @result Void
+function Cmd_SetStance( sgroupname, stance )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	Command_SquadExt(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_Stance,
+		stance,
+		0
+	)
+end
+
+--? @shortdesc Order a squad group set their stance.  Use MSTANCE_Assault, MSTANCE_Ranged.
+--? @extdesc The order will be issued by the owner of the squad group.  This function does nothing if the squad group is empty.
+--? @args String squadgroupname, Integer stance
+--? @result Void
+function Cmd_SetMeleeStance( sgroupname, stance )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	Command_SquadExt(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_StanceMelee,
+		stance,
+		0
+	)
+end
+
+--? @shortdesc Sends a reinforce leader command to all squads in a group.  count represents the number of commands to send.
+--? @extdesc Note: To create a squad bypassing the pre-reqs and costs use Util_CreateSquadsAtPositionEx.
+--? @args String squadgroupname, Integer count
+--? @result Void
+function Cmd_ReinforceLeader( sgroupname, count )
+	
+	-- default parameter
+	if count == nil then count = 1 end
+	
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	-- send commands
+	for i=1, count do
+		Command_Squad(
+			_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+			squads,
+			SCMD_ReinforceLeader
+		)
+	end
+	
+end
+
+--? @shortdesc Sends a reinforce command to all squads in a group.  count represents the number of commands to send.
+--? @extdesc Note: To create a squad bypassing the pre-reqs and costs use Util_CreateSquadsAtPositionEx.
+--? @args String squadgroupname, Integer count
+--? @result Void
+function Cmd_ReinforceTrooper( sgroupname, count )
+	
+	-- default parameter
+	if count == nil then count = 1 end
+	
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	-- send commands
+	for i=1, count do
+		Command_Squad(
+			_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+			squads,
+			SCMD_ReinforceTrooper
+		)
+	end
+	
+end
+
+----------------------------------------------------------------------------------------------------------------
+-- Queries
+
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are currently calling for reinforcments.
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function Cmd_IsReinforcing( sgroupname, all )
+	local group = SGroup_FromName( sgroupname )
+	
+	local CheckIsReinforcing = function( groupid, itemindex, itemid )
+		return Squad_IsReinforcing( itemid )
+	end
+	
+	return SGroup_ForEachAllOrAny( group, all, CheckIsReinforcing )
+end
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are currently reinforcing a leader.
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY.
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function Cmd_IsReinforcingLeader( sgroupname, all )
+	local IsReinforcingLeader = function( groupid, itemindex, itemid )
+		return Squad_IsReinforcingLeader( itemid )
+	end
+	
+	return SGroup_ForEachAllOrAny( SGroup_FromName( sgroupname ), all, IsReinforcingLeader )
+end
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are currently upgrading.
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function Cmd_IsUpgrading( sgroupname, all )
+	local group = SGroup_FromName( sgroupname )
+	
+	local CheckIsUpgrading = function( groupid, itemindex, itemid )
+		return Squad_IsUpgrading( itemid )
+	end
+	
+	return SGroup_ForEachAllOrAny( group, all, CheckIsUpgrading )
+end
+
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are currently capturing something.
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function Cmd_IsCapturing( sgroupname, all )
+	return _Cmd_Private.IsCommandActive(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				SQUADSTATEID_Capture,
+				all
+			)
+end
+
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are currently constructing a building.
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function Cmd_IsConstructingBuilding( sgroupname, all )
+	return _Cmd_Private.IsCommandActive(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				SQUADSTATEID_Construction,
+				all
+			)
+end
+
+
+--? @shortdesc Returns true if ALL or ANY entities in a group are currently producing squads
+--? @extdesc Set all to true to check for ALL or set to false to check for ANY
+--? @args String egroupname, Boolean all
+--? @result Boolean
+function Cmd_IsProducingSquads( egroupname, all )
+	local group = EGroup_FromName( egroupname )
+		
+	local IsProducingSquads = function( groupid, itemindex, itemid )
+		return Entity_HasProductionQueue(itemid) and (Entity_GetProductionQueueSize(itemid) > 0) 
+	end
+	
+	return EGroup_ForEachAllOrAny( group, all, IsProducingSquads )
+end
+
+--? @shortdesc Attach the squad from sgroupnameAttachee to sgroupname.  Both SGroups must contain only one squad.
+--? @args String sgroupname, String sgroupnameAttachee
+--? @result Void
+function Cmd_AttachSquads( sgroupname, sgroupnameAttachee )
+	sgroupID = SGroup_FromName( sgroupname )
+	sgroupIDAttachee = SGroup_FromName( sgroupnameAttachee )
+	
+	-- validate squad groups are different
+	if( sgroupname == sgroupnameAttachee ) then
+		error("Cannot attach squads from the same group!")
+	end
+	
+	-- validate squad groups only have one squad
+	if( SGroup_CountSpawned( sgroupID ) ~= 1 or SGroup_CountSpawned( sgroupIDAttachee ) ~= 1 ) then
+		error( "SGroups must contain only one squad" )
+	end
+		
+	-- validate squads have same player owner
+	if( Player_GetID( Squad_GetPlayerOwner( SGroup_GetSpawnedSquadAt( sgroupID, 1 ) ) ) ~= Player_GetID( Squad_GetPlayerOwner( SGroup_GetSpawnedSquadAt( sgroupIDAttachee, 1 ) ) ) ) then
+		error( "Cannot attach squads belonging to seperate players" )
+	end
+	
+	-- issue order
+	Command_SquadSquad( 
+		Squad_GetPlayerOwner( SGroup_GetSpawnedSquadAt( sgroupID, 1 ) ),
+		sgroupIDAttachee, 
+		SCMD_Attach, 
+		sgroupID
+	)	
+	
+end
+
+--? @shortdesc Command an sgroup to jump to a given position.  The squad will jump to the closest possible position.
+--? @extdesc Note: Jump restrictions such as range etc apply.
+--? @args String sgroupname, Position position
+--? @result Void
+function Cmd_JumpToPos( sgroupname, position )
+	local sgroupID = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( sgroupID ) <= 0) then return end
+	
+	Command_SquadPos(
+		Squad_GetPlayerOwner( SGroup_GetSpawnedSquadAt( sgroupID, 1 ) ),
+		sgroupID,
+		SCMD_Jump,
+		position
+	)	
+end
+
+--? @shortdesc Command an sgroup to stop.  This is the same as issuing a stop from the taskbar
+--? @args String sgroupname
+--? @result Void
+function Cmd_StopSquads( sgroupname )
+	local sgroupID = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( sgroupID ) <= 0) then return end
+
+	Command_Squad(
+		Squad_GetPlayerOwner( SGroup_GetSpawnedSquadAt( sgroupID, 1 ) ),
+		sgroupID,
+		SCMD_Stop
+	)	
+end
+
+--? @shortdesc Command an egroup to stop.  This is the same as issuing a stop from the taskbar
+--? @args String egroupname
+--? @result Void
+function Cmd_StopEntities( egroupname )
+	local egroupID = EGroup_FromName( egroupname )
+	
+	-- ignore empty groups
+	if( EGroup_CountSpawned( egroupID ) <= 0) then return end
+
+	Command_Entity(
+		Entity_GetPlayerOwner( EGroup_GetSpawnedEntityAt( egroupID, 1 ) ),
+		egroupID,
+		CMD_Stop
+	)	
+end
+
+--? @shortdesc Command an sgroup to jump to a given marker position. 
+--? @extdesc Note: Jump restrictions such as range etc apply.
+--? @args String sgroupname, String markername
+--? @result Void
+function Cmd_JumpToMarker( sgroupname, markername )
+	Cmd_JumpToPos( sgroupname, Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ) )
+end
+
+
+--? @shortdesc Moves a squad group to the closest marker in a list of marker names.
+--? @args String sgroupName, StringTable markerNameTable
+--? @result markerID
+function Cmd_MoveToClosestMarker( sgroupName, markerNameTable )
+	local sgroupId = SGroup_FromName(sgroupName)
+	
+	if( SGroup_CountSpawned( sgroupId ) == 0 ) then
+		error( "Cannot issue order on empty group" )
+	end
+	
+	local range = table.getn(markerNameTable)
+	local distance = {}
+	local closest = 9999
+	local closestPoint = 0
+	local startPoint = 0
+	for r = 1, range do
+		table.insert( 
+			distance,	r,
+			World_DistanceSGroupToPoint( sgroupId, Marker_GetPosition( Marker_FromName(markerNameTable[r], "basic_marker") ), 1)
+		)
+	end
+--	table.foreachi(distance,print)
+	for r = 1, range do
+		if distance[r] < closest then
+			closest = distance[r]
+			closestPoint = r
+			startPoint = markerNameTable[closestPoint]
+--			print("the closest point currently is "..tableName[closestPoint])
+		end
+	end
+--	print("the starting marker is "..startPoint)
+	if startPoint == markerNameTable[closestPoint] then
+		Command_SquadPos( 
+			_Cmd_Private.GetGroupPlayerOwner( sgroupId, SGroupCaller ),
+			sgroupId, 
+			SCMD_Move,
+			Marker_GetPosition( Marker_FromName( startPoint, "basic_marker") ) 
+		)
+		
+		return Marker_FromName( startPoint, "basic_marker")
+	end
+end
+
+--? @shortdesc Enables/Disables infiltration for an sgroup
+--? @args String sgroupName, Boolean on
+--? @result Void
+function Cmd_Infiltrate( sgroupname, on )
+
+	-- default parameter
+	if on == nil then on = true end
+	
+	if( on == true ) then on = 1 else on = 0 end
+	
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	-- send command
+	Command_SquadExt(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_SetInfiltrating,
+		on,
+		0		-- ignored
+	)
+end
+
+--? @shortdesc Command a SGroup to enter a transport in transportgroup
+--? @args String sgroupname, String transportgroup
+--? @result Void
+function Cmd_EnterTransport( sgroupname, transportgroup )
+	local squads = SGroup_FromName( sgroupname )
+	local transport = SGroup_FromName( transportgroup )
+	
+	if( SGroup_CountSpawned( squads ) == 0 or SGroup_CountSpawned( squads ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_SquadSquad( 
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads, 
+		SCMD_Load,
+		transport
+	)
+end
+
+--? @shortdesc Command all transports in an SGroup to move to position and unload
+--? @args String sgroupname, ScarPosition pos
+--? @result Void
+function Cmd_EmptyTransport( transportgroup, pos )
+	local squads = SGroup_FromName( transportgroup )
+	
+	if( SGroup_CountSpawned( squads ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_SquadPos( 
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads, 
+		SCMD_Unload,
+		pos
+	)
+end
+
+--? @shortdesc Command a SGroup to enter the first building in buildinggroup
+--? @args String sgroupname, String buildinggroup
+--? @result Void
+function Cmd_EnterBuilding( sgroupname, buildinggroup )
+	local squads = SGroup_FromName( sgroupname )
+	local building = EGroup_FromName( buildinggroup )
+	
+	if( SGroup_CountSpawned( squads ) == 0 or SGroup_CountSpawned( squads ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_SquadEntity( 
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads, 
+		SCMD_Load,
+		building
+	)
+end
+
+--? @shortdesc Command all buildings in an EGroup to unload their squads
+--? @args String buildinggroup
+--? @result Void
+function Cmd_EmptyBuilding( buildinggroup )
+	local building = EGroup_FromName( buildinggroup )
+	
+	if( EGroup_CountSpawned( building ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_Entity( 
+		_Cmd_Private.GetGroupPlayerOwner( building, EGroupCaller ),
+		building, 
+		CMD_Unload
+	)
+end
+
+
+--? @shortdesc Command an sgroup of builders to construct a building at a position
+--? @args String builderSGroup, String buildingBlueprint, ScarPosition pos
+--? @result Void
+function Cmd_ConstructBlueprintPos( builderSGroup, buildingBlueprint, pos )
+	local groupID = SGroup_FromName( builderSGroup )
+	
+	if( SGroup_CountSpawned( groupID ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_ConstructBuilding(
+		_Cmd_Private.GetGroupPlayerOwner( groupID, SGroupCaller ),
+		groupID,
+		buildingBlueprint,
+		pos
+	)
+end
+
+--? @shortdesc Command an sgroup of builders to construct a building at a marker position
+--? @args String builderSGroup, String buildingBlueprint, String markername
+--? @result Void
+function Cmd_ConstructBlueprintMarker( builderSGroup, buildingBlueprint, markername )
+	local markerpos = Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+	
+	Cmd_ConstructBlueprintPos( builderSGroup, buildingBlueprint, markerpos )
+end
+
+--? @shortdesc Command an sgroup of builders to construct a building an enity (for listening posts etc)
+--? @args String builderSGroup, String buildingBlueprint, String egroupName
+--? @result Void
+function Cmd_ConstructBlueprintOnEGroup( builderSGroup, buildingBlueprint, egroupName )
+	local egroupID = EGroup_FromName( egroupName )
+
+	-- make sure there is only one entity in egroup
+	if( EGroup_CountSpawned( egroupID ) ~= 1 ) then
+		error( "Function only works on egroups containing one spawned entity")
+	end	
+	
+	local pos = EGroup_GetPosition( egroupID )
+	
+	Cmd_ConstructBlueprintPos( builderSGroup, buildingBlueprint, pos )
+end
+
+
+--? @shortdesc Command an sgroup of units to capture an egroup of strategic points
+--? @args String sgroupname, String egroupname
+--? @result Void
+function Cmd_Capture( sgroupname, egroupname )
+	local squads = SGroup_FromName( sgroupname )
+	local points = EGroup_FromName( egroupname )
+	
+	if( SGroup_CountSpawned( squads ) == 0 or EGroup_CountSpawned( points ) == 0 ) then
+		return	-- ignore empty groups
+	end
+	
+	Command_SquadEntity( 
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads, 
+		SCMD_Capture,
+		points
+	)
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts it on the target pos. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, ScarPosition targetpos
+--? @result Boolean
+function Cmd_CastAbilityPos( sgroupname, abilityname, targetpos )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		local castSuccesful = Command_SquadAbilityPos( player, itemid, abilityname, targetpos )
+		return castSuccesful
+	end
+	
+	local result = SGroup_ForEachAllOrAny( sgroupname, false, CheckAndCastAbility )	
+	return result
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts it on the target pos. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, ScarPosition targetpos
+--? @result Boolean
+function Cmd_CastAbilityMarker( sgroupname, abilityname, targetmarker )
+
+	local markerpos = Marker_GetPosition( Marker_FromName( targetmarker, "basic_marker" ) )
+	
+	local result = Cmd_CastAbilityPos( sgroupname, abilityname, markerpos )
+	return result
+	
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts on itself
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname
+--? @result Boolean
+function Cmd_CastAbilitySelf( sgroupname, abilityname )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		local castSuccesful = Command_SquadAbilitySelf( player, itemid, abilityname)
+		return castSuccesful
+	end
+	
+	local result = SGroup_ForEachAllOrAny( sgroupname, false, CheckAndCastAbility )	
+	return result
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts it on the target pos. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, String targetgroup
+--? @result Boolean
+function Cmd_CastAbilitySGroup( sgroupname, abilityname, targetgroup )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	local targetgroupid = SGroup_FromName( targetgroup )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		local castSuccesful = Command_SquadAbilitySGroup( player, itemid, abilityname, targetgroupid )
+		return castSuccesful
+	end
+	
+	local result = SGroup_ForEachAllOrAny( sgroupname, false, CheckAndCastAbility )	
+	return result
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts it on the target. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, String targetgroup
+--? @result Boolean
+function Cmd_CastAbilitySGroupE( sgroupname, abilityname, targetgroup )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	local targetgroupid = EGroup_FromName( targetgroup )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		local castSuccesful = Command_SquadAbilityEGroup( player, itemid, abilityname, targetgroupid )
+		return castSuccesful
+	end
+	
+	local result = SGroup_ForEachAllOrAny( sgroupname, false, CheckAndCastAbility )	
+	return result
+end
+
+--? @shortdesc Checks the egroup for an entity that can cast the ability and casts it on the target. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, String targetgroup
+--? @result Boolean
+function Cmd_CastAbilityEGroupS( egroupname, abilityname, targetgroup )
+	local player = _Cmd_Private.GetGroupPlayerOwner( egroupname, EGroupCaller )
+	local targetgroupid = SGroup_FromName( targetgroup )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		local castSuccesful = Command_EntityAbilitySGroup( player, itemid, abilityname, targetgroupid )
+		return castSuccesful
+	end
+	
+	local result = EGroup_ForEachAllOrAny( egroupname, false, CheckAndCastAbility )	
+	return result
+end
+
+--? @shortdesc Calls possesion on a squads in a group.  Requirments for possesion must be met
+--? @args String sgroupName
+--? @result Void
+function Cmd_Possesion( sgroupname )
+
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( squads )  <= 0 ) then return end
+	
+	-- send command
+	Command_SquadPossesion(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads
+	)
+end
+
+--? @shortdesc Order a squad group to ramapge to a position. 
+--? @args String sgroupname, Position targetposition
+--? @result Void
+function Cmd_RampagePos( sgroupname, targetposition )
+	local source = SGroup_FromName( sgroupname )
+	
+	-- ignore empty groups
+	if( SGroup_CountSpawned( source ) <= 0  ) then return end
+		
+	
+	Command_SquadPos(
+		_Cmd_Private.GetGroupPlayerOwner( source, SGroupCaller ),
+		source,
+		SCMD_Rampage,
+		targetposition
+	)
+end
+
+--? @shortdesc Order a squad group to ramapge to a marker pos/
+--? @args String sgroupname, String markername
+--? @result Void
+function Cmd_RampageMarker( sgroupname, markername )
+	Cmd_RampagePos( sgroupname, Marker_GetPosition( Marker_FromName( markername, "basic_marker") ) )
+end

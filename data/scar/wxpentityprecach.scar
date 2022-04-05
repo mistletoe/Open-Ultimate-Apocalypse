@@ -1,0 +1,827 @@
+----------------------------------------------------------------------------------------------------------------
+-- Single player tables of entities to precach for the SP campaign
+-- (c) 2005 Relic Entertainment Inc.
+
+
+-------------------------------------------------
+--[[ MSO1 ]]
+-------------------------------------------------
+
+_t_MSO1_Player1 = {
+--[[Buildings]]"guard_mars_pattern", "guard_thermo_plasma", 
+
+--[[Units]]"guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_priest", "guard_leaders_psyker", "guard_leaders_psyker_sp_mdc5",
+"guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_lemanruss"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player2 = {
+--[[Buildings]]"chaos_armoury", "chaos_greater_sacrificial_circle", "chaos_hq", "chaos_listening_post", "chaos_machine_pit", "chaos_plasma_generator",
+"chaos_sacrificial_circle", "chaos_single_player_only_sacrificial_circle",  
+
+--[[Units]]"chaos_aspiring_champion", "chaos_bloodthirster", "chaos_daemon_prince", "chaos_horror", "chaos_khorne_berserker",
+"chaos_lord_sp_msd01", "chaos_obliterator", "chaos_predator", "chaos_raptor_aspiring_champion", 
+"chaos_rhino", "chaos_slave"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player3 = {
+--[[Buildings]] "eldar_advanced_warp_generator", "eldar_aspect_portal", "eldar_hq", "eldar_hq_sp_msoe05", "eldar_listening_post", "eldar_mine_field", 
+"eldar_soul_shrine", "eldar_support_platform_scatterlaser", "eldar_support_portal", "eldar_warp_generator", 
+
+--[[Units]]"eldar_avatar", "eldar_banshee_exarch", "eldar_banshees", "eldar_bonesinger", "eldar_dark_reaper_exarch", "eldar_falcon_grav_tank",
+"eldar_farseer_sp", "eldar_fire_dragon", "eldar_fire_dragon_exarch", "eldar_fire_prism", "eldar_grav_platform", "eldar_grav_platform_brightlance", "eldar_guardian",
+"eldar_rangers", "eldar_vypers", "eldar_warlock", "eldar_warp_spider", "eldar_warp_spider_exarch", "eldar_wraithlord"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player4 = {
+--[[Buildings]]"guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter",  
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player5 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma",  
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player6 = {
+--[[Buildings]]"chaos_machine_pit", "chaos_mine_field", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator", 
+
+--[[Units]]"chaos_aspiring_champion", "chaos_bloodthirster", "chaos_cultist", "chaos_daemon_prince", "chaos_defiler", "chaos_horror", "chaos_khorne_berserker",
+"chaos_lord", "chaos_lord_sp_msd01", "chaos_marine_bolter", "chaos_obliterator", "chaos_possessed_marine", "chaos_predator", "chaos_raptor", "chaos_raptor_aspiring_champion", 
+"chaos_rhino", "chaos_slave", "chaos_sorcerer"}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player7 = {}
+
+-----------------------------------------------------------------------
+_t_MSO1_Player8 = {}
+
+
+-------------------------------------------------
+--[[ MSO2 ]]
+-------------------------------------------------
+
+_t_MSO2_Player1 = {
+--[[Buildings]]"guard_mars_pattern", "guard_thermo_plasma", 
+
+--[[Units]]"guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant", "guard_infantry_ogryn", 
+"guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_priest", "guard_leaders_psyker", "guard_leaders_psyker_sp_mdc5","guard_vehicles_baneblade", 
+"guard_vehicles_basilisk", "guard_vehicles_hellhound", "guard_vehicles_lemanruss"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player2 = {
+--[[Buildings]] "eldar_advanced_warp_generator", "eldar_hq_sp_msoe05", "eldar_mine_field", 
+"eldar_soul_shrine", "eldar_support_platform_scatterlaser", "eldar_support_portal", 
+
+--[[Units]]"eldar_avatar", "eldar_bonesinger", "eldar_falcon_grav_tank", "eldar_farseer_sp", "eldar_fire_dragon", "eldar_fire_dragon_exarch", "eldar_fire_prism", 
+"eldar_grav_platform", "eldar_grav_platform_brightlance", "eldar_guardian", "eldar_rangers", "eldar_vypers", "eldar_warlock", "eldar_warlock_seer", "eldar_warp_spider", 
+"eldar_warp_spider_exarch", "eldar_wraithlord"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player3 = {
+--[[Buildings]]"space_marine_ability_building", "space_marine_armoury", "space_marine_barracks", "space_marine_drop_pod_building", "space_marine_generator",
+"space_marine_hq", "space_marine_interface_relay", "space_marine_listening_post", "space_marine_mine_field", "space_marine_orbital_relay", "space_marine_single_player_only_drop_pod_building", 
+"space_marine_thermo_generator", "space_marine_turret_bolter", "space_marine_vehicle_building", 
+
+--[[Units]]"apothecary", "assault_marine", "dreadnought", "dreadnought_hellfire_variant", "evil_librarian", "force_commander", "force_commander_sp", 
+"land_speeder", "librarian", "predator", "rhino", "scout_marine", "sergeant", "sergeant_assault_marine", "servitor", "skull_probe", "space_marine_sp_thunderhawk",
+"terminator", "terminator_assault", "thunderhawk", "whirlwind"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player4 = {
+--[[Buildings]]"chaos_greater_sacrificial_circle", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator",  
+
+--[[Units]]"chaos_aspiring_champion", "chaos_daemon_prince", "chaos_defiler", "chaos_lord", "chaos_lord_sp_msd01", "chaos_obliterator", "chaos_possessed_marine", 
+"chaos_raptor_aspiring_champion", "chaos_rhino", "chaos_slave"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player5 = {
+--[[Buildings]] "ork_boy_hut", "ork_generator", "ork_gork_totem", "ork_hq", 
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob_leader", "ork_nob_leader_sp", "ork_squiggoth", "ork_stormboy_nob_leader",
+"ork_trukk", "ork_warboss", "ork_warboss_sp_md2"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player6 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player7 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO2_Player8 = {}
+
+
+-------------------------------------------------
+--[[ MSO3 ]]
+-------------------------------------------------
+
+_t_MSO3_Player1 = {
+--[[Buildings]] "eldar_advanced_warp_generator", "eldar_hq_sp_msoe05", "eldar_mine_field", "eldar_support_portal", "eldar_warp_generator", 
+
+--[[Units]]"eldar_avatar", "eldar_banshee_exarch", "eldar_banshees", "eldar_dark_reaper_exarch", "eldar_dark_reapers", "eldar_falcon_grav_tank",
+"eldar_farseer_sp", "eldar_fire_dragon", "eldar_fire_dragon_exarch", "eldar_fire_prism", "eldar_grav_platform", "eldar_grav_platform_brightlance", 
+"eldar_vypers", "eldar_warlock", "eldar_warp_spider", "eldar_warp_spider_exarch", "eldar_wraithlord"}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player2 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player3 = {
+--[[Buildings]] "ork_bigger_generator", "ork_boy_hut", "ork_gork_totem", "ork_mine_field",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_killa_kan", "ork_looted_tank_singleplayer_superlongrange",
+"ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_warboss", "ork_warboss_sp_md2", }
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player4 = {
+--[[Buildings]]
+
+--[[Units]]"guard_leaders_psyker_sp_mdc5", "guard_vehicles_basilisk_sp_mso2"
+}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player5 = {
+--[[Buildings]] "ork_bigger_generator", "ork_boy_hut", "ork_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns", "ork_waagh_banner",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_slugga_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player6 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSO3_Player8 = {}
+
+
+
+-------------------------------------------------
+--[[ MSO4 ]]
+-------------------------------------------------
+
+_t_MSO4_Player1 = {
+--[[Buildings]] 
+
+--[[Units]]"guard_vehicles_basilisk_sp_mso2"}
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player2 = {
+--[[Buildings]]"eldar_hq_sp_msoe05",
+
+--[[Units]]"eldar_farseer_sp"}
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player3 = {
+--[[Buildings]]"space_marine_ability_building", "space_marine_armoury", "space_marine_drop_pod_building", "space_marine_generator",
+"space_marine_hq", "space_marine_interface_relay", "space_marine_listening_post", "space_marine_mine_field", "space_marine_orbital_relay", "space_marine_single_player_only_drop_pod_building", 
+"space_marine_thermo_generator", "space_marine_turret_bolter", "space_marine_vehicle_building", 
+
+--[[Units]]"apothecary", "assault_marine", "evil_librarian", "force_commander", "force_commander_sp", 
+"land_speeder", "librarian", "predator", "rhino", "scout_marine", "sergeant_assault_marine", "servitor", "skull_probe", "space_marine_sp_thunderhawk",
+"thunderhawk", "whirlwind"}
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player4 = {
+--[[Buildings]] 
+
+--[[Units]]"guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_vehicles_baneblade", "guard_vehicles_basilisk_sp_mso2", }
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player5 = {
+--[[Buildings]] 
+
+--[[Units]]"ork_squiggoth", "ork_warboss_sp_md2", }
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player6 = {
+--[[Buildings]]"chaos_single_player_only_sacrificial_circle",
+
+--[[Units]]"chaos_daemon_prince", "chaos_lord_sp_msd01"}
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player7 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO4_Player8 = {
+--[[Buildings]]"chaos_armoury", "chaos_greater_sacrificial_circle", "chaos_hq", "chaos_listening_post", "chaos_machine_pit", "chaos_mine_field", "chaos_plasma_generator",
+"chaos_sacrificial_circle", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator", "chaos_turret_bolter", 
+
+--[[Units]]"chaos_bloodthirster", "chaos_daemon_prince", "chaos_defiler", "chaos_horror", 
+"chaos_lord", "chaos_lord_sp_msd01", "chaos_obliterator", "chaos_possessed_marine", "chaos_predator", "chaos_raptor",  
+"chaos_rhino", "chaos_slave", "chaos_sorcerer"}
+
+-------------------------------------------------
+--[[ MSO5I ]]
+-------------------------------------------------
+
+
+_t_MSO5I_Player1 = {
+--[[Buildings]]
+
+--[[Units]]"guard_leaders_psyker_sp_mdc5", "guard_vehicles_basilisk_sp_mso2"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player2 = {
+--[[Buildings]] "ork_gork_totem", 
+
+--[[Units]]"ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_killa_kan", "ork_looted_tank_singleplayer_superlongrange", "ork_nob_leader_sp", "ork_shoota_boy", "ork_slugga_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+ "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player3 = {
+--[[Buildings]] "chaos_listening_post", "chaos_plasma_generator", "chaos_single_player_only_sacrificial_circle", 
+
+--[[Units]]"chaos_bloodthirster", "chaos_daemon_prince", "chaos_lord", "chaos_lord_sp_msd01", "chaos_rhino"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player4 = {
+--[[Buildings]]
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player5 = {--[[Buildings]]"guard_hq", "guard_listening_post", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", 
+
+--[[Units]]"guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player6 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player7 = {
+--[[Buildings]]"space_marine_ability_building", "space_marine_armoury", "space_marine_drop_pod_building", "space_marine_generator",
+"space_marine_hq", "space_marine_interface_relay", "space_marine_listening_post", "space_marine_mine_field", "space_marine_orbital_relay", "space_marine_single_player_only_drop_pod_building", 
+"space_marine_thermo_generator", "space_marine_turret_bolter", "space_marine_vehicle_building", 
+
+--[[Units]]"apothecary", "dreadnought", "dreadnought_hellfire_variant", "evil_librarian", "force_commander", "force_commander_sp", "land_raider",
+"land_speeder", "librarian",  "predator", "rhino", "scout_marine", "servitor", "skull_probe", "space_marine_sp_thunderhawk", "terminator", "terminator_assault", "thunderhawk", "whirlwind"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5I_Player8 = {}
+
+
+-------------------------------------------------
+--[[ MSO5E ]]
+-------------------------------------------------
+
+_t_MSO5E_Player1 = {
+--[[Buildings]] 
+
+--[[Units]]"eldar_farseer_sp"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player2 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player3 = {
+--[[Buildings]]
+
+--[[Units]]"chaos_daemon_prince", "chaos_lord_sp_msd01"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player4 = {
+--[[Buildings]] 
+
+--[[Units]]"ork_bad_dok_sp_trainer", "ork_looted_tank_singleplayer_superlongrange",
+"ork_warboss_sp_md2"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player5 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player6 = {
+--[[Buildings]]
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSO5E_Player8 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+
+-------------------------------------------------
+--[[ MSD1 ]]
+-------------------------------------------------
+
+_t_MSD1_Player1 = {
+--[[Buildings]] "chaos_greater_sacrificial_circle", "chaos_machine_pit", "chaos_single_player_only_sacrificial_circle", 
+
+--[[Units]]"chaos_bloodthirster", "chaos_daemon_prince", "chaos_obliterator", "chaos_possessed_marine", }
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player2 = {
+--[[Buildings]] 
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_squiggoth", }
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player3 = {
+--[[Buildings]]"chaos_armoury", "chaos_greater_sacrificial_circle", "chaos_hq", "chaos_listening_post", "chaos_machine_pit", "chaos_mine_field", "chaos_plasma_generator",
+"chaos_sacrificial_circle", "chaos_single_player_only_sacrificial_circle", "chaos_temple", "chaos_thermo_plasma_generator", "chaos_turret_bolter", 
+
+--[[Units]]"chaos_aspiring_champion", "chaos_bloodthirster", "chaos_cultist", "chaos_daemon_prince", "chaos_defiler", "chaos_horror", "chaos_khorne_berserker",
+"chaos_lord", "chaos_lord_sp_msd01", "chaos_marine_bolter", "chaos_obliterator", "chaos_possessed_marine", "chaos_predator", "chaos_raptor", "chaos_raptor_aspiring_champion", 
+"chaos_rhino", "chaos_slave", "chaos_sorcerer"}
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player4 = {
+--[[Buildings]] 
+
+--[[Units]]"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_vehicles_baneblade", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_lemanruss", }
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player5 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player6 = {
+--[[Buildings]] "ork_bigger_generator", "ork_boy_hut", "ork_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns", "ork_waagh_banner",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_slugga_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD1_Player8 = {}
+
+-------------------------------------------------
+--[[ MSD2 ]]
+-------------------------------------------------
+
+
+_t_MSD2_Player1 = {
+--[[Buildings]] 
+	
+--[[Units]]
+	"ork_looted_tank_singleplayer_superlongrange", "ork_nob_leader_sp", "ork_stormboy_nob_leader", "ork_warboss_sp_md2"
+}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player2 = {
+--[[Buildings]] "ork_bigger_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns",
+
+--[[Units]]"ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player3 = {
+--[[Buildings]] "ork_bigger_generator", "ork_gork_totem", "ork_hq", "ork_mine_field", 
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player4 = {
+--[[Buildings]] "ork_bigger_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player5 = {
+--[[Buildings]] "ork_bigger_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player6 = {
+--[[Buildings]] "ork_gork_totem", "ork_mine_field",
+
+--[[Units]]"ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob_leader", "ork_nob_leader_sp", "ork_slugga_boy", "ork_squiggoth", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player7 = {
+--[[Buildings]] "ork_bigger_generator", "ork_boy_hut", "ork_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns", "ork_waagh_banner",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_grot", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_slugga_boy", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD2_Player8 = {
+--[[Buildings]]"chaos_greater_sacrificial_circle", "chaos_listening_post", "chaos_mine_field", "chaos_sacrificial_circle", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator",  
+
+--[[Units]] "chaos_bloodthirster", "chaos_daemon_prince", "chaos_defiler", "chaos_horror", "chaos_khorne_berserker",
+"chaos_lord", "chaos_lord_sp_msd01", "chaos_obliterator", "chaos_possessed_marine",  
+"chaos_rhino", "chaos_slave" }
+
+
+-------------------------------------------------
+--[[ MSD3 ]]
+-------------------------------------------------
+
+
+_t_MSD3_Player1 = {
+--[[Buildings]] "ork_bigger_generator", "ork_gork_totem", "ork_mek_shop", 
+
+--[[Units]] "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob_leader", "ork_nob_leader_sp", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss_sp_md2"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player2 = {
+--[[Buildings]]"chaos_greater_sacrificial_circle", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator", 
+
+--[[Units]]"chaos_daemon_prince", "chaos_obliterator"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player3 = {
+--[[Buildings]]"guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_tactica", "guard_thermo_plasma",  
+
+--[[Units]]"guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_commissar", "guard_leaders_commissar_command_squad","guard_leaders_priest_command_squad", 
+"guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5", "guard_support_enginseer", "guard_vehicles_basilisk_sp_mso2"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player4 = {
+--[[Buildings]] "eldar_advanced_warp_generator", "eldar_aspect_portal", "eldar_hq", "eldar_hq_sp_msoe05", "eldar_listening_post", "eldar_mine_field", 
+"eldar_soul_shrine", "eldar_support_platform_scatterlaser", "eldar_support_portal", "eldar_warp_generator", "eldar_webway_gate",
+
+--[[Units]]"eldar_banshee_exarch", "eldar_bonesinger", "eldar_dark_reaper_exarch", "eldar_falcon_grav_tank", "eldar_farseer", "eldar_farseer_sp", 
+"eldar_fire_dragon_exarch", "eldar_fire_prism", "eldar_grav_platform", "eldar_grav_platform_brightlance", "eldar_rangers", "eldar_vypers", "eldar_warlock", 
+"eldar_warlock_seer", "eldar_warp_spider", "eldar_warp_spider_exarch", "eldar_wraithlord"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player5 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player6 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD3_Player8 = {}
+
+
+-------------------------------------------------
+--[[ MSD4 ]]
+-------------------------------------------------
+
+
+_t_MSD4_Player1 = {
+--[[Buildings]] 
+
+--[[Units]]"chaos_daemon_prince", "chaos_lord_sp_msd01"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player2 = {
+--[[Buildings]]  
+
+--[[Units]]"ork_bad_dok_sp_trainer", "ork_looted_tank_singleplayer_superlongrange", "ork_nob_leader_sp", "ork_warboss_sp_md2"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player3 = {
+--[[Buildings]]"space_marine_ability_building", "space_marine_armoury", "space_marine_drop_pod_building", "space_marine_generator",
+"space_marine_hq", "space_marine_interface_relay", "space_marine_listening_post", "space_marine_mine_field", "space_marine_orbital_relay", "space_marine_single_player_only_drop_pod_building", 
+"space_marine_thermo_generator", "space_marine_turret_bolter", "space_marine_vehicle_building", 
+
+--[[Units]]"apothecary", "assault_marine", "dreadnought", "dreadnought_hellfire_variant", "evil_librarian", "force_commander", "force_commander_sp", "land_speeder", 
+"librarian", "predator", "rhino", "scout_marine", "sergeant", "sergeant_assault_marine", "servitor", "skull_probe", "space_marine_sp_thunderhawk",
+ "terminator", "terminator_assault", "thunderhawk", "whirlwind"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player4 = {
+--[[Buildings]]"guard_hq", "guard_mars_pattern", "guard_plasma_generator",
+"guard_tactica", 
+
+--[[Units]]"guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk_sp_mso2"  }
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player5 = {
+--[[Buildings]] "eldar_hq_sp_msoe05", 
+
+--[[Units]]"eldar_banshee_exarch", "eldar_bonesinger", "eldar_dark_reaper_exarch", "eldar_farseer_sp", "eldar_fire_dragon_exarch", "eldar_grav_platform", "eldar_grav_platform_brightlance", 
+"eldar_warlock", "eldar_warlock_seer", "eldar_warp_spider_exarch"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player6 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player7 = {
+--[[Buildings]]"necron_monolith",
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "necron_warrior", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD4_Player8 = {}
+
+
+
+-------------------------------------------------
+--[[ MSD5C ]]
+-------------------------------------------------
+
+_t_MSD5C_Player1 = {
+--[[Buildings]]
+
+--[[Units]]"chaos_daemon_prince", "chaos_lord_sp_msd01"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player2 = {
+--[[Buildings]]"guard_mines", "guard_plasma_generator", "guard_thermo_plasma", 
+
+--[[Units]]"guard_leaders_captain", "guard_leaders_commissar_command_squad", "guard_leaders_priest", 
+"guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_support_enginseer", "guard_vehicles_basilisk_sp_mso2", 
+ "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player3 = {
+--[[Buildings]]
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player4 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player5 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player6 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD5C_Player8 = {}
+
+
+
+-------------------------------------------------
+--[[ MSD5O ]]
+-------------------------------------------------
+
+
+_t_MSD5O_Player1 = {
+--[[Buildings]] 
+
+--[[Units]]"ork_bad_dok_sp_trainer", "ork_looted_tank_singleplayer_superlongrange", "ork_nob_leader_sp", "ork_stormboy", "ork_warboss_sp_md2", }
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player2 = {
+--[[Buildings]]"guard_hq", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator", "guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player3 = {
+--[[Buildings]]"chaos_greater_sacrificial_circle", "chaos_listening_post", "chaos_mine_field", "chaos_single_player_only_sacrificial_circle", "chaos_thermo_plasma_generator", 
+
+--[[Units]]"chaos_daemon_prince", "chaos_lord_sp_msd01", "chaos_rhino", "chaos_slave"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player4 = {
+--[[Buildings]]
+
+--[[Units]]"guard_civilian_child_a", "guard_civilian_child_b", "guard_civilian_child_c", "guard_civilian_child_d", "guard_civilian_female_a", "guard_civilian_female_b", "guard_civilian_female_d",
+"guard_civilian_man_a", "guard_civilian_man_b", "guard_civilian_man_c", "guard_civilian_man_d", "guard_colonel", "guard_inquisitor", "guard_lemun_russ", "guard_soldier",
+"guard_soldier_coward", "guard_thunderhawk", "npc_valkyrie"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player5 = {
+--[[Buildings]]"guard_hq", "guard_infantry", "guard_listening_post", "guard_mars_pattern", "guard_mechanized", "guard_mines", "guard_plasma_generator",
+"guard_tactica", "guard_thermo_plasma", "guard_turret_heavy_bolter", 
+
+--[[Units]]"guard_infantry_guardsmen", "guard_infantry_guardsmen_sergeant", "guard_infantry_kasrkin", "guard_infantry_kasrkin_sergeant",
+"guard_infantry_ogryn", "guard_infantry_ogryn_sergeant", "guard_leaders_assassin", "guard_leaders_captain", "guard_leaders_commissar", "guard_leaders_commissar_command_squad",
+"guard_leaders_priest", "guard_leaders_priest_command_squad", "guard_leaders_psyker", "guard_leaders_psyker_command_squad", "guard_leaders_psyker_sp_mdc5",
+"guard_support_enginseer", "guard_vehicles_baneblade", "guard_vehicles_basilisk", "guard_vehicles_basilisk_sp_mso2", "guard_vehicles_chimera", "guard_vehicles_hellhound", 
+"guard_vehicles_lemanruss", "guard_vehicles_sentinel"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player6 = {
+--[[Buildings]] "ork_bigger_generator", "ork_boy_hut", "ork_generator", "ork_gork_totem", "ork_hq", "ork_mek_shop", "ork_mine_field", "ork_pile_o_guns", "ork_waagh_banner",
+
+--[[Units]]"ork_armored_nob", "ork_bad_dok", "ork_bad_dok_sp_trainer", "ork_grot", "ork_killa_kan", "ork_looted_tank", "ork_looted_tank_singleplayer_superlongrange",
+"ork_mek_boy", "ork_nob", "ork_nob_leader", "ork_nob_leader_sp", "ork_shoota_boy", "ork_slugga_boy", "ork_squiggoth", "ork_stormboy", "ork_stormboy_nob_leader",
+"ork_tankbusta", "ork_trukk", "ork_warboss", "ork_warboss_sp_md2", "ork_wartrak"}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player7 = {}
+
+-----------------------------------------------------------------------
+
+_t_MSD5O_Player8 = {}
+

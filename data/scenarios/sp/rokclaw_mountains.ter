@@ -1,0 +1,287 @@
+Model = "Rokclaw_Mountains"
+Planet = "Kaurava_II"
+
+Name = "$3900019"
+Description = "$3900180"
+TerrainDescription = "$3900181"
+History = 
+{
+	"$3900182",
+	"$3900183",
+	"$3900184",
+	"$3900185",
+	"$3900186",
+	"$3900187",
+	"$3900188",
+	"$3900189",
+	"$3900190",
+	"$3900191",
+	"$3900192",
+	"$3900193",
+	"$3900194",
+	"$3900195",
+	"$3900196",
+	"$3900197",
+	"$3900198",
+	"$3900199",
+	"$3900200",
+	"$3900201",
+	"$3900202",
+}
+
+TerrainType = "$2851402"
+
+Nuggets = 
+{
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550340",
+		Text =
+		{
+			"$5100180",
+			"$2850018",
+			"$5100181",
+			"$2850018",
+			"$5100182",
+		},
+		Speech =
+		{
+			5100180,
+			5100181,
+			5100182,
+		}
+	},
+	{
+		Race = "guard_race",
+		Title = "", --"$3550340",
+		Text =
+		{
+			"$5100174",
+			"$2850018",
+			"$5100175",
+			"$2850018",
+			"$5100176",
+		},
+		Speech =
+		{
+			5100174,
+			5100175,
+			5100176,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550640",
+		Text =
+		{
+			"$5100177",
+			"$2850018",
+			"$5100178",
+			"$2850018",
+			"$5100179",
+		},
+		Speech =
+		{
+			5100177,
+			5100178,
+			5100179,
+		}
+	},	
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550140",
+		Text =
+		{
+			"$5100183",
+			"$2850018",
+			"$5100184",
+		},
+		Speech =
+		{
+			5100183,
+			5100184,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550240",
+		Text =
+		{
+			"$5100185",
+			"$2850018",
+			"$5100186",
+			"$2850018",
+			"$5100187",
+		},
+		Speech =
+		{
+			5100185,
+			5100186,
+			5100187,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550240",
+		Text =
+		{
+			"$5100188",
+			"$2850018",
+			"$5100189",
+			"$2850018",
+			"$5100190",
+		},
+		Speech =
+		{
+			5100188,
+			5100189,
+			5100190,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550750",
+		Text =
+		{
+			"$5100191",
+			"$2850018",
+			"$5100192",
+			"$2850018",
+			"$5100193",
+		},
+		Speech =
+		{
+			5100191,
+			5100192,
+			5100193,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550440",
+		Text =
+		{
+			"$5100194",
+			"$2850018",
+			"$5100195",
+			"$2850018",
+			"$5100196",
+		},
+		Speech =
+		{
+			5100194,
+			5100195,
+			5100196,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100090",
+		"$2851718",
+		"$5100091",
+		"$2851718",
+		"$5100092",
+	},
+	Speech = 
+	{
+		5100090,
+		--5100091,
+		--5100092,
+	}
+}
+
+MissionFileAttacking = "Stronghold_Ork"
+MissionFileAttackingConquered = "8P_Rokclaw_Mountains_Attack_Skirmish"
+MissionFileDefending = "8P_Rokclaw_Mountains"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Trivian_Groves",
+	"Cerulea",
+	"Clooth-na-Bare",
+	"Rokclaw_Foothills",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_tankbusta_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_shoota_boy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_slugga_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_stormboy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_nob_advance_sp",
+		Count = 1,
+	},
+]]
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "ork_race"
+OwnerSecondary = "ork_race"
+
+KeyLocationAbility =
+{
+	ID = "population_growth",
+	Name = "$3900071",
+	HelpText =
+	{
+		"$3900420",
+		"$3900421",
+		"$3900422",
+	},
+  CommanderScreenName = "$3900498",
+	CommanderScreenHelpText =
+	{
+		"$3900499",
+		"$3900500",
+		"$3900420",
+		"$3900421",
+		"$3900422",
+	},
+  CommanderScreenLostName = "$3900498",
+	CommanderScreenLostHelpText =
+	{
+		"$3900499",
+		"$3900501",
+	}  
+}
+
+StartingResourceBonus = 0.0

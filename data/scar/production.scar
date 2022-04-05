@@ -1,0 +1,211 @@
+----------------------------------------------------------------------------------------------------------------
+-- Helper functions for Production queries
+-- (c) 2003 Relic Entertainment Inc.
+
+import("GroupCallers.scar")
+
+----------------------------------------------------------------------------------------------------------------
+-- Private implementation
+
+_Prod_Private = {
+
+	-- adds an item to the list if it doesnt exist, or increments count if it already exists.
+	AddItemToList = function( itemname, itemtype, list )
+		-- increment count if item is in table already else add new item with count 1
+		local FindItem = function( key, value )
+			if( itemname == key and itemtype == value.type ) then return true end
+		end
+		if( table.foreach( list, FindItem ) == nil ) then
+			-- item not found, add new one
+			list[itemname] = {}
+			list[itemname].count = 1
+			list[itemname].type = itemtype
+		else
+			-- item found, increment count
+			list[itemname].count = list[itemname].count + 1
+		end
+	end,
+
+	-- returns the number of occurences a given item is in a list
+	GetNumberOfOccurences = function( itemname, itemtype, list )
+		
+		local CheckIsItemInList = function( key, value )
+			if( ( key == itemname ) and ( value.type == itemtype ) ) then return value.count end
+		end
+		
+		local result = table.foreach( list, CheckIsItemInList)
+		
+		-- if result was nil, item was not found in list
+		if( result == nil ) then return 0 end
+		
+		-- return number of occurences
+		return result
+		
+	end,
+	
+}
+
+----------------------------------------------------------------------------------------------------------------
+-- Prod_ 
+
+--? @group Production
+
+
+--? @shortdesc Adds a research item to a production list table.
+--? @args String researchname, LuaTable list
+--? @result Void
+function Prod_AddResearchToList( researchname, list )
+	_Prod_Private.AddItemToList( researchname, PQ_Research, list )
+end
+
+--? @shortdesc Adds a add-on item to a production list table.
+--? @args String addonname, LuaTable list
+--? @result Void
+function Prod_AddAddOnToList( addonname, list )
+	_Prod_Private.AddItemToList( addonname, PQ_AddOn, list )
+end
+
+--? @shortdesc Adds a squad item to a production list table.
+--? @args String blueprintname, LuaTable list
+--? @result Void
+function Prod_AddSquadToList( blueprintname, list )
+	_Prod_Private.AddItemToList( blueprintname, PQ_Squad, list )
+end
+
+
+--? @shortdesc Returns true if a production list contains the given research item
+--? @args String researchname, LuaTable list
+--? @result Boolean
+function Prod_DoesListContainResearch( researchname, list )
+	return ( _Prod_Private.GetNumberOfOccurences( researchname, PQ_Research, list ) > 0 )
+end
+
+--? @shortdesc Returns true if a production list contains the given add-on item
+--? @args String addonname, LuaTable list
+--? @result Boolean
+function Prod_DoesListContainAddOn( addonname, list )
+	return ( _Prod_Private.GetNumberOfOccurences( addonname, PQ_AddOn, list ) > 0 )
+end
+
+--? @shortdesc Returns true if a production list contains the given squad item
+--? @args String blueprintname, LuaTable list
+--? @result Boolean
+function Prod_DoesListContainSquad( blueprintname, list )
+	return ( _Prod_Private.GetNumberOfOccurences( blueprintname, PQ_Squad, list ) > 0 )
+end
+
+
+--? @shortdesc Checks all entities to see if they're production-capable and if so, adds their queued items to a Production Table.
+--? @extdesc 
+--? Use Prod_DoesListContainSquad etc to query the resulting production table.\n\n
+--? Example:\n
+--? \tlocal ProductionTable = { }\n
+--? \tProd_GetProductionList( "GRP_ANYENTITYGROUP", ProductionTable )\n
+--? \tif(Prod_DoesListContainSquad("chaos_marine_squad", ProductionTable) then\n
+--? \t\t-- There is a building in GRP_ANYENTITYGROUP that is currently producing a space marine Squad_CanSeeEntity\n
+--? \tend
+--? @args String egroupname, LuaTable list
+--? @result Void
+function Prod_GetProductionList( egroupname, list )
+	local AddProductionItems = function( groupid, itemindex, entityId )
+		-- ignore entities that dont have production queues
+		if( not Entity_HasProductionQueue( entityId ) ) then return end
+		
+		-- add all items in production queue
+		local n = Entity_GetProductionQueueSize( entityId ) - 1
+		for i = 0, n do
+			_Prod_Private.AddItemToList( 
+				Entity_GetProductionQueueItemName( entityId, i ),
+				Entity_GetProductionQueueItemType( entityId, i ),
+				list
+			)
+		end
+			
+	end
+	
+	EGroupCaller.ForEach( EGroup_FromName( egroupname ), AddProductionItems )
+end
+
+
+--? @shortdesc  Gets everything a given player currently has in production.
+--? @extdesc See Prod_GetProductionList for more info.
+--? @args PlayerID playerId, LuaTable list
+--? @result Void
+function Prod_GetPlayerProductionList( playerId, list )
+	Prod_GetProductionList( EGroup_GetName( Player_GetEntities( playerId ) ) )
+end
+
+
+--? @shortdesc Returns true if the player is producing all or any items in a production table.  See Prod_IsProducing for more info.
+--? @args PlayerID playerId, LuaTable list, Boolean all
+--? @result Boolean
+function Prod_IsPlayerProducing( playerId, list, all )
+	local result = Prod_IsProducing( EGroup_GetName( Player_GetEntities( playerId ) ) )
+	return result
+end
+
+--? @shortdesc Returns true if buildings in a entity group are producing ALL or ANY items in a given production table.
+--? @extdesc
+--? Use Prod_AddSquadToList etc to add entries to the given production list.\n\n
+--? Example:\n
+--? \tlocal ProductionTable = { }\n
+--? \tProd_AddSquadToList( "chaos_squad_cultist", list )\n
+--? \tProd_AddSquadToList( "chaos_squad_cultist", list )\n
+--? \tProd_AddSquadToList( "chaos_squad_defiler", list )\n
+--? \tif( Prod_IsProducing( "GRP_ANYENTITYGROUP", ProcutionTable, true ) then\n
+--? \t\t-- Of all the buildings in GRP_ANYENTITYGROUP, they are producing 2 cultists and a defiler.\n
+--? \tend
+--? @args String egroupname, LuaTable list, Boolean all
+--? @result Boolean
+function Prod_IsProducing( egroupname, list, all )
+	local egroup = EGroup_FromName( egroupname )
+	
+	-- Get current items in production
+	local ProductionItems = {}
+	Prod_GetProductionList( egroupname, ProductionItems )
+	
+	local CheckProductionItem = function ( key, value )
+		local count = _Prod_Private.GetNumberOfOccurences( key, value.type, ProductionItems )
+		if( count > 0) then
+			-- item found, return true if we are looking for any
+			if( not all ) then return true end
+			
+			if( all ) then
+				-- if looking for all, make sure the count is the same in ProductionItems and list
+				if( count ~= _Prod_Private.GetNumberOfOccurences( key, value.type, list ) ) then return false end
+			end
+			
+		else
+			-- item not found.  return false if we are looking for all
+			if( all ) then return false end
+		end
+	end	
+	-- Check against input list, breaks when ProductionItems returns a non-nil value
+	local result = table.foreach( list, CheckProductionItem )
+	
+	-- If foreach did not return nil, that means that we broke out of iteration, return result
+	if( result ~= nil ) then return result end
+	
+	-- This means we've made it through each iteration, so return the value of all
+	return all
+end
+
+--? @shortdesc Returns true the players henchmen are currently constructing a building with given blueprintname.
+--? @extdesc
+--? Note: If you find that you are calling this function for tons of different buildings, we should change this function to take a constuction list (similar to the way production lists are handled)
+--? @args PlaierID playerId, String buildingname
+--? @result Boolean
+function Prod_IsPlayerConstructing( playerId, buildingname )
+	local CheckIsConstructing = function( egroupId, itemindex, entityId )
+		local progress = Entity_GetBuildingProgress( entityId )
+		if( (progress > 0.0) and (progress < 1.0) ) then 
+			-- is this the building we are looking for? if so, return true
+			if( Entity_GetBlueprintName( entityId ) == buildingname ) then return true end
+		end
+		
+		return false
+	end
+	local result = EGroupCaller.ForEachAllOrAny( Player_GetEntities( playerId ), false, CheckIsConstructing )
+	return result
+end
+

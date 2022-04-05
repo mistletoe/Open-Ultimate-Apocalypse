@@ -1,0 +1,274 @@
+Model = "Coastal_Imossa"
+Planet = "Kaurava_III"
+
+Name = "$3900032"
+Description = "$3900310"
+
+TerrainType = "$2850402"
+TerrainDescription = "$3900311"
+
+History = 
+{
+	"$3900312",
+	"$3900313",
+	"$3900314",
+	"$3900315",
+	"$3900316",
+	"$3900317",
+	"$3900318",
+	"$3900319",
+	"$3900320",
+	"$3900321",
+	"$3900322",
+	"$3900323",
+	"$3900324",
+	"$3900325",
+}
+
+Nuggets = 
+{
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550130",
+		Text =
+		{
+			"$5100106",
+			"$2850018",
+			"$5100107",
+		},
+		Speech =
+		{
+			5100106,
+			5100107,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550230",
+		Text =
+		{
+			"$5100109",
+			"$2850018",
+			"$5100110",
+		},
+		Speech =
+		{
+			5100109,
+			5100110,
+		}
+	},
+	{
+		Race = "guard_race",
+		Title = "", --"$3550330",
+		Text =
+		{
+			"$5100099",
+			"$2850018",
+			"$5100100",
+			"$2850018",
+			"$5100101",
+		},
+		Speech =
+		{
+			5100099,
+			5100100,
+			5100101,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550540",
+		Text =
+		{
+			"$5100113",
+			"$2850018",
+			"$5100114",
+		},
+		Speech =
+		{
+			5100113,
+			5100114,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550650",
+		Text =
+		{
+			"$5100102",
+			"$2850018",
+			"$5100103",
+		},
+		Speech =
+		{
+			5100102,
+			5100103,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550740",
+		Text =
+		{
+			"$5100115",
+			"$2850018",
+			"$5100116",
+		},
+		Speech =
+		{
+			5100115,
+			5100116,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550650",
+		Text =
+		{
+			"$5100104",
+			"$2850018",
+			"$5100105",
+		},
+		Speech =
+		{
+			5100104,
+			5100105,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550650",
+		Text =
+		{
+			"$5100111",
+			"$2850018",
+			"$5100112",
+		},
+		Speech =
+		{
+			5100111,
+			5100112,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100096",
+		"$2851718",
+		"$5100097",
+		"$2851718",
+		"$5100098",
+	},
+	Speech =
+	{
+		5100096,
+		--5100097,
+		--5100098,
+	}
+}
+
+
+MissionFileAttacking = "Stronghold_Necron"
+MissionFileAttackingConquered = "8P_Coastal_Imossa_Attack_Skirmish"
+MissionFileDefending = "8P_Coastal_Imossa"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	"Nirraein",
+	"Kier_Harrad",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "necron_race",
+		Blueprint = "necron_destroyer_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_basic_warrior_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_flayed_one_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_immortal_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_pariah_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_tomb_spyder_squad_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+]]
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "necron_race"
+OwnerSecondary = "necron_race"
+
+KeyLocationAbility =
+{
+	ID = "resurrection",
+	Name = "$3900074",
+	HelpText =
+	{
+		"$3900429",
+		"$3900430",
+		--"$3900431",
+	},
+  CommanderScreenName = "$3900506",
+	CommanderScreenHelpText =
+	{
+		"$3900507",
+		"$3900508",
+		"$3900429",
+		"$3900430",
+		--"$3900431",
+	},
+  CommanderScreenLostName = "$3900506",
+	CommanderScreenLostHelpText =
+	{
+		"$3900507",
+		"$3900508",
+	}  
+}
+
+StartingResourceBonus = 0.0

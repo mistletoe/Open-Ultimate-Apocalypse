@@ -1,0 +1,1090 @@
+----------------------------------------------------------------------------------------------------------------
+-- SGroup and EGroup helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+import("Squad.scar")
+import("Entity.scar")
+import("GroupCallers.scar")
+
+----------------------------------------------------------------------------------------------------------------
+-- Priv
+
+_Groups_Private = {
+	
+	-- Create a group and return it if not found.
+	CreateGroupIfNotFound = function( groupname, groupcaller )
+		if( groupcaller.Exists( groupname ) ) then
+			-- found, return existing
+			return groupcaller.FromName( groupname )
+		end
+		
+		-- not found, create new
+		return groupcaller.Create( groupname )
+	end,
+	
+	-- Returns true if group is empty
+	IsGroupEmpty = function( group, groupcaller )
+		return ( groupcaller.GetCount( group ) == 0 )
+	end,
+	
+	-- Can ALL or ANY items in a group see ALL or ANY items in an egroup
+	CanGroupSeeEGroup = function( group1, groupcaller1, egroup, all )
+	
+		local CheckCanSeeEGroup = function( groupid, groupindex, itemid )
+			
+			local CheckCanItemSeeEntity = function( egroupid, egroupindex, entityid )
+				return groupcaller1.CanItemSeeEntity( itemid, entityid )
+			end
+			
+			-- can this item see all or any items of an egroup?
+			return EGroupCaller.ForEachAllOrAny( egroup, all, CheckCanItemSeeEntity )
+			
+		end
+		
+		return groupcaller1.ForEachAllOrAny( group1, all, CheckCanSeeEGroup )
+	end,
+	
+	-- Can ALL or ANY items in a group see ALL or ANY items in an sgroup
+	CanGroupSeeSGroup = function( group1, groupcaller1, sgroup, all )
+	
+		local CheckCanSeeSGroup = function( groupid, groupindex, itemid )
+			
+			local CheckCanItemSeeSquad = function( sgroupid, sgroupindex, squadid )
+				return groupcaller1.CanItemSeeSquad( itemid, squadid )
+			end
+			
+			-- can this item see all or any items of an egroup?
+			return SGroupCaller.ForEachAllOrAny( sgroup, all, CheckCanItemSeeSquad )
+			
+		end
+		
+		return groupcaller1.ForEachAllOrAny( group1, all, CheckCanSeeSGroup )
+	end,
+	
+	-- Are ALL or ANY items of a group in cover?
+	IsGroupInCover = function( groupid, groupcaller, all )
+		
+		local CheckIsInCover = function( groupid, itemindex, itemid )
+			return groupcaller.IsItemInCover( itemid, all )
+		end
+		
+		return  groupcaller.ForEachAllOrAny( groupid, all, CheckIsInCover )
+		
+	end,
+	
+	-- Are ALL or ANY items of a group under attack?
+	IsGroupUnderAttack = function( groupid, groupcaller, all )
+		
+		local CheckIsItemUnderAttack = function ( groupid, itemindex, itemid )
+			return groupcaller.IsItemUnderAttack( itemid )
+		end
+		
+		return  groupcaller.ForEachAllOrAny( groupid, all, CheckIsItemUnderAttack )
+		
+	end,
+	
+	-- Are ALL or ANY items of a group under attack?
+	IsGroupUnderAttackByPlayer = function( groupid, groupcaller, all, player )
+		
+		local CheckIsItemUnderAttack = function ( groupid, itemindex, itemid )
+			return groupcaller.IsItemUnderAttackByPlayer( itemid, player )
+		end
+		
+		return  groupcaller.ForEachAllOrAny( groupid, all, CheckIsItemUnderAttack )
+		
+	end,
+	
+	-- Check if all or any items in a group have the given active command
+	CheckGroupActiveCommand = function( cmd, groupid, groupcaller, all )
+		
+		local CheckHasActiveCommand = function( groupid, itemindex, itemid )
+			return groupcaller.GetItemActiveCommand( itemid ) == cmd
+		end
+		
+		return groupcaller.ForEachAllOrAny( groupid, all, CheckHasActiveCommand )
+	
+	end,
+	
+	GetAvgGroupMorale = function( groupid )
+		
+		local currentMorale = 0
+		local maxMorale = 0
+		
+		local GetItemMorale = function( groupid, itemindex, itemid )
+			currentMorale = currentMorale + Squad_GetMorale( itemid )
+			maxMorale = maxMorale + 1
+		end
+		
+		-- check morale
+		SGroup_ForEach( groupid, GetItemMorale )
+		
+		if( maxMorale == 0 ) then
+			return 0
+		end
+		
+		local result = currentMorale / maxMorale
+		
+		if( (result < 0.0) or (result > 1.0) ) then
+			error("this should never happen")
+		end
+		
+		return result
+		
+	end,
+	
+	GetAvgGroupHealth = function( groupid, groupcaller )
+		
+		local currentHealth = 0
+		local maxHealth = 0
+		
+		local GetItemHealth = function( groupid, itemindex, itemid )
+			currentHealth = currentHealth + groupcaller.GetItemHealth( itemid )
+			maxHealth = maxHealth + groupcaller.GetItemHealthMax( itemid )
+		end
+		
+		-- check health
+		groupcaller.ForEach( groupid, GetItemHealth )
+		
+		if( maxHealth == 0 ) then
+			return 0
+		end
+		
+		local result = currentHealth / maxHealth
+		
+		if( (result < 0.0) or (result > 1.0) ) then
+			error("this should never happen")
+		end
+		
+		return result
+		
+	end,
+	
+	SetAvgGroupHealth = function( groupid, groupcaller, healthPercent )
+		
+		-- clip health [0.0, 1.0]
+		if( healthPercent < 0 ) then healthPercent = 0 end
+		if( healthPercent > 1 ) then healthPercent = 1 end
+	
+		local GetItemHealth = function( groupid, itemindex, itemid )
+			groupcaller.SetItemHealth( itemid, healthPercent )
+		end
+		
+		-- set health
+		groupcaller.ForEach( groupid, GetItemHealth )
+		
+	end,
+	
+	SetPlayerOwner = function( groupid, groupcaller, playerOwner )
+	
+		local SetOwner = function( groupid, itemindex, itemid )
+			groupcaller.SetPlayerOwner( itemid, playerOwner )
+		end
+		
+		groupcaller.ForEachEx( groupid, SetOwner, true, true )
+	end,
+	
+	-- destroys all items in a group
+	DestroyAllItems = function( groupid, groupcaller )
+	
+		local DestroyItem = function( groupid, itemindex, itemid )
+			groupcaller.DestroyItem( itemid )
+		end
+		
+		groupcaller.ForEachEx( groupid, DestroyItem, true, true )
+		
+	end,
+	
+	-- check the invulnerability state of ALL or ANY items in a group
+	GroupGetHealthInvulnerable = function( groupid, groupcaller, all )
+		
+		local IsInvulnerable = function( groupid, itemindex, itemid )
+			return groupcaller.GetHealthInvulnerable( itemid )
+		end
+		
+		local result = groupcaller.ForEachAllOrAny( groupid, all, IsInvulnerable )
+		return result
+		
+	end,
+	
+	-- check the invulnerability state of ALL or ANY items in a group
+	IsGroupSelected = function( groupid, groupcaller )
+		
+		local IsSelected = function( groupid, itemindex, itemid )
+			return groupcaller.IsSelected( itemid )
+		end
+		
+		local result = groupcaller.ForEachAllOrAny( groupid, true, IsSelected )
+		return result
+	end,
+	
+	-- set the invulnerability state of ALL items in a group
+	GroupSetHealthInvulnerable = function( groupid, groupcaller, enabled )
+		
+		local SetInvulnerable = function( groupid, itemindex, itemid )
+			groupcaller.SetHealthInvulnerable( itemid, enabled )
+		end
+		
+		groupcaller.ForEach( groupid, SetInvulnerable )
+		
+	end,
+	
+	-- 
+	DoGroupSpawn = function ( groupid, groupcaller, spawn )
+		
+		local DoItemSpawn = function( groupid, itemindex, itemid )
+			if( spawn ) then
+				groupcaller.ReSpawnItem( itemid )
+			else
+				groupcaller.DeSpawnItem( itemid )
+			end
+		end
+		
+		-- when spawn is true, we want to iterate over all despawned items
+		groupcaller.ForEachEx( groupid, DoItemSpawn, not spawn, spawn )
+		
+	end,
+	
+	DoGroupSpawnPosition = function( groupid, groupcaller, position )
+	
+		local DoItemSpawn = function( groupid, itemindex, itemid, position )
+			groupcaller.ReSpawnItemPosition( itemid, position)
+		end
+	
+		groupcaller.ForEachExPosition( groupid, DoItemSpawn, false, true, position )
+	
+	end
+}
+
+----------------------------------------------------------------------------------------------------------------
+-- EGroup
+
+--? @group Entity
+
+--? @shortdesc Returns true if ALL or ANY entities are in cover.
+--? @args String egroupname, Boolean all
+--? @result Boolean
+function EGroup_IsInCover( egroupname, all )
+	return _Groups_Private.IsGroupInCover(
+				EGroup_FromName( egroupname ),
+				EGroupCaller,
+				all
+			)	
+end
+
+--? @shortdesc Returns true if ALL or ANY entities are under attack.
+--? @args String egroupname, Boolean all, PlayerID player
+--? @result Boolean
+function EGroup_IsUnderAttackByPlayer( egroupname, all, player )
+	return _Groups_Private.IsGroupUnderAttackByPlayer(
+				EGroup_FromName( egroupname ),
+				EGroupCaller,
+				all,
+				player
+			)	
+end
+
+
+--? @shortdesc Returns true if ALL or ANY entities are under attack.
+--? @args String egroupname, Boolean all
+--? @result Boolean
+function EGroup_IsUnderAttack( egroupname, all )
+	return _Groups_Private.IsGroupUnderAttack(
+				EGroup_FromName( egroupname ),
+				EGroupCaller,
+				all
+			)	
+end
+
+--? @shortdesc Returns true if ALL or ANY entities in a group can see ALL or ANY entities in a given egroup.
+--? @args String egroupname, String targetegroupname, Boolean all
+--? @result Boolean
+function EGroup_CanSeeEGroup( egroupname, targetegroupname, all )
+	local egroup = EGroup_FromName( egroupname )
+	local targetegroup = EGroup_FromName( targetegroupname )
+		
+	return _Groups_Private.CanGroupSeeEGroup(
+				EGroup_FromName( egroupname ),
+				EGroupCaller,
+				targetegroup,
+				all
+			)
+end
+
+--? @shortdesc Returns true if ALL or ANY entities in a group can see ALL or ANY squads in a given sgroup.
+--? @args String egroupname, String targetsgroupname, Boolean all
+--? @result Boolean
+function EGroup_CanSeeSGroup( egroupname, targetsgroupname, all )
+	local egroup = EGroup_FromName( egroupname )
+	local targetsgroup = SGroup_FromName( targetsgroupname )
+		
+	return _Groups_Private.CanGroupSeeSGroup(
+				EGroup_FromName( egroupname ),
+				EGroupCaller,
+				targetsgroup,
+				all
+			)
+end
+
+--? @shortdesc Find a entity group from name.  Creates a new one with given name if it doesnt exist.
+--? @args String name
+--? @result EGroupID
+function EGroup_CreateIfNotFound( name )
+	return _Groups_Private.CreateGroupIfNotFound( name, EGroupCaller )
+end
+
+--? @shortdesc Returns true if a named entity group contains no spawned or despawned entities
+--? @args String name
+--? @result Boolean
+function EGroup_IsEmpty( name )
+	return _Groups_Private.IsGroupEmpty( EGroup_FromName( name ), EGroupCaller )
+end
+
+--? @shortdesc Returns true if all or any strategic points in a group have been captured.
+--? @extdesc This function will ignore all entities that cannot be captured and will return false if no entities in the group can be captured.
+--? @args String groupname, PlayerID playerId, Boolean all
+--? @result Boolean
+function EGroup_IsCapturedByPlayer( name, playerId, all )
+	local egroupId = EGroup_FromName( name )
+	local n = EGroup_Count( egroupId )
+	
+	local CheckCapturedByPlayer = function ( groupid, itemindex, itemid )
+		
+		if( Entity_IsStrategicPoint( itemid ) ) then
+			return Entity_IsCapturedByPlayer( itemid, playerId )
+		end
+		
+		return false
+		
+	end
+	
+	local result = EGroup_ForEachAllOrAny( egroupId, all, CheckCapturedByPlayer )
+	
+	return result
+	
+end
+
+--? @shortdesc Returns the average health of all units in a entity group as a weighted percent [0.0, 1.0].
+--? @extdesc Example: A group of entities with health 20/100 and 100/1000 would return 120/1100 ( approx 11 % )
+--? @args String groupname
+--? @result Real
+function EGroup_GetAvgHealth( groupname )
+	
+	--local GetSquadHealth( groupid, item
+	return _Groups_Private.GetAvgGroupHealth(
+					EGroup_FromName( groupname ),
+					EGroupCaller
+				)
+				
+end
+
+--? @shortdesc Sets the health of each unit in an entity group to a given percent [0.0, 1.0].
+--? @args String groupname, Real healthPercent
+--? @result Real
+function EGroup_SetAvgHealth( groupname, healthPercent )
+	
+	return _Groups_Private.SetAvgGroupHealth(
+					EGroup_FromName( groupname ),
+					EGroupCaller,
+					healthPercent
+				)
+	
+end
+
+--? @shortdesc Changes the player owner for all spawned and despawned entities of an EGroup.
+--? @args String groupname, PlayerID owner
+--? @result Void
+function EGroup_SetPlayerOwner( groupname, owner )
+	
+	_Groups_Private.SetPlayerOwner(
+			EGroup_FromName( groupname ),
+			EGroupCaller,
+			owner
+	)
+	
+end
+
+--? @shortdesc Resets the player owner to the world for all entities in the group
+--? @args String groupname
+--? @result Void
+function EGroup_ResetPlayerOwner( groupname )
+	
+	local ResetOwner = function( groupid, itemidx, itemid )
+		Entity_SetWorldOwner( itemid )
+	end
+	
+	EGroup_ForEach( groupname, ResetOwner )	
+	
+end
+
+--? @shortdesc Destroys all spawned and despawned entities in a group.
+--? @extdesc 
+--? Be careful not to confuse this with EGroup_Destroy which destroys the group and NOT the items it contains.  This function will destroy
+--? spawned and despawned items in a group
+--? @args String groupname
+--? @result Void
+function EGroup_DestroyAllEntities( groupname )
+	
+	return _Groups_Private.DestroyAllItems(
+					EGroup_FromName( groupname ),
+					EGroupCaller
+				)
+	
+end
+
+--? @shortdesc Enable/Disable invulnerablity for an entire entity group.
+--? @result Void
+--? @args String groupname, Boolean enabled
+--? @extdesc IMPORTANT: You must disable invulnerability for everytime you enable it!
+function EGroup_SetHealthInvulnerable( groupname, enabled )
+	
+	_Groups_Private.GroupSetHealthInvulnerable(
+		EGroup_FromName( groupname ),
+		EGroupCaller,
+		enabled
+	)
+	
+end
+
+--? @shortdesc Check invulnerablity state for ALL or ANY entity in an entity group.
+--? @result Boolean
+--? @args String groupname, Boolean all
+--? @extdesc
+--? Set all param to true to check for ALL or set to false to check for ANY.
+function EGroup_GetHealthInvulnerable( groupname, all )
+
+	local result = _Groups_Private.GroupGetHealthInvulnerable(
+		EGroup_FromName( groupname ),
+		EGroupCaller,
+		all
+	)
+	
+	return result
+
+end
+
+--? @shortdesc Respawn all despawned entities in a group.
+--? @result Void
+--? @args String groupname
+function EGroup_ReSpawn( groupname )
+	_Groups_Private.DoGroupSpawn(
+		EGroup_FromName( groupname ), 
+		EGroupCaller,
+		true
+	)
+end
+
+--? @shortdesc Despawn all spawned entities in a group.
+--? @result Void
+--? @args String groupname
+function EGroup_DeSpawn( groupname )
+	_Groups_Private.DoGroupSpawn(
+		EGroup_FromName( groupname ), 
+		EGroupCaller,
+		false
+	)
+end
+
+--? @shortdesc Respawns all entities in a group at a given position
+--? @result Void
+--? @args String groupname ScarPosition position
+function EGroup_ReSpawnPosition( groupname, position )
+
+	EGroup_DeSpawn( groupname )
+
+	_Groups_Private.DoGroupSpawnPosition(
+		EGroup_FromName( groupname ),
+		EGroupCaller,
+		position
+	)
+end
+
+--? @shortdesc Respawns all entities in a group at a given position
+--? @result Void
+--? @args String groupname String markerName
+function EGroup_ReSpawnMarker( groupname, markerName )
+	EGroup_ReSpawnPosition( groupname, Marker_GetPosition( Marker_FromName(markerName, "basic_marker")) )
+end
+
+--? @shortdesc Return true if all items in a group are selected
+--? @result Boolean
+--? @args String groupname
+function EGroup_IsSelected( groupname )
+	return _Groups_Private.IsGroupSelected(
+		EGroup_FromName( groupname ), 
+		EGroupCaller
+	)
+end
+
+--? @shortdesc Return true if any entities in a group contain a strategic point with a structure on it
+--? @result Boolean
+--? @args String groupname
+function EGroup_HasStrategicPointWithStructure( groupname )	
+	
+	local HasSPWithStructure = function ( groupid, itemindex, itemid )
+		
+		if( Entity_IsStrategicPoint( itemid ) ) then
+			return Entity_StrategicPointHasStructure( itemid )
+		end
+		
+		return false
+		
+	end
+	
+	local result = EGroup_ForEachAllOrAny( groupname, false, HasSPWithStructure )
+	return result
+end
+
+--? @shortdesc Returns true if ALL or ANY items in a group have the given active command
+--? @extdesc See Entity_GetActiveCommand for valid command types
+--? @result Boolean
+--? @args String groupname, Integer cmd, Boolean all
+function EGroup_CheckActiveCommand( groupname, cmd, all )
+	
+	local result = CheckGroupActiveCommand(
+		cmd,
+		EGroup_FromName( groupname ),
+		EGroupCaller,
+		all
+	)
+	
+	return result
+
+end
+
+--? @shortdesc Call Entity_ResetConstructionState for all spawned buildings
+--? @extdesc See Entity_ResetConstructionState for more info
+--? @result Void
+--? @args String groupname
+function EGroup_ResetConstructionState( groupname )
+	
+	local ResetState = function( groupid, itemindex, itemid )
+		Entity_ResetConstructionState( itemid )
+	end
+	
+	EGroup_ForEach( groupname, ResetState )
+	
+end
+
+--? @shortdesc Returns true if ALL or ANY items in a group have built the given addon
+--? @result Boolean
+--? @args String groupname, String addonname, Boolean all
+function EGroup_ContainsAddOn( groupname, addonname, all )
+	
+	local CheckAddOn = function( groupid, itemindex, itemid )
+		return Entity_ContainsAddOn( itemid, addonname )
+	end
+	
+	local result = EGroup_ForEachAllOrAny( groupname, all, CheckAddOn )
+	
+	return result
+	
+end
+
+
+--? @shortdesc Gives addon to all members of the group
+--? @result Boolean
+--? @args String groupname, String addonname
+function EGroup_ForceAddOn( groupname, addonname )
+	
+	local GiveAddOn = function( groupid, itemindex, itemid )
+		Entity_ForceAddOn( itemid, addonname )
+	end
+	
+	EGroup_ForEachAllOrAny( groupname, true, GiveAddOn )
+	
+end
+
+--? @shortdesc Forces all buildings in progress to complete their construction state
+--? @result Void
+--? @args String groupname
+function EGroup_SetConstructionComplete( groupname )
+	
+	local SetConstrComplete = function( groupid, itemindex, itemid )
+		if( Entity_IsBuilding( itemid ) ) then
+			Entity_SetConstructionComplete(  itemid )
+		end
+	end
+	
+	EGroup_ForEach( groupname, SetConstrComplete )
+
+end
+
+----------------------------------------------------------------------------------------------------------------
+-- SGroup
+
+--? @group Squad
+
+--? @shortdesc Returns true if ALL or ANY squads are in cover.
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function SGroup_IsInCover( sgroupname, all )
+	return _Groups_Private.IsGroupInCover(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				all
+			)	
+end
+
+--? @shortdesc Returns true if ALL or ANY squads are under attack.
+--? @args String sgroupname, Boolean all, PlayerID player
+--? @result Boolean
+function SGroup_IsUnderAttackByPlayer( sgroupname, all, player )
+	return _Groups_Private.IsGroupUnderAttackByPlayer(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				all,
+				player
+			)	
+end
+
+--? @shortdesc Returns true if ALL or ANY squads are under attack.
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function SGroup_IsUnderAttack( sgroupname, all )
+	return _Groups_Private.IsGroupUnderAttack(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				all
+			)	
+end
+
+--? @shortdesc Returns true if ALL or ANY squads in a group can see ALL or ANY squads in a target sgroup.
+--? @args String sgroupname, String targetegroupname, Boolean all
+--? @result Boolean
+function SGroup_CanSeeSGroup( sgroupname, targetsgroupname, all )
+	local sgroup = SGroup_FromName( sgroupname )
+	local targetsgroup = SGroup_FromName( targetsgroupname )
+		
+	return _Groups_Private.CanGroupSeeSGroup(
+				SGroup_FromName( sgroupname ),
+				SGroupCaller,
+				targetsgroup,
+				all
+			)
+end
+
+--? @shortdesc Returns true if ALL or ANY squads in a group are infiltrated
+--? @args String sgroupname, Boolean all
+--? @result Boolean
+function SGroup_IsInfiltrated( sgroupname, all )
+	local sgroup = SGroup_FromName( sgroupname )
+	
+	local IsInfil = function( groupid, idx, id )
+		return Squad_IsInfiltrated( id )
+	end
+	
+	return SGroup_ForEachAllOrAny( sgroup, all, IsInfil )
+end
+
+--? @shortdesc Find a squad group from name.  Creates a new one with given name if it doesnt exist.
+--? @args String name
+--? @result SGroupID
+function SGroup_CreateIfNotFound( name )
+	return _Groups_Private.CreateGroupIfNotFound( name, SGroupCaller )
+end
+
+--? @shortdesc Returns true if a named squad group is empty
+--? @args String name
+--? @result Boolean
+function SGroup_IsEmpty( name )
+	return _Groups_Private.IsGroupEmpty( SGroup_FromName( name ), SGroupCaller )
+end
+
+--? @shortdesc Returns the average health of all units in a squad group as a weighted percent [0.0, 1.0].
+--? @extdesc Example: A group of squads with health 20/100 and 100/1000 would return 120/1100 ( approx 11 % )
+--? @args String groupname
+--? @result Real
+function SGroup_GetAvgHealth( groupname )
+
+	return _Groups_Private.GetAvgGroupHealth(
+					SGroup_FromName( groupname ),
+					SGroupCaller
+				)
+	
+end
+
+--? @shortdesc Returns true if ALL or ANY items in a group have broken morale
+--? @args String groupname, Boolean all
+--? @result Boolean
+function SGroup_IsMoraleBroken( groupname, all )
+	local CheckIsBroken = function( groupid, itemindex, itemid )
+		return Squad_IsMoraleBroken( itemid )	
+	end
+	
+	local result = SGroup_ForEachAllOrAny( groupname, all, CheckIsBroken )
+	return result
+end
+
+--? @shortdesc Returns the average morale of all units in a squad group as a weighted percent [0.0, 1.0].
+--? @extdesc Squads that are not affected by morale always have morale of 1.0.  These squads will count towards your 
+--? total average
+--? @args String groupname
+--? @result Real
+function SGroup_GetAvgMorale( groupname )
+
+	return _Groups_Private.GetAvgGroupMorale(
+					SGroup_FromName( groupname )
+				)
+	
+end
+
+--? @shortdesc Sets the health of each squad in a squad group to a given percent [0.0, 1.0].
+--? @args String groupname, Real healthPercent
+--? @result Real
+function SGroup_SetAvgHealth( groupname, healthPercent )
+	
+	return _Groups_Private.SetAvgGroupHealth(
+					SGroup_FromName( groupname ),
+					SGroupCaller,
+					healthPercent
+				)
+	
+end
+
+--? @shortdesc Returns the average loadout of all squads in a group as a percent [0.0, 1.0].
+--? @extdesc Example: A group of squads with loadouts of 4/8 and 1/1 would return 0.75
+--? @args String groupname
+--? @result Real
+function SGroup_GetAvgLoadout( groupname )
+
+	local groupid = SGroup_FromName( groupname )
+	
+	local currentLoadout = 0
+	local maxLoadout = 0
+
+	local GetSquadLoadout = function( groupid, itemindex, itemid )
+		currentLoadout = currentLoadout + Squad_Count( itemid )
+		maxLoadout = maxLoadout + Squad_GetMax( itemid )
+	end
+	
+	-- check health
+	SGroup_ForEach( groupid, GetSquadLoadout )
+	
+	local result = currentLoadout / maxLoadout
+	
+	if( (result < 0.0) or (result > 1.0) ) then
+		error("this should never happen")
+	end
+	
+	return result
+
+end
+
+--? @shortdesc Sets the moral of each squad in a squad group to a given percent [0.0, 1.0].
+--? @args String groupname, Real moralePercent
+--? @result Real
+function SGroup_SetAvgMorale( groupname, moralePercent )
+	
+	local SetMorale = function( groupid, itemindex, itemid )
+		Squad_SetMorale( itemid, moralePercent )
+	end
+	
+	SGroup_ForEach( SGroup_FromName( groupname ), SetMorale )
+	
+end
+
+--? @shortdesc Changes the player owner of spawned and despawned squads in an SGroup.
+--? @args String groupname, PlayerID owner
+--? @result Void
+function SGroup_SetPlayerOwner( groupname, owner )
+	
+	return _Groups_Private.SetPlayerOwner(
+			SGroup_FromName( groupname ),
+			SGroupCaller,
+			owner
+	)
+	
+end
+
+--? @shortdesc Destroys all spawned and despawned squads in a group.
+--? @extdesc 
+--? Be careful not to confuse this with SGroup_Destroy which destroys the group and NOT the squads it contains.  This function will destroy
+--? spawned and despawned items in a group
+--? @args String groupname
+--? @result Void
+function SGroup_DestroyAllSquads( groupname )
+	
+	return _Groups_Private.DestroyAllItems(
+					SGroup_FromName( groupname ),
+					SGroupCaller
+				)
+	
+end
+
+--? @shortdesc Enable/Disable invulnerablity for an entire squad group.
+--? @result Void
+--? @args String groupname, Boolean enabled
+--? @extdesc IMPORTANT: You must disable invulnerability for everytime you enable it!
+function SGroup_SetHealthInvulnerable( groupname, enabled )
+	
+	_Groups_Private.GroupSetHealthInvulnerable(
+		SGroup_FromName( groupname ),
+		SGroupCaller,
+		enabled
+	)
+	
+end
+
+--? @shortdesc Check invulnerablity state for ALL or ANY squads in a squad group.
+--? @result Boolean
+--? @args String groupname, Boolean all
+--? @extdesc
+--? Set all param to true to check for ALL or set to false to check for ANY.
+function SGroup_GetHealthInvulnerable( groupname, all )
+
+	local result = _Groups_Private.GroupGetHealthInvulnerable(
+		SGroup_FromName( groupname ),
+		SGroupCaller,
+		all
+	)
+	
+	return result
+
+end
+
+--? @shortdesc Enable/Disable morale invulnerablity for an entire squad group.
+--? @result Void
+--? @args String groupname, Boolean enabled
+--? @extdesc IMPORTANT: You must disable invulnerability for everytime you enable it!
+function SGroup_SetMoraleInvulnerable( groupname, enabled )
+	
+	local SetInvulnerable = function( groupid, itemindex, itemid )
+		Squad_SetMoraleInvulnerable( itemid, enabled )
+	end
+	
+	SGroup_ForEach( SGroup_FromName( groupname ), SetInvulnerable )
+	
+end
+
+--? @shortdesc Check morale invulnerablity state for ALL or ANY squads in a squad group.
+--? @result Boolean
+--? @args String groupname, Boolean all
+--? @extdesc
+--? Set all param to true to check for ALL or set to false to check for ANY.
+function SGroup_GetMoraleInvulnerable( groupname, all )
+	
+	local IsInvulnerable = function( groupid, itemindex, itemid )
+		return Squad_GetMoraleInvulnerable( itemid )
+	end
+		
+	local result = SGroup_ForEachAllOrAny( SGroup_FromName( groupname ), all, IsInvulnerable )
+	return result
+	
+end
+
+--? @shortdesc Check if ALL or ANY squads in a sgroup have a leader
+--? @result Boolean
+--? @args String groupname, Boolean all
+--? @extdesc
+--? Set all param to true to check for ALL or set to false to check for ANY.
+function SGroup_HasLeader( groupname, all )
+	local HasLeader = function( groupid, itemindex, itemid )
+		return Squad_HasLeader( itemid )
+	end
+	
+	local result = SGroup_ForEachAllOrAny( SGroup_FromName( groupname ), all, HasLeader )
+	return result
+end
+
+--? @shortdesc Counts the number of leaders in all squads in the specified group
+--? @args String groupName
+--? @result Integer
+function SGroup_CountLeaders( groupName )
+	local count = 0
+
+	local CountLeaders = function( groupID, itemIndex, itemID )
+		count = count + Squad_CountLeaders( itemID )
+		return true
+	end
+	
+	SGroup_ForEachAllOrAny( SGroup_FromName(groupName), true, CountLeaders )
+	
+	return count
+end
+
+--? @shortdesc Destroys all items in a group that are in proximity to a given marker.
+--? @result Void
+--? @args String groupname, String markername
+function SGroup_DestroyAllInMarker( groupname, markername )	
+	local groupid = SGroup_FromName( groupname )
+	
+	local squadsNearMarker = {}
+	
+	local CheckNearMarker = function ( groupid, itemindex, itemid )
+		if( Marker_InProximity( Marker_FromName( markername, "basic_marker" ),  Squad_GetPosition( itemid ) ) ) then
+			table.insert( squadsNearMarker, itemid )
+		end
+	end
+	
+	--
+	SGroup_ForEach( groupid, CheckNearMarker )
+	
+	--
+	for i = 1, table.getn( squadsNearMarker ) do
+		Squad_Destroy( squadsNearMarker[i] ) -- squad will be removed from all groups when it is destroyed
+	end
+	
+end
+
+--? @shortdesc Adds a leader to all squads in a group that can take a leader.
+--? @extdesc This function will bypass all cost and queue prereqs
+--? @result Void
+--? @args String sgroupname
+function SGroup_AddLeaders( sgroupname )	
+	local AddLeader = function( groupid, itemindex, itemid )
+		Squad_AddLeader( itemid )
+	end
+	
+	SGroup_ForEach( SGroup_FromName(sgroupname), AddLeader )
+end
+
+--? @shortdesc Makes two SGroups face each other
+--? @result Void
+--? @args String sgroupname1, String sgroupname2
+function SGroup_FaceEachOther( sgroupname1, sgroupname2 )
+	local sgroup1 = SGroup_FromName( sgroupname1 )
+	local sgroup2 = SGroup_FromName( sgroupname2 )
+	
+	-- group1 face group2
+	SGroup_FacePosition( sgroup1,  SGroup_GetPosition( sgroup2 ) )
+	
+	-- group2 face group1
+	SGroup_FacePosition( sgroup2,  SGroup_GetPosition( sgroup1 ) )
+end
+
+--? @shortdesc Makes a SGroup face a marker.
+--? @result Void
+--? @args String sgroupname, String markername
+function SGroup_FaceMarker( sgroupname, markername )
+	local pos = Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) )
+	SGroup_FacePosition( SGroup_FromName( sgroupname ), pos )
+end
+
+--? @shortdesc Makes the first SGroup face the second SGroup
+--? @result Void
+--? @args String sgroupname1, String sgroupname2
+function SGroup_FaceSGroup( sgroupname1, sgroupname2 )
+	local sgroup1 = SGroup_FromName( sgroupname1 )
+	local sgroup2 = SGroup_FromName( sgroupname2 )
+	
+	-- group1 face group2
+	SGroup_FacePosition( sgroup1,  SGroup_GetPosition( sgroup2 ) )
+	
+end
+
+--? @shortdesc Respawn all despawned squads in a group.
+--? @result Void
+--? @args String groupname
+function SGroup_ReSpawn( groupname )
+	_Groups_Private.DoGroupSpawn(
+		SGroup_FromName( groupname ), 
+		SGroupCaller,
+		true
+	)
+end
+
+--? @shortdesc Despawn all spawned squads in a group.
+--? @result Void
+--? @args String groupname
+function SGroup_DeSpawn( groupname )
+	_Groups_Private.DoGroupSpawn(
+		SGroup_FromName( groupname ), 
+		SGroupCaller,
+		false
+	)
+end
+
+--? @shortdesc Respawns all squads in a group at a given position
+--? @result Void
+--? @args String groupname ScarPosition position
+function SGroup_ReSpawnPosition( groupname, position )
+
+	SGroup_DeSpawn( groupname )
+
+	_Groups_Private.DoGroupSpawnPosition(
+		SGroup_FromName( groupname ),
+		SGroupCaller,
+		position
+	)
+end
+
+--? @shortdesc Respawns all squads in a group at a given position
+--? @result Void
+--? @args String groupname String markerName
+function SGroup_ReSpawnMarker( groupname, markerName )
+	SGroup_ReSpawnPosition( groupname, Marker_GetPosition( Marker_FromName(markerName, "basic_marker")) )
+end
+
+--? @shortdesc Return true if all items in a group are selected
+--? @result Boolean
+--? @args String groupname
+function SGroup_IsSelected( groupname )
+	return _Groups_Private.IsGroupSelected(
+		SGroup_FromName( groupname ), 
+		SGroupCaller
+	)
+end
+
+--? @shortdesc Returns true if ANY entities in ANY squads of a group are on currently screen
+--? @extdesc IMPORTANT: This function does not check the FOW.  It will return true  even if the item is not revealed in FOW
+--? @result Boolean
+--? @args String groupname
+function SGroup_IsOnScreen( groupname )
+	local CheckOnScreen = function( groupid, itemindex, itemid )
+		return Camera_IsSquadOnScreen( itemid )
+	end
+	
+	local result  = SGroup_ForEachAllOrAny( groupname, false, CheckOnScreen )
+	return result
+end 
+
+--? @shortdesc Returns true if ALL or ANY items in a group have the given active command
+--? @extdesc See Squad_GetActiveCommand for valid command types
+--? @result Boolean
+--? @args String groupname, Integer cmd, Boolean all
+function SGroup_CheckActiveCommand( groupname, cmd, all )
+	
+	local result = _Groups_Private.CheckGroupActiveCommand(
+		cmd,
+		SGroup_FromName( groupname ),
+		SGroupCaller,
+		all
+	)
+	
+	return result
+
+end
+
+--? @shortdesc Check if all or any squads in a group contain (at least) the given number of weapon blueprints
+--? @result Boolean
+--? @args String groupname, String weaponname, Integer count, Boolean all
+function SGroup_ContainsWeaponBlueprints( sgroupname, weaponname, count, all )
+	
+	local  CheckWeaponCount = function( groupid, itemindex, itemid )
+		return ( Squad_WeaponCount( itemid, weaponname ) >= count )
+	end
+	
+	local result = SGroup_ForEachAllOrAny( sgroupname, all, CheckWeaponCount )
+	
+	return result
+
+end
+
+--? @shortdesc Returns true if the sgroup has ANY squads of type blueprint have received reinforcements 
+--? @result Boolean
+--? @args String sgroupname, String squadblueprint
+function SGroup_HasAnyReinforced( sgroupname, squadblueprint )
+
+	CheckSquadBPLoadout = function( sgroupid, itemindex, squadID)
+		if Squad_GetBlueprintName(squadID) == squadblueprint and Squad_Count(squadID) > Squad_GetMin(squadID) then
+			return true
+		else
+			return false
+		end
+	end
+	
+	-- check if any squads match the blueprint and have reinforcements
+	local result =  SGroup_ForEachAllOrAny(SGroup_FromName(sgroupname), false, CheckSquadBPLoadout) 
+	return result 
+	
+end

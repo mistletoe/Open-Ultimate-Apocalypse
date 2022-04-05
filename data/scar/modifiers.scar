@@ -1,0 +1,189 @@
+----------------------------------------------------------------------------------------------------------------
+-- Modifier helper functions
+-- (c) 2003 Relic Entertainment Inc.
+--
+-- Provides a simple interface to add and remove modifiers from groups and players.
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Modifier tables -- Store your custom modifiers here
+
+SquadModifiers = {}
+
+EntityModifiers = {}
+
+PlayerModifiers = {}
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Private Implementation
+
+_ModifiersPrivate =
+{
+	-- returns the applierIndex from an ApplierTable, returns zero if not found
+	GetApplierIndex = function( ApplierTable, Modifier, gameid )
+		for i=1, table.getn( ApplierTable ) do
+			--print ( "check index "..i, Modifier, ApplierTable[i][3], itemid, ApplierTable[i][1] );
+			if( ( ApplierTable[i][1] == gameid ) and ApplierTable[i][3] == Modifier ) then
+				return i
+			end
+		end
+		
+		-- not found
+		return 0
+	end,
+	
+	-- unapply a modifier and remove it from an applier table
+	RemoveModifier = function( ApplierTable, applierIndex )
+		-- remove the modifier
+		Modifier_Remove( ApplierTable[ applierIndex ][ 2 ] )
+		
+		-- remove from the applier table
+		table.remove( ApplierTable, applierIndex )
+	end,
+	
+	ApplyToGroup = function( groupid, groupcaller, ApplierTable, ApplierIndexFunc, Modifier, apply )
+	
+		local ApplyModifier = function( groupid, itemindex, itemid )
+		
+			if( apply == true ) then
+				--
+				-- apply if it is not already applied
+				if( ApplierIndexFunc( Modifier, itemid ) == 0 ) then
+					local applierid = groupcaller.ApplyModifier( itemid, Modifier )
+					
+					-- store entry ( so we can remove modifier later )
+					local entry = { groupcaller.GetGameID( itemid ), applierid, Modifier }
+					table.insert( ApplierTable, entry )
+					
+					-- DEBUG
+					--print( "Added modifier applier at index: "..ApplierIndexFunc( Modifier, itemid ) )
+				else
+					print( "Modifier cannot be re-applied.  You must remove it first." )
+				end
+				
+			else
+				--
+				-- remove if applier exists
+				local applierIdx = ApplierIndexFunc( Modifier, itemid )
+				if( applierIdx ~= 0 ) then
+					_ModifiersPrivate.RemoveModifier( ApplierTable, applierIdx )
+					--print( "Removed modifier from index: "..applierIdx );
+				else
+					print( "Modifier cannot be removed because it has not been applied" )
+				end
+			
+			end
+		
+		end
+	
+		groupcaller.ForEach( groupid, ApplyModifier )
+	end,
+
+	-- Applier tables
+	EntityAppliers = {},
+	SquadAppliers = {},
+	PlayerAppliers = {},
+	--WeaponAppliers = {}, --TODO
+}
+
+
+----------------------------------------------------------------------------------------------------------------
+-- Public Implementation
+
+--? @shortdesc Returns the applier table index for a given modifier.
+--? @extdesc Returns zero if applier for modifier is not found.
+--? @args Modifier modifier, SquadID squadid
+--? @result Integer
+function ModifierUtil_GetSquadApplierIndex( Modifier, squadid )
+	local result = _ModifiersPrivate.GetApplierIndex( _ModifiersPrivate.SquadAppliers, Modifier, Squad_GetGameID( squadid ) )
+	return result
+end
+
+--? @shortdesc Returns the applier table index for a given modifier.
+--? @extdesc Returns zero if applier for modifier is not found.
+--? @args Modifier modifier, EntityID entityid
+--? @result Integer
+function ModifierUtil_GetEntityApplierIndex( Modifier, entityid )
+	local result = _ModifiersPrivate.GetApplierIndex( _ModifiersPrivate.EntityAppliers, Modifier, Entity_GetGameID( entityid ) )
+	return result
+end
+
+--? @shortdesc Returns the applier table index for a given modifier.
+--? @extdesc Returns zero if applier for modifier is not found.
+--? @args Modifier modifier, PlayerID playerid
+--? @result Integer
+function ModifierUtil_GetEntityApplierIndex( Modifier, playerid )
+	local result = _ModifiersPrivate.GetApplierIndex( _ModifiersPrivate.PlayerAppliers, Modifier, Player_GetID( playerID ) )
+	return result
+end
+
+--[[
+function ModifierUtil_IsSquadModifierApplied( Modifier, squadid )
+	return ( ModifierUtil_GetSquadApplierIndex( Modifier, squadid ) ~= 0 )
+end
+
+function ModifierUtil_IsEntityModifierApplied( Modifier, entityid )
+	return ( ModifierUtil_GetEntityApplierIndex( Modifier, entityid ) ~= 0 )
+end
+
+function ModifierUtil_IsPlayerModifierApplied( Modifier, playerid )
+	return ( ModifierUtil_GetPlayerApplierIndex( Modifier, playerid ) ~= 0 )
+end
+]]
+
+
+
+
+--? @shortdesc Applys/Removes a modifier to a squadgroup
+--? @args SGroupID groupid, Modifier modifier, Boolean apply
+--? @result Void
+function ModifierUtil_ApplyToSGroup( groupid, Modifier, apply )
+	
+	--if( apply == true ) then print( "applying to sgroup" ) else print( "removing from sgroup") end
+	
+	--ApplyToGroup = function( groupid, groupcaller, ApplierTable, ApplierIndexFunc, Modifier, apply )
+	_ModifiersPrivate.ApplyToGroup(
+		groupid,
+		SGroupCaller,
+		_ModifiersPrivate.SquadAppliers,
+		ModifierUtil_GetSquadApplierIndex,
+		Modifier,
+		apply
+	)
+	
+end
+
+--? @shortdesc Applys/Removes a modifier to an egroup
+--? @args EGroupID groupid, Modifier modifier, Boolean apply
+--? @result Void
+function ModifierUtil_ApplyToEGroup( groupid, Modifier, apply )
+	
+	_ModifiersPrivate.ApplyToGroup(
+		groupid,
+		EGroupCaller,
+		_ModifiersPrivate.EntityAppliers,
+		ModifierUtil_GetEntityApplierIndex,
+		Modifier,
+		apply
+	)
+	
+end
+
+--? @shortdesc Toggles the fx for the specified modifer
+--? @args Modifier modifier
+--? @result Void
+function ModifierUtil_ToggleFX(modifier)
+	
+	for i = 1, World_GetPlayerCount()  do
+		local player = World_GetPlayerAt(i - 1)
+		local squads = Player_GetSquads(player)
+		
+		Modifier_SGroup_FX_Toggle(squads, modifier)
+	end
+	
+end
+
+
+
+

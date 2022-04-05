@@ -1,0 +1,35 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\global_required_addon.lua]])
+GameData["requirements"]["required_1"]["global_addon_name"] = [[addon_daemons_hq_2]]
+GameData["requirements"]["required_2"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_2"]["research_name"] = [[daemons_lord_research_1]]
+GameData["requirements"]["required_2"]["hide_the_button_when_failed"] = nil
+GameData["requirements"]["required_2"]["research_must_not_be_complete"] = nil
+GameData["requirements"]["required_10"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["requirements"]["required_10"]["research_name"] = [[daemons_lord_research_1]]
+GameData["requirements"]["required_10"]["hide_the_button_when_failed"] = nil
+GameData["requirements"]["required_10"]["research_must_not_be_complete"] = nil
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["faith"] = 0
+GameData["time_cost"]["cost"]["power"] = 150
+GameData["time_cost"]["cost"]["souls"] = 0
+GameData["time_cost"]["time_seconds"] = 60
+GameData["ui_hotkey_name"] = [[hotkey_f]]
+GameData["ui_index_hint"] = 4
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$95601]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$16002065]] -- - Grants the dark blessing of Chaos Gods to the Daemon Lord and the Shadow Fiends.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$16002066]] -- - Greatly improves the toughness of the Daemon Lord and Shadow Fiends.
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$16002067]] -- - Increases the health and health regeneration of the Daemon Lord, and the health of Shadow Fiends.
+GameData["ui_info"]["help_text_list"]["text_04"] = [[$16002068]] -- - Decreases the ability recharge time of the Daemon Lord and Shadow Fiends.
+GameData["ui_info"]["help_text_list"]["text_05"] = [[$16002069]] -- - Increases the strength of the Daemon Lord, thus increasing the damage potential of his Hellsword.
+GameData["ui_info"]["help_text_list"]["text_06"] = [[$16002070]] -- - Increases the damage caused by the Shadow Fiends' energy bolts.
+GameData["ui_info"]["help_text_list"]["text_07"] = [[$16002071]] -- - Second of two possible upgrades.
+GameData["ui_info"]["help_text_list"]["text_08"] = [[$16002072]] -- 
+GameData["ui_info"]["icon_name"] = [[daemons_icons/daemons_hero2_icon]]
+--REPLACE_ME
+GameData["ui_info"]["screen_name_id"] = [[$16002064]] -- Daemonic Gift: Daemonic Boon II

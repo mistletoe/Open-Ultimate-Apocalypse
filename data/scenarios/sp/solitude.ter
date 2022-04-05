@@ -1,0 +1,285 @@
+Model = "Solitude"
+Planet = "Kaurava_II"
+
+Name = "$3900015"
+Description = "$3900135"
+TerrainDescription = "$3900136"
+History = 
+{
+	"$3900137",
+	"$3900223",
+	"$3900138",
+	"$3900223",
+	"$3900139",
+	"$3900223",
+	"$3900140",
+	"$3900223",
+	"$3900141",
+	"$3900223",
+	"$3900142",
+	"$3900223",
+	"$3900143",
+}
+
+TerrainType = "$2851402"
+
+Nuggets = 
+{
+	{
+		Race = "guard_race",
+		Title = "", --"$3550350",
+		Text =
+		{
+			--"$3550350",
+			--"$2850018",
+			"$5100151",
+			"$2850018",
+			"$5100152",
+			"$2850018",
+			"$5100153",		
+		},
+		Speech =
+		{
+			5100151,
+			5100152,
+			5100153,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550350",
+		Text =
+		{
+			--"$3550350",
+			--"$2850018",
+			"$5100154",
+			"$2850018",
+			"$5100155",
+			"$2850018",
+			"$5100156",		
+		},
+		Speech =
+		{
+			5100154,
+			5100155,
+			5100156,
+		}
+	},
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550150",
+		Text =
+		{
+			--"$3550150",
+			--"$2850018",
+			"$5100157",
+			"$2850018",
+			"$5100158",
+			"$2850018",
+			"$5100159",
+		},
+		Speech =
+		{
+			5100157,
+			5100158,
+			5100159,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550250",
+		Text =
+		{
+			--"$3550250",
+			--"$2850018",
+			"$5100160",
+			"$2850018",
+			"$5100161",
+			"$2850018",
+			"$5100162",
+		},
+		Speech =
+		{
+			5100160,
+			5100161,
+			5100162,
+		}
+	},
+{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550250",
+		Text =
+		{
+			--"$3550250",
+			--"$2850018",
+			"$5100163",
+			"$2850018",
+			"$5100164",
+			"$2850018",
+			"$5100165",
+		},
+		Speech =
+		{
+			5100163,
+			5100164,
+			5100165,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550550",
+		Text =
+		{
+			--"$3550550",
+			--"$2850018",
+			"$5100166",
+			"$2850018",
+			"$5100167",
+			"$2850018",
+			"$5100168",
+		},
+		Speech =
+		{
+			5100166,
+			5100167,
+			5100168,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550760",
+		Text =
+		{
+			"$5100169",
+			"$2850018",
+			"$5100170",
+			"$2850018",
+			"$5100171",
+		},
+		Speech =
+		{
+			5100169,
+			5100170,
+			5100171,
+		}
+	},	
+	{
+		Race = "necron_race",
+		Title = "", --"$3550450",
+		Text =
+		{
+			"$5100172",
+			"$2850018",
+			"$5100173",
+		},
+		Speech =
+		{
+			5100172,
+			5100173,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100087",
+		"$2851718",
+		"$5100088",
+		"$2851718",
+		"$5100089",
+	},
+	Speech = 
+	{
+		5100087,
+		--5100088,
+		--5100089,
+	},
+}
+
+MissionFileAttacking = "Stronghold_Space_Marines"
+MissionFileAttackingConquered = "8P_Lands_of_Solitude_Attack_Skirmish"
+MissionFileDefending = "8P_Lands_of_Solitude"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Cerulea",
+	--"Irridene",
+	"Trivian_Groves"
+}
+
+VictoryBonusSquads =
+{
+--[[	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_assault_veteran_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_terminator_assault_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_terminator_veteran_sp",
+		Count = 1,
+	},
+]]
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "space_marine_race"
+OwnerSecondary = "space_marine_race"
+
+KeyLocationAbility =
+{
+	ID = "deep_strike",
+	Name = "$3900070",
+	HelpText =
+	{
+		"$3900416",
+		"$3900417",
+		"$3900418",
+		"$3900419"
+	},
+  CommanderScreenName = "$3900482",
+	CommanderScreenHelpText =
+	{
+		"$3900483",
+		"$3900484",
+		"$3900416",
+		"$3900417",
+		"$3900418",
+		"$3900419"
+	},
+  CommanderScreenLostName = "$3900482",
+	CommanderScreenLostHelpText =
+	{
+		"$3900483",
+		"$3900485",
+	}
+}
+
+StartingResourceBonus = 0.0

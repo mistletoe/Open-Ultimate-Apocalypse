@@ -1,0 +1,66 @@
+
+
+
+-- -----------------------------------------------------------------
+-- Mission Name - NISLets and Intel Events
+--
+-- (c) 2005 Relic Entertainment
+-- -----------------------------------------------------------------
+
+EVENTS = {}
+
+
+EVENTS.NIS_Opening = function()
+	
+
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )
+
+	--[[Removing all the rules]]
+
+	CTRL.Event_Delay( 1 )
+	CTRL.WAIT()
+	
+	Rule_RemoveAll()
+	
+	
+	CTRL.Event_Delay( 1 )
+
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+
+	
+	Fade_Start( .5	, true )
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	CTRL.Event_Delay( .5	 )		
+	CTRL.WAIT()
+	
+		
+		Camera_ActivateEntityCam(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_test"), 1), "helmet_cam", 0)
+	
+	--change this number if you change the length of the camera
+	CTRL.Event_Delay( 160 )		
+	CTRL.WAIT()
+	
+		Camera_DisableEntityCam(30)
+		
+	CTRL.W40k_Letterbox( false, 2)
+	
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+		
+	
+end

@@ -1,0 +1,102 @@
+Model = "Gurmuns_Pass"
+Planet = "Kaurava_IV"
+
+Name = "$3900036"
+Description = "$3900345"
+TerrainType = "$2851002"
+TerrainDescription = "$3900346"
+History = 
+{
+"$3900347",
+"$3900348",
+"$3900349",
+}
+
+
+MissionFileAttacking = "4P_Gurmuns_Pass"
+MissionFileAttackingConquered = "4P_Gurmuns_Pass"
+MissionFileDefending = "4P_Gurmuns_Pass"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = .75
+
+NeighborTerritories = 
+{
+	"Morholt_Range",
+	"Peninsula_of_Iseult",
+	--"Riwalin",
+	"Tristram_Plains",
+	"Marconia",
+	-- "Parmenie", 
+	-- "Parmenian_Steppe", 
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_cultist_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_slugga_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_guardsmen_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_banshee_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_kroot_alpha_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_builder_scarab_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_missionary_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_reaver_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 2
+
+OwnerPrimary = "chaos_marine_race"
+OwnerSecondary = "dark_eldar_race"
+
+StartingResourceBonus = 0.0

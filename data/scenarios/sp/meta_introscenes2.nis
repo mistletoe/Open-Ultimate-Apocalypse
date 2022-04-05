@@ -1,0 +1,1676 @@
+-- -----------------------------------------------------------------
+-- Eldar Stronghold - NISLets and Intel Events
+--
+-- (c) 2005 Relic Entertainment
+-- -----------------------------------------------------------------
+
+EVENTS = {}
+
+--[[
+5300460	Commander Stubbs! Four monoliths have been sighted. It – it looks as they’re being powered up.
+5300461	We’ll have to put a stop to that. We can’t have four of those things bearing down on us. There must be some way to cut off their energy supply…
+5300462	Sir! Reconnaissance had identified four monoliths at the perimeter of the target area. They – they appear to be drawing power from the center. I don’t know what for.
+5300463	Excellent work. That area is supplying power that is used to upgrade their capabilities. It is mission critical that we prevent these monoliths from being fully restored. Which means… we’ll need to cut off their power.
+5300464	Canoness. Our scouts have identified four monoliths outlying the central area. Scans indicate that they are drawing power from there, which is being used to – to awaken them.
+5300465	This must be stopped before they reach their full capabilities. I will not have four of those monstrosities upon the field of battle.
+5300466	Master! Lord! They have monoliths, four monoliths. They drink, drink power and they grow!
+5300467	They *must* be stopped. There are two strategies: cut them at the jugular, or pierce them through the skull!
+5300468	It is as I feared! Power… courses from the center, to four buds, four… monoliths. If these are allowed to reach full bloom, it is very likely our demise. They must be stopped, be it at the stem or at the bud. They *must* be stopped.
+5300469	Archon, we flew above this foul city. At the four cardinal points we scried four monoliths. They seemed, Lord, to draw power from the center.
+5300470	Hmph! If it is as I fear, these fortresses are being restored to fullness. If they were to reach this state, they would be fearsome foes. We must do all that we can to halt their progress.
+5300471	Wot’s dis? Dem monoliffs in da corners is plugged in. If we don’t stop ‘em, dey’ll go full up, dey’ll be worse ‘an four squigoffs stompin on us. Unplug ‘em, dat’s wot I say.
+5300472	Commander, our equipment has detected a strong flow of energy from the center towards four points at the edge of their compound.
+5300473	And what lies at these points?
+5300474	Monoliths, commander.
+5300475	Ah, this is a great threat. That power restores each monolith. When they are fully restored, they are a force to be reckoned with. They must be stopped.
+5300476	Take… it… back…
+5300477	It… is ours… drink again…grow… 
+5300478	General, sir, scanners show that this attack came directly from a Summoning Core at the back of the city. Destroying that might prevent further teleporting.
+5300479	Commander. Our scanners show that this defensive force originated at a Summoning Core at the back of the compound. Dispatching the Core should prevent similar defensive teleports.
+5300480	Canoness! We have traced the energy pattern to a Summoning Core at the far end of the Necropolis. It appears that this is how they deploy these defensive forces.
+5300481	<in a bloody rage> Curse these teleporting fiends! Blast them to smithereens. Do you know how they do it? No?? *I’ll* tell you! There’s a Summoning Core, in the back of this, this city. Let us smash it with the speed of Khorne’s fist!
+5300482	These defensive maneuvers originate in a single source. There is… yes, a Summoning Core behind their compound. If we can dispatch this structure, we defeat this tactic, gaining a true advantage.
+5300483	Archon. I have discovered the secret of these teleportation tricks! They hail from one point – a Summoning Core nestled behind this necropolis. Destroy it, and that grievance shall trouble us no more. 
+5300484	Oi! I see where da tellyporta dey usin’s at. It’s back dere. We oughta stomp that good, we ought.
+5300485	Commander, sensor arrays have determined the origin of this defensive force. They all came from a Summoning Core, which it seems controls all defensive teleports.
+5300486	Sir, the monoliths are gaining in power.
+5300487	Commander, the monoliths are powering up.
+5300488	Mistress, the monoliths gain in power.
+5300489	Master! Lord! The monoliths gain, they grow!
+5300490	We must make haste, the monoliths gain in power.
+5300491	Archon, the monlliths are gaining power. We must not tarry.
+5300492	Boss! Da monoliffs, dey's powerin' up!
+5300493	The monoliths are gaining in power. We must not hesitate to act.
+5300494	Sir, one of the monoliths is partially restored.
+5300495	Commander, one of the monoliths has reached its second phase.
+5300496	Mistress, a monolith is in its second stage of restoration.
+5300497	Master! Now a monolith is partially restored!
+5300498	Ah! A monolith has gained a new stage of restoration.
+5300499	That monolith is one step closer to complete. We must halt its growth.
+5300500	Uh oh, a monoliff jus' wen' up a level.
+5300501	Commander, one monolith is now partially restored!
+5300502	<grumbling> *Another* restored monolith. Take that thing out of commission!
+5300503	It's gone active. Marines, your objective is that giant tower of death.
+5300504	Cursed abomination! The tower has gone active. Sisters, it must be destroyed!
+5300505	Choas! Blast that cursed monolith to smithereens!
+5300506	The central monolith is now active. <inspired> It is their last hope. We must finish this! Now!
+5300507	Aaagh! The monolith has gone active! Destroy that thing! Blow it to pieces!
+5300508	It's shootin' us! Da monoliff is shootin' us! Bash it good! Waaagh!
+5300509	The central monolith -- it has gone active! This is their last stand. Destroy it, and we prevail!
+5300510	If we go in there now, we risk the outer monoliths being fully restored. That might be more than we could handle.
+5300511	Our first priority is those four outer monoliths that are powering up. Hitting the center could lose us the battle.
+5300512	Everything must be destroyed… but I fear we will overextend ourselves if we do not destroy the outer monoliths first.
+5300513	<aggravated scorn> Ah, leave it be! We cannot fight the outer monoliths *and* the center, all at once!
+5300514	Attacking the center before the outer monoliths is a path fraught with great peril. It is unlikely to succeed.
+5300515	Tis a bad prospect, trying to take the center before we have demolished the outer structures.
+5300516	Wotchyou doin'? First we smash da outta monaliffs, *then* the middle one! 'Ear that?
+5300517	It would be unwise to maintain an assault on both the outer and inner fortresses of the enemy. And the outside a much greater threat.
+5300518	Death… blooms… and flies… out… to kill…
+5300519	It is complete… now… you will die…
+5300520	Awaken!... awaken… and… destroy!
+5300521	It is… restored… now… it will… vanquish!
+5300522	You… shall not… go here.
+5300523	Die… trespassers…
+5300524	Go… back!...
+5300525	<almost sounding glad> Enter… the spider’s… web…
+5300526	Embrace… death… you… cannot… escape it…
+5300527	You think… you… have won… you… have not…
+5300528	<laughter>
+5300529	Great Deceiver… lead them… to… their… deaths…
+5300577	They… shall not… have it…
+5300578	Commander, we have identified small Necron encampments South and Northwest of our base. They could do some damage, if we left it unguarded.
+5300579	Commander, scouts have located small Necron outposts to the South and Northwest. They've got sufficient strength to threaten our base.
+5300580	Canoness, Missionaries have spied small Necron posts South and Northwest of our base of operations. They are not strong, but if our base were left unattended…
+5300581	Dreaded Lord! There are small Necron camps South and Northwest of our base. Do you wish us to destroy these *nuisances*?
+5300582	Farseer, small outposts have been spotted South and Northwest of our Webway Assembly. While they stand, we should not leave our base unguarded.
+5300583	Bah! Petty Necron outposts flank our camp to the South and Northwest. …shall we guard our base, or crush these pests?
+5300584	Boss! Boss! Dey's more of 'em! Souf and Norfwest. <thinks about it…sounds doubtful> Ain't very big, tho!
+5300585	Commander! Small Necron outposts have been identified to the South and Northwest of our base. They could do some damage, if we left ourselves undefended
+5300637	Fools… you have… released… more… power…
+5300638	More… power! … they … must … die!
+5300639	All … energy … go… I … command it ..
+5300640	<deep breath> <low laugh>
+5300641	*Die*. <necron whirring sounds>
+5300642	Take… it… back…
+5300643	Need… power… get… power!
+5300644	Power… slipping…
+5300645	Sir, we’ve determined that power is flowing to each of the outer monoliths at a point just outside the center. If we can take those points, General, we can stop the flow of power.
+5300646	Commander, sensors have identified power flow from the central base to the four outer monoliths. There's a point at each path, just outside the center. If we hold it, we can turn the power off.
+5300647	Mistress, we have identified our points outside the central base. Each is provides power to one of the outer monoliths. If we took these points, we could stop them from powering up.
+5300648	Alpha Legion, we have seen four points just outside the center. Each point provides power to one of the outer monoliths. Take these points, and we control the power. We stop the monoliths.
+5300649	Farseer, we have located four points just outside the central Necron base. Each is a gate that provides power to one of the outer monoliths. We can stop the flow of power by taking these points.
+5300650	Warriors! Listen to me. There are four points, just outside the central Necron base. It is through these that the outer monoliths are being powered. If we are to halt the restoration of the monoliths, we must take these points!
+5300651	Boss!  Boss! Da Mek Boyz figgered it out. See, dey's four points near the middle, right? Dat's how da power gets to da outer monoliffs. All we gotta do is take dem, and da monoliffs stop!
+5300652	Commander, our sensors have identified four critical locations just outside the central Necron base. Each of these channels power to the outer monoliths. If we take these points, we can stop those monoliths from being poweredup.
+]]
+-------------------------------------------------
+--[[ INTEL EVENTS ]]
+-------------------------------------------------
+EVENTS.IE_FirstCritPointTaken = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300476 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_CritPointTakenBack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300477 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_RestoredMonolithRandom1 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300518 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_RestoredMonolithRandom2 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300519 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_RestoredMonolithRandom3 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300520 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_RestoredMonolithRandom4 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300521 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_RestoredMonolithLaughter = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300528 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DefendMonolithsRandom1 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300522 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DefendMonolithsRandom2 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300523 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DefendMonolithsRandom3 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300524 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Taunt1 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300525 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Taunt2 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300526 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Taunt3 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300527 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Deciever = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300529 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DefendTheRelic = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300577 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_TimeRemoved1 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300637 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_TimeRemoved2 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300638 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_TimeRemoved3 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300639 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_EnterBase1 = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300640 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_EnterBase2= function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300641 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_PlayerTakes2Points = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300643 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_PlayerTakes3Points = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Macabee, 5300644 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+
+--------------------------------------------------
+-------------------------------------------------
+--[[ Race Specific Chatter ]]
+-------------------------------------------------
+-------------------------------------------------
+
+-------------------------------------------------
+--[[IG -- Mauser]]
+-------------------------------------------------
+
+EVENTS.IE_IG_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Kasrkin, 5300460 )	
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300461 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Kasrkin, 5300478 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300486 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300494 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300502 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300510 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300645 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_IG_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Mauser, 5300578 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Space Marines -- Thule ]]
+-------------------------------------------------
+EVENTS.IE_SM_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.TacticalMarine, 5300462 )	
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300463 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.TacticalMarine, 5300479 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300487 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300495 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+EVENTS.IE_SM_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300503 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300511 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300646 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_SM_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Thule, 5300579 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Sisters of Battle -- Avatar ]]
+-------------------------------------------------
+
+EVENTS.IE_Sisters_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.TacticalMarine, 5300464 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300465 )
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.TacticalMarine, 5300480 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300488 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300496 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300504 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300512 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300647 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Sisters_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Avatar, 5300580 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Chaos -- Eliphas ]]
+-------------------------------------------------
+EVENTS.IE_Chaos_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Cultist, 5300466 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300467 )
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300481 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300489 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300497 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300505 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300513 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300648 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Chaos_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Eliphas, 5300581 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Eldar -- Gabriel ]]
+-------------------------------------------------
+EVENTS.IE_Eldar_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300468 )
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300482 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300490 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300498 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300506 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300514 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300649 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Eldar_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gabriel, 5300582 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Dark Eldar -- Dark_Reaper_Exarch]]
+-------------------------------------------------
+EVENTS.IE_DE_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Harlequin, 5300469 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300470 )
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Harlequin, 5300483 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300491 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300499 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300507 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300515 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300650 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_DE_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Dark_Reaper_Exarch, 5300583 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Ork -- Gorgutz]]
+-------------------------------------------------
+EVENTS.IE_Ork_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300471 )
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.BigMek, 5300484 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300492 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300500 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300508 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300516 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300651 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Ork_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Gorgutz, 5300584 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[Tau  -- Shas]]
+-------------------------------------------------
+EVENTS.IE_Tau_GameIntro = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Fire_Warrior, 5300472 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300473 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Fire_Warrior, 5300474 )
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300475 )
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_DisableSummoningCoreObj = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Fire_Warrior, 5300485 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_OneMonolithPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300493 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_TwoMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300501 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_ThreeMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300509 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_FourMonolithsPartiallyCharged = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300517 )	
+	CTRL.WAIT()
+	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_TellPlayerHowToStopPower = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300652 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Tau_UpperLowerBasesAttack = function()
+
+	Util_SetIE( true )
+
+	CTRL.Actor_PlaySpeech(  ACT.Shas, 5300585 )	
+	CTRL.WAIT()	
+	
+	Util_SetIE( false )
+
+end
+
+-------------------------------------------------
+--[[ Loss NIS ]]
+-------------------------------------------------
+
+EVENTS.NIS_Loss = function()
+	
+	CTRL.W40k_Letterbox( true, 1)
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 5 )
+	CTRL.WAIT()
+	
+	CTRL.W40k_Letterbox( false, 1)
+	CTRL.WAIT()
+		
+	
+end
+-----------------------------------------------------------------
+-----Opening
+-----------------------------------------------------------------
+EVENTS.NIS_Opening = function()		
+
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+		
+		g_Nis_Blueprint = "chaos_squad_cultist"
+		
+	elseif humanplayer == "eldar_race" then
+		
+		g_Nis_Blueprint = "eldar_squad_banshees"
+		
+	elseif humanplayer == "guard_race" then
+		
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		
+	elseif humanplayer == "ork_race" then
+		
+		g_Nis_Blueprint = "ork_squad_slugga"	
+		
+	elseif humanplayer =="space_marine_race" then
+		
+		g_Nis_Blueprint = "space_marine_squad_scout"
+		
+	elseif humanplayer == "tau_race" then
+		
+		g_Nis_Blueprint = "tau_pathfinder_squad"
+		
+	elseif humanplayer =="dark_eldar_race" then
+		
+		g_Nis_Blueprint = "dark_eldar_squad_warrior"
+		
+	elseif humanplayer == "sisters_race" then
+		
+		g_Nis_Blueprint = "sisters_squad_battle_missionary"
+		
+	end
+	
+	--set the music	
+	t_necron_ambience = {"AM_IG_STR_Necron"}
+	
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_necron_ambience, true, true , {2, 4})
+
+	--[[turn off events
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	Util_NIS_ToggleModifierEvents(g_Player5, false)]]
+	
+	--EGroup_DeSpawn("eg_NISCarnage")
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )	
+	
+	--[[hide the bonus unit effect
+	Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")]]
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+
+	Util_MissionTitle("$2652000")
+	
+	CTRL.Event_Delay( 4 )
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	
+	Fade_Start( 2.0, true )
+	
+	-------------------------------------------------
+	--Create Opening Actors
+	-------------------------------------------------
+	
+	--Wraith 01
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_wraith01", "necron_wraith_squad", "nis_opening_wraith_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_wraith01"))
+	SGroup_FaceMarker("sg_opening_wraith01", "nis_opening_wraithlookout")
+	SGroup_SetHealthInvulnerable("sg_opening_wraith01", true)
+	Cmd_SetStance("sg_opening_wraith01", STANCE_CeaseFire)
+	
+	--Necron Lord
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_lord1", "necron_lord_squad_sp", "nis_opening_necronlord_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_lord1"))
+	SGroup_FaceMarker("sg_opening_lord1", "nis_opening_necronlord_face")
+	SGroup_SetHealthInvulnerable("sg_opening_lord1", true)
+	Cmd_SetStance("sg_opening_lord1", STANCE_CeaseFire)
+	
+	--Enemy Army
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_enemyarmy", g_Nis_Blueprint, "nis_opening_enemy_spawn", 2, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_enemyarmy"))
+	SGroup_FaceMarker("sg_opening_enemyarmy", "nis_opening_enemy_goto")
+	SGroup_SetHealthInvulnerable("sg_opening_enemyarmy", true)
+	Cmd_SetStance("sg_opening_enemyarmy", STANCE_CeaseFire)
+	
+	-------------------------------------------------
+	--End Spawns
+	-------------------------------------------------
+	
+	CTRL.CPath_Start("canim_start", "start", "end")
+	
+	CTRL.CPath_CutToPath("canim_intro_flyby01", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(10)
+			CTRL.WAIT()
+			Cmd_MoveToMarker("sg_opening_wraith01", "nis_opening_wraithlookout")
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_wraith", "start", "end")
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_wraith01", "start", "end")
+		Cmd_MoveToMarker("sg_opening_enemyarmy", "nis_opening_enemy_goto")
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	CPath_CutToPath("canim_wraith02", "start", "end")
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_wraith01", "nis_opening_wraithlookout_goto")
+	
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 1 )
+	Fade_Start( .5, false )
+	CTRL.WAIT()
+	Fade_Start( .5, true )
+	
+	--Wraith 02
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_wraith02", "necron_wraith_squad", "nis_opening_wraith2_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_wraith02"))
+	SGroup_FaceMarker("sg_opening_wraith02", "nis_opening_wraith_goto2")
+	SGroup_SetHealthInvulnerable("sg_opening_wraith02", true)
+	Cmd_SetStance("sg_opening_wraith02", STANCE_CeaseFire)
+	
+	CTRL.CPath_CutToPath("canim_wraithandlord01", "start", "end")
+		Cmd_MoveToMarker("sg_opening_wraith02", "nis_opening_wraith_goto2")
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_wraith02", "nis_opening_wraith_goto3")
+	
+	CTRL.CPath_CutToPath("canim_wraithandlord", "start", "end")
+	CTRL.WAIT()
+
+	CTRL.CPath_CutToPath("canim_wraithandlord02", "start", "end")
+			CTRL.SUB()
+			Actor_PlaySpeech(  ACT.TacticalMarine, 5200067) --So, they come.
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			Cmd_JumpToMarker("sg_opening_lord1", "nis_opening_lord_jump")
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_critpoint", "start", "end")
+		CTRL.SUB()
+			Cmd_MoveToMarker("sg_opening_lord1", "nis_opening_necronlordsmash")
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_lord1"), "special_ability_1" )
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_monolith1", "start", "end")
+	CTRL.WAIT()
+
+	CTRL.CPath_CutToPath("canim_monolith2", "start", "end")
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_monolith3", "start", "end")
+	CTRL.WAIT()
+
+	-------------------------------------------------
+	--Create Finale Actors
+	-------------------------------------------------
+	
+	for i = 1,4 do
+		
+		--Warriors
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_flayedones"..i, "necron_flayed_one_squad", "nis_opening_flayedOnes_spawn"..i, 1, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_flayedones"..i))
+		SGroup_SetHealthInvulnerable("sg_opening_flayedones"..i, true)
+		SGroup_FaceMarker("sg_opening_flayedones"..i, "nis_opening_necronarmy_face")
+		Cmd_SetStance("sg_opening_flayedones"..i, STANCE_CeaseFire)
+		
+	end
+	
+	for i = 1,4 do
+		SGroup_DeSpawn("sg_opening_flayedones"..i)
+	end
+	
+	for i = 1,3 do
+		
+		--Warriors
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_warriors"..i, "necron_basic_warrior_squad", "nis_opening_warriors_spawn"..i, 6, 1)
+		SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_warriors"..i))
+		SGroup_SetHealthInvulnerable("sg_opening_warriors"..i, true)
+		SGroup_FaceMarker("sg_opening_warriors"..i, "nis_opening_necronarmy_face")
+		Cmd_SetStance("sg_opening_warriors"..i, STANCE_CeaseFire)
+		
+	end
+	
+	--Necron Lord
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_lord2", "necron_lord_squad_sp", "nis_opening_lordfinal_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_lord2"))
+	SGroup_FaceMarker("sg_opening_lord2", "nis_opening_necronlordfinal_face")
+	SGroup_SetHealthInvulnerable("sg_opening_lord1", true)
+	Cmd_SetStance("sg_opening_lord2", STANCE_CeaseFire)
+	-------------------------------------------------
+	--End SPawning
+	-------------------------------------------------
+
+	
+	CPath_CutToPath("canim_lordlast01", "start", "end")
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	Actor_PlaySpeech(  ACT.TacticalMarine, 5200068) --Awake… I give you energy. Drink, drink and awake. 
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_lord2"), "special_ability_2" )
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+
+	for i = 1,4 do
+		Squad_DeepStrikeToPos(SGroup_FromName("sg_opening_flayedones"..i), "monolith", Marker_GetPosition(Marker_FromName("nis_opening_flayedones_deepstrike"..i, "basic_marker")))
+		SGroup_FaceMarker("sg_opening_flayedones"..i, "nis_opening_necronarmy_face")
+	end
+	
+	CTRL.Event_Delay( 1 )
+	Fade_Start( .5, false )
+	CTRL.WAIT()
+	Fade_Start( .5, true )
+
+	CPath_CutToPoint("canim_centerfinal01", "start")
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_centerfinal01", "start", "end")
+		Actor_PlaySpeech(  ACT.TacticalMarine, 5200069) --They shall meet their ends. They shall join the army of death.
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 1 )
+		Fade_Start( 1, false )
+	CTRL.WAIT()
+	
+	SGroup_DeSpawn("sg_opening_actors")
+	SGroup_DestroyAllSquads("sg_opening_actors")
+	SGroup_Destroy(SGroup_FromName("sg_opening_actors"))
+	
+	CPath_CutToPoint("canim_end", "start")
+	
+	CTRL.W40k_Letterbox( false, 2)
+		FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+	
+	Fade_Start( 1, true )
+	
+end
+
+-----------------------------------------------------------------
+-----Closing
+-----------------------------------------------------------------
+
+EVENTS.NIS_Outro = function()		
+
+	Rule_RemoveAll()
+
+	--turn off events
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	--Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	Util_NIS_ToggleModifierEvents(g_Player5, false)
+		
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 2 )	
+	
+	--[[hide the bonus unit effect]]
+	--Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	--Remove all the buildings and units to clear the Nis scenes
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	--SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player5))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	--EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player5))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+	
+	--[[EGroup_DeSpawn("eg_Thrower")
+	EGroup_DeSpawn("eg_AllEntities")
+	EGroup_DestroyAllEntities("eg_AllEnemyEntities")
+	EGroup_Destroy(EGroup_FromName("eg_AllEnemyEntities"))
+	SGroup_DeSpawn("sg_AllSquads")
+	SGroup_DestroyAllSquads("sg_AllEnemySquads")
+	SGroup_Destroy(SGroup_FromName("sg_AllEnemySquads"))]]
+	
+	
+	--EGroup_SetPlayerOwner("eg_BasePoint", g_Player1)
+	
+	Fade_Start( 2.0, true )
+	
+	-----------------------------------------------------------------
+	-----Spawn Closing Units
+	-----------------------------------------------------------------
+	
+	--Closing Set Summoning Core
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_core", "necron_greater_summoning_core", "nis_closing_summoningcore", 1)
+	
+	--Closing Set Monolith
+	for i = 1, 4 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_closing_monolith"..i, "monolith", "nis_closing_monolth_spawn"..i, 1)
+	end
+	
+	--Closing Actor Warriors
+	for i = 1, 5 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_necronwarriors"..i, "necron_basic_warrior_squad", "nis_closing_deatharmy_spawn"..i, 12, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_necronwarriors"..i)
+		Cmd_SetStance("sg_closing_necronwarriors"..i, STANCE_CeaseFire)
+	end
+	
+	--Closing Actor Destroyers
+	for i = 1, 2 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_destroyer"..i, "necron_heavy_destroyer_squad", "nis_closing_destroyer_spawn"..i, 3, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_destroyer"..i)
+		Cmd_SetStance("sg_closing_destroyer"..i, STANCE_CeaseFire)
+	end
+	
+	--[[Closing Actor 
+	for i = 1, 2 do
+		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_destroyer"..i, "necron_heavy_destroyer_squad", "nis_closing_destroyer_spawn"..i, 1, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_destroyer"..i)
+		Cmd_SetStance("sg_closing_destroyer"..i, STANCE_CeaseFire)
+	end]]
+	
+	--Closing Actor Finale Warriors
+	for i = 1, 10 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_finalewarriors"..i, "necron_basic_warrior_squad", "nis_closing_finale_spawn"..i, 3, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_finalewarriors"..i)
+		Cmd_SetStance("sg_closing_finalewarriors"..i, STANCE_CeaseFire)
+	end
+	
+	--Closing Actor Finale Lord
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_finalelord", "necron_lord_squad", "nis_closing_finalelord", 1, 1)
+	Cpu_LockSGroupAcrossPlayers("sg_closing_finalelord")
+	Cmd_SetStance("sg_closing_finalelord", STANCE_CeaseFire)
+	
+	-----------------------------------------------------------------
+	-----End Spawn Closing Units
+	-----------------------------------------------------------------
+	
+	CPath_Start("canim_start", "start", "end")
+	
+	CTRL.CPath_CutToPath("canim_out_monolith", "start","end")
+		CTRL.SUB()
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			EGroup_SelfDestroy("eg_closing_monolith1", true)
+			
+			CTRL.Event_Delay(5)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_closing_necronwarriors1", "nis_closing_deatharmy_goto1")
+			
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_necronwarriors1", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_closing_destroyer1", "nis_closing_deatharmy_goto1")
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			SGroup_SelfDestroy("sg_closing_destroyer2", true)
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			SGroup_SelfDestroy("sg_closing_destroyer1", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_closing_necronwarriors2", "nis_closing_deatharmy_goto1")
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			SGroup_SelfDestroy("sg_closing_necronwarriors2", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_closing_necronwarriors3", "nis_closing_deatharmy_goto1")
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_necronwarriors3", true)
+			
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_closing_necronwarriors4", "nis_closing_deatharmy_goto2")
+			
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_necronwarriors4", true)
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CPath_CutToPath("canim_out_monolith2", "start","end")
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	EGroup_SelfDestroy("eg_closing_monolith2", true)
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	
+	CPath_CutToPath("canim_out_monolith3", "start","end")
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	EGroup_SelfDestroy("eg_closing_monolith3", true)
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	SGroup_SelfDestroy("sg_closing_necronwarriors5", true)
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_out_summoningcore", "start","end")
+		EGroup_SelfDestroy("eg_closing_core", true)
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_necronsdie02", "start","end")
+		CTRL.SUB()
+			SGroup_SelfDestroy("sg_closing_finalewarriors1", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalewarriors2"), "syncdeath_2" )
+			
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_finalewarriors3", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_finalewarriors5", true)
+			SGroup_SelfDestroy("sg_closing_finalewarriors4", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			SGroup_SelfDestroy("sg_closing_finalewarriors6", true)
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalewarriors7"), "syncdeath_2" )
+			SGroup_SelfDestroy("sg_closing_finalewarriors8", true)
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalewarriors9"), "syncdeath_2" )
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalelord"), "special_ability_2" )
+			
+			CTRL.Event_Delay(6)
+			CTRL.WAIT()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalewarriors10"), "syncdeath_2" )
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_closing_finalelord"), "die" )
+			
+			CTRL.Event_Delay(5)
+			CTRL.WAIT()
+			
+			CTRL.Event_Delay( 1 )
+				Fade_Start( 2, false )
+			CTRL.WAIT()
+		CTRL.END()
+	CTRL.WAIT()			
+
+end

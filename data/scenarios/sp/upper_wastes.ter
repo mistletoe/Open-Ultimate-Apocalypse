@@ -1,0 +1,300 @@
+Model = "Upper_Wastes"
+Planet = "Kaurava_III"
+
+Name = "$3900026"
+Description = "$3900264"
+TerrainDescription = "$3900265"
+History = 
+{
+	"$3900266",
+	"$3900267",
+	"$3900223",
+	"$3900268",
+	"$3900223",
+	"$3900269",
+	"$3900223",
+	"$3900270",
+}
+
+TerrainType = "$2851402"
+
+Nuggets = 
+{
+	{
+		Race = "guard_race",
+		Title = "", --"$3550320",
+		Text =
+		{
+			"$5100020",
+			"$2850018",
+			"$5100021",
+			"$2850018",
+			"$5100022",
+			"$2850018",
+			"$5100023",
+		},
+		Speech =
+		{
+			5100020,
+			5100021,
+			5100022,
+			5100023,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550620",
+		Text =
+		{
+			"$5100024",
+			"$2850018",
+			"$5100025",
+			"$2850018",
+			"$5100026",
+		},
+		Speech =
+		{
+			5100024,
+			5100025,
+			5100026,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550620",
+		Text =
+		{
+			"$5100027",
+			"$2850018",
+			"$5100028",
+		},
+		Speech =
+		{
+			5100027,
+			5100028,
+		}
+	},
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550110",
+		Text =
+		{
+			"$5100029",
+			"$2850018",
+			"$5100030",
+			"$2850018",
+			"$5100031",
+		},
+		Speech =
+		{
+			5100029,
+			5100030,
+			5100031,
+		}
+	},
+	{
+		Race = "dark_eldar_race",
+		Title = "", --"$3550110",
+		Text =
+		{
+			"$5100032",
+			"$2850018",
+			"$5100033",
+			"$2850018",
+			"$5100034",
+		},
+		Speech =
+		{
+			5100032,
+			5100033,
+			5100034,
+		}
+	},	
+	{
+		Race = "ork_race",
+		Title = "", --"$3550520",
+		Text =
+		{
+			"$5100035",
+			"$2850018",
+			"$5100036",
+			"$2850018",
+			"$5100037",
+		},
+		Speech =
+		{
+			5100035,
+			5100036,
+			5100037,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550720",
+		Text =
+		{
+			"$5100038",
+			"$2850018",
+			"$5100039",
+		},
+		Speech =
+		{
+			5100038,
+			5100039,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550420",
+		Text =
+		{
+			"$5100040",
+			"$2850018",
+			"$5100041",
+			"$2850018",
+			"$5100042",
+		},
+		Speech =
+		{
+			5100040,
+			5100041,
+			5100042,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100081",
+		"$2851718",
+		"$5100082",
+		"$2851718",
+		"$5100083",
+	},
+	Speech =
+	{
+		5100081,
+		--5100082,
+		--5100083,
+	}
+}
+
+
+
+
+MissionFileAttacking = "Stronghold_Eldar"
+MissionFileAttackingConquered = "8P_Upper_Wastes_Attack_Skirmish"
+MissionFileDefending = "8P_Upper_Wastes"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	"Principian_Badlands",
+	"Kier_Harrad",
+	"Broken_Lands",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_banshee_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_grav_platform_brightlance_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_falcon_grav_tank_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_wraithlord_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_dark_reaper_exarch_council",
+		Count = 1,
+	},
+	
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_fire_dragon_exarch_council",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_warp_spider_exarch_council",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_vypers_advance_sp",
+		Count = 1,
+	},
+]]
+}
+
+Stronghold = true
+WarpGate = false
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "eldar_race"
+OwnerSecondary = "eldar_race"
+
+KeyLocationAbility =
+{
+	ID = "roadway_seeds",
+	Name = "$3900073",
+	HelpText =
+	{
+		"$3900426",
+		"$3900427",
+		"$3900428",
+	},
+  CommanderScreenName = "$3900490",
+	CommanderScreenHelpText =
+	{
+		"$3900491",
+		"$3900492",
+		"$3900426",
+		"$3900427",
+		"$3900428",
+	},
+  CommanderScreenLostName = "$3900490",
+	CommanderScreenLostHelpText =
+	{
+		"$3900491",
+		"$3900493",
+	}  
+}
+
+StartingResourceBonus = 0.0

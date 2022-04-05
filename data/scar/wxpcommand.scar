@@ -1,0 +1,206 @@
+----------------------------------------------------------------------------------------------------------------
+-- Command helper functions.
+-- (c) 2005 Relic Entertainment Inc.
+----------------------------------------------------------------------------------------------------------------
+
+--? @shortdesc Checks the egroup for all entities that can cast the ability and has those entities casts on themselves
+--? @args String groupName, String abilityName
+--? @result Boolean
+function Cmd_EGroupCastAbilitySelf(groupName, abilityName)
+	local player = _Cmd_Private.GetGroupPlayerOwner(groupName, EGroupCaller)
+	
+	local CheckAndCastAbility = function(groupID, itemIndex, itemID)		
+		return Command_EntityAbilitySelf(player, itemID, abilityName)
+	end
+	
+	return EGroup_ForEachAllOrAny(groupName, true, CheckAndCastAbility)
+end
+
+--? @shortdesc Relocates every entity in the group that can relocate to the closest free spot within 'searchRadius' meters of 'position'.
+--? @args String groupName, ScarPosition position, Integer searchRadius
+--? @result Void
+function Cmd_EGroupRelocatePosition(groupName, position, searchRadius)
+	local player = _Cmd_Private.GetGroupPlayerOwner(groupName, EGroupCaller)
+	
+	local RelocateEntity = function(groupID, itemIndex, itemID)
+		Command_EntityRelocate(player, itemID, position, searchRadius)
+		return true
+	end
+	
+	EGroup_ForEachAllOrAny(groupName, true, RelocateEntity)
+end
+
+--? @shortdesc Relocates every entity in the group that can relocate to the closest free spot withing 'searchRadius' meters of marker 'markerName'
+--? @args String groupName, String markerName, Integer searchRadius
+--? @result Void
+function Cmd_EGroupRelocateMarker(groupName, markerName, searchRadius)
+	Cmd_EGroupRelocatePosition(groupName, Marker_GetPosition(Marker_FromName(markerName, "basic_marker")), searchRadius)
+end
+
+--? @shordesc Moves squads in group to a location offset by some distance around 'position'.
+--? @extdesc The offset is a number from 0 to 7 and indicates a location around 'position' as follows:\n7   0   1\n6  pos  2\n5   4   3
+--? @args String groupName, ScarPosition position, Integer offset, Real distance
+--? @result Void
+function Cmd_MoveToPosOffset(groupName, position, offset, distance)
+	local player = _Cmd_Private.GetGroupPlayerOwner(groupName, SGroupCaller)
+	local orientation = World_Pos(0, 0, 1)
+	
+	local MoveToPosOffset = function(groupID, itemIndex, itemID)
+		Command_SquadMoveToPosOffset(player, itemID, position, orientation, offset, distance)
+		return true
+	end
+	
+	SGroup_ForEachAllOrAny(groupName, true, MoveToPosOffset)
+end
+
+--? @shordesc Moves squads in group to a location offset by some distance around the targert sgroup.
+--? @extdesc The the target SGroup can only have one squad in it. The offset is a number from 0 to 7 and indicates a location around the target sgroup (oriented based on that group's orientation) as follows:\n7   0   1\n6  pos  2\n5   4   3
+--? @args String groupName, String targetGroupName, Integer offset, Real distance
+--? @result Void
+function Cmd_MoveToSGroupOffset(groupName, targetGroupName, offset, distance)
+	local player = _Cmd_Private.GetGroupPlayerOwner(groupName, SGroupCaller)
+	
+	local MoveToSGroupOffset = function(groupID, itemIndex, itemID)
+		Command_SquadMoveToSGroupOffset(player, itemID, SGroup_FromName(targetGroupName), offset, distance)
+		return true
+	end
+	
+	SGroup_ForEachAllOrAny(groupName, true, MoveToSGroupOffset)
+end
+
+--? @shortdesc Checks the egroup for an entity that can cast the ability and casts it on the target pos. 
+--? Returns false if no items in the group can cast.
+--? @args String egroupname, String abilityname, ScarPosition targetpos
+--? @result Boolean
+function Cmd_EntityCastAbilityPos( egroupname, abilityname, targetpos )
+	local player = _Cmd_Private.GetGroupPlayerOwner( egroupname, EGroupCaller )
+	
+	local CheckAndCastAbility = function ( groupid, itemindex, itemid  )		
+		-- try to cast ability
+		return Command_EntityAbilityPos( player, itemid, abilityname, targetpos )
+	end
+	
+	return EGroup_ForEachAllOrAny( egroupname, false, CheckAndCastAbility )	
+end
+
+--? @shortdesc Checks the egroup for an entity that can cast the ability and casts it at the marker. 
+--? Returns false if no items in the group can cast.
+--? @args String egroupname, String abilityname, String targetmarker
+--? @result Boolean
+function Cmd_EntityCastAbilityMarker( egroupname, abilityname, targetmarker )
+	local markerpos = Marker_GetPosition( Marker_FromName( targetmarker, "basic_marker" ) )
+	
+	return Cmd_EntityCastAbilityPos( egroupname, abilityname, markerpos )	
+end
+
+
+
+--? @shordesc Orders an entity to build a squad in it's build queue
+--? @extdesc The squadBlueprintToBuild is the name of the squad you want to build from the building.
+--? @args String egroupName, String squadBlueprintToBuild
+--? @result Void
+function Cmd_BuildSquad(egroupname, squadBlueprintToBuild)
+	local egroupID = EGroup_FromName( egroupname )
+	
+	-- ignore empty groups
+	if( EGroup_CountSpawned( egroupID ) <= 0) then return end
+
+	Command_EntityBuild(
+		Entity_GetPlayerOwner( EGroup_GetSpawnedEntityAt( egroupID, 1 ) ),
+		egroupID,
+		squadBlueprintToBuild
+	)		
+end
+
+
+
+--? @shortdesc Send a spawn slot A command to a harvester unit
+--? @extdesc Spawn the unit linked to the spawnslot of the harvester unit
+--? @args String sgroupname
+--? @result Void
+function Cmd_HarvestSpawnSlotA( sgroupname )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_Squad(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_HarvestSpawnSlotA
+	)
+end
+
+
+
+
+--? @shortdesc Send a spawn slot A command to a harvester unit
+--? @extdesc Spawn the unit linked to the spawnslot of the harvester unit
+--? @args String sgroupname
+--? @result Void
+function Cmd_HarvestSpawnSlotB( sgroupname )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_Squad(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_HarvestSpawnSlotB
+	)
+end
+
+
+
+
+--? @shortdesc Send a spawn slot A command to a harvester unit
+--? @extdesc Spawn the unit linked to the spawnslot of the harvester unit
+--? @args String sgroupname
+--? @result Void
+function Cmd_HarvestSpawnSlotC( sgroupname )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_Squad(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_HarvestSpawnSlotC
+	)
+end
+
+--? @shortdesc Tell a squad to entrench.
+--? @extdesc The given unit should have an squad entrench extension.
+--? @args String sgroupname
+--? @result Void
+function Cmd_SquadEntrench( sgroupname )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_Squad(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_Entrench
+	)
+end
+
+--? @shortdesc Tell a squad to uproot.
+--? @extdesc The given unit should have an squad entrench extension.
+--? @args String sgroupname
+--? @result Void
+function Cmd_SquadUproot( sgroupname )
+	local squads = SGroup_FromName( sgroupname )
+	
+	-- ignore empty group
+	if( SGroup_CountSpawned( squads ) <= 0 ) then return end
+		
+	Command_Squad(
+		_Cmd_Private.GetGroupPlayerOwner( squads, SGroupCaller ),
+		squads,
+		SCMD_Uproot
+	)
+end

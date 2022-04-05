@@ -1,0 +1,2062 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Stronghold_Eldar.nis
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Declares an Event Table
+EVENTS = {}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+--INTEL EVENTS
+	--	Initial (Race Based) :  Attack the small Eldar base to our south
+	--	Player_Nears_CenterBase :  Eldar response to the Player begining to attack the first base
+	--	BeginTeleport_CenterBase :  Eldar Starts to Teleport CenterBase Away
+	--	GivePlayerBase (Race Based) :  Players HQ & Builders have arrived
+	--	PostTeleport_CenterBase (Race Based) :  Center base has finished teleporting to the new location
+	--	Activate_SouthBase:  Activate Warp Spider & Ranger from South Base after first group is killed
+	--	Activate_NorthBase:  Activate Nightwings from North Base after first group is killed
+	--	Eldar_AirfieldDestroyed :  North Base is Destroyed (Variations for with/without elite squadron)
+	--	Eldar_SouthBaseDestroyed :  South Base is Destroyed
+	--	Reveal_MainBase (Race Based) :  Center base has been destroyed -- Reveal the Main Base
+	--	Detect_Energy_Sources (Race Based) :  Detect Locations of the Generators
+	--	Turrents_Found (Race Based) :  Found the Super Turrets
+	--	Turrets_Disabled :  The generator controlling the Turrets has been destroyed, & the turrets are shut down (or all turrets destroyed)
+	--	First_Barrier_Destroyed:  The first generator has been destroyed & first group of holo rocks turned off
+	--	Second_Barrier_Destroyed:  The Second generator has been destroyed & Second group of holo rocks turned off
+	--	All_Barriers_Destroyed :  All generators has been destroyed & all groups of holo rocks turned off
+	--	Meet_Elite_Aircraft : Elite Aircraft Squad is sent into the Battle
+	--	Destroyed_Elite_Aircraft : Elite Aircraft Squad has been destroyed
+	--	Taunt_One-Four : Four Taunts by Eldar Farseer that occur during level 
+	
+	-- Tags Not Used: 5300008, 5300051-5300058
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Initial (Race Based) : Attack the Small Eldar Base to our South
+	-- EVENTS.IE_Initial_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_Initial_DarkEldar : ACT.Archon
+	-- EVENTS.IE_Initial_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_Initial_Guard : ACT.Stubbs
+	-- EVENTS.IE_Initial_Necron : ACT.Macabee
+	-- EVENTS.IE_Initial_Ork : ACT.Gorgutz
+	-- EVENTS.IE_Initial_Sisters : ACT.Canoness
+	-- EVENTS.IE_Initial_Space : ACT.Boreale
+	-- EVENTS.IE_Initial_Tau : ACT.Shas
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Initial_Chaos = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Initial_Chaos_Commander : There they are! There! Go – go kill them all! Burn their base! Plant the flag of Chaos!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300003)
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Initial_DarkEldar_Commander : There, we gaze upon it. The stronghold of our false kin. The cowards! Let us move with deadly speed and silence, and blot out these fools from off this world.
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300004)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_Initial_Guard = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Guard_Commander : The Eldar stronghold lies directly below us. Let us strike, before they suspect anything.
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300000)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Necron_Commander: Our old … foes … are there … destroy them…
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300007)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Ork = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Ork_Commander: Look ‘ere, ya zoggin’ runts. Down dere, dat’s da pointy-ear big fort. We blast that, we blast ‘em all offa Kurruva. So get dem blastas and shootas ready, cuz we gots some fightin’ to do, is wot we’ve got.
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300005)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Sisters = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Sisters_Commander: Come, Sisters. Down there is the Eldar stronghold. We will purge it with fire, and claim this land in the Emperor’s name.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300002)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Space = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Space_Commander : The Eldar headquarters, directly below us. Move quickly men. Leave nothing standing, or moving.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300001)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Initial_Tau = function()
+	Util_SetIE( true )
+
+	-- Eldar_Initial_Tau_Commander: Fire Warriors, we stand before the Eldar central command. We are commanded to decimate the target. If we fight with skill and honor, victory will be ours.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300006)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Player_Nears_CenterBase :  Eldar response to the Player begining to attack the first base
+	-- EVENTS.IE_Player_Nears_CenterBase : ACT.Warlock, ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Player_Nears_CenterBase = function()
+	Util_SetIE( true )
+
+	-- Eldar_PlayerNears_FakeBase_Eldar_1_Warlock : They are upon us, Farseer! Is it time?
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300048)	
+	CTRL.WAIT()
+	
+	-- Eldar_PlayerNears_FakeBase_Eldar_2_Farseer : Almost. Not yet.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300049)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- BeginTeleport_CenterBase :  Eldar Starts to Teleport CenterBase Away
+	-- EVENTS.IE_BeginTeleport_CenterBase : ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_BeginTeleport_CenterBase = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_FakeBase_Farseer : Now! Quickly – to safety!
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300050)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- GivePlayerBase (Race Based) :  Players HQ & Builders have arrived
+	-- EVENTS.IE_GivePlayerBase_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_GivePlayerBase_DarkEldar : ACT.Archon
+	-- EVENTS.IE_GivePlayerBase_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_GivePlayerBase_Guard : ACT.Guardsmen, ACT.Stubbs
+	-- EVENTS.IE_GivePlayerBase_Necron : ACT.Macabee
+	-- EVENTS.IE_GivePlayerBase_Ork : ACT.Gorgutz
+	-- EVENTS.IE_GivePlayerBase_Sisters : ACT.Canoness
+	-- EVENTS.IE_GivePlayerBase_Space : ACT.Scout, ACT.Boreale
+	-- EVENTS.IE_GivePlayerBase_Tau : ACT.Fire_Warrior, ACT.Shas
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_GivePlayerBase_Chaos = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_Chaos_Commander : Good. We have our Stronghold and a heretic. Now get to work!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300227)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_DarkEldar_Commander : Ah! I see the Kabal Fortress has been summoned. A slave, too. We shall build quickly and stay on the attack.
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300228)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_GivePlayerBase_Guard = function()
+	Util_SetIE( true )
+
+	-- Eldar_GivePlayerBase_Guard_1_Guardsman : General Stubbs, Field Command and Techpriest have been deployed, and are ready for active duty.
+	CTRL.Actor_PlaySpeech( ACT.Guardsmen, 5300224)
+	CTRL.WAIT()
+	
+	-- Eldar_GivePlayerBase_Guard_2_Stubbs : Get building immediately. I've suddenly got a feeling this won't be easy…
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300762)
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_GivePlayerBase_Necron_Commander : My… Monolith… Scarabs… have come… good…
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300231)
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Ork = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_Ork_Commander : Lissen up, boyz. We gotz a settlement and some grots, right? Dat means its time for dis 'ere Waaagh! ta get goin’. So get goin’!!!
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300229)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Sisters = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_Sisters_Sister : Canoness, the Chapel and Servitor have arrived. The operation may commence. I suspect the road before is long and winding.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300226)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Space = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_Space_1_Marine : Force Commander Boreale, we have a Stronghold and a Servitor. We can commence building.
+	CTRL.Actor_PlaySpeech( ACT.Scout, 5300225)	
+	CTRL.WAIT()
+	
+	-- Eldar_GivePlayerBase_Space_2_Commander : Work quickly and prepare to mobilize. We do not know what is ahead of us.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300763)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_GivePlayerBase_Tau = function()
+	Util_SetIE( true )
+	
+	-- Eldar_GivePlayerBase_Tau_1_FireWarrior : Commander Or’es’Ka, our Cadre Headquarters and Earth Caste builders have arrived. We await your orders.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300230)	
+	CTRL.WAIT()
+	
+	-- Eldar_GivePlayerBase_Tau_2_Commander : Commence immediately. We must now be prepared for the most arduous struggle.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300764)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- PostTeleport_CenterBase (Race Based) :  Center base has finished teleporting to the new location
+	-- EVENTS.IE_PostTeleport_CenterBase_Chaos : ACT.Taldeer, ACT.FirraeveusCarron
+	-- EVENTS.IE_PostTeleport_CenterBase_DarkEldar : ACT.Taldeer, ACT.Archon
+	-- EVENTS.IE_PostTeleport_CenterBase_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_PostTeleport_CenterBase_Guard : ACT.Taldeer, ACT.Stubbs
+	-- EVENTS.IE_PostTeleport_CenterBase_Necron : ACT.Taldeer, ACT.Macabee
+	-- EVENTS.IE_PostTeleport_CenterBase_Ork : ACT.Taldeer, ACT.Gorgutz
+	-- EVENTS.IE_PostTeleport_CenterBase_Sisters : ACT.Taldeer, ACT.Canoness
+	-- EVENTS.IE_PostTeleport_CenterBase_Space : ACT.Taldeer, ACT.Boreale
+	-- EVENTS.IE_PostTeleport_CenterBase_Tau : ACT.Taldeer, ACT.Shas
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_PostTeleport_CenterBase_Chaos = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Chaos_Commander : What? What! Tricked – deceived! Arrrrrgh…. You’ll pay, fools! You will pay, in blood!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300013)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_DarkEldar = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_DarkEldar_Commander : Gah! Run while you can, Caerys. I am angry now. I am faster than you, and when I catch you, your death will be slow… and exquisite.
+	CTRL.Actor_PlaySpeech(ACT.Archon, 5300014)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Guard = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Guard_Commander : You want to do this the hard way? That is acceptable to the Imperial Guard!
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300010)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Necron_Commander : Find… them….
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300017)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Ork = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Ork_Commander : Aaaaugh! Where’d dey go? Come back ‘an fight, ya squiggs!
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300015)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Sisters = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Sisters_Commander : <cursing under her breath> By the Emperor’s wrath… you will pay for these feeble deceits…
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300012)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Space = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Space_Commander : Hide all you want, Eldar, we will come and find you.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300011)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_PostTeleport_CenterBase_Tau = function()
+	Util_SetIE( true )
+
+	-- Eldar_Teleport_CenterBase_Farseer : <mocking> How little you understand the Eldar. You have stepped into our snare. Do not expect to escape it alive.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300009)	
+	CTRL.WAIT()
+	
+	-- Eldar_Teleport_CenterBase_Tau_Commander : <humbly> We have failed to anticipate the advanced Eldar tactics. We must not be fooled again.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300016)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Activate_SouthBase:  Activate Warp Spider & Ranger from South Base after first group is killed
+	-- EVENTS.IE_Activate_SouthBase : ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Activate_SouthBase = function()
+	Util_SetIE( true )
+
+	-- Eldar_Activate_NorthBase_Farseer : <concerned> More Warp Spiders and Rangers are needed on the field. Send word to their base-camp, and have it down immediately.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300018)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Activate_NorthBase:  Activate Nightwings from North Base after first group is killed
+	-- EVENTS.IE_Activate_NorthBase : ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Activate_NorthBase = function()
+	Util_SetIE( true )
+
+	-- Eldar_Activate_SouthBase_Farseer : <urgent, furious> Why are there not more Nightwings in the air? Need I remind you, we are at war? Deploy all interceptors immediately.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300019)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Eldar_AirfieldDestroyed :  North Base is Destroyed (Variations for with/without elite squadron)
+	-- EVENTS.IE_Eldar_AirfieldDestroyed_with_Squadron : ACT.Warlock, ACT.Taldeer
+	-- EVENTS.IE_Eldar_AirfieldDestroyed_without_Squadron : ACT.Warlock, ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Eldar_AirfieldDestroyed_with_Squadron = function()
+	Util_SetIE( true )
+
+	-- Eldar_AirfieldDestroyed_Farseer : So, our Nightwing production has been destroyed. I see our many roads to victory growing fewer and more arduous. Yet, there is still hope.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300765)	
+	CTRL.WAIT()
+
+	-- Eldar_EliteSquadronRemains_1_Warlock : The elite Shining Eagle squadron of Nightwings remain where they were assigned, Farseer.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300766)	
+	CTRL.WAIT()
+	
+	-- Eldar_EliteSquadronRemains_2_Farseer : Good. We must press on.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300767)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Eldar_AirfieldDestroyed_without_Squadron = function()
+	Util_SetIE( true )
+
+	-- Eldar_AirfieldDestroyed_Farseer : So, our Nightwing production has been destroyed. I see our many roads to victory growing fewer and more arduous. Yet, there is still hope.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300765)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Eldar_SouthBaseDestroyed :  South Base is Destroyed
+	-- EVENTS.IE_Eldar_SouthBaseDestroyed : ACT.Warlock, ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Eldar_SouthBaseDestroyed = function()
+	Util_SetIE( true )
+
+	-- Eldar_SouthBase_Destroyed_1_Warlock : Farseer, we have lost our Ranger and Warp Spider facilities.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300774)	
+	CTRL.WAIT()
+	
+	-- Eldar_SouthBase_Destroyed_2_Farseer : Their noble deaths will be honored. Only victory matters now.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300775)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Reveal_MainBase (Race Based) :  Center base has been destroyed -- Reveal the Main Base
+	-- EVENTS.IE_Reveal_MainBase_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_Reveal_MainBase_DarkEldar : ACT.Archon
+	-- EVENTS.IE_Reveal_MainBase_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_Reveal_MainBase_Guard : ACT.Stubbs
+	-- EVENTS.IE_Reveal_MainBase_Necron : ACT.Macabee
+	-- EVENTS.IE_Reveal_MainBase_Ork : ACT.Gorgutz
+	-- EVENTS.IE_Reveal_MainBase_Sisters : ACT.Canoness
+	-- EVENTS.IE_Reveal_MainBase_Space : ACT.Boreale
+	-- EVENTS.IE_Reveal_MainBase_Tau : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Reveal_MainBase_Chaos = function()
+	Util_SetIE( true )
+
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+	
+	-- Eldar_Reveal_FakeBase_Chaos_Commander : More strongholds? More to destroy! Fools, no stones or walls can hold us back. We are Chaos! You cannot hide from us…You, find out how to get in there.
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300023)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_DarkEldar = function()
+	Util_SetIE( true )
+
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+	
+	-- Eldar_Reveal_FakeBase_DarkEldar_Commander : So, another hidden headquarters. Up to your old tricks, my cowardly kin? And you think that will stop us for long?
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300024)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_Reveal_MainBase_Guard = function()
+	Util_SetIE( true )
+
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+	
+	-- Eldar_Reveal_FakeBase_Guard_Commander : What, another stronghold? Let’s hope this is the last. Now just how’re we going to get over there?
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300020)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+
+	-- Eldar_Reveal_FakeBase_Necron_Commander : Find … a way … there …
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300027)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Ork = function()
+	Util_SetIE( true )
+	
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+
+	-- Eldar_Reveal_FakeBase_Ork_Commander : Wot? Dat’s not da real base, neiver? Wwwwwwuh! When I get’s over dere, Ise gonna – first we gotta get all day boyz in dere, huh?
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300025)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Sisters = function()
+	Util_SetIE( true )
+	
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+
+	-- Eldar_Reveal_FakeBase_Sisters_Commander : What? Yet another central command discovered. Ah! These wretched xenos are infuriating.
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300022)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Space = function()
+	Util_SetIE( true )
+	
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+
+	-- Eldar_Reveal_FakeBase_Space_Commander : Well, well. There is another base. Smoke and mirrors! We will strike you over there, too.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300021)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_MainBase_Tau = function()
+	Util_SetIE( true )
+	
+	-- Eldar_DestroyCenterBase_Farseer : Weary of firing at shadows and illusions? We will always elude you. Leave now, while you can.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300768)	
+	CTRL.WAIT()
+
+	-- Eldar_Reveal_FakeBase_Tau_FireWarrior : Look, Commander Or’es’Ka, there is another, concealed stronghold. We will strive to discover a path to this location.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300026)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Detect_Energy_Sources (Race Based) :  Detect Locations of the Generators
+	-- EVENTS.IE_Detect_Energy_Sources_Chaos : ACT.Cultist
+	-- EVENTS.IE_Detect_Energy_Sources_DarkEldar : ACT.Warrior
+	-- EVENTS.IE_Detect_Energy_Sources_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_Detect_Energy_Sources_Guard : ACT.Guardsmen
+	-- EVENTS.IE_Detect_Energy_Sources_Necron : ACT.Macabee
+	-- EVENTS.IE_Detect_Energy_Sources_Ork : ACT.Gorgutz
+	-- EVENTS.IE_Detect_Energy_Sources_Sisters : ACT.Canoness
+	-- EVENTS.IE_Detect_Energy_Sources_Space : ACT.Scout
+	-- EVENTS.IE_Detect_Energy_Sources_Tau : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Detect_Energy_Sources_Chaos = function()
+	Util_SetIE( true )
+
+	-- Eldar_Detect_Energy_Sources_Chaos_Cultist : Most terrible and feared lord! We have – we have found – there are strange energies! We don’t know them. They come from – from just a few p-p-p-places on the map!
+	CTRL.Actor_PlaySpeech( ACT.Cultist, 5300031)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_DarkEldar_Warrior : Archon – we have detected energy sources which can be nothing, if not special field generators, employed by our devious cousins. We have scried several points of origin.
+	CTRL.Actor_PlaySpeech( ACT.Warrior, 5300032)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_Detect_Energy_Sources_Guard = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_Guard_Guardsman : General Stubbs, strange energy signatures have been detected. Sir, should we look into it?
+	CTRL.Actor_PlaySpeech( ACT.Guardsmen, 5300028)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_Detect_Energy_Sources_Necron_Commander : … I … sense … hidden … power…
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300035)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Ork = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_Ork_Commander : Wot’s dis? Ennigy wotzits, blinkerin’ right ‘ere under me nose? More pointy-eared tricks, is wot dat is! Ennigy spots, is it…
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300033)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Sisters = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_Sisters_Commander : Hmm… it seems there is an unknown type of energy being emitted from several locations in the field of battle. Perhaps it would be best if we shed some light on these…
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300030)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Space = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_Space_Marine : Commander Boreale, we have detected unusual energy patterns nearby. We await orders to investigate?
+	CTRL.Actor_PlaySpeech( ACT.Scout, 5300029)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Detect_Energy_Sources_Tau = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Detect_Energy_Sources_Tau_FireWarrior : Our sensors have identified strange energy patterns of an unknown form, Commander. They have been detected at multiple sources, nearby.
+	CTRL.Actor_PlaySpeech( ACT.Fire_Warrior, 5300034)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Turrents_Found (Race Based) :  Found the Super Turrets
+	-- EVENTS.IE_Turrents_Found_Chaos : ACT.FirraeveusCarron
+	-- EVENTS.IE_Turrents_Found_DarkEldar : ACT.Archon
+	-- EVENTS.IE_Turrents_Found_Eldar : not used since this is eldar mission
+	-- EVENTS.IE_Turrents_Found_Guard : ACT.Stubbs
+	-- EVENTS.IE_Turrents_Found_Necron : ACT.Macabee
+	-- EVENTS.IE_Turrents_Found_Ork : ACT.Gorgutz
+	-- EVENTS.IE_Turrents_Found_Sisters : ACT.Canoness
+	-- EVENTS.IE_Turrents_Found_Space : ACT.Boreale
+	-- EVENTS.IE_Turrents_Found_Tau : ACT.Fire_Warrior
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Turrents_Found_Chaos = function()
+	Util_SetIE( true )
+
+	-- Eldar_Turrents_Found_Chaos_Commander : Turrets! Cursed turrets! Make them stop! Make them stop, I will never have my throne of Eldar skulls!
+	CTRL.Actor_PlaySpeech( ACT.FirraeveusCarron, 5300041)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_DarkEldar = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_DarkEldar_Commander : You see, they have prepared a fools promenade for us, with these Support Platforms lining the way. However… there may be another way…
+	CTRL.Actor_PlaySpeech( ACT.Archon, 5300042)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Reveal_Turrents_Found_Eldar = function()
+	-- not used since this is eldar mission
+end
+
+EVENTS.IE_Turrents_Found_Guard = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_Guard_Commander : Blast those turrets! Hmm…must be some way to shut them down.
+	CTRL.Actor_PlaySpeech( ACT.Stubbs, 5300038)
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_Necron = function()
+	Util_SetIE( true )
+
+	-- Eldar_Turrents_Found_Necron_Commander : Beware… turrets… 
+	CTRL.Actor_PlaySpeech( ACT.Macabee, 5300045)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_Ork = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_Ork_Commander : Grakey, wot’s all dem shooty bits? We ain’t gunna march right through all a dem! Wot we gunna do?
+	CTRL.Actor_PlaySpeech( ACT.Gorgutz, 5300043)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_Sisters = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_Sisters_Commander : Emperor smite these turrets! Is our only choice to travel this valley of death?
+	CTRL.Actor_PlaySpeech( ACT.Canoness, 5300040)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_Space = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_Space_Commander : We will force our way right past all those turrets if we have to, but look sharp, brothers. If there is some other way, we will take it.
+	CTRL.Actor_PlaySpeech( ACT.Boreale, 5300039)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Turrents_Found_Tau = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Turrents_Found_Tau_Commander : Fire Warriors! Our enemy fights not directly, but by devious means, with this array of turrets prepared for intruders. So must we endeavor to be indirect, as well.
+	CTRL.Actor_PlaySpeech( ACT.Shas, 5300044)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Turrets_Disabled :  The generator controlling the Turrets has been destroyed, & the turrets are shut down (or all turrets destroyed)
+	-- EVENTS.IE_Turrets_Disabled : ACT.Warlock, ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Turrets_Disabled = function()
+	Util_SetIE( true )
+
+	-- Eldar_Turrets_Disabled_Eldar_Warlock : Farseer! They have disabled the Support Platform Array! The entrance is no longer protected.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300046)	
+	CTRL.WAIT()
+	
+	-- Eldar_Turrets_Disabled_Farseer : Yes, I have seen this. Do not yet despair, my sister. They have not foreseen our every move.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300047)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- First_Barrier_Destroyed:  The first generator has been destroyed & first group of holo rocks turned off
+	-- EVENTS.IE_First_Barrier_Destroyed : ACT.Warlock
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_First_Barrier_Destroyed = function()
+	Util_SetIE( true )
+
+	-- Eldar_First_Barrier_Destroyed_Eldar_Warlock : Farseer, they have disabled one of the illusion barrier devices.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300036)	
+	CTRL.WAIT()
+
+	-- Eldar_First_Barrier_Destroyed_Eldar_2_Farseer : Then the other ones must not fall…
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300771)	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Second_Barrier_Destroyed:  The Second generator has been destroyed & Second group of holo rocks turned off
+	-- EVENTS.IE_Second_Barrier_Destroyed : ACT.Warlock
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Second_Barrier_Destroyed = function()
+	Util_SetIE( true )
+
+	-- Eldar_Two_Barriers_Destroyed_Eldar_1_Warlock : Another illusion barrier was destroyed, Farseer.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300769)	
+	CTRL.WAIT()
+	
+	-- Eldar_Two_Barriers_Destroyed_Eldar_2_Farseer : I see… We shall prepare for the worst.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300770)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- All_Barriers_Destroyed :  All generators has been destroyed & all groups of holo rocks turned off
+	-- EVENTS.IE_All_Barriers_Destroyed : ACT.Warlock
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_All_Barriers_Destroyed = function()
+	Util_SetIE( true )
+
+	-- Eldar_All_Barriers_Destroyed_Eldar_Warlock : They have disabled all the illusion barriers! This never should have come to pass! We have few chances left – we must fight! We must prevail.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300037)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Meet_Elite_Aircraft : Elite Aircraft Squad is sent into the Battle
+	-- EVENTS.IE_Meet_Elite_Aircraft : ACT.Warlock
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Meet_Elite_Aircraft = function()
+	Util_SetIE( true )
+
+	-- Eldar_MeetEliteAircraft_Warlock : Let us see how they deal with the Shining Eagles. They are no ordinary pilots.
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300772)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Destroyed_Elite_Aircraft : Elite Aircraft Squad has been destroyed
+	-- EVENTS.IE_Destroyed_Elite_Aircraft : ACT.Warlock
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Destroyed_Elite_Aircraft = function()
+	Util_SetIE( true )
+
+	-- Eldar_DestroyedEliteAircraft_Warlock : Even our Shining Eagle Squadron could not stop them!
+	CTRL.Actor_PlaySpeech( ACT.Warlock, 5300773)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Taunt_One-Four : Four Taunts by Eldar Farseer that occur during level 
+	-- EVENTS.IE_Taunt_One : ACT.Taldeer
+	-- EVENTS.IE_Taunt_Two : ACT.Taldeer
+	-- EVENTS.IE_Taunt_Three : ACT.Taldeer
+	-- EVENTS.IE_Taunt_Four : ACT.Taldeer
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+EVENTS.IE_Taunt_One = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Taunt_One_Farseer : You think to defeat us? You do not even know where to look for us. And you will be dead long before you do.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300059)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Two = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Taunt_Two_Farseer : We will strike when you do not expect us. You will try to strike back, but in vain – we will not be there.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300060)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Three = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Taunt_Three_Farseer : Be strong of heart, warriors. We shall prevail.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300061)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+EVENTS.IE_Taunt_Four = function()
+	Util_SetIE( true )
+	
+	-- Eldar_Taunt_Four_Farseer : If we perish, so does our last Eldar foothold on this ancient world.
+	CTRL.Actor_PlaySpeech( ACT.Taldeer, 5300062)	
+	CTRL.WAIT()
+
+	Util_SetIE( false )
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF INTEL EVENTS
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+--[[***********************************************************************************************************
+
+																									INTRO/OPENING
+
+***********************************************************************************************************]]--																									
+
+EVENTS.NIS_Opening = function()
+	--[[setting up race specific items for the nis]]
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	--[[if humanplayer == "chaos_marine_race" then
+	
+		g_Nis_Blueprint = "chaos_marine_squad"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_obliterator"
+		
+	elseif humanplayer == "guard_race" then
+	
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+	
+	elseif humanplayer == "ork_race" then
+	
+		g_Nis_Blueprint = "ork_squad_nob"	
+		g_Nis_Blueprint2 = "ork_squad_nob"
+		g_Nis_Blueprint3 = "ork_squad_armored_nob"
+	
+	elseif humanplayer =="space_marine_race" then
+	
+		g_Nis_Blueprint = "space_marine_squad_tactical"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_tactical"
+	
+	elseif humanplayer == "tau_race" then
+	
+		g_Nis_Blueprint = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint2 = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint3 = "tau_crisis_suit_squad"
+	
+	elseif humanplayer == "necron_race" then
+ 
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_tomb_spyder_squad"
+		
+	end]]--
+
+	
+	--[[turn off events]]
+	Util_NIS_ToggleModifierEvents(g_Player1, false)
+	Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	Util_NIS_ToggleModifierEvents(g_Player5, false)
+	
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 0 )	
+	
+	--[[hide the bonus unit effect]]
+	Player_RestrictAbility(g_Player1, "sp_dxp_unit_glow")
+	Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	Player_RestrictAbility(g_Player3, "sp_dxp_unit_glow")
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+	
+	--Silvey Polish 10/21/07:  Adding music
+	Sound_SetVolumeModifierSfx( 0.5)
+	--set the music		
+	t_eldar_music = {"MU_IG_STR_Eldar_perc_brass"}
+	
+	
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_eldar_music, true, true , {1, 2})
+	--
+	
+	Util_MissionTitle("$3900026")
+	
+	CTRL.Event_Delay( 4 )
+		Fade_Start( 0, false )
+	CTRL.WAIT()
+	Fade_Start( 2.0, true )
+	
+	-------------------------------------------------
+	--Spawn Seq1 Actors
+	-------------------------------------------------
+	
+	--Farseer
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_farseer", "eldar_squad_farseer", "nis_opening_farseer_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_farseer"))
+	Cmd_SetStance("sg_opening_farseer", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_farseer", true)
+	SGroup_FaceMarker("sg_opening_farseer", "nis_opening_farseerguard_spawn2")
+	
+	for i = 1, 3 do
+	
+	--Seer Council
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_seercouncil"..i, "eldar_squad_seer_council", "nis_opening_farseerguard_spawn"..i, 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_council_group"), SGroup_FromName("sg_opening_seercouncil"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_council_group"))
+	Cmd_SetStance("sg_opening_council_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_council_group", "nis_opening_farseer_spawn")
+
+	end
+	
+	--Fire Prism
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_fireprism", "eldar_squad_fire_prism", "nis_opening_fireprism_spawn", 2, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_fireprism"))
+	Cmd_SetStance("sg_opening_fireprism", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_fireprism", "nis_opening_fireprism_goto")
+	
+	--nightwings1
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_nightwings", "eldar_squad_nightwing", "nis_opening_nightwing_spawn", 2, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_nightwings"))
+	Cmd_SetStance("sg_opening_nightwings", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_nightwings", "nis_opening_nightwing_goto")
+	Squad_TurnOffVehiclePhysics(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_nightwings"), 2))
+	Entity_SetFixedY(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_nightwings"), 2), true, 10)
+	
+	--nightwings2
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_nightwings2", "eldar_squad_nightwing", "nis_opening_nightwing_spawn1", 2, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_nightwings2"))
+	Cmd_SetStance("sg_opening_nightwings2", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_nightwings2", "nis_opening_nightwing_goto")
+	Squad_TurnOffVehiclePhysics(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_nightwings2"), 2))
+	Entity_SetFixedY(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_nightwings2"), 2), true, 9)
+	
+	--Falcon
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_falconseer", "eldar_squad_falcon_grav_tank", "nis_opening_falcon_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_falconseer"))
+	Cmd_SetStance("sg_opening_falconseer", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_falconseer", "nis_opening_farseer_spawn")
+	
+	--Falcon
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_falconwarlock", "eldar_squad_falcon_grav_tank", "nis_opening_falcon_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_falconwarlock"))
+	Cmd_SetStance("sg_opening_falconwarlock", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_falconwarlock", "nis_opening_farseer_spawn")
+	
+	--Builder
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_builder", "eldar_squad_bonesinger", "nis_opening_builder_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_builder"))
+	Cmd_SetStance("sg_opening_builder", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_builder", "nis_opening_farseer_spawn")
+	
+	-------------------------------------------------
+	--End Initial Spawns
+	-------------------------------------------------
+	
+	CPath_Start("canim_starter", "start", "end")
+	
+	Cmd_MoveToMarker("sg_opening_fireprism", "nis_opening_fireprism_goto")
+	Cmd_MoveToMarker("sg_opening_nightwings", "nis_opening_nightwing_goto")
+	Cmd_MoveToMarker("sg_opening_nightwings2", "nis_opening_nightwing_goto")
+	
+	CPath_CutToPath("canim_opening01", "start","end")
+	
+	CTRL.Event_Delay(12)
+	CTRL.WAIT()
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_farseer"), "sp_talk" )
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200070) --Taldeer:  They approach. We are prepared?
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(  ACT.Warlock, 5200071) --Councilor:  Yes, Farseer, but –
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200072) --Taldeer:  Yes?
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(.8)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(  ACT.Warlock, 5200073) --Councilor:  Must we fight?
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_falconseer", "nis_opening_falcon_goto1")
+	--Cmd_MoveToMarker("sg_opening_falconwarlock", "nis_opening_falcon_goto5")
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200074) --Taldeer:  We shall fight. They must never suspect.
+	CTRL.WAIT()
+
+	CTRL.Event_Delay(.5)
+	CTRL.WAIT()
+	
+	--Cmd_ConstructBlueprintMarker("sg_opening_builder", "eldar_webway_gate", "nis_opening_buildwebway")
+
+	for i = 1, 5 do
+	
+	--Jets
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_secondplanes"..i, "eldar_squad_nightwing", "nis_opening_secondplanes"..i, 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_planes_group"), SGroup_FromName("sg_opening_secondplanes"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_secondplanes"..i))
+	Cmd_SetStance("sg_opening_planes_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_planes_group", "nis_opening_farseer_spawn")
+	Squad_TurnOffVehiclePhysics(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_secondplanes"..i), 1))
+	Entity_SetFixedY(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_secondplanes"..i), 1), true, 11)
+
+	end
+	
+	for i = 1, 5 do
+		Cmd_MoveToMarker("sg_opening_secondplanes"..i, "nis_opening_secondplanes_goto"..i)
+	end
+	
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200075) --Taldeer:  They shall come, expecting the obvious, the simple, the artless. They shall stab at the shadows with confused minds and troubled hearts. Meanwhile, we shall appear unseen from ten directions, and from every one strike a fatal blow.
+		CTRL.SUB()
+			CTRL.CPath_CutToPath("canim_farseercloseup", "start","end")
+			CTRL.WAIT()
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CPath_CutToPoint("canim_falcomtransport", "start")
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_seercouncil2", "nis_opening_council_goto1")
+	Cmd_MoveToMarker("sg_opening_seercouncil3", "nis_opening_council_goto1")
+	Cmd_MoveToMarker("sg_opening_seercouncil1", "nis_opening_council_goto1")
+	Cmd_EnterTransport("sg_opening_farseer", "sg_opening_falconseer")
+	--Cmd_EnterTransport("sg_opening_seercouncil1", "sg_opening_falconwarlock")
+	
+	CTRL.Event_Delay(3.5)
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_falconseer", "nis_opening_falcon_goto2")
+	--Cmd_MoveToMarker("sg_opening_falcon", "nis_opening_falcon_goto2")
+	
+	CTRL.CPath_CutToPath("canim_falcomtransport", "start","end")
+		CTRL.SUB()
+			CTRL.Event_Delay( 3)
+			CTRL.WAIT()
+			Fade_Start( 1, false )
+		CTRL.END()
+	CTRL.WAIT()
+	
+	-------------------------------------------------
+	--Spawn Farseer2 and Falcon2
+	-------------------------------------------------
+	
+	--Farseer
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_farseer2", "eldar_squad_farseer", "nis_opening_farseer2_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_farseer2"))
+	Cmd_SetStance("sg_opening_farseer2", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_farseer2", true)
+	SGroup_FaceMarker("sg_opening_farseer2", "nis_opening_farseerguard_spawn2")
+	
+	--Falcon
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_falcon2", "eldar_squad_falcon_grav_tank", "nis_opening_falcon02_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_falcon2"))
+	Cmd_SetStance("sg_opening_falcon2", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_falcon2", "nis_opening_falcon02_goto1")
+	
+	Cmd_EnterTransport("sg_opening_farseer2", "sg_opening_falcon2")
+	--Cmd_EnterTransport("sg_opening_council2", "sg_opening_falcon2")
+	-------------------------------------------------
+	--End Spawn
+	-------------------------------------------------
+	
+	Cmd_MoveToMarker("sg_opening_falcon2", "nis_opening_falcon02_goto1")
+	
+	CTRL.CPath_CutToPath("canim_farseerincoming", "start","mid")
+		CTRL.SUB()
+			Fade_Start( 2, true )
+			Cmd_MoveToMarker("sg_opening_falcon2", "nis_opening_falcon02_goto3")
+			
+			CTRL.Event_Delay(5)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_opening_falcon2", "nis_opening_falcon02_goto2")
+			
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			--Council2
+			Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_council2", "eldar_squad_seer_council", "nis_opening_council2_spawn", 1, 1)
+			SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_council2"))
+			Cmd_SetStance("sg_opening_council2", STANCE_CeaseFire)
+			SGroup_SetHealthInvulnerable("sg_opening_council2", true)
+			SGroup_FaceMarker("sg_opening_council2", "nis_opening_farseer2_goto")
+			
+			Cmd_EmptyTransport("sg_opening_falcon2", Marker_GetPosition(Marker_FromName("nis_opening_falcon02_goto2", "basic_marker")))
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_opening_farseer2", "nis_opening_farseer2_goto")
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			Cmd_MoveToMarker("sg_opening_council2", "nis_opening_council2_goto1")
+			SGroup_FaceMarker("sg_opening_council2", "nis_opening_farseer2_face")
+			
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			SGroup_FaceMarker("sg_opening_farseer2", "nis_opening_farseer2_face")
+			
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()
+			
+			CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200076) --Taldeer:  Do you know the history of this place, which we call Essel ir-Tanith and the young races call the Upper Wastes?
+			CTRL.WAIT()
+			
+			CTRL.Event_Delay(.5)
+			CTRL.WAIT()
+			
+			CTRL.Actor_PlaySpeech(  ACT.Warlock, 5200077) --Warlock:  We the Eldar made our war camp here, in a past age?
+			CTRL.WAIT()
+		CTRL.END()
+	CTRL.WAIT()			
+		
+	Actor_PlaySpeech(  ACT.Taldeer, 5200078) -- Taldeer:  Yes, that is so. Our ancestors came here to fight the Necron when they were an overwhelming wave that swept the worlds. This system was one of their stages of destruction, their foundries of undeath. Our ancestors defeated them here.
+	
+	CTRL.CPath_CutToPath("canim_farseerincoming", "mid","end")
+		CTRL.SUB()
+			--[[CTRL.Event_Delay( 1 )
+			Fade_Start( 1, false )
+			CTRL.WAIT()]]--
+			
+			--Silvey Polish (10/21/07):  Fade out music
+			Fade_Start( 1, false )
+			
+			--Fade Music out			
+			for i = 1.0, 0.0, -0.2 do
+				Sound_SetVolumeModifierMusic(i)
+				CTRL.Event_Delay( 0.2 )
+				CTRL.WAIT()
+			end
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	-------------------------------------------------
+	--Spawn Inbound Necrons
+	-------------------------------------------------
+	
+	--Necron Lord
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_necronlord", "necron_lord_squad", "nis_opening_necronlord_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_necronlord"))
+	Cmd_SetStance("sg_opening_necronlord", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_necronlord", true)
+	SGroup_FaceMarker("sg_opening_necronlord", "nis_opening_necronlord_goto")
+	
+	--Monolith
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_monolith", "necron_restored_monolith_squad", "nis_opening_monolith_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_monolith"))
+	Cmd_SetStance("sg_opening_monolith", STANCE_Hold)
+	SGroup_SetHealthInvulnerable("sg_opening_monolith", true)
+	SGroup_FaceMarker("sg_opening_monolith", "nis_opening_monolith_goto")
+	
+
+	for i = 1, 10 do
+	
+	--Necron Warriors
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_necronwarriors"..i, "necron_basic_warrior_squad", "nis_opening_warriors_spawn"..i, 4, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_necronwarriors"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_warrior_group"), SGroup_FromName("sg_opening_necronwarriors"..i))
+	--Cmd_SetStance("sg_opening_warrior_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_warrior_group", "nis_opening_necronlord_goto")
+
+	end
+	
+	for i = 1, 5 do
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_necronsgroup1"), SGroup_FromName("sg_opening_necronwarriors"..i))
+	end
+	
+	for i = 6, 10 do
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_necronsgroup2"), SGroup_FromName("sg_opening_necronwarriors"..i))
+	end
+	
+	for i = 1, 3 do
+	
+	--Fire Prisms
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_battleprisms"..i, "eldar_squad_fire_prism", "nis_opening_fireprism_spawn"..i, 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_prisms_group"), SGroup_FromName("sg_opening_battleprisms"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_battleprisms"..i))
+	Cmd_SetStance("sg_opening_prisms_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_prisms_group", "nis_opening_doomedlord_goto2")
+
+	end
+	
+	
+	for i = 1, 5 do
+	
+	--Guardians
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_guardian"..i, "eldar_guardian_squad", "nis_opening_guardians_spawn"..i, 8, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_guardian_group"), SGroup_FromName("sg_opening_guardian"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_guardian"..i))
+	--Cmd_SetStance("sg_opening_guardian_group", STANCE_Hold)
+	SGroup_SetHealthInvulnerable("sg_opening_guardian_group", true)
+	SGroup_FaceMarker("sg_opening_guardian_group", "nis_opening_doomedlord_goto2")
+
+	end
+	
+	
+	-------------------------------------------------
+	--End Initial Necron Spawns
+	-------------------------------------------------
+	
+	
+	CPath_CutToPath("canim_war01", "start","end")
+	
+	--Cmd_MoveToMarker("sg_opening_necronlord", "nis_opening_necronlord_goto")
+	SPath_Start( "manim_necronlord",  "1", "2", "sg_opening_necronlord" )
+	Fade_Start( 1, true )
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Cmd_MoveToMarker("sg_opening_necronsgroup1", "nis_opening_necrons_goto1")
+	Cmd_MoveToMarker("sg_opening_necronsgroup2", "nis_opening_necrons_goto2")
+	Cmd_MoveToMarker("sg_opening_monolith", "nis_opening_monolith_goto")
+	
+	CTRL.Event_Delay(5)
+	CTRL.WAIT()
+	
+	Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_necronlord"), "special_ability_4" )
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	--Silvey Polish 10/21/07:  Adding music
+	--set the music		
+	t_eldar_music = {"music_msd3_perc_choir"}
+	
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_eldar_music, true, true , {1, 2})
+	
+	Sound_SetVolumeModifierMusic(1.0)
+	
+	Anim_StopSGroupAnim("sg_opening_necronlord", "special_ability_4" )
+
+
+	--[[CPath_CutToPath("canim_war03", "start","end")
+
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Cmd_SetStance("sg_opening_battleprisms1", STANCE_Hold)
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Cmd_SetStance("sg_opening_battleprisms2", STANCE_Hold)
+	
+	CTRL.Event_Delay(1)
+	CTRL.WAIT()
+	
+	Cmd_SetStance("sg_opening_battleprisms3", STANCE_Hold)]]
+
+	
+	-------------------------------------------------
+	--Mid Battle Spawns
+	-------------------------------------------------
+	
+	--Necron Warriors Mid
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_midwarriors", "necron_basic_warrior_squad", "nis_opening_necron_closebattle1", 10, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_midwarriors"))
+	--Cmd_SetStance("sg_opening_midwarriors", STANCE_CeaseFire)
+	--SGroup_SetHealthInvulnerable("sg_opening_midwarriors", true)
+	SGroup_FaceMarker("sg_opening_midwarriors", "nis_opening_eldar_closebattle1")
+	
+	--Eldar Banshee Mid
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_Banshee", "eldar_squad_banshees", "nis_opening_eldar_closebattle1", 8, 2)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_Banshee"))
+	--Cmd_SetStance("sg_opening_Banshee", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_Banshee", true)
+	SGroup_FaceMarker("sg_opening_Banshee", "nis_opening_necron_closebattle1")
+
+	-------------------------------------------------
+	--End Mid Battle Spawns
+	-------------------------------------------------
+	
+	CTRL.CPath_CutToPath("canim_closebattle01", "start","end")
+	CTRL.WAIT()
+	
+	-------------------------------------------------
+	--Last Battle Spawns
+	-------------------------------------------------
+	
+	--Eldar Avatar
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_avatar", "eldar_squad_avatar", "nis_opening_avatar_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_avatar"))
+	Cmd_SetStance("sg_opening_avatar", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_avatar", true)
+	SGroup_FaceMarker("sg_opening_avatar", "nis_opening_avatar_goto")
+	
+	--Necron Lord
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_opening_necronlordmid", "necron_lord_squad", "nis_opening_doomedlord_spawn", 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_battleactors"), SGroup_FromName("sg_opening_necronlordmid"))
+	Cmd_SetStance("sg_opening_avatar", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_necronlordmid", true)
+	SGroup_FaceMarker("sg_opening_necronlordmid", "nis_opening_avatar_spawn")
+
+	-------------------------------------------------
+	--End Last Battle Spawns
+	-------------------------------------------------
+
+	--[[CTRL.CPath_CutToPath("canim_avatarkilllordb", "start","end")
+		CTRL.SUB()
+			--Cmd_MoveToMarker("sg_opening_avatar", "nis_opening_avatar_goto")
+			--Cmd_MoveToMarker("sg_opening_necronlordmid", "nis_opening_doomedlord_goto2")
+			SPath_Start( "manim_doomedlord",  "1", "2", "sg_opening_necronlordmid")
+			SPath_Start( "manim_avatarkill",  "1", "2", "sg_opening_avatar")
+			
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			--looping anim causing crash
+			Anim_PlaySyncAnim(SGroup_FromName("sg_opening_avatar"), SGroup_FromName("sg_opening_necronlordmid"), "synckill_4", "syncdeath_4", 3)
+			--Cmd_AttackSGroup("sg_opening_avatar", "sg_opening_necronlordmid")
+		CTRL.END()
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	CTRL.CPath_CutToPath("canim_avatarkilllord3", "start","end")
+	CTRL.WAIT()]]
+	
+	CTRL.CPath_CutToPath("canim_avatarroar", "start","end")
+		CTRL.SUB()
+			Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_avatar"), "special_attack_5" )
+			CTRL.Event_Delay(2)
+			CTRL.WAIT()
+			Anim_StopSGroupAnim("sg_opening_avatar", "special_attack_5" )
+			--Fade_Start( 1, false )
+			
+			--Silvey Polish (10/21/07):  Fade out music
+			--Fade Music out			
+			for i = 1.0, 0.0, -0.2 do
+				Sound_SetVolumeModifierMusic(i)
+				CTRL.Event_Delay( 0.2 )
+				CTRL.WAIT()
+			end
+
+		CTRL.END()
+	CTRL.WAIT()
+	
+	------------------------------------------------
+	--Final Scene Spawns
+	-------------------------------------------------
+	
+	SGroup_DeSpawn("sg_opening_battleactors")
+	SGroup_DestroyAllSquads("sg_opening_battleactors")
+	SGroup_Destroy(SGroup_FromName("sg_opening_battleactors"))
+	
+	for i = 1, 12 do
+	
+	--Dark Reapers
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_darkreapers"..i, "eldar_squad_dark_reapers_exarch_sp", "nis_opening_darkreaper_spawn"..i, 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_reapers_group"), SGroup_FromName("sg_opening_darkreapers"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_darkreapers"..i))
+	Cmd_SetStance("sg_opening_reapers_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_reapers_group", "nis_opening_darkreapers_face1")
+
+	end
+	
+	for i = 1, 3 do
+	
+	--Wraith Lords
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_wraithlord"..i, "eldar_squad_wraithlord", "nis_opening_wraithlord_spawn"..i, 1, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_wraithlord_group"), SGroup_FromName("sg_opening_wraithlord"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_wraithlord"..i))
+	Cmd_SetStance("sg_opening_wraithlord_group", STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_wraithlord_group", "nis_opening_darkreapers_face2")
+
+	end
+	
+	--Vyper
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_vyper", "eldar_squad_vypers", "nis_opening_vyper_spawn", 2, 1)
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_vyper"))
+	Cmd_SetStance("sg_opening_vyper", STANCE_CeaseFire)
+	SGroup_SetHealthInvulnerable("sg_opening_vyper", true)
+	SGroup_FaceMarker("sg_opening_vyper", "nis_opening_vyper_goto")
+	
+	for i = 1, 2 do
+	
+	--Jets
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_opening_lastplanes"..i, "eldar_squad_nightwing", "nis_opening_lastplanes"..i, 1, 1)
+	--SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_planes_group"), SGroup_FromName("sg_opening_secondplanes"..i))
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_secondplanes"..i))
+	Cmd_SetStance("sg_opening_lastplanes"..i, STANCE_CeaseFire)
+	SGroup_FaceMarker("sg_opening_lastplanes"..i, "nis_opening_farseer_spawn")
+	Squad_TurnOffVehiclePhysics(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_lastplanes"..i), 1))
+	Entity_SetFixedY(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_opening_lastplanes"..i), 1), true, 11)
+
+	end
+	
+	------------------------------------------------
+	--End Final Scene Spawns
+	-------------------------------------------------
+	--Actor_PlaySpeech(  ACT.Taldeer, 5200079) 
+	--Silvey Polish 10/21/07:  Adding music
+	--set the music		
+	t_eldar_music = {"MU_IG_STR_Eldar"}
+	
+	
+	Sound_PlaylistClear(PC_Music)
+	Playlist_Manager( PC_Music, t_eldar_music, true, true , {1, 2})
+	Sound_SetVolumeModifierMusic(1.0)
+	--
+
+	CTRL.CPath_CutToPath("canim_final02", "start","end")
+		CTRL.SUB()
+			--Fade_Start( 0, true )
+			Actor_PlaySpeech(  ACT.Taldeer, 5200079) 
+			Cmd_MoveToMarker("sg_opening_vyper", "nis_opening_vyper_goto")
+			CTRL.Event_Delay(5)
+			CTRL.WAIT()
+			Cmd_MoveToMarker("sg_opening_vyper", "nis_opening_vyper_goto2")
+			CTRL.Event_Delay(5)
+			CTRL.WAIT()
+			Cmd_MoveToMarker("sg_opening_wraithlord3", "nis_opening_wraithlord_goto1")
+			CTRL.Event_Delay(3)
+			CTRL.WAIT()
+			
+			Actor_PlaySpeech(  ACT.Taldeer, 5200080) 
+			
+			--for i = 1, 2 do
+			--	Cmd_MoveToMarker("sg_opening_lastplanes"..i, "nis_opening_lastvipers_goto")
+			--end
+			
+			Cmd_MoveToMarker("sg_opening_farseer2", "nis_opening_farseer2_goto2")	
+		CTRL.END()
+	CTRL.WAIT()
+
+	CTRL.Actor_PlaySpeech(  ACT.Taldeer, 5200081) 
+		CPath_CutToPath("canim_final03", "start","end")
+		Anim_PlaySGroupAnim(SGroup_FromName("sg_opening_farseer2"), "sp_talk" )
+	CTRL.WAIT()
+
+	Fade_Start( 1, false )
+	--Silvey Polish (10/21/07):  Fade out music
+	--Fade Music out			
+	for i = 1.0, 0.0, -0.2 do
+		Sound_SetVolumeModifierMusic(i)
+		CTRL.Event_Delay( 0.5 )
+		CTRL.WAIT()
+	end
+
+	Sound_SetVolumeModifierSfx( 1.0)
+	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_opening_actors"), SGroup_FromName("sg_opening_farseer2"))
+	
+	SGroup_DeSpawn("sg_opening_actors")
+	SGroup_DestroyAllSquads("sg_opening_actors")
+	SGroup_Destroy(SGroup_FromName("sg_opening_actors"))
+
+	Fade_Start( 1, true )
+	
+	CPath_CutToPath("canim_blendout", "start","end")
+
+	Util_NIS_ToggleModifierEvents(g_Player1, true)
+	Util_NIS_ToggleModifierEvents(g_Player2, true)
+	Util_NIS_ToggleModifierEvents(g_Player3, true)
+	Util_NIS_ToggleModifierEvents(g_Player4, true)
+	Util_NIS_ToggleModifierEvents(g_Player5, true)
+	
+	Player_UnRestrictAbility(g_Player1, "sp_dxp_unit_glow")
+	Player_UnRestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	Player_UnRestrictAbility(g_Player3, "sp_dxp_unit_glow")
+	
+
+	CTRL.W40k_Letterbox( false, 2)
+	
+	FOW_Reset()
+		CPath_Blendout( 1 )
+	CTRL.WAIT()
+	
+	FOW_Reset()
+
+	--Rule_Add( Rule_GameStart )
+
+end
+
+--[[***********************************************************************************************************
+
+																									OUTRO/CLOSING
+
+***********************************************************************************************************]]--																									
+EVENTS.NIS_Outro = function()		
+
+	local humanplayer = MetaMap_GetPlayerRaceName()	
+ 
+	if humanplayer == "chaos_marine_race" then
+	
+		g_Nis_Blueprint = "chaos_marine_squad"
+		g_Nis_Blueprint2 = "chaos_marine_squad"
+		g_Nis_Blueprint3 = "chaos_squad_obliterator"
+		g_Nis_Blueprint4 = "chaos_squad_rhino"
+		
+	elseif humanplayer == "eldar_race" then
+	
+		g_Nis_Blueprint = "eldar_squad_farseer"
+		g_Nis_Blueprint2 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint3 = "eldar_squad_dark_reapers"
+		g_Nis_Blueprint4 = "eldar_squad_wraithlord"
+		
+	elseif humanplayer == "guard_race" then
+	
+		g_Nis_Blueprint = "guard_squad_guardsmen"
+		g_Nis_Blueprint2 = "guard_squad_guardsmen"
+		g_Nis_Blueprint3 = "guard_squad_sentinel"
+		g_Nis_Blueprint4 = "guard_squad_chimera"
+	
+	elseif humanplayer == "ork_race" then
+	
+		g_Nis_Blueprint = "ork_squad_nob"	
+		g_Nis_Blueprint2 = "ork_squad_nob"
+		g_Nis_Blueprint3 = "ork_squad_armored_nob"
+		g_Nis_Blueprint4 = "ork_squad_trukk"
+	
+	elseif humanplayer =="space_marine_race" then
+	
+		g_Nis_Blueprint = "space_marine_squad_tactical"
+		g_Nis_Blueprint2 = "space_marine_squad_tactical"
+		g_Nis_Blueprint3 = "space_marine_squad_dreadnought"
+		g_Nis_Blueprint4 = "space_marine_squad_rhino"
+	
+	elseif humanplayer == "tau_race" then
+	
+		g_Nis_Blueprint = "tau_fire_warrior_squad"
+		g_Nis_Blueprint2 = "tau_kroot_carnivore_squad"
+		g_Nis_Blueprint3 = "tau_crisis_suit_squad"
+		g_Nis_Blueprint4 = "tau_devilfish_troop_carrier"
+	
+	elseif humanplayer == "necron_race" then
+ 
+		g_Nis_Blueprint = "necron_basic_warrior_squad"
+		g_Nis_Blueprint2 = "necron_basic_warrior_squad"
+		g_Nis_Blueprint3 = "necron_tomb_spyder_squad"
+		g_Nis_Blueprint4 = "necron_heavy_destroyer_squad"
+		
+	elseif humanplayer =="dark_eldar_race" then
+		
+		g_Nis_Blueprint = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint2 = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint3 = "dark_eldar_squad_warrior"
+		g_Nis_Blueprint4 = "dark_eldar_squad_dais_of_destruction"
+				
+	elseif humanplayer == "sisters_race" then
+		
+		g_Nis_Blueprint = "sisters_squad_battle_sister"
+		g_Nis_Blueprint2 = "sisters_squad_battle_sister"
+		g_Nis_Blueprint3 = "sisters_squad_battle_sister"		
+		g_Nis_Blueprint4 = "sisters_squad_battle_sister"		
+		
+	end
+
+	--Rule_RemoveAll()	
+	Fade_Start( 0, false )
+	
+	--turn off events
+	Util_NIS_ToggleModifierEvents(g_Player1, false)	
+	--Util_NIS_ToggleModifierEvents(g_Player2, false)
+	Util_NIS_ToggleModifierEvents(g_Player3, false)
+	Util_NIS_ToggleModifierEvents(g_Player4, false)
+	Util_NIS_ToggleModifierEvents(g_Player5, false)
+		
+	--[[ go into letterbox mode ]]
+	W40k_Letterbox( true, 2 )	
+	
+	--[[hide the bonus unit effect]]
+	--Player_RestrictAbility(g_Player2, "sp_dxp_unit_glow")
+	
+	--[[ reveals all of the map ]]
+	FOW_RevealAll()
+
+	CTRL.Event_Delay(2)
+	CTRL.WAIT()
+	
+	--Remove all the buildings and units to clear the Nis scenes
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player5))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player5))
+	
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+	
+	
+	Fade_Start( 2.0, true )
+	
+	-------------------------------------------------------------------
+	--[[ START Spawing Units ]]
+	-------------------------------------------------------------------
+
+	--Eldar units
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_farseer", "eldar_squad_farseer", "nis_outro_farseer", 1, 1)
+	Cpu_LockSGroupAcrossPlayers("sg_closing_farseer")
+	SGroup_FaceMarker("sg_closing_farseer", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_farseer", STANCE_CeaseFire)
+	
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_seer_council1", "eldar_squad_seer_council", "nis_outro_seer_council1", 1, 1)
+	SGroup_FaceMarker("sg_closing_seer_council1", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_seer_council1", STANCE_CeaseFire)
+	
+	
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_seer_council2", "eldar_squad_seer_council", "nis_outro_seer_council2", 1, 1)
+	SGroup_FaceMarker("sg_closing_seer_council2", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_seer_council2", STANCE_CeaseFire)
+	
+	
+	for i = 1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_guardian"..i, "eldar_squad_dark_reapers", "nis_outro_def_guardian"..i, 6, 1)
+		Cmd_SetStance("sg_closing_guardian"..i, STANCE_Attack)		
+	end
+	
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_darkreaper", "eldar_squad_dark_reapers", "nis_outro_def_darkreaper", 6, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_firedragon1", "eldar_squad_fire_dragon", "nis_outro_def_firedragon1", 9, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_firedragon2", "eldar_squad_fire_dragon", "nis_outro_def_firedragon2", 9, 1)
+	Cmd_SetStance("sg_closing_darkreaper", STANCE_CeaseFire)		
+	Cmd_SetStance("sg_closing_firedragon1", STANCE_CeaseFire)		
+	Cmd_SetStance("sg_closing_firedragon2", STANCE_CeaseFire)		
+	
+	for i = 1,3 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_wraith"..i, "eldar_squad_wraithlord", "nis_outro_def_wraith"..i, 1, 1)
+		Cmd_SetStance("sg_closing_wraith"..i, STANCE_Attack)		
+	end
+	
+	--The Harlequin and the Banshees:  "Let your enemies fear, for a Harlequin of the Laughing God dances at your side."
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_harlequin", "eldar_harlequin_squad", "nis_outro_def_harlequin", 1, 1)
+	Cmd_SetStance("sg_closing_harlequin", STANCE_CeaseFire)
+	
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_banshee", "eldar_squad_banshee_exarch_council", "nis_outro_def_banshee", 6, 1)
+	Cmd_SetStance("sg_closing_banshee", STANCE_CeaseFire)		
+
+	SGroup_FaceMarker("sg_closing_harlequin", "nis_outro_def_banshee")
+	SGroup_FaceMarker("sg_closing_banshee", "nis_outro_def_harlequin")
+	
+	--Attacking Units
+	for i = 1,11 do
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_attacker"..i, g_Nis_Blueprint, "nis_outro_attacker"..i, 10, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_attacker"..i)
+		if i < 3 then
+			Cmd_SetStance("sg_closing_attacker"..i, STANCE_Attack)		
+		else
+			Cmd_SetStance("sg_closing_attacker"..i, STANCE_CeaseFire)		
+		end
+		SGroup_FaceMarker("sg_closing_attacker"..i, "nis_outro_farseer_facing")
+	end	
+	
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_extra_attacker1", g_Nis_Blueprint, "nis_outro_extra_attacker1", 5, 1)
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_extra_attacker2", g_Nis_Blueprint, "nis_outro_extra_attacker2", 5, 1)
+	Cmd_SetStance("sg_closing_attacker1", STANCE_Attack)
+	Cmd_SetStance("sg_closing_attacker2", STANCE_Attack)
+		
+	
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_heavyattacker1",g_Nis_Blueprint3, "nis_outro_heavyattacker1", 1, 1)
+	Cmd_SetStance("sg_closing_heavyattacker1", STANCE_CeaseFire)		
+	
+	for i = 1,4 do
+	    --Heavy Flank
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_flank_heavy"..i, g_Nis_Blueprint3, "nis_outro_flanking_heavy"..i, 2, 1)
+		Cpu_LockSGroupAcrossPlayers("sg_closing_flank_heavy"..i)
+		Cmd_SetStance("sg_closing_flank_heavy"..i, STANCE_CeaseFire)		
+		SGroup_FaceMarker("sg_closing_flank_heavy"..i, "nis_outro_farseer_facing")
+		
+		--Vehicle Relief
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_vehicle"..i, g_Nis_Blueprint4, "nis_outro_atk_vehicle"..i, 1, 1)		
+		Cmd_SetStance("sg_closing_vehicle"..i, STANCE_CeaseFire)				
+		
+	end 
+		
+	
+	-------------------------------------------------------------------
+	--[[ END Spawing Units ]]
+	-------------------------------------------------------------------
+
+	
+	-------------------------------------------------------------------
+	--[[ START Spawing Buildings ]]
+	-------------------------------------------------------------------
+	--Single Buildings
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_hq", "eldar_hq", "nis_outro_atk_webwaygate", 1)	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_shrine", "eldar_soul_shrine", "nis_outro_atk_soulshrine", 1)	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_shrine2", "eldar_soul_shrine", "nis_outro_atk_soulshrine2", 1)	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_aspectportal", "eldar_aspect_portal", "nis_outro_atk_aspectportal", 1)	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_supportportal", "eldar_support_portal", "nis_outro_atk_supportportal", 1)	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_webway", "eldar_webway_gate", "nis_outro_webway", 1)	
+	
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_cannon7", "eldar_support_platform_cannon_sp", "nis_outro_atk_cannon7", 1)		
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_cannon8", "eldar_support_platform_cannon_sp", "nis_outro_atk_cannon8", 1)		
+	
+	--Multiple Buildings
+	for i = 1,6 do		
+		Entity_CreateBuildingMarker(g_Player3, "eg_closing_cannon"..i, "eldar_support_platform_scatterlaser", "nis_outro_atk_cannon"..i, 1)		
+		Entity_CreateBuildingMarker(g_Player3, "eg_closing_warpg"..i, "eldar_warp_generator", "nis_outro_atk_warpg"..i, 1)		
+	end 	
+	
+	--Webways
+	for i = 1,9 do
+		Entity_CreateBuildingMarker(g_Player3, "eg_closing_webway"..i, "eldar_webway_gate", "nis_outro_atk_webway"..i, 1)		
+	end
+	
+	--firedragon relief
+	for i = 1,4 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_firedragon_relief"..i, "eldar_squad_fire_dragon", "nis_outro_def_firedragon_relief"..i, 6, 1)
+		Cmd_SetStance("sg_closing_firedragon_relief"..i, STANCE_CeaseFire)		
+		--Cmd_EnterBuilding("sg_closing_firedragon_relief"..i, "eg_closing_webway8")
+	end
+	
+	-------------------------------------------------------------------
+	--[[ END Spawing Buildings ]]
+	-------------------------------------------------------------------
+
+	
+	-------------------------------------------------------------------
+	--[[ START Scene Control ]]
+	-------------------------------------------------------------------
+	Cmd_AttackEGroup("sg_closing_attacker1", "eg_closing_cannon1")
+	CPath_Start("canim_starter", "start", "end")
+	
+	-- Blocks 1 and 2
+	CTRL.CPath_CutToPath("canim_out_farseer", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(5.0)
+			CTRL.WAIT()
+			
+			-- Farseer:  We came here long, long ago. 
+			Actor_PlaySpeech(  ACT.Taldeer, 5200082) 			
+			
+						
+			CTRL.Event_Delay(13.0)
+			CTRL.WAIT()			
+			-- Harlequin and Banshees fight back!
+			
+			Cmd_MoveToMarker("sg_closing_banshee", "nis_outro_attacker1")
+			Cmd_SetStance("sg_closing_banshee", STANCE_Attack)		
+			
+			-- Farseer:  We did battle with our deathless foes, the Necron, and won. This day… this day we have lost. <sounding wistful> If they swarm again like locusts here, some other must stop them.
+			Actor_PlaySpeech(  ACT.Taldeer, 5200083) 
+			
+			CTRL.Event_Delay(4.0)
+			CTRL.WAIT()			
+			Cmd_MoveToMarker("sg_closing_harlequin", "nis_outro_atk_webway2")
+			
+			
+			for i = 1,4 do
+				Cmd_MoveToMarker("sg_closing_flank_heavy"..i, "nis_outro_atk_webwaygate")
+				Cmd_SetStance("sg_closing_flank_heavy"..i, STANCE_Attack)		
+			end
+			
+			CTRL.Event_Delay(8.0)
+			CTRL.WAIT()			
+			
+			-- Was going to play a special animation here, but it didn't work...If I figure it out later, I'll fix this...
+			--[[if SGroup_Exists("sg_closing_harlequin") and SGroup_Count("sg_closing_harlequin") > 0 then
+				Anim_PlaySquadAnim("sg_closing_harlequin", "special_ability_1")
+			end]]--
+			Cmd_SetStance("sg_closing_harlequin", STANCE_Attack)		
+			
+			CTRL.Event_Delay(2.0)
+			CTRL.WAIT()			
+			
+			for i = 3,11 do
+				Cmd_MoveToMarker("sg_closing_attacker"..i, "nis_outro_atk_webwaygate")								
+				Cmd_SetStance("sg_closing_attacker"..i, STANCE_Attack)		
+			end 
+			
+			
+			Cmd_SetStance("sg_closing_darkreaper", STANCE_Attack)		
+			Cmd_SetStance("sg_closing_firedragon1", STANCE_Attack)		
+			Cmd_SetStance("sg_closing_firedragon2", STANCE_Attack)		
+			Cmd_SetStance("sg_closing_heavyattacker1", STANCE_Attack)		
+	
+			
+			CTRL.Event_Delay(12.0)
+			CTRL.WAIT()			
+			
+			for i = 1,4 do
+				Cmd_MoveToMarker("sg_closing_vehicle"..i, "nis_outro_atk_webway2")
+				Cmd_SetStance("sg_closing_vehicle"..i, STANCE_Attack)		
+			end
+			
+			CTRL.Event_Delay(7.5)
+			CTRL.WAIT()			
+			
+			
+			
+			Fade_Start( 2, false )
+		CTRL.END()
+	CTRL.WAIT()
+	-------------------------------------------------------------------
+	--[[ END Scene Control ]]
+	-------------------------------------------------------------------
+	
+	--********************************************************************************************************************************************--
+	
+	-- Block 3
+	
+	--Remove all the buildings and units to clear the Nis scenes
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_All_Units"), Player_GetSquads(g_Player1))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player2))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player3))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player4))
+	SGroup_AddGroup(SGroup_FromName("sg_All_Units"), Player_GetSquads(g_Player5))
+	
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_All_Buildings"), Player_GetEntities(g_Player1))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player2))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player3))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player4))
+	EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player5))
+	--EGroup_AddGroup(EGroup_FromName("eg_All_Buildings"), Player_GetEntities(g_Player6))
+	
+	SGroup_DeSpawn("sg_All_Units")
+	EGroup_DeSpawn("eg_All_Buildings")
+	
+	
+	Fade_Start( 2.0, true )
+	
+	
+	
+	
+	-------------------------------------------------------------------
+	--[[ START Spawing Units ]]
+	-------------------------------------------------------------------
+
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_farseer", "eldar_squad_farseer", "nis_outro_farseer", 1, 1)
+	SGroup_FaceMarker("sg_closing_farseer", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_farseer", STANCE_CeaseFire)
+	
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_seer_council1", "eldar_squad_seer_council", "nis_outro_seer_council1", 1, 1)
+	SGroup_FaceMarker("sg_closing_seer_council1", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_seer_council1", STANCE_CeaseFire)
+		
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_closing_seer_council2", "eldar_squad_seer_council", "nis_outro_seer_council2", 1, 1)
+	SGroup_FaceMarker("sg_closing_seer_council2", "nis_outro_farseer_facing")
+	Cmd_SetStance("sg_closing_seer_council2", STANCE_CeaseFire)
+	
+	
+	--Attackers
+	for i = 1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_finale_attacker"..i,g_Nis_Blueprint, "nis_outro_final_attacker"..i, 10, 1)
+		Cmd_SetStance("sg_closing_finale_attacker"..i, STANCE_CeaseFire)	
+	end
+	
+	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_finale_attacker3",g_Nis_Blueprint3, "nis_outro_final_attacker3", 4, 1)
+	Cmd_SetStance("sg_closing_finale_attacker3", STANCE_CeaseFire)	
+	-------------------------------------------------------------------
+	--[[ END Spawing Units ]]
+	-------------------------------------------------------------------
+
+	
+	
+	-------------------------------------------------------------------
+	--[[ START Spawing Buildings ]]
+	-------------------------------------------------------------------
+	Entity_CreateBuildingMarker(g_Player3, "eg_closing_webway", "eldar_webway_gate", "nis_outro_webway", 1)	
+	-------------------------------------------------------------------
+	--[[ END Spawing Buildings ]]
+	-------------------------------------------------------------------
+	
+	
+	-------------------------------------------------------------------
+	--[[ START Scene Control ]]
+	-------------------------------------------------------------------
+	
+	CTRL.CPath_CutToPath("canim_out_farseer_escape", "start", "end")
+		CTRL.SUB()
+			CTRL.Event_Delay(2.0)
+			CTRL.WAIT()
+			
+			-- Farseer:  We shall be gone. 
+			Actor_PlaySpeech(  ACT.Taldeer, 5200084) 
+		
+			CTRL.Event_Delay(3.0)
+			CTRL.WAIT()		
+			
+			Cmd_MoveToMarker("sg_closing_farseer", "nis_outro_webway")
+			
+			for i = 1,3 do
+				Cmd_MoveToMarker("sg_closing_finale_attacker"..i, "nis_outro_webway")
+				Cmd_SetStance("sg_closing_finale_attacker"..i, STANCE_Attack)		
+			end
+			
+			CTRL.Event_Delay(2.0)
+			CTRL.WAIT()		
+			
+			Cmd_EnterBuilding("sg_closing_farseer", "eg_closing_webway")			
+			Cmd_EnterBuilding("sg_closing_seer_council1", "eg_closing_webway")			
+			Cmd_EnterBuilding("sg_closing_seer_council2", "eg_closing_webway")			
+			
+			CTRL.Event_Delay(12.0)
+			CTRL.WAIT()		
+			
+			
+		CTRL.END()
+	CTRL.WAIT()
+	
+	Fade_Start( 2, false )
+	
+	CTRL.W40k_Letterbox( false, 2)	
+	CTRL.WAIT()
+	
+	-------------------------------------------------------------------
+	--[[ END Scene Control ]]
+	-------------------------------------------------------------------
+	
+	
+end
+
+-----------------------------------------------------------------

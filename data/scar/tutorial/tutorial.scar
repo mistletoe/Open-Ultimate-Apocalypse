@@ -1,0 +1,2048 @@
+EVENTS = {}
+--------------------------------------------------------------------------------------------------
+--IMPORTS
+import("WXPScarUtil.scar")
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--GAME SETUP
+
+function OnGameSetup()		
+	-- global variables
+	g_tutorialRuleState = nil
+	g_ObjectiveIssued = nil
+	g_ObjectiveEvent = nil
+	g_ReminderTime = 10
+	g_enableAI = false
+	g_enableAIAttack = false
+	g_enableAIVehicles = false
+	
+	g_zoomTimeOut = false
+	
+	
+	-- Soulstorm: Used to Store the Player Race in a global location:
+	g_race = 0
+	
+	g_Player1 = World_GetPlayerAt(Tut_GetLocalPlayerIndex())	
+	if Tut_GetLocalPlayerIndex() == 1 then
+		g_Player2 = World_GetPlayerAt(0)
+	else
+		g_Player2 = World_GetPlayerAt(1)
+	end
+end
+
+function OnGameRestore()
+	g_Player1 = World_GetPlayerAt(Tut_GetLocalPlayerIndex())	
+	if Tut_GetLocalPlayerIndex() == 1 then
+		g_Player2 = World_GetPlayerAt(0)
+	else
+		g_Player2 = World_GetPlayerAt(1)
+	end
+	
+	-- import the race specific scripts
+	ImportRaceScripts(Tut_GetRaceName())
+end
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--ON INITIALIZATION 
+
+	tutorialplayedbefore = true
+	
+	marine = {
+		barracks = "space_marine_barracks",
+		builder = "space_marine_squad_servitor",
+		research_facility = "space_marine_armoury",
+		hq_addon = "space_marine_hq_addon_1",
+		vehicle_building = "space_marine_vehicle_building",
+		hq = "space_marine_hq",
+		basic_infantry = "space_marine_squad_scout",
+		hq_research = "marine_scout_infiltrate_research",
+		infantry = "space_marine_squad_tactical",
+		commander = "space_marine_squad_force_commander",
+		weapon1 = "space_marine_flamer_tactical",
+		weapon2 = "space_marine_heavy_bolter_tactical",
+		weapon3 = "space_marine_plasma_gun",
+		weapon4 = "space_marine_missile_launcher_tactical",
+		walker = "space_marine_squad_dreadnought",
+		flyer = "space_marine_squad_land_speeder",
+		artillery = "space_marine_squad_whirlwind",
+		transport = "space_marine_squad_rhino",
+		listening_post = "space_marine_listening_post",
+		generator = "space_marine_generator"
+	}
+	
+	ork = {
+		barracks = "ork_boy_hut",
+		builder = "ork_squad_grot",
+		research_facility = "ork_pile_o_guns",
+		hq_addon = "ork_hq_addon",
+		vehicle_building = "ork_mek_shop",
+		hq = "ork_hq",
+		basic_infantry = "ork_squad_slugga",
+		hq_research = "ork_research_grot_infiltrate",
+		infantry = "ork_squad_shoota_boy",
+		commander = "ork_squad_mek_boy",
+		weapon1 = "ork_big_shoota_shoota",
+		weapon2 = "ork_burna_shoota",
+		weapon3 = "ork_rokkit_launcha_shoota",
+		weapon4 = "ork_burna_shoota",
+		walker = "ork_squad_killa_kan",
+		flyer = "ork_squad_stormboy",
+		artillery = "ork_squad_looted_tank",
+		transport = "ork_squad_trukk",
+		listening_post = "ork_gork_totem",
+		generator = "ork_generator",
+		population = "ork_waagh_banner"
+	}
+
+	eldar = {
+		barracks = "eldar_aspect_portal",
+		builder = "eldar_squad_bonesinger",
+		research_facility = "eldar_soul_shrine",
+		hq_addon = "space_marine_hq_addon_1",
+		vehicle_building = "eldar_support_portal",
+		hq = "eldar_hq",
+		basic_infantry = "eldar_guardian_squad",
+		hq_research = "eldar_bonesinger_ability_research_1",
+		infantry = "eldar_squad_rangers",
+		commander = "eldar_squad_farseer",
+		weapon1 = "space_marine_flamer_scout",
+		weapon2 = "space_marine_sniper_rifle",
+		weapon3 = "space_marine_flamer_tactical",
+		weapon4 = "space_marine_heavy_bolter_tactical",
+		walker = "eldar_squad_wraithlord",
+		flyer = "eldar_squad_vypers",
+		artillery = "eldar_squad_fire_prism",
+		transport = "eldar_squad_falcon_grav_tank",
+		listening_post = "eldar_listening_post",
+		generator = "eldar_warp_generator",
+		-- ELDAR SPECIFIC
+		webwaygate = "eldar_webway_gate",
+		banshees = "eldar_squad_banshees",
+		darkreapers = "eldar_squad_dark_reapers",
+		warpspiders = "eldar_squad_warp_spider",
+		addonbanshees = "eldar_aspect_stone_banshees",
+		addondarkreapers = "eldar_aspect_stone_dark_reapers",
+		addonwarpspiders = "eldar_aspect_stone_warp_spider",
+		addonfireprism = "eldar_aspect_stone_prism",
+		addonvyper = "eldar_aspect_stone_vyper",
+		addonwraithlord = "eldar_aspect_stone_wraithlord",
+		mobilizeforwarresearch = "eldar_tier2_research",
+		annihilate = "eldar_annihilate_the_enemy",
+		avatar = "eldar_squad_avatar"		
+	}
+	
+	chaos = {
+		barracks = "chaos_temple",
+		builder = "chaos_squad_slave",
+		research_facility = "chaos_armoury",
+		hq_addon = "chaos_hq_addon_1",
+		vehicle_building = "chaos_machine_pit",
+		hq = "chaos_hq",
+		basic_infantry = "chaos_squad_cultist",
+		hq_research = "chaos_squad_cap_research",
+		infantry = "chaos_marine_squad",
+		commander = "chaos_squad_lord",
+		weapon1 = "chaos_heavy_bolter_tactical",
+		weapon2 = "chaos_flamer_tactical",
+		weapon3 = "chaos_missile_launcher_tactical",
+		weapon4 = "chaos_plasma_gun_tactical",
+		walker = "chaos_squad_defiler",
+		flyer = "chaos_squad_raptor",
+		artillery = "chaos_squad_defiler",
+		transport = "chaos_squad_rhino",
+		listening_post = "chaos_listening_post",
+		generator = "chaos_plasma_generator",
+		-- extra chaos structures
+		sacrificialcircle = "chaos_sacrificial_circle",
+		daemonpit = "chaos_greater_sacrificial_circle",
+		hq_addon2 = "chaos_hq_addon_2",
+		bloodthirster = "chaos_squad_bloodthirster",
+		bloodthirsterresearch = "chaos_bloodthirster_research",
+		horror = "chaos_squad_horror"
+	}
+	
+	guard = {
+		barracks = "guard_infantry",
+		builder = "guard_squad_enginseer",
+		research_facility = "guard_tactica",
+		hq_addon = "addon_guard_hq_1",
+		vehicle_building = "guard_mechanized",
+		hq = "guard_hq",
+		basic_infantry = "guard_squad_guardsmen",
+		commander = "guard_squad_command_squad",
+		weapon1 = "guard_grenade_launcher_guardsmen",
+		weapon2 = "guard_plasma_gun_guardsmen",
+		leader1 = "guard_leaders_commissar_command_squad",
+		leader2 = "guard_leaders_priest_command_squad",
+		leader3 = "guard_leaders_psyker_command_squad",	
+		walker = "guard_squad_sentinel",
+		flyer = "guard_squad_hellhound",
+		artillery = "guard_squad_basilisk",
+		transport = "guard_squad_chimera",
+		listening_post = "guard_listening_post",
+		generator = "guard_plasma_generator",
+		sentinel = "guard_squad_sentinel",
+		basilisk = "guard_squad_basilisk",
+		ogryns = "guard_squad_ogryns",
+		leman = "guard_squad_lemanruss",
+		baneblade = "guard_squad_baneblade",
+		-- guard specific
+		commissar = "guard_squad_commissar",
+		hq_addon2 = "addon_guard_hq_2",
+		sent_addon = "addon_guard_sentinel_depot",
+		hell_addon = "addon_guard_hellhound_depot",		
+		bas_addon = "addon_guard_basilisk_depot",		
+		leman_addon = "addon_guard_lemanruss_depot",
+		ogryn_addon = "addon_guard_ogryn_quarters",
+		mars = "guard_mars_pattern",
+		fullscalewar = "guard_full_scale_war",
+		sergeant  = "guard_infantry_guardsmen_sergeant"
+	}
+
+	tau = {
+		barracks = "tau_barracks",
+		builder = "tau_builder_squad",
+		research_facility = "tau_research_building",
+		vehicle_building = "tau_vehicle_building",
+		hq = "tau_hq",
+		basic_infantry = "tau_stealth_team_squad",
+		infantry = "tau_fire_warrior_squad",
+		commander = "tau_commander_squad",
+		weapon1 = "tau_fusion_blaster_stealth_suit",
+		leader1 = "tau_shasui_fire_warrior",
+		leader2 = "tau_shield_drone",
+		walker = "tau_broadside_battlesuit_squad",
+		flyer = "tau_drone_harbinger_squad",
+		artillery = "tau_skyray_squad",
+		transport = "tau_devilfish_troop_carrier",
+		listening_post = "tau_listening_post",
+		generator = "tau_plasma_generator",
+		weapon1 = "tau_flamer_commander",
+		-- tau specific
+		nest = "tau_kroot_nest",
+		kroot = "tau_kroot_carnivore_squad",
+		shaper = "tau_kroot_shaper_squad",
+		montka = "tau_shrine_of_montka",
+		crisis = "tau_crisis_suit_squad",
+		teachings = "tau_teachings_of_montka_research",
+		hammer = "tau_hammerhead_gunship_squad",
+		coalition = "tau_shrine_of_purpose",
+		ethereal = "tau_ethereal_squad",
+	}
+
+	necron = {
+		barracks = "necron_summoning_core",
+		builder = "necron_builder_scarab_squad",
+		research_facility = "necron_forbidden_archive",
+		vehicle_building = "necron_greater_summoning_core",
+		hq = "monolith",
+		basic_infantry = "necron_basic_warrior_squad",
+		infantry = "necron_flayed_one_squad",
+		commander = "necron_lord_squad",
+		walker = "necron_tomb_spyder_squad",
+		listening_post = "necron_listening_post",
+		generator = "necron_plasma_generator",
+		hq_addon = "addon_necron_hq_1",
+		hq_addon2 = "addon_necron_hq_2",
+		hq_addon3 = "addon_necron_hq_3",
+		nightbringer = "necron_night_bringer",
+		
+		-- necron specific
+		core = "necron_energy_core",
+		phylactery = "necron_phylactery_research",
+		res = "necron_resurrection_orb_research",
+		monolith = "necron_restored_monolith_squad",
+		night = "necron_night_bringer_research",
+		
+	}
+
+	-- dark eldar building, units & researches used for Dark Eldar Tutorial 
+	darkeldar = {
+		hq = "dark_eldar_hq",
+		basic_infantry = "dark_eldar_squad_mandrake",
+		builder = "dark_eldar_squad_slave",
+		listening_post = "dark_eldar_listening_post",
+		generator = "dark_eldar_plasma_generator",
+		barracks = "dark_eldar_hall_of_blood",
+		infantry = "dark_eldar_squad_warrior",
+		population = "dark_eldar_slave_caravel",
+		slaveChamber_addon = "addon_dark_eldar_slave_graveyard",
+		soulPower = "dark_eldar_sudden_strike",
+		commander = "dark_eldar_squad_archon",
+		commander_leader = "dark_eldar_leader_incubus",
+		research_facility = "dark_eldar_haemonculus_laboratory",
+		infantry_leader = "dark_eldar_infantry_warrior_leader",
+		hq_addon = "addon_dark_eldar_hq_1",
+		vehicle_building = "dark_eldar_skimmer_shop",
+		vehicle_raider = "dark_eldar_squad_raider"		
+	}
+
+	-- sisters building, units & researches used for Sisters Tutorial 
+	sisters = {
+		hq = "sisters_hq",
+		basic_infantry = "sisters_squad_missionary",
+		builder = "sisters_squad_servitor",
+		listening_post = "sisters_listening_post",
+		generator = "sisters_plasma_generator",
+		barracks = "sisters_infantry",
+		infantry = "sisters_squad_battle_sister",
+		holyIcon = "addon_sisters_holy_icon",
+		commander = "sisters_squad_canoness",
+		research_facility = "sisters_sanctuary",
+		infantry_weapon = "sisters_flamer_battle_sister",
+		infantry_leader = "sisters_veteran_superior",
+		hq_addon = "addon_sisters_hq_1",
+		vehicle_building = "sisters_vehicle_building",
+		vehicle_immolator = "sisters_squad_immolator_tank"		
+	}
+
+function OnInit()	
+	Util_SetIE( true )
+	Fade_Start( 0, false )
+	W40k_Letterbox( true, 0 )	
+	Util_StartIntel(EVENTS.NIS_Opening)
+	
+	Taskbar_SetHelpTextLevel( HTL_Max )
+	
+	g_PlayerRaceName = Player_GetRaceName( g_Player1 )
+	
+	-- set actor
+	Tut_SetActorForRace()
+	
+	--[[Set Cpu]]	
+	
+	
+	Cpu_Enable(g_Player2, false)	
+	
+	
+	local race = Tut_GetRaceName()
+	
+	-- import the race specific scripts
+	ImportRaceScripts(race)
+	
+	-- Soulstorm: Store the race in a global varible so can use for race bases IEs
+	g_race = race
+	
+	if race == "space_marine_race" then
+		textpreface = 500
+		blueprint = marine
+		
+		--[[restricting the AI]]
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_2")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_tank_left")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_tank_right")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin_dreadnought")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin_hellfire")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin_predator")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin_tank_left")
+		Player_RestrictWeapon(g_Player2, "space_marine_lascannon_twin_tank_right")
+		
+	elseif race == "ork_race" then
+		textpreface = 501
+		blueprint = ork
+	elseif race == "eldar_race" then
+		textpreface = 502
+		blueprint = eldar
+	elseif race == "chaos_marine_race" then
+		textpreface = 503
+		blueprint = chaos
+	elseif race == "guard_race" then
+		textpreface = 500
+		blueprint = guard
+	elseif race == "tau_race" then
+		textpreface = 500
+		blueprint = tau
+	elseif race == "necron_race" then
+		textpreface = 500
+		blueprint = necron
+	elseif race == "dark_eldar_race" then
+		textpreface = 500
+		blueprint = darkeldar
+	elseif race == "sisters_race" then
+		textpreface = 500
+		blueprint = sisters
+	end
+
+	--[[Get the Game Ready to Run]]
+	Rule_Add(Rule_MissionStart);
+	
+end
+
+function ImportRaceScripts(race)
+
+	if race == "space_marine_race" then
+		print("importing space_marine_race")
+		import("Tutorial\\Tutorial-SpaceMarine.scar")
+	elseif race == "ork_race" then
+		print("importing ork_race")
+		import("Tutorial\\Tutorial-Ork.scar")
+	elseif race == "eldar_race" then
+		print("importing eldar_race")
+		import("Tutorial\\Tutorial-Eldar.scar")
+	elseif race == "chaos_marine_race" then
+		print("importing chaos_race")
+		import("Tutorial\\Tutorial-Chaos.scar")
+	elseif race == "guard_race" then
+		print("importing guard_race")
+		import("Tutorial\\Tutorial-ImperialGuard.scar")
+	elseif race == "tau_race" then
+		print("importing tau_race")
+		import("Tutorial\\Tutorial-Tau.scar")
+	elseif race == "necron_race" then
+		print("importing necron_race")
+		import("Tutorial\\Tutorial-Necron.scar")
+	elseif race == "dark_eldar_race" then
+		print("importing dark_eldar_race")
+		import("Tutorial\\Tutorial-DarkEldar.scar")
+	elseif race == "sisters_race" then
+		print("importing sisters_race")
+		import("Tutorial\\Tutorial-Sisters.scar")
+	else
+		error( "unknown race "..race )
+	end
+end
+
+Scar_AddInit(OnInit)
+
+function Rule_EnableAI()
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_Player2All"), Player_GetSquads(g_Player2))
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_Player2All"), Player_GetEntities(g_Player2))
+	
+	if Player_CanSeeEGroup( g_Player1, "eg_Player2All", false) or Player_CanSeeSGroup( g_Player1, "sg_Player2All", false ) or g_enableAI == true then
+		Cpu_Enable( g_Player2, true )
+		Cpu_SetDifficulty(g_Player2, AD_Easy)
+		Cpu_EnableComponent( g_Player2, false, CT_Attacking )
+		Cpu_SetClassPreference( g_Player2, UC_VehicleLow, 0.0 ) 
+		Cpu_SetClassPreference( g_Player2, UC_VehicleMed, 0.0 ) 
+		Cpu_SetClassPreference( g_Player2, UC_VehicleHigh, 0.0 ) 
+		Rule_Remove( Rule_EnableAI )
+	end
+end
+
+function Rule_EnableAIAttack()
+	if g_enableAIAttack == true and g_enableAI == true then
+		Cpu_EnableComponent( g_Player2, true, CT_Attacking )
+		Rule_Remove(Rule_EnableAIAttack)
+	end	
+end
+
+function Rule_EnableAIVehicles()
+	if g_enableAIVehicles == true and g_enableAI == true then
+		Cpu_ResetClassPreferences( g_Player2 ) 
+		Rule_Remove(Rule_EnableAIVehicles)
+	end	
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--[[PLAYTEST MAIN SCRIPT]]
+function Rule_MissionStart()
+	Player_RestrictResearch(g_Player1, "necron_chronometron_research")
+	Player_RestrictResearch(g_Player1, "necron_lightning_field_research")
+	Player_RestrictResearch(g_Player1, "necron_phase_shifter_research")
+	Player_RestrictResearch(g_Player1, "necron_solar_pulse_research")
+	Player_RestrictResearch(g_Player1, "necron_veil_of_darkness_research")	
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_1")
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_2")
+	Player_RestrictAddOn(g_Player1, "addon_necron_hq_3")
+	
+	Player_RestrictSquad(g_Player1, "necron_lord_squad")
+
+	Rule_AddInterval( Rule_EnableAI, 1 )
+	Rule_AddInterval( Rule_EnableAIAttack, 1 )
+	Rule_AddInterval( Rule_EnableAIVehicles, 1 )
+	Rule_Add(Rule_ObjectivesReminder_Start)
+
+	--[[Remove Servitor]]
+	Rule_FirstServitor()
+	--[[Cap Scouts]]
+	Rule_AddInterval(Rule_CapScoutCount, 1)
+	
+	--[[Start Tutorial Welcome]]
+	Rule_AddOneShot(Rule_TutorialWelcome, 2.25)
+	
+	Rule_Remove(Rule_MissionStart)
+	
+end	
+
+--------------------------------------------------------------------------------------------
+--[[SETUP and USABILITY FUNCTIONS]]
+function Rule_FirstServitor()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+	SGroup_DeSpawn("sg_Player1All")
+	SGroup_DestroyAllSquads("sg_Player1All")
+	
+	Rule_Remove(Rule_FirstServitor)
+end
+
+function Rule_CapScoutCount()
+	
+	if not Tut_GetRaceName() == "space_marine_race" then
+		Rule_Remove( Rule_CapScoutCount )
+	end
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()	
+
+	if Tut_GetRaceName() == "space_marine_race" and Tut_SGBlueprintCount("sg_Player1All", "space_marine_squad_scout", 3, true) then
+		Player_RestrictSquad(g_Player1, "space_marine_squad_scout")
+	elseif Tut_GetRaceName() == "space_marine_race" and (Tut_SGBlueprintCount("sg_Player1All", "space_marine_squad_scout", 3, false) or Tut_SGBlueprintCount("sg_Player1All", "space_marine_squad_scout", 4, false)) then
+		Player_UnRestrictSquad(g_Player1, "space_marine_squad_scout")
+	end
+
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Tutorial Welcome 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_TutorialWelcome()
+
+	-- Display the welcome message
+	Util_StartIntel(EVENTS.IE_Tutorial_Welcome)
+	Rule_AddInterval(Rule_TutorialWelcomeDone, 0)
+	Rule_AddIntervalDelay(Rule_EndGameLose, 1, 5)
+	
+end
+
+function Rule_TutorialWelcomeDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_TutorialWelcomeDone)
+		
+		-- testing
+		--Rule_AddOneShot(Rule_StartMainTutorial, 0)
+		
+		-- Start either with the camera bit, or jump straight to the main meat of the thing
+		if (PlayerProfile_GetVar("hasPlayedTutorial") == "yes") then
+			Rule_AddOneShot(Rule_StartMainTutorial, 0)
+		else
+			Rule_AddOneShot(Rule_StartCameraTutorial, 0)
+		end
+	end
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Camera Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_StartCameraTutorial()
+
+	-- Trigger Next Rule
+	Rule_AddInterval(Rule_StartCameraTutorialDone, 0)
+	
+	-- Intel Event Trigger
+	Util_StartIntel(EVENTS.IE_Camera_Welcome)
+end
+
+function Rule_StartCameraTutorialDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_StartCameraTutorialDone)
+		Rule_AddOneShot(Rule_PanCamera, 0)
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Camera Lesson 1 - Pan Camera
+
+function Rule_PanCamera()
+
+	-- Define Objective
+	obj_PanCamera = { title_id = 500030, short_desc_id = 500031, help_tip_id = 500030 } -- Pan the camera using the mouse
+
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_PanCameraCheck, 0)
+	
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_PanCamera , true, EVENTS.IE_PanCamera)
+	
+	-- Play first Intel Event
+	Util_StartIntel(EVENTS.IE_PanCamera)
+end
+
+function Rule_PanCameraCheck()
+	-- If the Player Pans the Camera...
+	if Camera_HasPanned( 1 ) then		
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_PanCameraCheck)
+		Rule_AddInterval(Rule_PanCameraDone, 0)
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PanCamera.title_id)
+	end
+end
+
+-- Pan Camera is Completed
+function Rule_PanCameraDone()
+	-- Make sure all IEs are finished...
+	if (Event_IsAnyRunning() == false) then
+		-- Finish Pan Camera Lesson & Move on to Rotate Camera
+		Rule_Remove(Rule_PanCameraDone)
+		Rule_AddOneShot(Rule_RotateCamera, 0)
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Camera Lesson 2 - Rotate Camera
+
+function Rule_RotateCamera()
+	-- Define Objective
+	obj_RotateCamera = { title_id = 500040, short_desc_id = 500041, help_tip_id = 500040 } -- Rotate the camera using the 'ALT' key
+
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_RotateCameraCheck, 0)
+	
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_RotateCamera , true, EVENTS.IE_RotateCamera)
+	Util_StartIntel(EVENTS.IE_RotateCamera)
+end
+
+function Rule_RotateCameraCheck()	
+	if Camera_HasRotated( 1 ) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_RotateCamera.title_id)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_RotateCameraCheck)
+		Rule_AddInterval(Rule_RotateCameraDone, 0)
+		
+	end	
+end
+
+function Rule_RotateCameraDone()
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_RotateCameraDone)
+		Rule_AddOneShot(Rule_ZoomCamera, 0)
+		
+	end	
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Camera Lesson 3 - Zoom Camera
+
+function Rule_ZoomCamera()
+
+	-- Define Objective
+	obj_ZoomCamera = { title_id = 500050, short_desc_id = 500051, help_tip_id = 500050 } -- Zoom the camera	
+
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_ZoomCameraCheck, 0)
+	
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_ZoomCamera , true, EVENTS.IE_ZoomCamera)
+	Util_StartIntel(EVENTS.IE_ZoomCamera)	
+	
+	-- after 30 seconds this just times out and we move on
+	Rule_AddOneShot( Rule_ZoomTimeOut, 30 )
+
+end
+
+function Rule_ZoomTimeOut()
+	g_zoomTimeOut = true
+end
+
+function Rule_ZoomCameraCheck()
+	
+	if Camera_HasZoomed( 1 ) or g_zoomTimeOut == true then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_ZoomCamera.title_id)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_ZoomCameraCheck)
+		Rule_AddInterval(Rule_ZoomCameraDone, 0)
+		
+	end
+	
+end
+
+function Rule_ZoomCameraDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_ZoomCameraDone)
+		Rule_AddOneShot(Rule_DefaultCamera, 0)
+		
+	end
+	
+end
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Camera Lesson 4 - Default Camera : (Backspace Key)
+
+function Rule_DefaultCamera()
+
+	-- Define Objective
+	obj_DefaultCamera = { title_id = 500060, short_desc_id = 500061, help_tip_id = 500060 } -- Reset the camera to default
+
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_DefaultCameraCheck, 0)
+	
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_DefaultCamera , true, EVENTS.IE_DefaultCamera)
+	Util_StartIntel(EVENTS.IE_DefaultCamera)
+end
+
+function Rule_DefaultCameraCheck()
+	
+	if Camera_HasReset( 1 ) then
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_DefaultCamera.title_id)
+		Util_StartIntel(EVENTS.IE_DefaultCamera_Complete)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_DefaultCameraCheck)
+		Rule_AddInterval(Rule_DefaultCameraDone, 0)
+	end
+	
+end
+
+function Rule_DefaultCameraDone()
+
+	if (Event_IsAnyRunning() == false) then
+		Rule_Remove(Rule_DefaultCameraDone)
+		Rule_AddInterval(Rule_HomeCamera, 0)
+	end
+end
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Camera Lesson 5 - Home Camera
+
+function Rule_HomeCamera()
+
+	-- Define Objective
+	obj_HomeCamera = { title_id = 500066, short_desc_id = 500067, help_tip_id = 500066 } -- Center the camera on your base
+
+	Tut_Player1GetAll()
+	
+	local hqID = nil
+	
+	-- throw away any buildings that aren't HQs
+	local FilterList = function(gID, idx, eID)
+		if (Entity_GetBlueprintName(eID) == blueprint.hq) then
+			hqID = eID
+		end
+	end
+	EGroup_ForEach(EGroup_FromName("eg_Player1All"), FilterList)
+
+	
+	if hqID ~= nil then
+		-- Only do this bit if the camera isn't over the HQ..
+		if Camera_IsEntityOnScreen(hqID) == false then		
+			
+			-- Create Objective and Intel Event
+			Tut_Util_ObjectiveCreate(obj_HomeCamera , true, EVENTS.IE_HomeCamera)
+			Util_StartIntel(EVENTS.IE_HomeCamera)
+			
+			-- Monitor for the lesson being completed
+			Rule_Remove(Rule_HomeCamera)
+			Rule_AddInterval(Rule_HomeCameraCheck, 0)
+			
+						
+		-- Skip it otherwise
+		else
+			Rule_Remove(Rule_HomeCamera)
+			Rule_AddInterval(Rule_HomeCameraDone, 0)
+		end
+	else
+		Rule_Remove(Rule_HomeCamera)
+		Rule_AddInterval(Rule_HomeCameraDone, 0)
+	end
+	
+end
+
+function Rule_HomeCameraCheck()
+	
+	if Taskbar_HasFocusedOnHQ( 1 ) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_HomeCamera.title_id)
+		Util_StartIntel(EVENTS.IE_HomeCamera_Complete)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_HomeCameraCheck)
+		Rule_AddInterval(Rule_HomeCameraDone, 0)
+		
+	end
+	
+end
+
+function Rule_HomeCameraDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_HomeCameraDone)
+		Rule_AddOneShot(Rule_MiniMap, 0)
+		
+	end
+	
+end
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- UI Lesson 6 - Mini-Map and FOW
+
+function Rule_MiniMap()
+
+	Util_StartIntel(EVENTS.IE_MiniMap)
+
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_MiniMapDone, 0)
+	
+end
+
+function Rule_MiniMapDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_MiniMapDone)
+		Rule_AddOneShot(Rule_ObjectiveScreen, 0)
+		
+	end
+	
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- UI Lesson 7 - Hide Taskbar
+
+function Rule_HideTaskbar()
+
+	-- Define Objective
+	obj_HideTaskbar = { title_id = 500390, short_desc_id = 500391, help_tip_id = 500390 } -- Hide the Taskbat
+
+	-- Only do the taskbar is on...
+	if not Taskbar_IsMinimized() then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_HideTaskbar , true, EVENTS.IE_HideTaskbar)
+		Util_StartIntel(EVENTS.IE_HideTaskbar)
+		
+		-- Monitor for the lesson being completed
+		Rule_AddInterval(Rule_HideTaskbarCheck, 0)
+		
+	-- Skip it otherwise
+	else
+		Rule_AddInterval(Rule_HideTaskbarDone, 0)
+	end
+	
+end
+
+function Rule_HideTaskbarCheck()
+	
+	if Taskbar_IsMinimized() then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_HideTaskbar.title_id)
+		Util_StartIntel(EVENTS.IE_HideTaskbar_Complete)
+		
+		-- Triggers the Next Rule
+		Rule_Remove(Rule_HideTaskbarCheck)
+		Rule_AddInterval(Rule_HideTaskbarDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_HideTaskbarDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_HideTaskbarDone)
+		Rule_AddOneShot(Rule_ObjectiveScreen, 0)
+		
+	end
+	
+end
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- UI Lesson 8 - Objectives Screen
+
+function Rule_ObjectiveScreen()
+	-- Create Intel Event
+	Util_StartIntel(EVENTS.IE_ObjectiveScreen)
+	
+	-- Monitor for the lesson being completed
+	Rule_AddInterval(Rule_ObjectiveScreenCheck, 0)
+end
+
+function Rule_ObjectiveScreenCheck()
+	
+	if (Event_IsAnyRunning() == false) then
+		obj_CloseObjectives = { title_id = 500413, short_desc_id = 500414, help_tip_id = 500413 }
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CloseObjectives , true)
+		
+		Objective_ShowScreen()
+			
+		Rule_Remove(Rule_ObjectiveScreenCheck)
+		Rule_AddInterval(Rule_ObjectiveScreenClosed, 0)
+	end
+end
+
+function Rule_ObjectiveScreenClosed()
+	Tut_Util_ObjectiveComplete( obj_CloseObjectives.title_id )
+	Util_StartIntel(EVENTS.IE_ObjectiveScreen_Complete)
+	Rule_Remove(Rule_ObjectiveScreenClosed)
+	Rule_AddInterval(Rule_ObjectiveScreenDone, 0)
+end
+
+function Rule_ObjectiveScreenDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_ObjectiveScreenDone)
+		Rule_AddOneShot(Rule_StartMainTutorial, 0)
+	end
+end
+
+
+-- this checks to see if the player is stuck
+function Rule_ObjectivesReminder_Start()
+	if g_ObjectiveIssued == true then
+		-- start counting down
+		Timer_Start( 1, g_ReminderTime )
+		Rule_Remove(Rule_ObjectivesReminder_Start)
+
+		if not Rule_Exists( Rule_ObjectivesReminder_Completed )
+		then 
+			Rule_AddInterval(Rule_ObjectivesReminder_Completed,1)
+		end
+		
+		Rule_AddInterval( Rule_ObjectivesReminder_Check,1)
+	end
+end
+
+function Rule_ObjectivesReminder_Check()
+	if g_ObjectiveIssued == true then
+		if Timer_GetRemaining(1) <= 0 and not Event_IsAnyRunning() then
+			
+			if g_ObjectiveEvent ~= nil then			
+				Util_StartIntel(g_ObjectiveEvent)
+			else
+				Util_StartIntel(EVENTS.IE_Objectives_Reminder)
+			end
+			Rule_Remove( Rule_ObjectivesReminder_Check )
+			-- readd the start rule in case the player is still lost
+			Rule_AddInterval( Rule_ObjectivesReminder_Start, 5 )
+		end
+	end
+end
+
+-- this checks to see if the objective is completed before the timer runs out
+function Rule_ObjectivesReminder_Completed()
+	if g_ObjectiveIssued == false then
+		Timer_End( 1 )
+		Rule_Remove(Rule_ObjectivesReminder_Completed)
+		if not Rule_Exists( Rule_ObjectivesReminder_Start ) then Rule_Add( Rule_ObjectivesReminder_Start ) end
+		if Rule_Exists( Rule_ObjectivesReminder_Check ) then Rule_Remove( Rule_ObjectivesReminder_Check ) end
+	end
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Start the main tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_StartMainTutorial()
+
+	-- Branch off in different directions depending on the race
+	local race = Tut_GetRaceName()
+
+	if race == "space_marine_race" then 							-- Space Marine
+		Rule_AddOneShot(Rule_SMarine_Start, 0)
+	elseif race == "ork_race" then						-- Ork
+		Rule_AddOneShot(Rule_Ork_Start, 0)
+	elseif race == "eldar_race" then						-- Eldar
+		Rule_AddOneShot(Rule_Eldar_Start, 0)
+	elseif race == "chaos_marine_race" then						-- Chaos
+		Rule_AddOneShot(Rule_Chaos_Start, 0)
+	elseif race == "guard_race" then						-- Imperial Guard
+		Rule_AddOneShot(Rule_Guard_Start, 0)
+	elseif race == "tau_race" then						-- Tau
+		Rule_AddOneShot(Rule_Tau_Start, 0)
+	elseif race == "necron_race" then						-- Necron
+		Rule_AddOneShot(Rule_Necron_Start, 0)
+	elseif race == "dark_eldar_race" then						-- Dark Eldar
+		Rule_AddOneShot(Rule_DarkEldar_Start, 0)
+	elseif race == "sisters_race" then						-- Sisters
+		Rule_AddOneShot(Rule_Sisters_Start, 0)
+	else										-- What the hell are you, then? (could be an extra mod race)
+		print("ERROR: Unknown Race")
+	end
+end
+
+
+function Rule_TutorialComplete()
+
+	Util_StartIntel(EVENTS.IE_Tutorial_Complete1)
+	Rule_AddInterval(Rule_TutorialCompletePart2, 0)
+	Rule_Remove(Rule_TutorialComplete)
+	
+	-- So Game Knows Tutorial has been run at least once	
+	PlayerProfile_SetVar("hasPlayedTutorial", "yes")
+end
+
+function Rule_TutorialCompletePart2()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Util_StartIntel(EVENTS.IE_Tutorial_Complete2)
+		
+		-- Adding Win Conditions
+		import("WinConditions/Annihilate.scar")
+		import("WinConditions/ControlArea.scar")
+		import("WinConditions/StrategicObjective.scar")
+		
+		-- Add & Check for the Three Win Conditions
+		Rule_AddOneShot(Annihilate, 0.0)
+		Rule_AddOneShot(ControlArea, 0.0)
+		Rule_AddOneShot(StrategicObjective, 0.0)
+
+		Rule_Remove(Rule_TutorialCompletePart2)
+	end
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel events for the above stuff 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Tutorial Welcome
+EVENTS.IE_Tutorial_Welcome = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400291 )	-- Welcome to the Dawn of War tutorial. By listening to me and reading the text that appears in this message box, you will learn how to play a Skirmish game. 
+		CTRL.WAIT()	
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500010 )		-- Welcome to the Dawn of War tutorial. By listening to me and reading the text that appears in this message box, you will learn how to play a Skirmish game. 
+		CTRL.WAIT()
+	end
+end
+
+-- Camera Welcome
+EVENTS.IE_Camera_Welcome = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400382 )	-- The mouse is your primary method of surveying the battle, selecting units and structures, and issuing orders.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400383 )	-- The mouse controls the camera. The camera represents your current view of the battlefield.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500021 )		-- The mouse is your primary method of surveying the battle, selecting units and structures, and issuing orders.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500022 )		-- The mouse controls the camera. The camera represents your current view of the battlefield.
+		CTRL.WAIT()
+	end
+end
+
+-- Pan Camera
+EVENTS.IE_PanCamera = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400384 )	-- To pan the camera, simply move the mouse pointer to the edge of the screen. Do this now.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500033 )		-- To pan the camera, simply move the mouse pointer to the edge of the screen. Do this now.
+		CTRL.WAIT()
+	end
+end
+
+-- Rotate Camera
+EVENTS.IE_RotateCamera = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400385 )	-- To rotate the camera to gain a different view of the battle, press the 'ALT' key, and move your mouse. Do this now.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500043 )		-- To rotate the camera to gain a different view of the battle, press the 'ALT' key, and move your mouse. Do this now.
+		CTRL.WAIT()
+	end
+end
+
+-- Zoom Camera
+EVENTS.IE_ZoomCamera = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400386 )	-- You can zoom in on something to see it up close by spinning the mouse-wheel forward. Do this now.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500053 )		-- You can zoom in on something to see it up close by spinning the mouse-wheel forward. Do this now.
+		CTRL.WAIT()
+	end
+end
+
+-- Default Camera
+EVENTS.IE_DefaultCamera = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400387 )	-- To return the camera to the game's default view, press the 'Backspace' key on your keyboard. Do this now.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500063 )		-- To return the camera to the game's default view, press the 'Backspace' key on your keyboard. Do this now.
+		CTRL.WAIT()
+	end
+end
+
+-- Default Camera Complete
+EVENTS.IE_DefaultCamera_Complete = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400388 )	-- Excellent, you've returned the camera to its default playing view.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400389 )	-- By panning, rotating, and zooming the camera in and out, you can get whatever view of the battlefield you wish.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500064 )	-- Excellent, you've returned the camera to its default playing view.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500065 )	-- By panning, rotating, and zooming the camera in and out, you can get whatever view of the battlefield you wish.
+		CTRL.WAIT()
+	end
+end
+
+-- Home Camera
+EVENTS.IE_HomeCamera = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400390 )	-- To quickly return the camera to your base from anywhere on the battlefield, press the 'Home' key on your keyboard. Do this now.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500068 )	-- To quickly return the camera to your base from anywhere on the battlefield, press the 'Home' key on your keyboard. Do this now.
+		CTRL.WAIT()
+	end
+end
+
+-- Home Camera Complete
+EVENTS.IE_HomeCamera_Complete = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400391 )	-- Excellent, you've returned the camera to your base. 
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500069 )		-- Excellent, you've returned the camera to your base. 
+		CTRL.WAIT()
+	end
+end
+
+-- MiniMap
+EVENTS.IE_MiniMap = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400392 )	-- The diamond-shaped display in the lower left-hand corner of your screen is your Mini-map.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400393 )	-- You can use the Mini-map to see where your units and structures are located, to quickly scan the battlefield, to issue quick orders, and so on.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400394 )	-- The Mini-map displays the locations of all Strategic Points on the battlefield, as well as other items of strategic importance.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400395 )	-- Fog of War prevents you from seeing things where you do not have a presence. As you move units into an area, the Fog of War will be lifted.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500340 )	-- The diamond-shaped display in the lower left-hand corner of your screen is your Mini-map.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500342 )	-- You can use the Mini-map to see where your units and structures are located, to quickly scan the battlefield, to issue quick orders, and so on.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500345 )	-- The Mini-map displays the locations of all Strategic Points on the battlefield, as well as other items of strategic importance.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500346 )	-- Fog of War prevents you from seeing things where you do not have a presence. As you move units into an area, the Fog of War will be lifted.
+		CTRL.WAIT()
+	end
+end
+
+-- Taskbar
+EVENTS.IE_HideTaskbar = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400396 )	-- Hide the taskbar by clicking the Skull icon on the upper-middle edge of the taskbar.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500393 )	-- Hide the taskbar by clicking the Skull icon on the upper-middle edge of the taskbar.
+		CTRL.WAIT()
+	end
+end
+
+EVENTS.IE_HideTaskbar_Complete = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400397 )	-- When the taskbar is hidden, you will notice the Mini-Map stays revealed.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400398 )	-- To issue commands and upgrade your squads you can either unhide the taskbar or use the 'hotkeys'.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400399 )	-- To return to the full taskbar, simply click the Skull icon again.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500394 )	-- When the taskbar is hidden, you will notice the Mini-Map stays revealed.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500395 )	-- To issue commands and upgrade your squads you can either unhide the taskbar or use the 'hotkeys'.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500396 )	-- To return to the full taskbar, simply click the Skull icon again.
+		CTRL.WAIT()
+	end
+end
+
+-- Objective Screen
+EVENTS.IE_ObjectiveScreen = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400400 )	-- Now we will bring up the Objective Menu.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400401 )	-- The Objective Menu provides you a list of all the Primary and Secondary Objectives assigned to you by the game. Mouse over the Objectives to get the description of each.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500410 )	-- Now we will bring up the Objective Menu.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500411 )	-- The Objective Menu provides you a list of all the Primary and Secondary Objectives assigned to you by the game. Mouse over the Objectives to get the description of each.
+		CTRL.WAIT()
+	end
+end
+
+EVENTS.IE_ObjectiveScreen_Complete = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Event_Delay(2)
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400402 )	-- Excellent! Anytime you want to refer to the Objectives Menu, click on the OBJ button on the upper menu bar.
+		CTRL.WAIT()
+	else
+		CTRL.Event_Delay(2)
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500412 )	-- Excellent! Anytime you want to refer to the Objectives Menu, click on the OBJ button on the upper menu bar.
+		CTRL.WAIT()
+	end
+end
+
+-- Obejctives Reminder
+EVENTS.IE_Objectives_Reminder = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400403 )	-- Remember, if you aren't sure what you need to do next you should always check your current Objectives.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400404 )	-- To check your Objectives, click on the OBJ button on the upper menu bar.
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500415 )	-- Remember, if you aren't sure what you need to do next you should always check your current Objectives.
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500416 )	-- To check your Objectives, click on the OBJ button on the upper menu bar.
+		CTRL.WAIT()
+	end
+end
+
+-- Tutorial Complete
+EVENTS.IE_Tutorial_Complete1 = function()
+	-- Play New Version For Sisters / Dark Eldar
+	if g_race == "sisters_race" or g_race == "dark_eldar_race"
+	then
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400405 )	-- Congratulations! You've completed the learning session of the tutorial.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400406 )	-- It is time to put what you have learned to work. Take control of the force and build up your strength so you can crush your enemy!
+		CTRL.WAIT()
+	else
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500300 )	-- Congratulations! You've completed the learning session of the tutorial.
+		CTRL.WAIT()
+		CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 500301 )	-- It is time to put what you have learned to work. Take control of the force and build up your strength so you can crush your enemy!
+		CTRL.WAIT()
+	end
+end
+
+-- Fade In at the mission opening (it hides a multitude of sins, like rearranging the start setup in the first frame)
+EVENTS.NIS_Opening = function()		
+	
+	CTRL.Event_Delay( 2 )
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 4 )
+	Util_MissionTitle("$3016")
+	CTRL.WAIT()
+	
+	CTRL.Fade_Start(2, true)	
+	W40k_Letterbox(false, 2)	
+	CTRL.WAIT()
+	
+	CTRL.Event_Delay( 2 )
+	CTRL.WAIT()
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Tutorial Utility Functions 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Get all of Player1s Squads & Entities 
+function Tut_Player1GetAll()
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_Player1All"), Player_GetSquads(g_Player1))
+	EGroup_AddGroup(EGroup_CreateIfNotFound("eg_Player1All"), Player_GetEntities(g_Player1))
+end
+
+--[[ Event Running Check ]]
+function Tut_AnyEventRunning(boolean)
+	if Event_IsAnyRunning() == boolean then
+		return true
+	end
+end
+
+--[[ Blueprint Checker ]]
+function Tut_SGBlueprintCheck(sgroupname, blueprint, num, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = num }
+	}
+	if SGroup_ContainsBlueprints(sgroupname, blueprinttable, true) == boolean then
+		return true
+	end
+end
+
+function Tut_EGBlueprintCheck(egroupname, blueprint, num, boolean)
+
+	local blueprinttable = { { name = blueprint, count = num } }
+	local local_blueprint = blueprint
+	local hasRequiredCount = EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	
+	local Rule_AllBuilt = function( egroupid, itemindex, entityID )
+		if Entity_GetBlueprintName(entityID) == local_blueprint and Entity_GetBuildingProgress(entityID) == 1.0 then
+			return true
+		else
+			return false
+		end
+	end
+
+	if boolean == true then
+		if hasRequiredCount then
+			-- is at least one of them fully built?
+			if EGroup_ForEach(EGroup_FromName(egroupname), Rule_AllBuilt) then
+				return true
+			end
+		end
+	else
+		if not hasRequiredCount then
+			return true
+		else
+			-- we have at least one, but is it built?
+			if not EGroup_ForEach(EGroup_FromName(egroupname), Rule_AllBuilt) then
+				return true
+			end
+		end
+	end
+	
+	return false
+end
+
+function Tut_EGBlueprintCheck2(egroupname, blueprint, num, boolean)
+
+	local blueprinttable = { { name = blueprint, count = num } }
+	local local_blueprint = blueprint
+	local hasRequiredCount = EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	
+	local t_Building = Util_MakeBlueprintTable("necron_plasma_generator")
+
+	countbuildings = EGroup_Count(EGroup_FromName("eg_Player1All"))
+
+	for i = 1, countbuildings
+	do
+		EGroup_Clear(EGroup_CreateIfNotFound("eg_Potential_Generators"..i))
+		EGroup_Add(EGroup_FromName("eg_Potential_Generators"..i), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Player1All"), i))
+	
+		if EGroup_ContainsBlueprints(EGroup_FromName("eg_Potential_Generators"..i), t_Building, true) and
+			Entity_GetBuildingProgress(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Generators"..i), 1)) == 1.0
+		then
+
+			EGroup_Add(EGroup_CreateIfNotFound("eg_Generators"), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Generators"..i), 1))
+			local generators = EGroup_Count(EGroup_FromName("eg_Generators"))
+
+			if generators == num then
+				return true
+			end
+		end
+	end
+end
+
+--[[Blueprint counter]]
+function Tut_EGBlueprintCount(egroupname, blueprint, num, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+
+	local local_blueprint = blueprint
+	local buildingcount = 0
+	
+	local Rule_CountBuilt	= function( egroupid, itemindex, entityID )
+
+		if Entity_GetBlueprintName(entityID) == local_blueprint and
+			Entity_GetBuildingProgress(entityID) == 1.0
+		then
+			buildingcount = buildingcount+1
+		end
+		
+		if buildingcount >= num
+		then
+			return true
+		end
+	end
+
+	if EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	then
+		if EGroup_ForEach(EGroup_FromName(egroupname), Rule_CountBuilt) == true
+		then
+			return true
+		else
+			return false
+		end
+
+	else
+		return false
+	end
+end
+
+--[[Sgroup Blueprint counter]]
+-- ironically this function doesnt work anything like advertised.
+function Tut_SGBlueprintCount(sgroupname, blueprint, num, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = num }
+	}
+
+	local local_blueprint = blueprint
+	local squadcount = 0
+	local Rule_Count	= function( sgroupid, itemindex, squadID )
+
+		if Squad_GetBlueprintName(squadID) == local_blueprint then
+			squadcount = squadcount+1
+			return false
+		end
+		
+		if squadcount >= num then
+			return true
+		end
+	end
+
+	if SGroup_ContainsBlueprints(sgroupname, blueprinttable, true) == boolean then
+		return true
+	else
+		return false
+	end
+end
+
+--[[Push Camera to First Blueprint]]
+function Tut_EGBlueprintFocus(egroupname, blueprint)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+
+	local local_blueprint = blueprint
+	
+	local Rule_FocusOn	= function( egroupid, itemindex, entityID )
+
+		if Entity_GetBlueprintName(entityID) == local_blueprint and Entity_GetBuildingProgress(entityID) == 1.0 then
+			Camera_FocusOnTargetPos(Entity_GetPosition(entityID), -1)
+		else
+			return false
+		end
+		
+	end
+
+	if EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	then
+		EGroup_ForEach(EGroup_FromName(egroupname), Rule_FocusOn)
+	end
+end
+
+--[[Blueprint Check for Inactive  SGroup]]
+function Tut_SGBlueprintInactive(sgroupname, blueprint, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+	local local_blueprint = blueprint
+	
+	Rule_BlueprintInactive	= function( sgroupid, itemindex, squadID )
+		if Squad_GetBlueprintName(squadID) == local_blueprint and
+			Squad_GetActiveCommand(squadID) == SQUADSTATEID_Idle
+		then
+			return true
+		else
+			return false
+		end
+	end
+	
+	if SGroup_ContainsBlueprints(sgroupname, blueprinttable, true) == boolean
+	then
+		if SGroup_ForEach(SGroup_FromName(sgroupname), Rule_BlueprintInactive) == boolean
+		then
+			return true
+		end
+	end
+end
+
+--[[Blueprint Check for Inactive EGroup]]
+function Tut_EGBlueprintInactive(egroupname, blueprint, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+	local local_blueprint = blueprint
+	
+	Rule_EGBlueprintInactive	= function( egroupid, itemindex, entityID )
+
+		if Entity_GetBlueprintName(entityID) == local_blueprint and Entity_GetActiveCommand(entityID) == STATEID_Idle then
+			return true
+		else
+			return false
+		end
+		
+	end
+	
+	if EGroup_ContainsBlueprints(egroupname, blueprinttable, true) == boolean then
+		if EGroup_ForEach(EGroup_FromName(egroupname), Rule_EGBlueprintInactive) == boolean then
+			return true
+		end
+	end
+end
+
+
+--[[Blueprint Check for Upgrading  SGroup]]
+function Tut_SGBlueprintUpgrading(sgroupname, blueprint, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+	local local_blueprint = blueprint
+	
+	Rule_BlueprintUpgrading	= function( sgroupid, itemindex, squadID )
+
+		if Squad_GetBlueprintName(squadID) == local_blueprint and Squad_IsUpgrading(squadID) == true then
+			return true
+		else
+			return false
+		end
+		
+	end
+	
+	if SGroup_ContainsBlueprints(sgroupname, blueprinttable, true) == boolean then
+		if SGroup_ForEach(SGroup_FromName(sgroupname), Rule_BlueprintUpgrading) == boolean then
+			return true
+		end
+	end
+end
+
+
+--[[ Points Captured Check ]]
+function Tut_PointsCaptured(playerID, pointtype, num)
+	local egroupID = EGroup_CreateIfNotFound("_resource_ group")
+	EGroup_Clear(egroupID)	
+	
+	if pointtype == 1 then
+		Util_GetStrategicPoints(SPT_StrategicPoint, playerID, "_resource_ group")
+	elseif pointtype == 2 then
+		Util_GetStrategicPoints(SPT_StrategicObjective, playerID, "_resource_ group")
+	elseif pointtype == 3 then
+		Util_GetStrategicPoints(SPT_Relic, playerID, "_resource_ group")
+	end
+	
+	local ptsnum = EGroup_Count(egroupID)
+	
+	if ptsnum >= num then
+		return true
+	else
+		return false
+	end
+end
+
+--[[Research Done]]
+function Tut_ResearchIsDone(playerID, researchname, boolean)
+	if (Player_GetResearchState(playerID, researchname) == RS_Complete) == boolean then
+		return true
+	end
+end
+
+--[[Addon Done]]
+function Tut_AddonIsDone(addonname, boolean)
+	if not EGroup_IsEmpty("eg_Player1All") then
+		if EGroup_ContainsAddOn("eg_Player1All", addonname, false) == boolean then
+			return true
+		end
+	end
+end
+
+--[[ Selection Blueprint ]]
+function Tut_EGSelectionBlueprint(blueprint, boolean)
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_Player1selection"))
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+	if EGroup_ContainsBlueprints("eg_Player1selection", blueprinttable, false) == boolean then
+		return true
+	end
+end
+
+function Tut_SGSelectionBlueprint(blueprint, boolean)
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+	if SGroup_ContainsBlueprints("sg_Player1selection", blueprinttable, false) == boolean then
+		return true
+	end
+end
+
+--[[ Selection in Cover ]]
+function Tut_SGInCover(boolean)
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+	if SGroup_IsInCover("sg_Player1selection", false) == boolean then
+		return true
+	end
+end
+
+--[[ Stop in Cover ]]
+function Tut_SGInCoverStop()
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+	if SGroup_IsInCover("sg_Player1selection", false) then
+		Cmd_StopSquads("sg_Player1selection")
+	end
+end
+
+
+
+--[[ Selection Morale Broken ]]
+function Tut_SGMoraleBroken(boolean)
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+	
+	if SGroup_IsMoraleBroken("sg_Player1selection", false) == boolean then
+		return true
+	end
+end
+
+
+
+--[[ Points Captured Ping ]]
+function Tut_PingPointsCaptured(playerID, pointtype, looping)
+	local egroupID = EGroup_CreateIfNotFound("_pingpointgroup")
+	EGroup_Clear(egroupID)	
+	
+	if pointtype == 1 then
+		Util_GetStrategicPoints(SPT_StrategicPoint, playerID, "_pingpointgroup")
+	elseif pointtype == 2 then
+		Util_GetStrategicPoints(SPT_StrategicObjective, playerID, "_pingpointgroup")
+	elseif pointtype == 3 then
+		Util_GetStrategicPoints(SPT_Relic, playerID, "_pingpointgroup")
+	end
+
+	--[[EGROUP]]
+	local PingPoint = function( egroupid, itemindex, entityID )
+
+		local pos = Entity_GetPosition(entityID)
+		local pingID = Ping_Position(pos, looping)
+		table.insert(_ping_table, {x = pingID})
+		
+	end
+	
+	EGroup_ForEach(EGroup_FromName("_pingpointgroup"), PingPoint)
+	
+	--[[store the ping table infor for stopping the pings]] 
+	return _ping_table
+	
+end
+
+--[[ Point Range and Ping ]]
+function Tut_PingPointInRange(range)
+
+	World_GetStrategicPoints(EGroup_CreateIfNotFound("eg_StrategicPoints"))
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+    local RangeandOwner = function( egroupid, itemindex, entityID )
+		local pos = Entity_GetPosition(entityID)
+		if Entity_GetWorldOwner(entityID) and World_DistanceSGroupToPoint(SGroup_FromName("sg_Player1selection"), pos, true) <= range then
+			Ping_Position(pos, false)
+			return true
+		end
+    end
+	
+	if SGroup_IsEmpty("sg_Player1selection") ~= true and EGroup_IsEmpty("eg_StrategicPoints") ~= true then
+		SGroup_Count(SGroup_FromName("sg_Player1selection"))
+		EGroup_Count(EGroup_FromName("eg_StrategicPoints"))
+		return EGroup_ForEach(EGroup_FromName("eg_StrategicPoints"), RangeandOwner)
+	end
+end
+
+
+
+--[[ Objective Range and Ping ]]
+function Tut_PingObjectiveInRange(range)
+
+	Util_GetStrategicPoints( SPT_StrategicObjective, nil, "eg_StrategicObjectives") 
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+    local RangeandOwner = function( egroupid, itemindex, entityID )
+		local pos = Entity_GetPosition(entityID)
+		if Entity_GetWorldOwner(entityID) and World_DistanceSGroupToPoint(SGroup_FromName("sg_Player1selection"), pos, true) <= range then
+			Ping_Position(pos, false)
+			return true
+		end
+    end
+	
+	if  SGroup_IsEmpty("sg_Player1selection") ~= true and EGroup_IsEmpty("eg_StrategicObjectives") ~= true then
+		SGroup_Count(SGroup_FromName("sg_Player1selection"))
+		EGroup_Count(EGroup_FromName("eg_StrategicObjectives"))
+		return EGroup_ForEach(EGroup_FromName("eg_StrategicObjectives"), RangeandOwner)
+	end
+end
+
+
+
+--[[ Relic Range and Ping ]]
+function Tut_PingRelicInRange(range)
+
+	Util_GetStrategicPoints(SPT_Relic, nil, "eg_Relics") 
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+    local RangeandOwner = function( egroupid, itemindex, entityID )
+		local pos = Entity_GetPosition(entityID)
+		if Entity_GetWorldOwner(entityID) and World_DistanceSGroupToPoint(SGroup_FromName("sg_Player1selection"), pos, true) <= range then
+			Ping_Position(pos, false)
+			return true
+		end
+    end
+	
+	if SGroup_IsEmpty("sg_Player1selection") ~= true and EGroup_IsEmpty("eg_Relics") ~= true then
+		SGroup_Count(SGroup_FromName("sg_Player1selection"))
+		EGroup_Count(EGroup_FromName("eg_Relics"))
+		return EGroup_ForEach(EGroup_FromName("eg_Relics"), RangeandOwner)
+	end
+end
+
+
+
+--[[Ping Blueprint Type ]]
+function Tut_PingBlueprint(blueprint, looping)
+
+	_ping_table = {}
+	
+--[[SGROUP]]
+	local PingBlueprints1	= function( sgroupid, itemindex, squadID )
+
+		if Squad_GetBlueprintName(squadID) == blueprint then
+			local pos = Squad_GetPosition(squadID)
+			local pingID = Ping_Position(pos, looping)
+			table.insert(_ping_table, {x = pingID})
+			return false
+		else
+			return false
+		end
+		
+	end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), PingBlueprints1)
+
+--[[EGROUP]]
+	local PingBlueprints2	= function( egroupid, itemindex, entityID )
+
+		if Entity_GetBlueprintName(entityID) == blueprint then
+			local pos = Entity_GetPosition(entityID)
+			local pingID = Ping_Position(pos, looping)
+			table.insert(_ping_table, {x = pingID})
+			return false
+		else
+			return false
+		end
+		
+	end
+	
+	EGroup_ForEach(EGroup_FromName("eg_Player1All"), PingBlueprints2)
+	
+	--[[store the ping table infor for stopping the pings]] 
+	return _ping_table
+end
+
+function Tut_PingBlueprintStop(tablename)
+
+	if tablename ~= nil and table.getn(tablename) > 0 then
+		for i = 1, table.getn(tablename) do
+			Ping_Stop(tablename[i].x)
+		end
+	end
+end
+
+--[[Get the Active Command for the Selected Sgroup]]
+function Tut_SGSelectionActiveCommand(squadstate, boolean)	
+
+	Misc_GetSelectedSquads(SGroup_CreateIfNotFound("sg_Player1selection"))
+
+	GetSquadState = function( sgroupid, itemindex, squadID )
+		if Squad_GetActiveCommand(squadID) == squadstate then
+			return true
+		else
+			return false
+		end
+	end
+	
+	if SGroup_ForEach(SGroup_FromName("sg_Player1selection"), GetSquadState) == boolean then
+		return true
+	end
+	
+end
+
+
+
+--[[ Get the Squad Count of a Blueprint type ]]
+function Tut_SGSquadCountBlueprint(sgroupname, blueprint, num, boolean)
+	local blueprinttable = {
+		{ name = blueprint, count = 1 }
+	}
+
+	local local_blueprint = blueprint
+	
+	SquadCount = function( sgroupid, itemindex, squadID)
+		if squadID ~= nil then
+			local squadnum = Squad_Count(squadID)
+			local squadmin = Squad_GetMin(squadID)
+
+			if Squad_GetBlueprintName(squadID) == local_blueprint and Squad_Count(squadID) > Squad_GetMin(squadID) then
+				return true
+			else
+				return false
+			end
+		end
+	end
+
+	if SGroup_ContainsBlueprints(sgroupname, blueprinttable, true) == true then
+
+		if SGroup_ForEach(SGroup_FromName(sgroupname), Squad_Count) == boolean then
+			return true
+		end
+	end
+end
+
+
+
+--[[ Get the Squad Leader State ]]
+function Tut_SGSquadLeader(sgroupname, boolean)
+
+	
+	local mySquad_Count = function( sgroupid, itemindex, squadID )
+		
+		if Squad_HasLeader(squadID) == true then
+			print("there IS a leader")
+			return true
+		end
+
+		print("noleader")
+		return false
+	end		
+	
+	if SGroup_ForEach(SGroup_FromName(sgroupname), mySquad_Count) then
+		print("definitly a leader")
+		return true
+	else
+		return false
+	end
+
+end
+
+--[[ Enough Orks ]]
+function Tut_EnoughOrks(num)
+
+	if Tut_GetRaceName() == "ork_race" then
+	
+		if Player_GetResource(g_Player1, RT_Pop) >= num then
+			return true
+		else
+			return false
+		end
+	
+	else
+		return true
+	end
+
+end
+
+--[[ Player is Orks ]]
+function Tut_PlayerIsOrks(boolean)
+	if (Tut_GetRaceName() == "ork_race") == boolean then
+		return true
+	else
+		return false
+	end
+
+end
+
+--[[ Player is Eldar ]]
+function Tut_PlayerIsEldar(boolean)
+	if (Player_GetRace(g_Player1) == "eldar_race") == boolean then
+		return true
+	else
+		return false
+	end
+
+end
+
+--[[ Objective stuff ]]
+function Tut_ObjectiveCreate(tablename, titleID, boolean)
+
+	if _obj_table == nil then
+		_obj_table = {}
+	end
+	
+	local objexists = 0
+	
+	for i = 1, table.getn(_obj_table) do
+		if _obj_table[i] == titleID then
+			objexists = 1
+			break
+		else
+			objexists = 0
+		end
+	end
+	
+	if objexists == 0 then
+		Tut_Util_ObjectiveCreate(tablename, boolean)
+		table.insert(_obj_table, titleID)
+	end
+
+end
+
+function Tut_ObjectiveComplete(titleID)
+
+	if _obj_table == nil then
+		_obj_table = {}
+	end
+	
+	local objexists = 0
+	
+	for i = 1, table.getn(_obj_table) do
+		if _obj_table[i] == titleID then
+			objexists = 1
+			break
+		else
+			objexists = 0
+		end
+	end
+	
+	if objexists == 1 then
+		Tut_Util_ObjectiveComplete(titleID)
+	else
+		table.insert(_obj_table, titleID)
+	end
+
+end
+
+function Tut_SetActorForRace()
+
+	if Tut_GetRaceName() == "chaos_marine_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Chaos
+	elseif Tut_GetRaceName()  == "eldar_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Eldar
+	elseif Tut_GetRaceName()  == "ork_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Ork
+	elseif Tut_GetRaceName()  == "space_marine_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Marine
+	elseif Tut_GetRaceName()  == "guard_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Guard
+	elseif Tut_GetRaceName()  == "tau_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Tau
+	elseif Tut_GetRaceName()  == "necron_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Necron
+	elseif Tut_GetRaceName()  == "dark_eldar_race" then
+		ACTOR_SetForRace = ACT.Tutorial_DarkEldar
+	elseif Tut_GetRaceName()  == "sisters_race" then
+		ACTOR_SetForRace = ACT.Tutorial_Sisters
+	else
+		print("Error: no race found, race is "..Tut_GetRaceName() )
+	end
+	
+end
+
+function Tut_GetRaceName()
+	return g_PlayerRaceName
+end
+
+-- functions for enabling/disabling objectives whilst enabling the reminders properly
+function Tut_Util_ObjectiveCreate(obj , objType, objEvent)
+	Util_ObjectiveCreate(obj, objType)
+	g_ObjectiveIssued = true
+	g_ObjectiveEvent = objEvent
+end
+
+function Tut_Util_ObjectiveComplete(obj)
+	Util_ObjectiveComplete(obj)
+	g_ObjectiveIssued = false
+	g_ObjectiveEvent = nil
+end
+
+--SELECT ALL GUARDSMEN SQUADS
+
+function  GetGuardsmen()
+    local sgpotentialsID = SGroup_CreateIfNotFound("_sg_potentials")
+    local sgguardID = SGroup_CreateIfNotFound("_sg_guard")
+	SGroup_Clear("_sg_guard")
+
+    SGroup_AddGroup(sgpotentialsID, Player_GetSquads(g_Player1))
+
+    local GetGuard = function( sgroupID, itemindex, squadID )
+		if Squad_GetBlueprintName(squadID) == "guard_squad_guardsmen" then
+			SGroup_Add(sgguardID, squadID)
+		end
+
+	end
+
+    SGroup_ForEach( sgpotentialsID, GetGuard )
+end
+
+-------------------------------------------------
+--[[ GAME OVER - Player Loses ]]
+-------------------------------------------------
+
+function Rule_EndGameLose()
+	g_building_exceptions = 
+	{
+		{name ="chaos_hq", count = 1},
+		{name = "space_marine_hq", count = 1},
+		{name = "ork_hq", count = 1},
+		{name = "eldar_hq", count = 1},
+		{name = "guard_hq", count = 1},
+		{name = "tau_hq", count = 1},
+		{name = "monolith", count = 1},
+		{name = "dark_eldar_hq", count = 1},
+		{name = "sisters_hq", count = 1},
+	}
+	
+	local EntityID = Player_GetEntities(g_Player1)
+	
+	--[[ Lose because of Annihilation ]]	
+	if EGroup_ContainsBlueprints(EntityID, g_building_exceptions, false) == false then
+		Rule_RemoveAll()
+		Fade_Start(4, false)
+		Player_Kill(g_Player1)
+		Rule_Remove( Rule_EndGameLose )
+	end
+end
+
+function Rule_GameOver()
+	World_SetGameOver() 
+end

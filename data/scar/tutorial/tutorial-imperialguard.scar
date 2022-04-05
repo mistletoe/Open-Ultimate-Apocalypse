@@ -1,0 +1,4406 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Imperial Guard Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_Guard_Start()
+	Rule_AddOneShot(Rule_Guard_Selection, 0)
+
+    Rule_AddInterval(Rule_Guard_SquadCap, 10)
+	Rule_AddInterval(Rule_Guard_SquadLimit, 10)
+	Rule_AddInterval(Rule_Guard_LowResource, 10)
+	Rule_AddInterval(Rule_Guard_LowPower, 10)
+
+end
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Guardsmen
+-- 3	Capture Point
+-- 4	Build Enginseer
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Infantry Command
+-- 8	Reinforce Guardsmen
+-- 9	Health (skipped if tutorial has been played before)
+-- 10	Morale (skipped if tutorial has been played before)
+
+-- 10a	Garrison Units
+-- 10b	Underground Tunnels
+
+-- 11	Build Commissar
+-- 12	Attach Commissar
+-- 13	Build Command Squad
+-- 13a Reinforce Command Squad
+
+-- 14	Build Tactica
+-- 15	Build Sergeant
+-- 16	Upgrade to Grenade Launcher
+-- 17	Build More Guardsmen
+-- 18   Build another Commissar
+-- 19   Attach second Commissar 
+
+-- 20	Take Cover (skipped if tutorial has been played before)
+-- 21	Capture Points
+-- 22	Capture Critical Location
+-- 23	Capture Relic
+-- 24	Build Battle Command addon
+
+
+-- 25	Build Mechanized Command
+-- 26  Build Sentinel Depot
+-- 27  Build Sentinel
+-- 28  Build Basilisk Depot
+-- 29  Build Basilisk
+-- 30  Build Regiment Command addon
+-- 31   Build Ogryn Quarters
+-- 32	Build Ogryn Squad
+-- 33  Build Leman Russ addon
+-- 34  Build Leman Russ
+-- 35  Build Mars Pattern Command
+-- 36  Build Baneblade
+	
+-- 37	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 1 - Selection
+
+function Rule_Guard_Selection()
+
+	-- Define Objective
+	
+	obj_Selection = {title_id = 1100070, short_desc_id = 1100071, help_tip_id = 1100070 } -- Select the HQ
+
+	Tut_Player1GetAll()
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Check to see if the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true) then
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_Guard_Selection)
+		Util_StartIntel(EVENTS.IE_Guard_Selection)
+	
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_SelectionCheck, 0)
+
+	-- If they do have it selected
+	else
+	
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Guard_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Guard_SelectionCheck()
+
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+	
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false) then
+	
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_SelectionCheck)
+		Rule_AddInterval(Rule_Guard_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Guard_SelectionDone()
+
+	if (Event_IsAnyRunning() == false) then
+	
+		Rule_Remove(Rule_Guard_SelectionDone)
+		Rule_AddOneShot(Rule_Guard_BuildGuardsmen, 0)
+		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 2 - Build Guardsmen 
+
+function Rule_Guard_BuildGuardsmen()
+
+	-- Define Objective
+	obj_BuildGuardsmen = { title_id = 1100080, short_desc_id = 1100081, help_tip_id = 1100080 }	-- Build a Guardsmen Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Guardsmen squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGuardsmen , true, EVENTS.IE_Guard_BuildGuardsmen)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGuardsmen)
+		
+		-- Ping the HQ
+		ping_BuildGuardsmen = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildGuardsmenDoing, 0)
+		
+	-- if they already have a guardsmen
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGuardsmen , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGuardsmen.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGuardsmen_Complete)
+		
+		-- Ping guardsmen once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildGuardsmenDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildGuardsmenDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildGuardsmen_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildGuardsmenDoing)
+		Rule_AddInterval(Rule_Guard_BuildGuardsmenCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildGuardsmenCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a guardsmen squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGuardsmen.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGuardsmen_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildGuardsmen)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildGuardsmenCheck)
+		Rule_AddInterval(Rule_Guard_BuildGuardsmenDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildGuardsmenDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildGuardsmenDone)
+		Rule_AddOneShot(Rule_Guard_CapturePoint, 0) 
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 3 - Capture Point
+
+function Rule_Guard_CapturePoint()
+	
+	-- Define Objective
+	obj_CapturePoint = { title_id = 1100090, short_desc_id = 1100091, help_tip_id = 1100090 }	-- Capture a Strategic Point
+
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 200
+	
+	
+	-- need to do this check in reverse because function checks greater than or equal to (which if the player has 1, is greater than 0)
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Guard_CapturePoint)
+		Util_StartIntel(EVENTS.IE_Guard_CapturePoint)
+		
+		-- Ping points and infantry
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Guard_CapturePointDoing, 0)	
+		
+	end
+	
+end
+
+function Rule_Guard_CapturePointDoing()
+
+	Tut_Player1GetAll()
+	
+	if (Cmd_IsCapturing("sg_Player1All", false) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_CapturePoint_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_CapturePointDoing)
+		Rule_AddInterval(Rule_Guard_CapturePointCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_CapturePointCheck()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_CapturePointCheck)
+		Rule_AddInterval(Rule_Guard_CapturePointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_CapturePointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_CapturePointDone)
+		Rule_AddOneShot(Rule_Guard_BuildEnginseer, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 4 - Build Enginseer
+
+function Rule_Guard_BuildEnginseer()
+	
+	-- Define Objective
+	obj_BuildEnginseer = { title_id = 1100100, short_desc_id = 1100101, help_tip_id = 1100100 }	-- Build an Enginseer
+
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have an Enginseer...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildEnginseer , true, EVENTS.IE_Guard_BuildEnginseer)
+		Util_StartIntel(EVENTS.IE_Guard_BuildEnginseer)
+		
+		-- Ping the HQ
+		ping_BuildEnginseer = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Guard_BuildEnginseerDoing, 0)
+		
+	-- else if they DO have an Enginseer already...
+	else
+		
+		-- Create/Complete Objective and give a quick Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildEnginseer, true)
+		Tut_Util_ObjectiveComplete(obj_BuildEnginseer.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildEnginseer_Doing)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildEnginseerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildEnginseerDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildEnginseer_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildEnginseerDoing)
+		Rule_AddInterval(Rule_Guard_BuildEnginseerCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildEnginseerCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildEnginseer.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildEnginseer_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildEnginseer)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildEnginseerCheck)
+		Rule_AddInterval(Rule_Guard_BuildEnginseerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildEnginseerDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildEnginseerDone)
+		Rule_AddInterval(Rule_Guard_BuildPost, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+--  Imperial Guard Lesson 5 - Build Listening Post
+
+function Rule_Guard_BuildPost()
+	
+	-- Define Objective
+	obj_BuildPost = { title_id = 1100110, short_desc_id = 1100111, help_tip_id = 1100110 }	-- Build a Listening Post
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) 
+		and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) 
+		and Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Guard_BuildPost)
+		Util_StartIntel(EVENTS.IE_Guard_BuildPost)
+		
+		-- Ping the captured flag and the Servitor
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildPost)
+		Rule_AddInterval(Rule_Guard_BuildPostDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildPost
+		Rule_Remove(Rule_Guard_BuildPost)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- esle if they do somehow have a post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildPost_Doing)
+		
+		-- Ping Looping = true, Non = false
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildPost)
+		Rule_AddInterval(Rule_Guard_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildPostDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildPost_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildPostDoing)
+		Rule_AddInterval(Rule_Guard_BuildPostCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildPostCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildPostCheck)
+		Rule_AddInterval(Rule_Guard_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildPostDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildPostDone)
+		Rule_AddInterval(Rule_Guard_BuildGenerator, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 6 - Build Generator
+
+function Rule_Guard_BuildGenerator()
+	
+	-- Define Objective
+	obj_BuildGenerator = { title_id = 1100120, short_desc_id = 1100121, help_tip_id = 1100120 }	-- Build a Plasma Generator
+	
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Guard_BuildGenerator)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGenerator)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Servitor
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_BuildGenerator)
+		Rule_AddInterval(Rule_Guard_BuildGeneratorDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildGenerator
+		Rule_Remove(Rule_Guard_BuildGenerator)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGenerator_Complete)
+		
+		-- Ping the Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildGenerator)
+		Rule_AddInterval(Rule_Guard_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildGeneratorDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildGenerator_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Guard_BuildGeneratorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildGeneratorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildGenerator_Complete)
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+			Util_StartIntel(EVENTS.IE_Guard_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Guard_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildGeneratorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Guard_BuildBarracks, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 7 - Build Barracks
+
+function Rule_Guard_BuildBarracks()
+	
+	-- Define Objective
+	obj_BuildBarracks = { title_id = 1100130, short_desc_id = 1100131, help_tip_id = 1100130 }	-- Build an Infantry Command
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Guard_BuildBarracks)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBarracks)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_BuildBarracks)
+		Rule_AddInterval(Rule_Guard_BuildBarracksDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildBarracks
+		Rule_Remove(Rule_Guard_BuildBarracks)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBarracks_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBarracks)
+		Rule_AddInterval(Rule_Guard_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBarracksDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildBarracks_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Guard_BuildBarracksCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildBarracksCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Guard_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBarracksDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Guard_ReinforceGuardsmen, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 8 - Reinforce Guardsmen
+
+function Rule_Guard_ReinforceGuardsmen()
+
+	-- Define Objective
+	obj_ReinforceGuardsmen = { title_id = 1100140, short_desc_id = 1100141, help_tip_id = 1100140 }	-- Reinforce your Guardsmen Squad
+	
+	Tut_Player1GetAll()
+
+	-- Intel Event
+	Tut_Util_ObjectiveCreate(obj_ReinforceGuardsmen , true, EVENTS.IE_Guard_ReinforceGuardsmen)
+	Util_StartIntel(EVENTS.IE_Guard_ReinforceGuardsmen)
+	
+	-- Ping the Guardsmen
+	Tut_PingBlueprint(blueprint.basic_infantry, false)
+	Flash_ReinforcementButton(RT_Trooper, blueprint.basic_infantry, "", true, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Guard_ReinforceGuardsmenDoing, 0)
+	
+end
+
+function Rule_Guard_ReinforceGuardsmenDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Guardsmen
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.basic_infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsReinforcing("sg_Player1All", false)) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceGuardsmen_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_ReinforceGuardsmenDoing)
+		Rule_AddInterval(Rule_Guard_ReinforceGuardsmenCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_ReinforceGuardsmenCheck()
+
+	
+	Tut_Player1GetAll()
+
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.basic_infantry) == true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_ReinforceGuardsmen.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceGuardsmen_Complete)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_ReinforceGuardsmenCheck)
+		Rule_AddInterval(Rule_Guard_ReinforceGuardsmenDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_ReinforceGuardsmenDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_ReinforceGuardsmenDone)
+		Rule_AddOneShot(Rule_Guard_Health, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 9 - Health
+
+function Rule_Guard_Health()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Guard_Health)
+		Rule_AddInterval(Rule_Guard_HealthDone, 0)
+	else
+		Rule_AddOneShot(Rule_Guard_Morale, 0)
+	end
+	
+end
+
+function Rule_Guard_HealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_HealthDone)
+		Rule_AddOneShot(Rule_Guard_Morale, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 10 - Morale
+
+function Rule_Guard_Morale()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Guard_Morale)
+		Rule_AddInterval(Rule_Guard_MoraleDone, 0)
+	else
+		Rule_AddOneShot(Rule_Guard_Garrison, 0)
+	end
+	
+end
+
+function Rule_Guard_MoraleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_MoraleDone)
+		Rule_AddInterval(Rule_Guard_Garrison, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 10a - Squad Hold
+
+function Rule_Guard_Garrison()
+
+	-- Define Objective
+	obj_Garrison = { title_id = 1100500, short_desc_id = 1100501, help_tip_id = 1100500 }	-- Garrison a Squad
+
+	Tut_Player1GetAll()	
+
+	--Grab the player's HQ
+	function Get_HQ()
+		local StripHQ = function(egroupid, itemindex, entityID )
+	
+			if Entity_GetBlueprintName(entityID) == "guard_hq" then
+				EGroup_Add(EGroup_CreateIfNotFound("eg_HQ"), entityID)
+			end
+	
+		end
+	
+	EGroup_ForEach(Player_GetEntities(g_Player1), StripHQ)
+	
+	end
+	
+	Get_HQ()
+
+	-- If they don't already have a squad in the HQ...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.hq, 1, true) and SGroup_IsInHold("sg_Player1All", "eg_HQ",  false) == false then	
+	
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Garrison , true, EVENTS.IE_Guard_Garrison)	
+		Util_StartIntel(EVENTS.IE_Guard_Garrison)
+
+		-- Ping the HQ
+		ping_Garrison = Tut_PingBlueprint(blueprint.hq, true)
+--		ping_Squad = Tut_PingBlueprint(blueprint.basic_infantry, true)
+
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_Garrison)
+		Rule_AddInterval(Rule_Guard_GarrisonCheck, 0)
+
+	-- else if they already have a squad garrisoned in the HQ...
+	elseif SGroup_IsInHold("sg_Player1All", "eg_HQ",  false) then
+	
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Garrison , true)
+		Tut_Util_ObjectiveComplete(obj_Garrison.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_GarrisonDone)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+--		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_Garrison)
+		Rule_AddInterval(Rule_Guard_GarrisonDone, 0)
+		
+	end
+		
+end
+
+function Rule_Guard_GarrisonCheck()
+	
+	Tut_Player1GetAll()
+
+	if SGroup_IsInHold("sg_Player1All", "eg_HQ",  false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Garrison.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_GarrisonDone)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_Garrison)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_GarrisonCheck)
+		Rule_AddInterval(Rule_Guard_GarrisonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_GarrisonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_GarrisonDone)
+		Rule_AddInterval(Rule_Guard_Transfer, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 10b - Underground Tunnels
+
+function Rule_Guard_Transfer()
+
+	-- Define Objective
+	obj_Transfer = { title_id = 1100510, short_desc_id = 1100511, help_tip_id = 1100510 }	-- Garrison a Squad
+
+	Tut_Player1GetAll()	
+
+	--Grab the player's Infantry Command
+	function Get_Barracks()
+		local StripBarracks = function(egroupid, itemindex, entityID )
+	
+			if Entity_GetBlueprintName(entityID) == "guard_infantry" then
+				EGroup_Add(EGroup_CreateIfNotFound("eg_infantry"), entityID)
+			end
+	
+		end
+	
+	EGroup_ForEach(Player_GetEntities(g_Player1), StripBarracks)
+	
+	end
+	
+	Get_Barracks()
+
+	-- Check to make sure they don't already have a squad in the Infantry Command...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and SGroup_IsInHold("sg_Player1All", "eg_infantry",  false) == false then	
+	
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Transfer , true, EVENTS.IE_Guard_Transfer)	
+		Util_StartIntel(EVENTS.IE_Guard_Transfer)
+
+		-- Ping the Infantry Command
+		ping_Transfer = Tut_PingBlueprint(blueprint.barracks, true)
+
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_Transfer)
+		Rule_AddInterval(Rule_Guard_TransferCheck, 0)
+
+	-- else if they already have a squad garrisoned in the Infantry Command...
+	elseif SGroup_IsInHold("sg_Player1All", "eg_infantry",  false) then
+	
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Transfer , true)
+		Tut_Util_ObjectiveComplete(obj_Transfer.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_TransferDone)
+		
+		-- Ping the Infantry Command
+		Tut_PingBlueprint(blueprint.barracks, false)
+--		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_Transfer)
+		Rule_AddInterval(Rule_Guard_TransferDone, 0)
+		
+	end
+		
+end
+
+function Rule_Guard_TransferCheck()
+	
+	Tut_Player1GetAll()
+
+	if SGroup_IsInHold("sg_Player1All", "eg_infantry",  false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Transfer.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_TransferDone)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_Transfer)
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_TransferCheck)
+		Rule_AddInterval(Rule_Guard_TransferDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_TransferDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_TransferDone)
+		Rule_AddInterval(Rule_Guard_BuildCommissar, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 11 - Build Commissar
+
+function Rule_Guard_BuildCommissar()
+	
+	-- Define Objective
+	obj_BuildCommissar = { title_id = 1100150, short_desc_id = 1100151, help_tip_id = 1100150 }	-- Build a Commissar
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Guardsmen...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommissar , true, EVENTS.IE_Guard_BuildCommissar)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommissar)
+		
+		-- Ping the Barracks
+		ping_BuildCommissar = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commissar, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildCommissar)
+		Rule_AddInterval(Rule_Guard_BuildCommissarDoing, 0)
+		
+	-- else if they have got the Commissar already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommissar , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommissar.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommissar_Doing)
+		
+		-- Ping the Commissar
+		Tut_PingBlueprint(blueprint.commissar, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildCommissar)
+		Rule_AddInterval(Rule_Guard_BuildCommissarDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildCommissarDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commissar, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommissar_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commissar, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildCommissarDoing)
+		Rule_AddInterval(Rule_Guard_BuildCommissarCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildCommissarCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommissar.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommissar_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommissar)
+		Tut_PingBlueprint(blueprint.commissar, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildCommissarCheck)
+		Rule_AddInterval(Rule_Guard_BuildCommissarDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildCommissarDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildCommissarDone)
+		Rule_AddInterval(Rule_Guard_AttachCommissar, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 12 - Attach Commissar
+
+function Rule_Guard_AttachCommissar()
+
+	-- Define Objective
+	obj_AttachCommissar = { title_id = 1100160, short_desc_id = 1100161, help_tip_id = 1100160 }	-- Attach your Commissar to a Squad
+	
+	Tut_Player1GetAll()
+	
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 1, true) then
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_AttachCommissar , true, EVENTS.IE_Guard_AttachCommissar)
+		Util_StartIntel(EVENTS.IE_Guard_AttachCommissar)
+		
+		-- Ping the Commissar
+		Tut_PingBlueprint(blueprint.commissar, false)
+		Flash_OtherButton("attach_modal", 0, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_AttachCommissar)
+		Rule_AddInterval(Rule_Guard_AttachCommissarCheck, 0)
+	end
+	
+end
+
+function Rule_Guard_AttachCommissarCheck()
+
+	Tut_Player1GetAll()
+	local attached = false
+	
+	local FilterList = function(gID, idx, sID)
+		if (Squad_IsAttached(sID) == true) then	
+			if (Squad_GetAttachedBlueprintName(sID) == blueprint.commissar) then
+				attached = true		-- set a flag
+				g_tut_squad = sID	-- save the ID to check later
+			else
+				SGroup_Remove(gID, sID)
+			end
+		else
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (attached == true) then
+		
+		Tut_Util_ObjectiveComplete(obj_AttachCommissar.title_id)
+		
+		-- Intel Event
+		Util_StartIntel(EVENTS.IE_Guard_AttachCommissar_Complete)
+
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Guard_AttachCommissarCheck)
+		Rule_AddInterval(Rule_Guard_AttachCommissarCheck2, 0)
+		
+	end	
+
+end
+
+function Rule_Guard_AttachCommissarCheck2()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		-- Intel Event
+		Util_StartIntel(EVENTS.IE_Guard_AttachCommissar_Complete2)
+		
+		
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Guard_AttachCommissarCheck2)
+		Rule_AddInterval(Rule_Guard_AttachCommissarDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Guard_AttachCommissarDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_AttachCommissarDone)
+		Rule_AddInterval(Rule_Guard_BuildCommandSquad, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 13 - Build Command Squad
+
+function Rule_Guard_BuildCommandSquad()
+	
+	-- Define Objective
+	obj_BuildCommandSquad = { title_id = 1100200, short_desc_id = 1100201, help_tip_id = 1100200 }	-- Build a Command Squad
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have any Guardsmen...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommandSquad , true, EVENTS.IE_Guard_BuildCommandSquad)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommandSquad)
+		
+		-- Ping the Barracks
+		ping_BuildCommandSquad = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildCommandSquad)
+		Rule_AddInterval(Rule_Guard_BuildCommandSquadDoing, 0)
+		
+	-- else if they have the Command Squad already...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommandSquad , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommandSquad_Doing)
+		
+		-- Ping the Command Squad
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildCommandSquad)
+		Rule_AddInterval(Rule_Guard_BuildCommandSquadDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildCommandSquadDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommandSquad_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildCommandSquadDoing)
+		Rule_AddInterval(Rule_Guard_BuildCommandSquadCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildCommandSquadCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildCommandSquad_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommandSquad)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildCommandSquadCheck)
+		Rule_AddInterval(Rule_Guard_BuildCommandSquadDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildCommandSquadDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildCommandSquadDone)
+		Rule_AddInterval(Rule_Guard_ReinforceCommandSquad, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 13a - Reinforce Command Squad
+
+function Rule_Guard_ReinforceCommandSquad()
+	
+	-- Define Objective
+	obj_ReinforceCommandSquad = { title_id = 1100520, short_desc_id = 1100521, help_tip_id = 1100520 }	-- Reinforce the Command Squad
+	
+	--Grab the Command Squad
+	Get_CommandSquad()
+	
+	g_ReminderTime = 420
+
+	-- If they haven't already reinforced the Command Squad...
+	if SGroup_CountLeaders("sg_CommandSquad") < 1 then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad , true, EVENTS.IE_Guard_ReinforceCommandSquad)
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceCommandSquad)
+		
+		-- Ping the Command Squad
+		ping_CommandSquad = Tut_PingBlueprint(blueprint.commander, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.leader1, true, true)
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.leader2, true, true)
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.leader3, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_Guard_ReinforceCommandSquadDoing, 0)
+		
+	-- else if they have reinforced their Command Squad already...
+	elseif SGroup_CountLeaders("sg_CommandSquad") >= 1 then
+	
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad, true)
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceCommandSquadDoing)
+		
+		-- Ping the Command Squad
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_Guard_ReinforceCommandSquadDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_ReinforceCommandSquadDoing()
+
+	Get_CommandSquad()
+
+	
+	if (Cmd_IsReinforcingLeader("sg_CommandSquad", false)) then
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceCommandSquadDoing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_ReinforceCommandSquadDoing)
+		Rule_AddInterval(Rule_Guard_ReinforceCommandSquadCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_ReinforceCommandSquadCheck()
+	
+	Get_CommandSquad()
+
+	if 	SGroup_CountLeaders("sg_CommandSquad") >= 1 then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_ReinforceCommandSquadDone)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CommandSquad)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_ReinforceCommandSquadCheck)
+		Rule_AddInterval(Rule_Guard_ReinforceCommandSquadDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_ReinforceCommandSquadDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_ReinforceCommandSquadDone)
+		Rule_AddInterval(Rule_Guard_BuildTactica, 0)
+		
+	end
+	
+end
+	
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 14 - Build Tactica Control
+
+function Rule_Guard_BuildTactica()
+	
+	-- Define Objective
+	obj_BuildTactica = { title_id = 1100210, short_desc_id = 1100211, help_tip_id = 1100210 }	-- Build a Tactica Control
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Tactica Control...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildTactica , true, EVENTS.IE_Guard_BuildTactica)
+		Util_StartIntel(EVENTS.IE_Guard_BuildTactica)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_BuildTactica)
+		Rule_AddInterval(Rule_Guard_BuildTacticaDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildTactica
+		Rule_Remove(Rule_Guard_BuildTactica)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- Else if they do have a Tactica already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildTactica, true)
+		Tut_Util_ObjectiveComplete(obj_BuildTactica.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildTactica_Doing)
+		
+		-- Ping the Tactica
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildTactica)
+		Rule_AddInterval(Rule_Guard_BuildTacticaDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildTacticaDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true) then
+
+		Util_StartIntel(EVENTS.IE_Guard_BuildTactica_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildTacticaDoing)
+		Rule_AddInterval(Rule_Guard_BuildTacticaCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildTacticaCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildTactica.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildTactica_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildTacticaCheck)
+		Rule_AddInterval(Rule_Guard_BuildTacticaDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildTacticaDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildTacticaDone)
+		Rule_AddInterval(Rule_Guard_BuildLeader, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 15 - Build Leader
+
+function Rule_Guard_BuildLeader()
+	
+	-- Define Objective
+	obj_BuildLeader = { title_id = 1100230, short_desc_id = 1100231, help_tip_id = 1100230 }	-- Add a Sergeant to your Guardsmen Squad
+	
+	--Grab all of the player's Guardsmen squads
+	GetGuardsmen()
+	
+	-- If they haven't got a Sergeant already
+	if (SGroup_Exists("_sg_guard") and SGroup_IsEmpty("_sg_guard") == false and Tut_SGSquadLeader("_sg_guard", false) == false) 
+	or SGroup_Exists("_sg_guard") 
+	or SGroup_IsEmpty("_sg_guard") then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true, EVENTS.IE_Guard_BuildLeader)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeader)
+		
+		-- Ping the Guardsmen
+		t_BuildLeader = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.basic_infantry, "", true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildLeader)
+		Rule_AddInterval(GetGuardsmen, 1)
+		Rule_AddInterval(Rule_Guard_BuildLeaderDoing, 1)
+		
+	-- else if they called in a Sergeant
+	elseif Tut_SGSquadLeader("_sg_guard", true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeader_Complete)
+		
+		-- Ping the Guardsmen
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildLeader)
+		Rule_AddInterval(Rule_Guard_BuildLeaderDone, 1)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLeaderDoing()
+
+	if Command_HasBeenIssuedSquad(SCMD_ReinforceLeader, 2) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeader_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildLeaderDoing)
+		Rule_Check_AddInterval(Rule_Guard_BuildLeaderCheck, 1)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLeaderCheck()
+	
+	if Tut_SGSquadLeader("_sg_guard", true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeader_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildLeader)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the Next Rule
+		Rule_Check_Remove(GetGuardsmen)
+		Rule_Remove(Rule_Guard_BuildLeaderCheck)
+		Rule_AddInterval(Rule_Guard_BuildLeaderDone, 1)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLeaderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildLeaderDone)
+		Rule_AddInterval(Rule_Guard_UpgradeWeaponry, 1)
+		
+	end
+
+	Rule_Remove(GetGuardsmen)
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 16 - Upgrade Weaponry
+
+function Rule_Guard_UpgradeWeaponry()
+	
+	-- Define Objective
+	obj_UpgradeWeaponry = { title_id = 1100220, short_desc_id = 1100221, help_tip_id = 1100220 }	-- Upgrade your Guardsmen Squad's weaponry
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 420
+
+	-- If they don't have any upgraded weapons...
+	if not SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry , true, EVENTS.IE_Guard_UpgradeWeaponry)
+		Util_StartIntel(EVENTS.IE_Guard_UpgradeWeaponry)
+		
+		-- Ping the Guardsmen
+		ping_Guardsmen = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.basic_infantry, blueprint.weapon1, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Guard_UpgradeWeaponryDoing, 0)
+		
+	-- else if they have upgraded their weapons already...
+	elseif SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry, true)
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_UpgradeWeaponry_Doing)
+		
+		-- Ping the Guardsmen
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Guard_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_UpgradeWeaponryDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Guardsmen
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.basic_infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsUpgrading("sg_Player1All", false)) then
+		Util_StartIntel(EVENTS.IE_Guard_UpgradeWeaponry_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_UpgradeWeaponryDoing)
+		Rule_AddInterval(Rule_Guard_UpgradeWeaponryCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_UpgradeWeaponryCheck()
+	
+	Tut_Player1GetAll()
+
+	if SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_UpgradeWeaponry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_Guardsmen)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_UpgradeWeaponryCheck)
+		Rule_AddInterval(Rule_Guard_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_UpgradeWeaponryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_UpgradeWeaponryDone)
+		Rule_AddOneShot(Rule_Guard_BuildMoreGuardsmen, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 17 - Build More Guardsmen / Squad Count
+
+function Rule_Guard_BuildMoreGuardsmen()
+	
+	-- Define Objective
+	obj_BuildMoreGuardsmen = { title_id = 1100240, short_desc_id = 1100241, help_tip_id = 1100240 }	-- Build and Upgrade another Guardsmen Squad
+	
+	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_SavedSquads"), Player_GetSquads(g_Player1))
+
+	-- No if statement this time
+
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_BuildMoreGuardsmen , true, EVENTS.IE_Guard_BuildMoreGuardsmen)
+	Util_StartIntel(EVENTS.IE_Guard_BuildMoreGuardsmen)
+	Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+
+	-- Ping Looping = true, Non = false
+	ping_BuildMoreGuardsmen = Tut_PingBlueprint(blueprint.barracks, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Guard_BuildMoreGuardsmenCheck, 0)
+	
+end
+
+g_Guard_highlight_buttons = false
+
+function Rule_Guard_BuildMoreGuardsmenCheck()
+	
+	Tut_Player1GetAll()
+
+	-- Filter out any squads that were there are the start on the lesson
+	local StripOutSavedSquads = function (gID, idx, sID)
+		if (SGroup_ContainsSquad(SGroup_FromName("sg_SavedSquads"),sID)) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- Test a squad to see if it fits all criteria
+	local TestSquad = function (gID, idx, sID)
+		-- is it a Guardsmen squad?
+		if (Squad_GetBlueprintName(sID) == blueprint.basic_infantry) then
+			
+			local cur_squadsize = Squad_Count(sID)
+			local max_squadsize = Squad_GetMax(sID) + 1
+			local cur_weapons = (Squad_WeaponCount(sID, blueprint.weapon1) + Squad_WeaponCount(sID, blueprint.weapon2))
+			local max_weapons = 3
+			local has_leader = Squad_HasLeader(sID)
+			
+			-- is it fully upgraded?
+			if (cur_squadsize >= max_squadsize) and (cur_weapons >= max_weapons) and (has_leader) then
+				
+				-- Complete Objective and Intel Event
+				Tut_Util_ObjectiveComplete(obj_BuildMoreGuardsmen.title_id)
+				Util_StartIntel(EVENTS.IE_Guard_BuildMoreGuardsmen_Complete)
+				
+				Flash_ReinforcementButton(RT_Trooper, blueprint.basic_infantry, "", false, false)
+				Flash_ReinforcementButton(RT_Leader, blueprint.basic_infantry, "", false, false)
+				Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.basic_infantry, blueprint.weapon1, false, false)
+				Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.basic_infantry, blueprint.weapon2, false, false)
+				
+				-- Triggers the checker rules
+				Rule_Remove(Rule_Guard_BuildMoreGuardsmenCheck)
+				Rule_AddInterval(Rule_Guard_BuildMoreGuardsmenDone, 0)
+			   
+				return true
+				
+			end
+		end
+	end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), StripOutSavedSquads)
+	if not SGroup_IsEmpty("sg_Player1All") then
+		SGroup_ForEach(SGroup_FromName("sg_Player1All"), TestSquad)
+	end
+	
+	if SGroup_ContainsBlueprints("sg_Player1All", Util_MakeBlueprintTable(blueprint.basic_infantry), false) and (g_Guard_highlight_buttons == false) then
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, false, false)
+		Tut_PingBlueprintStop(ping_BuildMoreGuardsmen)
+		Flash_ReinforcementButton(RT_Trooper, blueprint.basic_infantry, "", true, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.basic_infantry, "", true, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.basic_infantry, blueprint.weapon1, true, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.basic_infantry, blueprint.weapon2, true, false)
+		g_Guard_highlight_buttons = true
+	end
+	
+end
+
+function Rule_Guard_BuildMoreGuardsmenDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildMoreGuardsmenDone)
+		
+		Tut_Player1GetAll()
+
+	   if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 3, true)  then
+			
+			Rule_AddOneShot(Rule_Guard_TakeCover, 0)	
+		
+		else
+			
+			Rule_AddOneShot(Rule_Guard_BuildSecondCommissar, 0)
+		
+		end
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 18 - Build a Second Commissar
+
+function Rule_Guard_BuildSecondCommissar()
+	
+	-- Define Objective
+	obj_BuildSecondCommissar = { title_id = 1100250, short_desc_id = 1100251, help_tip_id = 1100250 }	-- Build a second Commissar
+
+	-- Create Objective and Intel Event
+	Tut_Util_ObjectiveCreate(obj_BuildSecondCommissar , true, EVENTS.IE_Guard_BuildSecondCommissar)
+	Util_StartIntel(EVENTS.IE_Guard_BuildSecondCommissar)
+	Flash_ProductionButton(PQ_Squad, blueprint.commissar, true, true)
+
+	-- Ping Looping = true, Non = false
+	ping_BuildSecondCommissar = Tut_PingBlueprint(blueprint.hq, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Guard_BuildSecondCommissarCheck, 0)
+	
+end
+
+g_Guard_highlight_buttons = false
+
+function Rule_Guard_BuildSecondCommissarCheck()
+	
+	Tut_Player1GetAll()
+
+	-- Filter out any squads that were there are the start of the lesson
+	local StripOutSavedSquads = function (gID, idx, sID)
+		if (SGroup_ContainsSquad(SGroup_FromName("sg_SavedSquads"),sID)) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- Test a squad to see if it fits all criteria
+	local TestSquad = function (gID, idx, sID)
+		-- is it a Commissar? 
+		if (Squad_GetBlueprintName(sID) == blueprint.commissar) then
+					
+				-- Complete Objective and Intel Event
+				Tut_Util_ObjectiveComplete(obj_BuildSecondCommissar.title_id)
+				Util_StartIntel(EVENTS.IE_Guard_BuildSecondCommissarDone)
+				
+				-- Triggers the checker rules
+				Rule_Remove(Rule_Guard_BuildSecondCommissarCheck)
+				Rule_AddInterval(Rule_Guard_BuildSecondCommissarDone, 0)
+				return true
+		end
+	end
+	
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), StripOutSavedSquads)
+
+	if not SGroup_IsEmpty("sg_Player1All") then
+		SGroup_ForEach(SGroup_FromName("sg_Player1All"), TestSquad)
+	end
+	
+end
+
+function Rule_Guard_BuildSecondCommissarDone()
+
+	if (Event_IsAnyRunning() == false) then
+
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildSecondCommissar)
+
+		-- Begin the next lesson		
+		Rule_Remove(Rule_Guard_BuildSecondCommissarDone)
+		Rule_AddInterval(Rule_Guard_AttachSecondCommissar, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 19 - Attach a Second Commissar
+
+function Rule_Guard_AttachSecondCommissar()
+
+	-- Define Objective
+	obj_AttachSecondCommissar = { title_id = 1100260, short_desc_id = 1100261, help_tip_id = 1100260 }	-- Attach a second Commissar to a Squad
+	
+	Tut_Player1GetAll()
+	
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commissar, 1, true) then
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_AttachSecondCommissar , true, EVENTS.IE_Guard_AttachSecondCommissar)
+		Util_StartIntel(EVENTS.IE_Guard_AttachSecondCommissar)
+		
+		-- Ping the Second Commissar
+		Tut_PingBlueprint(blueprint.commissar, false)
+		Flash_OtherButton("attach_modal", 0, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_AttachSecondCommissar)
+		Rule_AddInterval(Rule_Guard_AttachSecondCommissarCheck, 0)
+	end
+	
+end
+
+function Rule_Guard_AttachSecondCommissarCheck()
+
+	Tut_Player1GetAll()
+
+	-- Filter out any squads that were there are the start of the lesson
+	local StripOutSavedSquads = function (gID, idx, sID)
+		if (SGroup_ContainsSquad(SGroup_FromName("sg_SavedSquads"),sID)) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+
+	local attached = false
+	
+	local FilterList = function(gID, idx, sID)
+		if (Squad_IsAttached(sID) == true) then	
+			if (Squad_GetAttachedBlueprintName(sID) == blueprint.commissar) then
+				attached = true		-- set a flag
+				g_tut_squad = sID	-- save the ID to check later
+			else
+				SGroup_Remove(gID, sID)
+			end
+		else
+			SGroup_Remove(gID, sID)
+		end
+	end
+
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), StripOutSavedSquads)
+
+	if not SGroup_IsEmpty("sg_Player1All") then
+		SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+	end
+	
+	if (attached == true) then
+		
+		Tut_Util_ObjectiveComplete(obj_AttachSecondCommissar.title_id)
+		
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Guard_AttachSecondCommissarCheck)
+		Rule_AddInterval(Rule_Guard_AttachSecondCommissarCheck2, 0)
+		
+	end	
+
+end
+
+function Rule_Guard_AttachSecondCommissarCheck2()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		-- Intel Event
+		Util_StartIntel(EVENTS.IE_Guard_AttachSecondCommissarDone)
+		
+		
+		-- Triggers the next checker rule
+		Rule_Remove(Rule_Guard_AttachSecondCommissarCheck2)
+		Rule_AddInterval(Rule_Guard_AttachSecondCommissarDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Guard_AttachSecondCommissarDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_AttachSecondCommissarDone)
+		Rule_AddOneShot(Rule_Guard_TakeCover, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 20 - Take Cover
+
+function Rule_Guard_TakeCover()
+	
+	-- Define Objective
+	obj_TakeCover = { title_id = 1100270, short_desc_id = 1100271, help_tip_id = 1100270 }	-- Take Cover
+
+	Tut_Player1GetAll()
+	
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+	
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- choose the closest cover
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			if currDistance < closestDist then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Guard_TakeCover)
+		Util_StartIntel(EVENTS.IE_Guard_TakeCover)
+		
+		-- Ping the Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Guard_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_TakeCoverCheck()
+	
+	Tut_Player1GetAll()
+
+	if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..coverMarker) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_TakeCover_Complete)
+		
+		-- Stop Looping Ping
+		Ping_Stop(ping_TakeCover)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_TakeCoverCheck)
+		Rule_AddInterval(Rule_Guard_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_TakeCoverDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_TakeCoverDone)
+		Rule_AddOneShot(Rule_Guard_PointCount, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 21 - Point Count
+
+function Rule_Guard_PointCount()
+	
+	-- Define Objective
+	obj_PointCount = { title_id = 1100280, short_desc_id = 1100281, help_tip_id = 1100280 }	-- Capture and Secure more Strategic Points
+
+	Tut_Player1GetAll()
+
+	-- if they haven't got three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false) then
+		
+		print("order to capture and build" )
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Guard_PointCount)
+		Util_StartIntel(EVENTS.IE_Guard_PointCount)
+		
+		-- Ping Looping = true, Non = false
+		t_PointCount = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Guard_PointCountDoing, 0)
+		
+	-- if they've got a load of points already
+	else
+		print("already capture and build" )
+		--Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , false)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_PointCount_Complete)
+		
+		-- Ping the posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_PointCountDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Guard_PointCountDoing()
+
+	Tut_Player1GetAll()
+
+	-- when you capture three points, mention building listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_PointCount_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_PointCountDoing)
+		Rule_AddInterval(Rule_Guard_PointCountCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_PointCountCheck()
+	
+	Tut_Player1GetAll()
+	
+	if Tut_PointsCaptured(g_Player1, 1, 3) and Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true) then
+		print("completed capture and build" )
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_PointCountCheck)
+		Rule_AddInterval(Rule_Guard_PointCountDone, 0)
+		
+	end
+
+end
+
+function Rule_Guard_PointCountDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_PointCountDone)
+		Rule_AddOneShot(Rule_Guard_CaptureCriticalPoint, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 22 - Capture Critical Point
+
+function Rule_Guard_CaptureCriticalPoint()
+	
+	-- Define Objective
+	obj_CaptureCriticalPoint = { title_id = 1100290, short_desc_id = 1100291, help_tip_id = 1100290 }		-- Capture a Critical Location
+
+	Tut_Player1GetAll()
+	
+	-- Check they don't have a Critical Point already...
+	if Tut_PointsCaptured(g_Player1, 2, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Guard_CaptureCriticalPoint)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Guard_CaptureCriticalPointCheck, 0)
+		
+	-- If they have already...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureCriticalPoint_Complete)
+		
+		-- Ping the critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_CaptureCriticalPointCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		--Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Guard_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_CaptureCriticalPointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Guard_CaptureRelic, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Space Marine Lesson 23 - Capture Relic
+
+function Rule_Guard_CaptureRelic()
+	
+	-- Define Objective
+	obj_CaptureRelic = { title_id = 1100300, short_desc_id = 1100301, help_tip_id = 1100300 }	-- Capture a Relic
+	
+	Tut_Player1GetAll()
+
+	-- if they don't have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Guard_CaptureRelic)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the Next Rule
+		Rule_AddInterval(Rule_Guard_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_CaptureRelicCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 3, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Guard_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_CaptureRelicDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_CaptureRelicDone)
+		Rule_AddInterval(Rule_Guard_BuildAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 24 - Build Battle Command Addon
+
+function Rule_Guard_BuildAddon()
+	
+	-- Define Objective
+	obj_BuildAddon = { title_id = 1100310, short_desc_id = 1100311, help_tip_id = 1100310 }	-- Upgrade the Headquarters
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the HQ already
+	if Tut_AddonIsDone(blueprint.hq_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true, EVENTS.IE_Guard_BuildAddon)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon)
+		
+		-- Ping the HQ
+		t_BuildAddon = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildAddon)
+		Rule_AddInterval(Rule_Guard_BuildAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon_Complete)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildAddon)
+		Rule_AddInterval(Rule_Guard_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildAddonDoing)
+		Rule_AddInterval(Rule_Guard_BuildAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.hq_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildAddon)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildAddonCheck)
+		Rule_AddInterval(Rule_Guard_BuildAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildAddonDone)
+		Rule_AddInterval(Rule_Guard_BuildMech, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 25 - Build Mechanized Command
+
+function Rule_Guard_BuildMech()
+
+	-- Define Objective
+	obj_BuildMech = { title_id = 1100320, short_desc_id = 1100321, help_tip_id = 1100320 }	-- Build a Mechanized Command
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true, EVENTS.IE_Guard_BuildMech)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMech)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_BuildMech)
+		Rule_AddInterval(Rule_Guard_BuildMechDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildMech
+		Rule_Remove(Rule_Guard_BuildMech)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMech_Doing)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildMech)
+		Rule_AddInterval(Rule_Guard_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildMechDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildMech_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildMechDoing)
+		Rule_AddInterval(Rule_Guard_BuildMechCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildMechCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMech_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildMechCheck)
+		Rule_AddInterval(Rule_Guard_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildMechDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildMechDone)
+		Rule_AddInterval(Rule_Guard_BuildSentAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 26 - Build Sentinel Depot
+
+function Rule_Guard_BuildSentAddon()
+	
+	-- Define Objective
+	obj_BuildSentAddon = { title_id = 1100330, short_desc_id = 1100331, help_tip_id = 1100330 }	-- Upgrade the Mechanized Command
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the Sent Depot already
+
+	if Tut_AddonIsDone(blueprint.sent_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSentAddon , true, EVENTS.IE_Guard_BuildSentAddon)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentAddon)
+		
+		-- Ping the Mechanized Command
+		t_BuildSentAddon = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.sent_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildSentAddon)
+		Rule_AddInterval(Rule_Guard_BuildSentAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.sent_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSentAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSentAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentAddon_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildSentAddon)
+		Rule_AddInterval(Rule_Guard_BuildSentAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildSentAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.sent_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.sent_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildSentAddonDoing)
+		Rule_AddInterval(Rule_Guard_BuildSentAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildSentAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.sent_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildSentAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildSentAddon)
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildSentAddonCheck)
+		Rule_AddInterval(Rule_Guard_BuildSentAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildSentAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildSentAddonDone)
+		Rule_AddOneShot(Rule_IG_BuildSentinel, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 27 - Build a Sentinel 
+
+function Rule_IG_BuildSentinel()
+
+	-- Define Objective
+	obj_BuildSentinel = { title_id = 1100340, short_desc_id = 1100341, help_tip_id = 1100340 }	-- Build a Sentinel
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Sentinel already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.sentinel, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSentinel , true, EVENTS.IE_Guard_BuildSentinel)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentinel)
+		
+		-- Ping the Mechanized Command
+		ping_BuildSentinel = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.sentinel, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildSentinelDoing, 0)
+		
+	-- if they already have a Sentinel
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSentinel , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSentinel.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentinel_Complete)
+		
+		-- Ping Sentinel once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildSentinelDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildSentinelDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.sentinel, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentinel_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildSentinelDoing)
+		Rule_AddInterval(Rule_Guard_BuildSentinelCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildSentinelCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Sentinel already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.sentinel, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildSentinel.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildSentinel_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildSentinel)
+		Tut_PingBlueprint(blueprint.sentinel, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildSentinelCheck)
+		Rule_AddInterval(Rule_Guard_BuildSentinelDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildSentinelDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildSentinelDone)
+		Rule_AddInterval(Rule_Guard_BuildBasAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 28 - Build Basilisk Depot
+
+function Rule_Guard_BuildBasAddon()
+	
+	-- Define Objective
+	obj_BuildBasAddon = { title_id = 1100350, short_desc_id = 1100351, help_tip_id = 1100350 }	-- Upgrade the Mechanized Command
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the Basilisk Depot already
+
+	if Tut_AddonIsDone(blueprint.bas_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBasAddon , true, EVENTS.IE_Guard_BuildBasAddon)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasAddon)
+		
+		-- Ping the Mechanized Command
+		t_BuildBasAddon = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.bas_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildBasAddon)
+		Rule_AddInterval(Rule_Guard_BuildBasAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.bas_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBasAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBasAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasAddon_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBasAddon)
+		Rule_AddInterval(Rule_Guard_BuildBasAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBasAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.bas_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.bas_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildBasAddonDoing)
+		Rule_AddInterval(Rule_Guard_BuildBasAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildBasAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.bas_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBasAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildBasAddon)
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBasAddonCheck)
+		Rule_AddInterval(Rule_Guard_BuildBasAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBasAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildBasAddonDone)
+		Rule_AddOneShot(Rule_IG_BuildBasilisk, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 29 - Build a Basilisk 
+
+function Rule_IG_BuildBasilisk()
+
+	-- Define Objective
+	obj_BuildBasilisk = { title_id = 1100360, short_desc_id = 1100361, help_tip_id = 1100360 }	-- Build a Basilisk
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Basilisk already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basilisk, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBasilisk , true, EVENTS.IE_Guard_BuildBasilisk)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasilisk)
+		
+		-- Ping the Mechanized Command
+		ping_BuildBasilisk = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basilisk, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildBasiliskDoing, 0)
+		
+	-- if they already have a Basilisk
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBasilisk , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBasilisk.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasilisk_Complete)
+		
+		-- Ping Sentinel once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildBasiliskDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBasiliskDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basilisk, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasilisk_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildBasiliskDoing)
+		Rule_AddInterval(Rule_Guard_BuildBasiliskCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBasiliskCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have aBasilisk already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basilisk, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBasilisk.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBasilisk_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBasilisk)
+		Tut_PingBlueprint(blueprint.basilisk, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBasiliskCheck)
+		Rule_AddInterval(Rule_Guard_BuildBasiliskDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBasiliskDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildBasiliskDone)
+		Rule_AddInterval(Rule_Guard_BuildAddon2, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 30 - Build Regiment Command Addon
+
+function Rule_Guard_BuildAddon2()
+	
+	-- Define Objective
+	obj_BuildAddon2 = { title_id = 1100370, short_desc_id = 1100371, help_tip_id = 1100370 }	-- Upgrade the Headquarters
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the HQ already
+	if Tut_AddonIsDone(blueprint.hq_addon2, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon2 , true, EVENTS.IE_Guard_BuildAddon2)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon2)
+		
+		-- Ping the HQ
+		t_BuildAddon2 = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon2, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildAddon2)
+		Rule_AddInterval(Rule_Guard_BuildAddon2Doing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.hq_addon2, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildAddon2 , true)
+		Tut_Util_ObjectiveComplete(obj_BuildAddon2.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon2_Complete)
+		
+		-- Ping the HQ
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildAddon2)
+		Rule_AddInterval(Rule_Guard_BuildAddon2Done, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildAddon2Doing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon2, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon2_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon2, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildAddon2Doing)
+		Rule_AddInterval(Rule_Guard_BuildAddon2Check, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildAddon2Check()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.hq_addon2, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildAddon2.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildAddon2_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildAddon2)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildAddon2Check)
+		Rule_AddInterval(Rule_Guard_BuildAddon2Done, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildAddon2Done()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildAddon2Done)
+		Rule_AddInterval(Rule_Guard_BuildOgrynAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 31 - Build Ogryn Quarters
+
+function Rule_Guard_BuildOgrynAddon()
+	
+	-- Define Objective
+	obj_BuildOgrynAddon = { title_id = 1100380, short_desc_id = 1100381, help_tip_id = 1100380 }	-- Upgrade the Infantry Command
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the Ogryn Quarters already
+
+	if Tut_AddonIsDone(blueprint.ogryn_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildOgrynAddon , true, EVENTS.IE_Guard_BuildOgrynAddon)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgrynAddon)
+		
+		-- Ping the Infantry Command
+		t_BuildOgrynAddon = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.ogryn_addon, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildOgrynAddon)
+		Rule_AddInterval(Rule_Guard_BuildOgrynAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.ogryn_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildOgrynAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildOgrynAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgrynAddon_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildOgrynAddon)
+		Rule_AddInterval(Rule_Guard_BuildOgrynAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildOgrynAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.ogryn_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgrynAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.ogryn_addon, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildOgrynAddonDoing)
+		Rule_AddInterval(Rule_Guard_BuildOgrynAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildOgrynAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.ogryn_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildOgrynAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgrynAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildOgrynAddon)
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildOgrynAddonCheck)
+		Rule_AddInterval(Rule_Guard_BuildOgrynAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildOgrynAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildOgrynAddonDone)
+		Rule_AddOneShot(Rule_IG_BuildOgryn, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 32 - Build an Ogryn Squad 
+
+function Rule_IG_BuildOgryn()
+
+	-- Define Objective
+	obj_BuildOgryn = { title_id = 1100390, short_desc_id = 1100391, help_tip_id = 1100390 }	-- Build an Ogryn Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have an Ogryn Squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.ogryns, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildOgryn , true, EVENTS.IE_Guard_BuildOgryn)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgryn)
+		
+		-- Ping the Infantry Command
+		ping_BuildOgryn = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.ogryns, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildOgrynDoing, 0)
+		
+	-- if they already have an Ogryn Squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildOgryn , true)
+		Tut_Util_ObjectiveComplete(obj_BuildOgryn.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgryn_Complete)
+		
+		-- Ping Infantry Command once
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildOgrynDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildOgrynDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.ogryns, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgryn_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildOgrynDoing)
+		Rule_AddInterval(Rule_Guard_BuildOgrynCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildOgrynCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have aBasilisk already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.ogryns, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildOgryn.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildOgryn_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildOgryn)
+		Tut_PingBlueprint(blueprint.ogryns, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildOgrynCheck)
+		Rule_AddInterval(Rule_Guard_BuildOgrynDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildOgrynDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildOgrynDone)
+		Rule_AddInterval(Rule_Guard_BuildLemanAddon, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 33 - Build Leman Russ Depot
+
+function Rule_Guard_BuildLemanAddon()
+	
+	-- Define Objective
+	obj_BuildLemanAddon = { title_id = 1100400, short_desc_id = 1100401, help_tip_id = 1100400 }	-- Upgrade the Mechanized Command
+	
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the Leman Russ Depot already
+
+	if Tut_AddonIsDone(blueprint.leman_addon, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLemanAddon , true, EVENTS.IE_Guard_BuildLemanAddon)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLemanAddon)
+		
+		-- Ping the Mechanized Command
+		t_BuildLemanAddon = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.leman_addon, true, true)
+		Flash_ProductionButton(PQ_Research, blueprint.fullscalewar, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Guard_BuildLemanAddon)
+		Rule_AddInterval(Rule_Guard_BuildLemanAddonDoing, 0)
+		
+	-- else if they have
+	elseif Tut_AddonIsDone(blueprint.leman_addon, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLemanAddon , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLemanAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLemanAddon_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildLemanAddon)
+		Rule_AddInterval(Rule_Guard_BuildLemanAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLemanAddonDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainAddOn(blueprint.leman_addon, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildLemanAddon_Doing)
+		
+		Flash_ProductionButton(PQ_AddOn, blueprint.leman_addon, false, false)
+		Flash_ProductionButton(PQ_Research, blueprint.fullscalewar, true, true)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildLemanAddonDoing)
+		Rule_AddInterval(Rule_Guard_BuildLemanAddonCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildLemanAddonCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_AddonIsDone(blueprint.leman_addon, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildLemanAddon.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLemanAddon_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildLemanAddon)
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildLemanAddonCheck)
+		Rule_AddInterval(Rule_Guard_BuildLemanAddonDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLemanAddonDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildLemanAddonDone)
+		Rule_AddOneShot(Rule_IG_BuildLeman, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 34 - Build a Leman Russ 
+
+function Rule_IG_BuildLeman()
+
+	-- Define Objective
+	obj_BuildLeman = { title_id = 1100410, short_desc_id = 1100411, help_tip_id = 1100410 }	-- Build a Leman Russ
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Leman Russ already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.leman, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeman , true, EVENTS.IE_Guard_BuildLeman)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeman)
+		
+		-- Ping the Mechanized Command
+		ping_BuildLeman = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.leman, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildLemanDoing, 0)
+		
+	-- if they already have a Leman Russ
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeman , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLeman.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeman_Complete)
+		
+		-- Ping Mechanized Command once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildLemanDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLemanDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.leman, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeman_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildLemanDoing)
+		Rule_AddInterval(Rule_Guard_BuildLemanCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLemanCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have aBasilisk already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.leman, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildLeman.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildLeman_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildLeman)
+		Tut_PingBlueprint(blueprint.leman, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildLemanCheck)
+		Rule_AddInterval(Rule_Guard_BuildLemanDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildLemanDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildLemanDone)
+		Rule_AddInterval(Rule_Guard_BuildMars, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 35 - Build Mars Pattern Command
+
+function Rule_Guard_BuildMars()
+
+	-- Define Objective
+	obj_BuildMars = { title_id = 1100420, short_desc_id = 1100421, help_tip_id = 1100420 }	-- Build a Mars Pattern Command
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.mars, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMars , true, EVENTS.IE_Guard_BuildMars)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMars)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.mars, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Guard_BuildMars)
+		Rule_AddInterval(Rule_Guard_BuildMarsDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Guard_BuildMars
+		Rule_Remove(Rule_Guard_BuildMars)
+		
+		Rule_Add(Rule_Guard_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.mars, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMars , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMars.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMars_Doing)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.mars, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildMars)
+		Rule_AddInterval(Rule_Guard_BuildMarsDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildMarsDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.mars) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildMars_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.mars, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildMarsDoing)
+		Rule_AddInterval(Rule_Guard_BuildMarsCheck, 0)
+		
+	end
+
+end
+
+function Rule_Guard_BuildMarsCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.mars, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMars.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildMars_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.mars, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildMarsCheck)
+		Rule_AddInterval(Rule_Guard_BuildMarsDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildMarsDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildMarsDone)
+		Rule_AddOneShot(Rule_Guard_BuildBaneblade, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Lesson 36 - Build a Baneblade 
+
+function Rule_Guard_BuildBaneblade()
+
+	-- Define Objective
+	obj_BuildBaneblade = { title_id = 1100430, short_desc_id = 1100431, help_tip_id = 1100430 }	-- Build a Baneblade
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Baneblade already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.baneblade, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBaneblade , true, EVENTS.IE_Guard_BuildBaneblade)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBaneblade)
+		
+		-- Ping the Mars Pattern Command
+		ping_BuildBaneblade = Tut_PingBlueprint(blueprint.mars, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.baneblade, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Guard_BuildBanebladeDoing, 0)
+		
+	-- if they already have a Baneblade
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBaneblade , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBaneblade.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBaneblade_Complete)
+		
+		-- Ping Mechanized Command once
+		Tut_PingBlueprint(blueprint.mars, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Guard_BuildBanebladeCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBanebladeDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.baneblade, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Guard_BuildBaneblade_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Guard_BuildBanebladeDoing)
+		Rule_AddInterval(Rule_Guard_BuildBanebladeCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBanebladeCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Baneblade already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.baneblade, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBaneblade.title_id)
+		Util_StartIntel(EVENTS.IE_Guard_BuildBaneblade_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBaneblade)
+		Tut_PingBlueprint(blueprint.baneblade, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Guard_BuildBanebladeCheck)
+		Rule_AddInterval(Rule_Guard_BuildBanebladeDone, 0)
+		
+	end
+	
+end
+
+function Rule_Guard_BuildBanebladeDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Guard_BuildBanebladeDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Hint A1 - Squad Cap Reached
+
+function Rule_Guard_SquadCap()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap ~= maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Guard_SquadCap)
+			Tut_PingBlueprint(blueprint.builder, false)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.barracks, true, true)
+			
+			Rule_Remove(Rule_Guard_SquadCap)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Hint A2 - Squad Limit Reached
+
+function Rule_Guard_SquadLimit()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap == maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Guard_SquadLimit)
+			
+			Rule_Remove(Rule_Guard_SquadLimit)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Hint A3 - Low Resource
+
+function Rule_Guard_LowResource()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Guard_LowResource)
+			
+			Rule_Remove(Rule_Guard_LowResource)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Hint A4 - Low Power
+
+function Rule_Guard_LowPower()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Power) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Guard_LowPower)
+			
+			Rule_Remove(Rule_Guard_LowPower)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Imperial Guard Hint A5 - No Builder Unit
+
+function Rule_Guard_NoBuilder()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			Util_StartIntel(EVENTS.IE_Guard_NoBuilder)
+			
+			Rule_Remove(Rule_Guard_NoBuilder)
+			Rule_AddInterval(Rule_Guard_NoBuilderDone,0)
+			
+		end
+		
+	end
+
+end
+
+-- once the player has a builder, continue where we left off
+function Rule_Guard_NoBuilderDone()
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+		Rule_Add( g_tutorialRuleState )
+			
+		Rule_Remove(Rule_Guard_NoBuilderDone)
+			
+	end
+		
+end
+
+---------------------------------------------------------------------------------------------
+-- Utility Function: Grab Command Squad
+
+function Get_CommandSquad()
+
+	local StripCommandSquad = function(sgroupid, itemindex, squadID )
+		
+		if 	Squad_GetBlueprintName(squadID) == "guard_squad_command_squad" then
+			SGroup_Add(SGroup_CreateIfNotFound("sg_CommandSquad"), squadID)
+		end
+
+	end
+	
+	SGroup_ForEach(Player_GetSquads(g_Player1), StripCommandSquad)
+	
+end
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--~ EVENTS = {}
+
+--  Selection
+
+EVENTS.IE_Guard_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101073 )   -- To select a unit or structure, simply click on it with the left mouse button. Go to your base and select the Stronghold. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101074 )  -- Congratulations! You have just learned how to select units and structures in the game.
+	CTRL.WAIT()
+end
+
+-- Build Guardsmen
+
+EVENTS.IE_Guard_BuildGuardsmen = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101083 )	-- Select your Headquarters and look for the Guardsmen Squad icon located in the lower-right corner of the screen. Click this button now.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildGuardsmen_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101084 )	-- Take note of the small bar that is gradually filling up. This Progress Bar gives you an indication of how close something is to being ready.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildGuardsmen_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101085 )	-- Excellent! You now have a Guardsmen Squad.
+	CTRL.WAIT()
+end
+
+-- Capture Point
+
+EVENTS.IE_Guard_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101093 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101094 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+	
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101095 )	-- Order the Guardsmen Squad to capture a Strategic Point by right-clicking on the Point.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101096 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101097 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101098 )	-- Capturing a Strategic Point takes time. Do not move the capturing squad away from the Strategic Point until the progress bar is full. Otherwise, you will not take control of the Strategic Point.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101099 )	-- Excellent! The point is ours! You must continue to capture Strategic Points to get more Requisition Resource, which allows you to build more units and structures.
+	CTRL.WAIT()
+end
+
+-- Build Enginseer
+EVENTS.IE_Guard_BuildEnginseer = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101103 )	-- Select your Headquarters and build an Enginseer.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildEnginseer_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101104 )	-- Enginseers are required to build additional structures. Enginseers are always available from the Headquarters. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildEnginseer_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101105 )	-- The Enginseer has arrived! Enginseers are the Imperial Guard's builder unit. Any time you wish to build a new structure, you must use an Enginseer.
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_Guard_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101113 )	-- Select the Enginseer and build a Listening Post on the captured Strategic Point. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101114 )	-- The Listening Post fortifies your hold of a Strategic Point, increasing your Requisition rate at the same time.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101115 )	-- Excellent! The point is now protected from enemy retaliation. You should continue to build Listening Posts on all your captured Strategic Points.
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_Guard_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101123 )	-- Some structures, vehicles, and research require Power to function. Building a Plasma Generator will supply you with the Power you need to keep your force going.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101124 )	-- Select your Enginseer and build a Plasma Generator.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101125 )	-- The more Plasma Generators you have, the faster you will build up the Power Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101126 )	-- You now have Power! Plasma Generators will continue to produce Power at a constant rate. Note that there is a limit to how many Plasma Generators can be built per Stronghold.
+	CTRL.WAIT()
+end
+
+-- Control Zones
+EVENTS.IE_Guard_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101193 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101194 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101195 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101196 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Barracks
+EVENTS.IE_Guard_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101133 )	-- Select your Enginseer and build an Infantry Command.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101134 )	-- The Infantry Command is the structure where you can build additional Guardsmen and more advanced Imperial Guard infantry units.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101135 )	-- Excellent, the Infantry Command is finished. 
+	CTRL.WAIT()
+end
+
+-- Reinforce Guardsmen
+EVENTS.IE_Guard_ReinforceGuardsmen = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101143 )	-- Now we should focus on bringing our squads to full strength by reinforcing them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101144 )	-- Reinforcing is the act of calling in additional troops to bring your squad to maximum combat effectiveness. elect a Guardsmen Squad. Click the Reinforce Squad button to add one new unit to your squad.
+	-- Removed Since is a Dupe of the ending of previous line
+	-- CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101145 )	-- Click the Reinforce Squad button to add one new unit to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_ReinforceGuardsmen_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101146 )	-- You can Reinforce during battle, in the event that a brother Guardsmen falls to the enemy. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101147 )	-- You can click the Reinforce Squad button multiple times to bring the squad to full strength.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_ReinforceGuardsmen_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101148 )	-- Congratulations! You have Reinforced your Guardsmen Squad. 
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_Guard_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101153 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101155 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101156 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101157 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_Guard_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101162 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101163 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101164 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101165 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101166 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101167 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101168 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101169 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- Garrison a Squad
+EVENTS.IE_Guard_Garrison = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101503 )	-- Now is a good time to learn about unit garrisons and underground tunnels. The Imperial Guard can garrison infantry inside of some of their buildings. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101504 )	-- Select your Guardsmen Squad and right click on the Headquarters.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_GarrisonDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101505 )	-- Very good! Your units are now protected from enemy fire. They can also use the building's mounted weapons against their enemies while inside.
+	CTRL.WAIT()
+end
+
+-- Underground Tunnels
+EVENTS.IE_Guard_Transfer = function()	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101513 )	-- The Imperial Guard dig tunnels between all of their buildings so they can move in safety. You can move your squads from building to building without ever leaving their protection.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101514 )	-- Click on the Infantry Command. Notice that it has three empty slots. Notice how your squad in the headquarters is shown below. Click on the squad icon to transfer the unit from your Headquarters to the Infantry Command. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_TransferDone = function()	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101515 )	-- Notice the timer bar over the squad icon. This is the amount of time it will take to travel between the two buildings.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101516 )	-- Your squad is now in the Infantry Command. Click on the squad icon to ungarrison them from the building. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101517 )	-- Congratulations! You now understand the basics of placing your units in the protection of your buildings, and moving them from building to building. Remember, though, that you can only move between buildings that are in the same control zone.
+	CTRL.WAIT()
+end
+
+-- Build Commissar
+EVENTS.IE_Guard_BuildCommissar = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101173 )	-- You will notice in combat that Guardsmen are much weaker than the warriors of other races, and quickly lose morale and flee.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101174 )	-- This is because Guardsmen are ordinary men being asked to fight the most evil and monstrous threats in the Galaxy. They require strong leadership to overcome their fear and fight effectively.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101175 )	-- Select the Headquarters and build a Commissar. The Commissar will greatly enhance the strength and courage of your Guardsmen, and will help even the balance.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildCommissar_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101176 )	-- The Commissar has the power to execute soldiers for cowardice and disobedience. He inspires troops through fear and discipline and by his own courage.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildCommissar_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101177 )	-- Excellent! The Commissar has arrived. But the Commissar will do you little good when he is not attached to a squad.
+	CTRL.WAIT()
+end
+
+-- Attach Commissar
+EVENTS.IE_Guard_AttachCommissar = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101183 )	-- Select your Commissar and click the Attach button. Now, select a Guardsmen Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_AttachCommissar_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101184 )	-- Notice how when the Commissar joins the squad, they rearrange themselves to make room for their esteemed leader.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101185 )	-- A squad with a Commissar attached will never have their morale break. They will also take less damage from enemy units. Commissars are vital to your success as Imperial Guard. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_AttachCommissar_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101186 )	-- You can also attach priests to your squad when you advance in the Tech Tree. Priests also greatly increase the power of an infantry squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101187 )	-- To detach the leader from this squad, simply select the squad, then click the Detach icon. It is located in the same place as the Attach icon.
+	CTRL.WAIT()
+end
+
+-- Build Command Squad
+EVENTS.IE_Guard_BuildCommandSquad = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101203 )	-- Most races have a single hero they can build that can lead their entire force. Imperial Guard are lead by a group of several brave men commanded by the Imperial Captain. This group is known as the Command Squad..  
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101204 )	-- Select the Infantry Command and build a Command Squad now. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildCommandSquad_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101205 )	-- The Command Squad is always lead by your Captain. The Captain can choose to fill out his Command Squad with other Imperial Guard leaders such as the Commisar, Priest or the Psyker.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildCommandSquad_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101206 )	-- Congratulations! You have finished building your Command Squad
+	CTRL.WAIT()
+end
+
+-- Reinforce Command Squad
+EVENTS.IE_Guard_ReinforceCommandSquad = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101523 )	-- Now that we have built a Command Squad we should reinforce it. You can do this by clicking on one of the flashing icons down below.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101524 )	-- Add an additional leader to the Command Squad by clicking on one of the flashing icons now.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101525 )	-- Excellent! You have reinforced your Command Squad. You should continue reinforcing it until the squad is at full strength. Remember that each leader type adds something to the squad. Diversity is strength in this case.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_ReinforceCommandSquadDoing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101525 )	-- You will need your Command Squad to be at full strength if you want to counter the strength of the other races' heroes. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_ReinforceCommandSquadDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101526 )	-- Congratulations! You have reinforced your Command Squad. You should continue to reinforce the Command Squad until it is at full strength. Remember that each leader type adds something to the squad. Diversity is strength in this case.
+	CTRL.WAIT()
+end
+
+-- Build Tactica Control
+EVENTS.IE_Guard_BuildTactica = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101213 )	-- Select your Enginseer and build a Tactica Control now. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildTactica_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101214 )	-- You must build a Tactica Control in order to access research and weapon upgrades. Squads can be equipped with a variety of weaponry, allowing you to prepare them against different enemy types.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildTactica_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101215 )	-- Excellent, the Tactica Control is now operational.
+	CTRL.WAIT()
+end
+
+-- Build Sergeant
+EVENTS.IE_Guard_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace,  1101233 )	-- Select a Guardsmen Squad and click the Add Leader: Sergeant icon.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101234 )	-- Sergeants are brave soldier that improve the combat ability and morale of the squad they are part of.  They also increase the health of every Guardsman in the squad. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101235 )	-- Excellent! Your Sergeant has arrived. Note that your Sergeants are part of the squad and cannot leave it. 
+	CTRL.WAIT()
+end
+
+-- Upgrade Weaponry
+EVENTS.IE_Guard_UpgradeWeaponry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101223 )	-- Select your Guardsmen Squad and click the Upgrade: Grenade Launcher icon to upgrade a squad member.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_UpgradeWeaponry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101224 )	-- Notice a Grenade Launcher appears in one of your squad members' hands. This procedure can be performed with any of the available weapon upgrades.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101225 )	-- You can only upgrade 3 units of your total squad with heavy weapons. But the power of these weapons makes the investment well worth it..
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_UpgradeWeaponry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101226 )	-- Excellent. You have upgraded your Guardsmen Squad. You can upgrade your squads anywhere on the battlefield to weapons that are well suited to counter your enemy.
+	CTRL.WAIT()
+end
+
+-- Build More Guardsmen
+EVENTS.IE_Guard_BuildMoreGuardsmen = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101243 )	-- Select your Infantry Command and build another Guardsmen Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildMoreGuardsmen_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101244 )	-- You have built a Guardsmen Squad and fully reinforced it. You have also added a Sergeant and outfitted it with heavy weapons.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101245 )	-- But the squad is still not at full strength. You need to build a Commissar from the HQ and attach it to the squad before it is fully ready for combat.
+	CTRL.WAIT()
+end
+
+-- Build a Second Commissar
+EVENTS.IE_Guard_BuildSecondCommissar = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101253 )	-- Select your Headquarters and build a second Commissar.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildSecondCommissarDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101254 )	-- You built a second Commissar. Now you must attach him to the new squad of Guardsmen.
+	CTRL.WAIT()
+end
+
+-- Attach a Second Commissar
+EVENTS.IE_Guard_AttachSecondCommissar = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101263 )	-- Select your new Commissar and click the Attach button. Now, select the new Guardsmen Squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_AttachSecondCommissarDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101264 )     -- Excellent! You have built a second squad of guardsmen and have brought it to full strength. To mount an effective attack, you should try to have several Guardsmen Squads, fully reinforced to maximum strength and Upgraded with heavy weapons, a Sergeant, and a Commissar or Priest.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101265 )	-- Your field base has supplies and logistics to support a finite number of squads. The number of squads you can support at any given time is called your Squad Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101266 )	-- You can see your current Squad Cap in the Resource Area at the top of your screen.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101267 )	-- Once you have reached your maximum Squad Cap, you will not be able to call in any additional squads, so it's very important to keep an eye on this as you're building up your forces. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101268 )	-- You can increase your Squad Cap by building additional Infantry Commands. Each infantry command increases your squad cap by four. But you cannot go beyond a squad cap of twenty.
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_Guard_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101273 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101274 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101275 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101276 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101277 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101278 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_Guard_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101283 )	-- The best way to make sure you have enough Requisition Resource is to capture and secure Strategic Points.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101284 )	-- Explore the map around your base with your Guardsmen Squads and capture any Strategic Points you encounter along the way. To complete this objective you must Capture 3 Strategic Points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101285 )	-- Make sure to use your Enginseer to build Listening Posts on any captured Strategic Points. This fortifies them against your enemies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101286 )	-- Excellent! You have captured 3 Strategic Points and built Listening Posts on them. Taking and holding Strategic Points is key to defeating your enemies.
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_Guard_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101293 )	-- You can capture Critical Locations just like Strategic Points. In some multiplayer games, capturing and holding one or more of these Critical Locations can win you the game! You also get Requisition from any Critical Locations you control.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101294 )	-- Use a squad to capture a Critical Location. Critical Locations are points on the map that represent locations of critical strategic importance. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101295 )	-- Excellent! You've captured a Critical Location. Note that Critical Locations cannot have Listening Posts built on them. You must find other ways to hold them.
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_Guard_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101303 )	-- Holding Relics gives you access to your army's best units and vehicles. Hold on to them to ensure you have access to your best technology!
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101304 )	-- Use a squad to capture a Relic. Relics are sacred points of great value. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101305 )	-- Excellent! You have captured a Relic. You can build Listening Posts to fortify captured Relics. You can also capture your opponent's Relics to deny them access to their best units and technology.
+	CTRL.WAIT()
+end
+
+-- Build Battle Command Addon
+EVENTS.IE_Guard_BuildAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101313 )	-- Select the Headquarters and click the Battle Command Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101314 )	-- We must upgrade the Headquarters to a Battle Command to gain access to powerful research options and powerful structures such as the Mechanized Command. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101315 )	-- The Mechanized Command allows you to requisition vehicles. Vehicles are powerful units that can turn the tide of large battles.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101316 )	-- The Battle Command is complete! You can now build a Mechanized Command. 
+	CTRL.WAIT()
+end
+
+-- Build Mechanized Command
+EVENTS.IE_Guard_BuildMech = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101323 )	-- Select your Enginseer and build a Mechanized Command.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildMech_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101324 )	-- Just like the Infantry Command is used to build infantry units, the Mechanized Command is used to build vehicles. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101325 )	-- Vehicles are tough and nearly impervious to the attacks of non-upgraded infantry. They are a fundamental part of your army, and can carry powerful support weapons.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildMech_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101326)	-- Excellent! You now have a Mechanized Command. You can build powerful vehicles from this building.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101327 )	-- Note that your field base can only support a finite number of vehicles. This limit is known as the Vehicle Cap. Just like Squad Cap, once you have reached your maximum, you cannot build any more vehicles. You can increase your vehicle cap by building additional Mechanized Commands.
+	CTRL.WAIT()
+end
+
+-- Build Sentinel Addon
+EVENTS.IE_Guard_BuildSentAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101333 )	-- Select the Mechanized Command and click the Sentinel Depot Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildSentAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101334 )	-- The Sentinel Depot Addon will allow you to build Sentinels from this Mechanized Command. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101335 )	-- If you want to build Sentinels from other Mechanized Commands, you will need to upgrade them with the Sentinel Depot Addon as well.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildSentAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101336 )	-- The Sentinel Depot is complete! You can now build a Sentinel. 
+	CTRL.WAIT()
+end
+
+-- Build Sentinel
+
+EVENTS.IE_Guard_BuildSentinel = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101343 )	-- Select your Mechanized Command and build a Sentinel. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildSentinel_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101344 )	-- Sentinels are quick raiding vehicles that excel at destroying other vehicles. The can also uncapture enemy points (though they cannot capture them).
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildSentinel_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101345 )	-- Excellent! You now have a Sentinel.
+	CTRL.WAIT()
+end
+
+-- Build Basilisk Addon
+EVENTS.IE_Guard_BuildBasAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101353 )	-- Select the Mechanized Command and click the Basilisk Depot Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildBasAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101354 )	-- The Basilisk Depot Addon will allow you to build Baslisks from this Mechanized Command. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101355 )	-- If you want to build Basilisks from other Mechanized Commands, you will need to upgrade them with the Basilisk Depot Addon as well.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildBasAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101356 )	-- The Basilisk Depot is complete! You can now build a Basilisk. 
+	CTRL.WAIT()
+end
+
+-- Build Basilisk
+
+EVENTS.IE_Guard_BuildBasilisk = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101363 )	-- Select your Mechanized Command and build a Basilisk. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildBasilisk_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101364 )	-- Basilisks are heavy artillery vehicles that excel at killing infantry and buildings. Keep in mind that they can't take a lot of punishment, so keep them behind your army.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildBasilisk_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101365 )	-- Excellent! You now have a Basilisk.
+	CTRL.WAIT()
+end
+
+-- Build Regiment Command Addon
+EVENTS.IE_Guard_BuildAddon2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101373 )	-- Select the Headquarters and click the Regiment Command Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildAddon2_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101374 )	-- We must upgrade the Headquarters to a Regiment Command to gain access to powerful research options and powerful addons such as the Ogryn Quarters or the Leman Russ Depot. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101375 )	-- The Leman Russ Depot allows you to requisition Leman Russ Tanks. Leman Russ Tanks are powerful all-purpose vehicles.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildAddon2_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101376 )	-- The Regiment Command is complete! You can now build more powerful units. 
+	CTRL.WAIT()
+end
+
+-- Build Ogryn Addon
+EVENTS.IE_Guard_BuildOgrynAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101383 )	-- Select the Infantry Command and click the Ogryn Depot Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildOgrynAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101384 )	-- The Orgyn Quarters Addon will allow you to build Ogryns from this Infantry Command. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101385 )	-- If you want to build Ogryns from other Infantry Commands, you will need to upgrade them with the Ogryn Quarters Addon as well.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildOgrynAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101386 )	-- The Ogryn Quarters are complete! You can now build Ogryn squads. 
+	CTRL.WAIT()
+end
+
+-- Build Ogryns
+
+EVENTS.IE_Guard_BuildOgryn = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101393 )	-- Select your Infantry Command and build a squad of Ogryns. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildOgryn_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101394 )	-- Ogryns are heavy melee infantry that deal large amounts of damage and can take incredible amounts of punishment.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildOgryn_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101395 )	-- Excellent! You now have a squad of Ogryns.
+	CTRL.WAIT()
+end
+
+-- Build Leman Russ Addon
+EVENTS.IE_Guard_BuildLemanAddon = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101403 )	-- Select the Mechanized Command and click the Leman Russ Depot Upgrade icon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildLemanAddon_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101404 )	-- The Leman Russ Depot Addon will allow you to build Leman Russ Tanks from this Mechanized Command. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101405 )	-- If you want to build Leman Russ Tanks from other Mechanized Commands, you will need to upgrade them with the Leman Russ Depot Addon as well.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildLemanAddon_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101406 )	-- The Leman Russ Depot is complete! You can now build a Leman Russ Tank. 
+	CTRL.WAIT()
+end
+
+-- Build Leman Russ
+
+EVENTS.IE_Guard_BuildLeman = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101413 )	-- Select your Mechanized Command and build a Leman Russ Tank. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildLeman_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101414 )	-- Leman Russ Tanks are all purpose tanks that are good against infantry and other vehicles.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildLeman_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101415 )	-- Excellent! You now have a Leman Russ Tank.
+	CTRL.WAIT()
+end
+
+-- Build Mars Pattern Command
+EVENTS.IE_Guard_BuildMars = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101423 )	-- Select your Enginseer and build a Mars Pattern Command.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildMars_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101424 )	-- The Mars Pattern Command is a specialized building that only builds one type of unit: the Baneblade 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101425 )	-- Baneblades are legendary vehicles that are nearly invincible. They unleash unimaginable fire power and can destroy whole armies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_BuildMars_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101426)	-- Note that the Mars Pattern Command, like the Mechanized Command, increases your vehicle cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101427 )	-- Excellent! You now have a Mars Pattern Command. You can now build a Baneblade. Let your enemies tremble in fear.
+	CTRL.WAIT()
+end
+
+-- Build Baneblade
+
+EVENTS.IE_Guard_BuildBaneblade = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101433 )	-- Select your Mars Pattern Command and build a Baneblade. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildBaneblade_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101434 )	-- Baneblades are fearsome vehicles that can destroy anything that dares to venture into range.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Guard_BuildBaneblade_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101435 )	-- Excellent! You now have a Baneblade. Your enemy's fate is sealed. Send it forward to annihilate him.
+	CTRL.WAIT()
+end
+
+-- Squad Cap Warnings
+EVENTS.IE_Guard_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101440 )	-- To increase the number of squads you can field as Imperial Guard, you need to build additional Infantry Commands.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101441 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them. If you have invested unwisely, you can press the 'Delete' button on your keyboard to terminate unwanted squads.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+
+EVENTS.IE_Guard_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101442 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+EVENTS.IE_Guard_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101443 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101444 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101445 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+
+EVENTS.IE_Guard_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101446 )	-- In order to further establish your base you need an Enginseer.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101447 )	-- Select your Headquarters and build an Enginseer.
+	CTRL.WAIT()
+end
+
+-- Tutorial Complete
+
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101448 )	-- Use infantry units to capture Strategic Points, and Enginseers to build Listening Posts on them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101449 )	-- Continue to build structures, and carry out research that will increase your effectiveness in battle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101450 )	-- Build additional squads and vehicles. Make sure you research upgrades that will increase both your Squad Cap and Vehicle Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101451 )	-- Take this battlefield, and the next, and the next after that. The fight will never end until your enemies are crushed.
+	CTRL.WAIT()
+end

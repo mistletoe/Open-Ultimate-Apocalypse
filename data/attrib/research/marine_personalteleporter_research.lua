@@ -1,0 +1,30 @@
+GameData = Inherit([[]])
+GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
+--REPLACE_ME
+GameData["requirements"] = Reference([[tables\requirements.lua]])
+GameData["requirements"]["required_1"] = Reference([[requirements\global_required_addon.lua]])
+GameData["requirements"]["required_1"]["global_addon_name"] = [[space_marine_hq_addon_2]]
+GameData["requirements"]["required_3"] = Reference([[requirements\required_research.lua]])
+GameData["requirements"]["required_3"]["research_name"] = [[research\marine_heavy_armor_deployment.lua]]
+GameData["requirements"]["required_3"]["hide_the_button_when_failed"] = nil
+GameData["requirements"]["required_3"]["research_must_not_be_complete"] = nil
+GameData["requirements"]["required_10"] = Reference([[requirements\required_structure.lua]])
+GameData["requirements"]["required_10"]["is_display_requirement"] = true 
+GameData["requirements"]["required_10"]["structure_name"] = [[ebps\races\space_marines\structures\space_marine_armoury.lua]]
+GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["time_cost"]["cost"]["power"] = 125
+GameData["time_cost"]["cost"]["requisition"] = 75
+GameData["time_cost"]["time_seconds"] = 60
+GameData["ui_hotkey_name"] = [[hotkey_e]]
+GameData["ui_index_hint"] = 3
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$95291]] -- 
+GameData["ui_info"]["help_text_list"]["text_01"] = [[- Equips Vanguard Veterans and Terminator squads with personal teleporters.]]
+GameData["ui_info"]["help_text_list"]["text_02"] = [[- Personal teleporters allows a squad to jump from one location to the next avoiding impassable terrain.]]
+--REPLACE_ME
+GameData["ui_info"]["icon_name"] = [[space_marine_icons/personalteleporter_research_icon]]
+GameData["ui_info"]["screen_name_id"] = [[$95290]] -- Wargear: Personal Teleporters
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["override_help_text_list"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["ui_info"]["use_override_table_for_non_requisition_races"] = nil

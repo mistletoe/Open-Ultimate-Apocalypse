@@ -1,0 +1,164 @@
+-- -----------------------------------------------------------------
+-- CL_Eres_Badlands - NISLets and Intel Events
+--
+-- (c) 2003 Relic Entertainment
+-- -----------------------------------------------------------------
+
+EVENTS = {}
+
+EVENTS.IE_Kill_Count_Threshold_Chaos = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Cultist, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_Eldar = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Ranger, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_IG = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Guardsman, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_Orks = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Grot, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_Space_Marines = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Servitor, 3630001)	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_Tau = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Macha, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Count_Threshold_Necrons = function() --
+
+	Util_SetIE( true )
+	
+	
+	CTRL.Actor_PlaySpeech( ACT.Psyker, 3630001 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+
+EVENTS.IE_First_Blood = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630100 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+
+EVENTS.IE_Halfway = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630102 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Kill_Close = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630103 )	
+	CTRL.WAIT()
+	
+	Util_SetIE( false )
+
+end
+
+
+
+EVENTS.IE_Player_Win_Speech = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630105 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Player_Lose_Speech = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630109 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+
+EVENTS.IE_Kill_Count_Reached = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630108 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_AI_Ahead = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630107 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end
+
+EVENTS.IE_Time_Almost_Up = function() --
+
+	Util_SetIE( true )
+		CTRL.Actor_PlaySpeech( ACT.Daemon, 3630110 )	
+	CTRL.WAIT()
+	Util_SetIE( false )
+
+end

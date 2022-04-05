@@ -1,0 +1,91 @@
+GameData = Inherit([[]])
+GameData["accuracy"] = 0.6499999762
+GameData["accuracy_reduction_when_moving"] = 0.5500000119
+GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+GameData["area_effect"]["area_effect_information"]["area_effect_events"]["dirtsand"] = [[Guard\Weapons\Demolisher_Cannon_Dirtsand]]
+GameData["area_effect"]["area_effect_information"]["area_effect_events"]["grass"] = [[Guard\Weapons\Demolisher_Cannon_grass]]
+GameData["area_effect"]["area_effect_information"]["area_effect_events"]["rock"] = [[Guard\Weapons\Demolisher_Cannon_rock]]
+GameData["area_effect"]["area_effect_information"]["area_effect_events"]["water"] = [[ground_impact/artillery_impact_water]]
+GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
+GameData["area_effect"]["area_effect_information"]["radius"] = 8
+GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
+
+GameData["area_effect"]["throw_data"]["direction_angle_random"] = 15
+GameData["area_effect"]["throw_data"]["force_max"] = 55
+GameData["area_effect"]["throw_data"]["force_min"] = 35
+GameData["area_effect"]["throw_data"]["up_angle_max"] = 60
+GameData["area_effect"]["throw_data"]["up_angle_min"] = 25
+
+
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 625
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 465
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 25
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 75
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[unit_impact_events/Unit_Thrown_Smoke_Spray]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry03"]["event"] = [[unit_impact_events/Unit_Thrown_Smoke_Spray]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["max_lifetime"] = 5
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\speed_maximum_modifier.lua]])
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["exclusive"] = true 
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["value"] = 0.5
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_08"] = Reference([[tables\time_modify_entry.lua]])
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_09"] = Reference([[tables\time_modify_entry.lua]])
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_10"] = Reference([[tables\time_modify_entry.lua]])
+GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
+
+GameData["cost"] = Reference([[tables\time_cost_table.lua]])
+GameData["death_motion_value"] = [[]]
+GameData["fire_cone_angle"] = 5
+GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
+GameData["fire_cost"]["faith"] = nil
+GameData["fire_cost"]["souls"] = nil
+GameData["fired_projectile"] = [[battlecannon_shell]]
+GameData["horizontal_traverse_speed"] = 500
+GameData["linger_on_target_after_fire_time"] = 2
+GameData["max_range"] = 100
+GameData["max_traverse_down"] = 0
+GameData["max_traverse_left"] = 0
+GameData["max_traverse_right"] = 0
+GameData["max_traverse_up"] = 80
+GameData["melee_weapon"] = false
+GameData["min_range"] = 10
+GameData["miss_events"] = Reference([[tables\terrain_footfall_based_event_table.lua]])
+GameData["miss_events"]["dirtsand"] = [[ground_impact/Impact_Chaos_Battlecannon_Dirt]]
+GameData["miss_events"]["grass"] = [[ground_impact/Impact_Chaos_Battlecannon_Dirt]]
+GameData["miss_events"]["rock"] = [[ground_impact/Impact_Chaos_Battlecannon_Dirt]]
+GameData["miss_events"]["water"] = [[ground_impact/artillery_impact_water]]
+GameData["move_aim_to_home"] = true 
+GameData["move_to_home_position_delay"] = 1.5
+GameData["obey_entity_line_of_sight"] = false
+GameData["obey_terrain_line_of_sight"] = false
+GameData["random_aim_on_create"] = false
+GameData["reload_show_progress"] = false
+GameData["reload_time"] = 2
+GameData["setup_time"] = 0
+GameData["shot_delay_time"] = 0
+GameData["show_in_reinforce"] = true 
+GameData["single_shot"] = false
+GameData["single_shot_duration"] = 0
+GameData["stationary_horizontal_multiplier"] = 1
+GameData["ui_effective_against"] = Reference([[tables\text_table.lua]])
+GameData["ui_effective_against"]["text_01"] = [[$90104]] -- Infantry
+GameData["ui_effective_against"]["text_02"] = [[$90105]] -- Heavy Infantry
+GameData["ui_effective_against"]["text_03"] = [[$90107]] -- Vehicle
+GameData["ui_effective_against"]["text_04"] = [[$90102]] -- Building
+
+GameData["ui_hotkey_name"] = [[]]
+GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
+GameData["ui_info"]["help_text_id"] = [[$0]]
+
+GameData["ui_info"]["help_text_list"]["text_05"] = [[$0]]
+GameData["ui_info"]["help_text_list"]["text_06"] = [[$0]]
+
+GameData["ui_info"]["icon_name"] = [[space_marine_icons/upgrade]]
+
+GameData["ui_info"]["screen_name_id"] = [[$0]]
+GameData["ui_info"]["no_button"] = nil
+GameData["ui_info"]["pseudo_leader"] = nil
+GameData["vertical_traverse_speed"] = 30
+GameData["weapon_spawned_event_name"] = [[]]

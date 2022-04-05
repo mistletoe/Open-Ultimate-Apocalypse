@@ -1,0 +1,3146 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--    Dark Eldar Tutorial 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Mandrake
+-- 3	Capture Point
+-- 4	Build Slave
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Slave Chamber (3)
+-- 8	Build Hall of Blood (Barracks)
+-- 9	Build Warrior Squad
+-- 10	Reinforce Warriors
+-- 11	Health (skipped if tutorial has been played before)
+-- 12	Morale (skipped if tutorial has been played before)
+-- 13	Build Archon (Commander)
+-- 14	Add Incubus to Commander Squad
+-- 15	Build Harmonculus Lab
+-- 16	Add Leader to Warrior Squad
+-- 17	Research Planetary Raid (HQ)
+-- 18	Add on Torture Pit to Slave Chamer
+-- 19	Harvest Souls
+-- 20	Use Soul Power: Corrosion
+-- 21	Take Cover (skipped if tutorial has been played before)
+-- 22	Capture 3 Strategic Points (with LPs)
+-- 23	Capture Critical Location
+-- 24	Capture Relic
+-- 25	Build Dark Foundry (Vehicle Building)
+-- 26	Build a Raider
+-- 27	Put Troops into Raider
+-- 28	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 1 - Selection of Kabal Fortress
+---------------------------------------------------------------------------------------------
+-- Start the Dark Eldar Portion of the Tutorial
+function Rule_DarkEldar_Start()
+	-- Add the First Lesson: Selection of Kabal Fortress
+	Rule_AddOneShot(Rule_DarkEldar_Selection, 0)
+	
+	-- Add Rules to Check for Low Resources
+	Rule_AddInterval(Rule_DarkEldar_LowResource, 10)
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 1 - Selection of Kabal Fortress
+---------------------------------------------------------------------------------------------
+-- Assign "Select the HQ" Lesson & Objective
+function Rule_DarkEldar_Selection()
+	-- Define Objective: Select the HQ
+	obj_Selection = {title_id = 3950129, short_desc_id = 3950130, help_tip_id = 3950129 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Get what is currently selected
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Make Sure the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_DarkEldar_Selection)
+		
+		-- Play Intel Event
+		Util_StartIntel(EVENTS.IE_DarkEldar_Selection)
+		
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_SelectionCheck, 0)
+
+	-- If they do have the HQ selected...
+	else
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_DarkEldar_SelectionDone, 0)
+	end
+end
+
+-- Checks if Player has selected the HQ
+function Rule_DarkEldar_SelectionCheck()
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+
+	-- If Player has selected the HQ
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_SelectionCheck)
+		Rule_AddInterval(Rule_DarkEldar_SelectionDone, 0)
+	end
+end
+
+-- Finish "Select the HQ" Lesson
+function Rule_DarkEldar_SelectionDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Mandrake
+		Rule_AddOneShot(Rule_DarkEldar_BuildMandrake, 0)
+		Rule_Remove(Rule_DarkEldar_SelectionDone)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 2 - Build Mandrake Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Build Mandrake Squad" Lesson & Objective
+function Rule_DarkEldar_BuildMandrake()
+	-- Define Objective: Build a Mandrake Squad
+	obj_BuildMandrake = { title_id = 3950131, short_desc_id = 3950132, help_tip_id = 3950131 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a mandrake squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMandrake, true, EVENTS.IE_DarkEldar_BuildMandrake)
+		
+		-- Play IE
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildMandrake)
+		
+		-- Ping the HQ
+		ping_BuildMandrake = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_BuildMandrakeDoing, 0)
+
+	-- if they already have a mandrake squad
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMandrake, true)
+		Tut_Util_ObjectiveComplete(obj_BuildMandrake.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildMandrake_Complete)
+		
+		-- Ping mandrake team once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_BuildMandrakeDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Mandrake Squad
+function Rule_DarkEldar_BuildMandrakeDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+
+	-- Is player currently producing mandrake
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true)
+	then
+		-- Play IE: Talks about Production Bar filling up
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildMandrake_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_DarkEldar_BuildMandrakeDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildMandrakeCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Mandrake Squad
+function Rule_DarkEldar_BuildMandrakeCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built mandrake squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMandrake.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildMandrake_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildMandrake)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Stop the Ping on the Production Button
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, false, true)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildMandrakeCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildMandrakeDone, 0)
+	end
+end
+
+-- Finish the "Build Mandrake" Lesson
+function Rule_DarkEldar_BuildMandrakeDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Strategic Point
+		Rule_Remove(Rule_DarkEldar_BuildMandrakeDone)
+		Rule_AddOneShot(Rule_DarkEldar_CapturePoint, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 3 - Capture Strategic Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Strategic Point" Lesson & Objective
+function Rule_DarkEldar_CapturePoint()
+	-- Define Objective: Capture a Strategic Point
+	obj_CapturePoint = { title_id = 1100606, short_desc_id = 3950133, help_tip_id = 1100606 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 200
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create/Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_DarkEldar_CapturePoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_CapturePoint)
+		
+		-- Ping points & mandrake squad
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_DarkEldar_CapturePointDoing, 0)	
+	end
+end
+
+-- Check if the Player has started capturing the strategic point
+function Rule_DarkEldar_CapturePointDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Is the Player currently capturing a Strategic Point
+	if (Cmd_IsCapturing("sg_Player1All", false) == true)
+	then
+		-- Play IE: Capturing Takes Time, Don't Move Squad
+		Util_StartIntel(EVENTS.IE_DarkEldar_CapturePoint_Doing)
+		
+		-- Triggers the check for completed capture rule
+		Rule_AddInterval(Rule_DarkEldar_CapturePointCheck, 0)
+		Rule_Remove(Rule_DarkEldar_CapturePointDoing)
+	end
+end
+
+-- Check if the Player has finished capturing the first strategic point
+function Rule_DarkEldar_CapturePointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Is the point fully captured...
+	if Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Complete Objective & Play IE: 
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_CapturePointCheck)
+		Rule_AddInterval(Rule_DarkEldar_CapturePointDone, 0)
+	end
+end
+
+-- Finish the "Capture Strategic Point" Lesson
+function Rule_DarkEldar_CapturePointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Builder (Tortured Slave)
+		Rule_Remove(Rule_DarkEldar_CapturePointDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildBuilder, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 4 - Build Tortured Slave Builder
+--------------------------------------------------------------------------------------------
+-- Assign "Build Tortured Slave Builder" Lesson & Objective
+function Rule_DarkEldar_BuildBuilder()
+	-- Define Objective: Build a Tortured Slave
+	obj_BuildBuilder = { title_id = 3950134, short_desc_id = 3950135, help_tip_id = 3950134 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have a builder...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder , true, EVENTS.IE_DarkEldar_BuildBuilder)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBuilder)
+		
+		-- Ping the HQ & Flash Production Button of the Tortured Slave
+		ping_BuildBuilder = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_DarkEldar_BuildBuilderDoing, 0)
+
+	-- else if they DO have a builder already...
+	else
+		-- Create/Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder, true)
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBuilder_Doing)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_BuildBuilderDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Builder
+function Rule_DarkEldar_BuildBuilderDoing()
+	local mylist = {}
+	
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Is player currently producing a builder
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true)
+	then
+		-- Play IE: Role of a Builder	
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBuilder_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_DarkEldar_BuildBuilderDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildBuilderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Mandrake Squad
+function Rule_DarkEldar_BuildBuilderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the Builder is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBuilder_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBuilder)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Stop the Flashing Production Button
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, false, true)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildBuilderCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildBuilderDone, 0)		
+	end	
+end
+
+-- Finish the "Build Tortured Slave Builder" Lesson
+function Rule_DarkEldar_BuildBuilderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Listening Post
+		Rule_Remove(Rule_DarkEldar_BuildBuilderDone)
+		Rule_AddInterval(Rule_DarkEldar_BuildPost, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 5 - Build Listening Post
+--------------------------------------------------------------------------------------------
+-- Assign "Build Listening Post" Lesson & Objective
+function Rule_DarkEldar_BuildPost()
+	-- Define Objective: Build Listening Post (Tower of Loathing)
+	obj_BuildPost = { title_id = 3950136, short_desc_id = 3950137, help_tip_id = 3950136 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post (& have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) and
+		Tut_PointsCaptured(g_Player1, 1, 1)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_DarkEldar_BuildPost)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildPost)
+		
+		-- Ping the captured flag & the builder
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Flash the Build Button & the Listening Post Building
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_DarkEldar_BuildPost)
+		Rule_AddInterval(Rule_DarkEldar_BuildPostDoing, 0)
+		
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildPost
+		Rule_Remove(Rule_DarkEldar_BuildPost)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+		
+	-- esle if they do somehow have a listening post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildPost_Doing)
+		
+		-- Ping Already built Listening Post
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildPost)
+		Rule_AddInterval(Rule_DarkEldar_BuildPostDone, 0)		
+	end
+end
+
+-- Check if the Player has started building the Listening Post
+function Rule_DarkEldar_BuildPostDoing()
+	-- Has the player started building the listening post (Tower of Loathing) 
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true)
+	then
+		-- Play IE: Remind Player that Building build without the builders
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildPost_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildPostDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildPostCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Listening Post
+function Rule_DarkEldar_BuildPostCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the Listening Post is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildPostCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildPostDone, 0)
+	end
+end
+
+-- Finish the "Build Listening Post" Lesson
+function Rule_DarkEldar_BuildPostDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Power Generator
+		Rule_Remove(Rule_DarkEldar_BuildPostDone)
+		Rule_AddInterval(Rule_DarkEldar_BuildGenerator, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 6 - Build Power Generator
+--------------------------------------------------------------------------------------------
+-- Assign "Build Power Generator" Lesson & Objective
+function Rule_DarkEldar_BuildGenerator()
+	-- Define Objective: Build a Plasma Generator
+	obj_BuildGenerator = { title_id = 1100615, short_desc_id = 3950138, help_tip_id = 1100615 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_DarkEldar_BuildGenerator)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildGenerator)
+		
+		-- Flash Build Button & Generator Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildGenerator)
+		Rule_AddInterval(Rule_DarkEldar_BuildGeneratorDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildGenerator
+		Rule_Remove(Rule_DarkEldar_BuildGenerator)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+	
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildGenerator_Complete)
+		
+		-- Ping the Already Built Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildGenerator)
+		Rule_AddInterval(Rule_DarkEldar_BuildGeneratorDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Power Generator
+function Rule_DarkEldar_BuildGeneratorDoing()
+	-- Has the player started building the power generator 
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true)
+	then
+		-- Play IE: More power generators equal faster power resource gathering
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildGenerator_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildGeneratorCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Power Generator
+function Rule_DarkEldar_BuildGeneratorCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Power Generator is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildGenerator_Complete)
+		
+		-- Plays IE about Control Zone if Players First Time playing tutorial
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+		then
+			Util_StartIntel(EVENTS.IE_DarkEldar_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildGeneratorDone, 0)		
+	end
+end
+
+-- Finish the "Build Generator" Lesson
+function Rule_DarkEldar_BuildGeneratorDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Slave Chambers & Population
+		Rule_Remove(Rule_DarkEldar_BuildGeneratorDone)
+		Rule_AddInterval(Rule_DarkEldar_BuildSlaveChamber, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 7 - Slave Chambers & Population Lesson
+--------------------------------------------------------------------------------------------
+-- Assign "Build 3 Slave Chambers" Lesson & Objective
+function Rule_DarkEldar_BuildSlaveChamber()
+	-- Define Objective: Build 3 Slave Chambers
+	obj_BuildSlaveChamber = { title_id = 3950145, short_desc_id = 3950146, help_tip_id = 3950145 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have 3 SlaveChambers (but have a builder)
+	if Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 3, true) ~= true and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildSlaveChamber)
+		
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSlaveChamber , true, EVENTS.IE_DarkEldar_BuildSlaveChamber)
+		
+		-- Flash Build Button & SlaveChamber Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.population, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamber)
+		Rule_AddInterval(Rule_DarkEldar_BuildSlaveChamberDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildSlaveChamber
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamber)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+		
+	-- Else if they do have 3 SlaveChambers already...
+	elseif Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 3, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildSlaveChamber , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSlaveChamber.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildSlaveChamber_Doing)
+		
+		-- Ping the Already Built SlaveChambers
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamber)
+		Rule_AddInterval(Rule_DarkEldar_BuildSlaveChamberDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the SlaveChambers
+function Rule_DarkEldar_BuildSlaveChamberDoing()
+	-- Has the player started building the SlaveChambers
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.population) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildSlaveChamber_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamberDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildSlaveChamberCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building all 3 SlaveChambers
+function Rule_DarkEldar_BuildSlaveChamberCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the 3 Slave Chambers are built
+	if Tut_EGBlueprintCheck_AllSlaveChambers("eg_Player1All", blueprint.population, 3, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildSlaveChamber.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildSlaveChamber_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.population, false, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamberCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildSlaveChamberDone, 0)
+	end
+end
+
+-- Finish the "Build 3 SlaveChamber" Lesson
+function Rule_DarkEldar_BuildSlaveChamberDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Barracks (Hall of Blood)
+		Rule_Remove(Rule_DarkEldar_BuildSlaveChamberDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildBarracks, 0)
+		
+		-- Add Rules to Remind the Player to build more slave chambers if population reaches limit
+		Rule_AddInterval(Rule_DarkEldar_SquadCap, 10)
+		Rule_AddInterval(Rule_DarkEldar_SquadLimit, 10)		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 8 - Build Barracks (Hall of Blood)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Hall of Blood" Lesson & Objective
+function Rule_DarkEldar_BuildBarracks()
+	-- Define Objective: Build a Barracks (Hall of Blood)
+	obj_BuildBarracks = { title_id = 3950139, short_desc_id = 3950140, help_tip_id = 3950139 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Hall of Blood (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_DarkEldar_BuildBarracks)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBarracks)
+		
+		-- Flash Build Button & Barracks Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildBarracks)
+		Rule_AddInterval(Rule_DarkEldar_BuildBarracksDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildBarracks
+		Rule_Remove(Rule_DarkEldar_BuildBarracks)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBarracks_Doing)
+		
+		-- Ping the Already Built Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildBarracks)
+		Rule_AddInterval(Rule_DarkEldar_BuildBarracksDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Barracks
+function Rule_DarkEldar_BuildBarracksDoing()
+	-- Has the player started building the barracks
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBarracks_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildBarracksDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildBarracksCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Barracks
+function Rule_DarkEldar_BuildBarracksCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Barracks is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true)
+	then
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildBarracksCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildBarracksDone, 0)
+	end
+end
+
+-- Finish the "Build Barracks" Lesson
+function Rule_DarkEldar_BuildBarracksDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Building Warrior Squad
+		Rule_Remove(Rule_DarkEldar_BuildBarracksDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildInfantry, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 9 - Build a Warrior Squad 
+---------------------------------------------------------------------------------------------
+-- Assign "Build Warrior" Lesson & Objective
+function Rule_DarkEldar_BuildInfantry()
+	-- Define Objective: Build a Warrior Squad
+	obj_BuildInfantry = { title_id = 3950141, short_desc_id = 3950142, help_tip_id = 3950141 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Warrior Squad
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true, EVENTS.IE_DarkEldar_BuildInfantry)
+		
+		-- Play IE: Build a Warrior Squad
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildInfantry)
+		
+		-- Ping the HQ
+		ping_BuildInfantry = Tut_PingBlueprint(blueprint.barracks, true)
+		
+		-- Flash Warrior Button:
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_BuildInfantryDoing, 0)
+		
+	-- else if the do have a Warrior Squad already...
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true)
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildInfantry_Complete)
+		
+		-- Ping the Already Built Warrior Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_BuildInfantryDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Warrior Squad
+function Rule_DarkEldar_BuildInfantryDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the warrior squad
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildInfantry_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildInfantryDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildInfantryCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Warrior Squad
+function Rule_DarkEldar_BuildInfantryCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Warrior Squad is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildInfantry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildInfantry)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		--Stop the Flashing Production Button
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildInfantryCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildInfantryDone, 0)
+	end
+end
+
+-- Finish the "Build Warriors" Lesson
+function Rule_DarkEldar_BuildInfantryDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Reinforcing Troops
+		Rule_Remove(Rule_DarkEldar_BuildInfantryDone)
+		Rule_AddOneShot(Rule_DarkEldar_Reinforce, 0) 
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 10 - Reinforce Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Reinforce Warrior Squad" Lesson & Objective
+function Rule_DarkEldar_Reinforce()
+	-- Define Objective : Reinforce your Warrior Squad
+	obj_Reinforce = { title_id = 3950143, short_desc_id = 3950144, help_tip_id = 3950143 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Create Objective with Repeating Intel Event
+	Tut_Util_ObjectiveCreate(obj_Reinforce , true, EVENTS.IE_DarkEldar_Reinforce)
+	
+	-- Check to see if the Warrior Squad has reinforced (& complete if so)
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_Reinforce_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_AddInterval(Rule_DarkEldar_ReinforceDone, 0)
+	
+	-- Otherwise Play IE & Assign Objective
+	else	
+		-- PLay IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_Reinforce)
+		
+		-- Ping the Warrior Squad
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Flash Reinforcement Button
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_ReinforceDoing, 0)
+	end
+end
+
+-- Check if the Player has started reinforcing the warrior squad
+function Rule_DarkEldar_ReinforceDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Function to Filter Squad List
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	
+	-- throw away any player squads that aren't warrior squads
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	-- Has the Player Started Reinforcing the warrior squad
+	if (Cmd_IsReinforcing("sg_Player1All", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_Reinforce_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_ReinforceDoing)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCheck, 0)
+	end
+end
+
+-- Check if the Player has finished Reinforcing the Warrior Squad (First Member only)
+function Rule_DarkEldar_ReinforceCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Warrior Squad has reinforced
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_Reinforce_Complete)
+		
+		--Stop the Flashing Reinforcement Button
+		Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_ReinforceCheck)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceDone, 0)
+	end
+end
+
+-- Finish the "Reinforcing Troops" Lesson
+function Rule_DarkEldar_ReinforceDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Health
+		Rule_Remove(Rule_DarkEldar_ReinforceDone)
+		Rule_AddOneShot(Rule_DarkEldar_Health, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 11 - Health Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Health if Players First Time playing tutorial
+function Rule_DarkEldar_Health()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_Health)
+		Rule_AddInterval(Rule_DarkEldar_HealthDone, 0)
+	else
+		-- Skip to Next Lesson: Morale
+		Rule_AddOneShot(Rule_DarkEldar_Morale, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson (Morale)
+function Rule_DarkEldar_HealthDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Morale
+		Rule_Remove(Rule_DarkEldar_HealthDone)
+		Rule_AddOneShot(Rule_DarkEldar_Morale, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 12 - Morale Lesson
+--------------------------------------------------------------------------------------------
+-- Plays IE about Morale if Players First Time playing tutorial
+function Rule_DarkEldar_Morale()
+	-- Is this the first time playing tutorial?
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_Morale)
+		Rule_AddInterval(Rule_DarkEldar_MoraleDone, 0)
+	else
+		-- Clean Up & Move onto the next Lesson: Build an Archon (Commander) 
+		Rule_AddOneShot(Rule_DarkEldar_BuildCommander, 0)
+	end
+end
+
+-- IE is finished, move on to the next lesson (Morale)
+function Rule_DarkEldar_MoraleDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build an Archon (Commander) 
+		Rule_Remove(Rule_DarkEldar_MoraleDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildCommander, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 13 - Build an Archon (Commander) 
+---------------------------------------------------------------------------------------------
+-- Assign "Build Archon (Commander)" Lesson & Objective
+function Rule_DarkEldar_BuildCommander()
+	-- Define Objective: Build an Archon
+	obj_BuildCommander = { title_id = 3950153, short_desc_id = 3950154, help_tip_id = 3950153 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't have a commander...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_DarkEldar_BuildCommander)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.barracks, true)
+		
+		-- Flash Build Archon Button on the Barracks
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_DarkEldar_BuildCommander)
+		Rule_AddInterval(Rule_DarkEldar_BuildCommanderDoing, 0)
+		
+	-- else if they have the Commander...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildCommander_Doing)
+		
+		-- Ping the Already Built Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildCommander)
+		Rule_AddInterval(Rule_DarkEldar_BuildCommanderDone, 0)
+	end	
+end
+
+-- Check if the Player has started building the Commander
+function Rule_DarkEldar_BuildCommanderDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started building the Commander
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true)
+	then
+		--Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildCommander_Doing)
+		
+		-- Turn off the Flashing Construction Buttons		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildCommanderDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildCommanderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Commander
+function Rule_DarkEldar_BuildCommanderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Commander is built
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildCommanderCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildCommanderDone, 0)		
+	end	
+end
+
+-- Finish the "Build Archon (Commander)" Lesson
+function Rule_DarkEldar_BuildCommanderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add Incubus to Command Squad
+		Rule_Remove(Rule_DarkEldar_BuildCommanderDone)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCommandSquad, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 14 - Add Incubus to Command Squad
+---------------------------------------------------------------------------------------------
+-- Assign "Add Incubus to Command Squad" Lesson & Objective
+function Rule_DarkEldar_ReinforceCommandSquad()
+	-- Define Objective: Add Incubus to Command Squad
+	obj_ReinforceCommandSquad = { title_id = 3950155, short_desc_id = 3950156, help_tip_id = 3950155 }
+	
+	--Grab the Archon Command Squad
+	Rule_DarkEldar_Get_CommandSquad()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 60
+
+	-- If they haven't already reinforced the Command Squad (Added Incubus)...
+	if SGroup_CountLeaders("sg_CommandSquad") < 1
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad , true, EVENTS.IE_DarkEldar_ReinforceCommandSquad)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_ReinforceCommandSquad)
+		
+		-- Ping the Command Squad
+		ping_CommandSquad = Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Flash Incubus Button
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.commander_leader, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCommandSquadDoing, 0)
+		
+	-- else if the Command Squad has an Incubus added to it already...
+	elseif SGroup_CountLeaders("sg_CommandSquad") >= 1
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_ReinforceCommandSquad, true)
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_ReinforceCommandSquadDoing)
+		
+		-- Ping the Already Reinforced Command Squad
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_ReinforceCommandSquad)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCommandSquadDone, 0)
+	end
+end
+
+-- Check if the Player has started reinforcing the Command Squad
+function Rule_DarkEldar_ReinforceCommandSquadDoing()
+	--Grab the Archon Command Squad
+	Rule_DarkEldar_Get_CommandSquad()
+	
+	-- Has the player started reinforcing the command squad
+	if (Cmd_IsReinforcingLeader("sg_CommandSquad", false))
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_ReinforceCommandSquadDoing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_ReinforceCommandSquadDoing)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCommandSquadCheck, 0)
+	end
+end
+
+-- Check if the Player has finished Adding an Icubus to Command Squad
+function Rule_DarkEldar_ReinforceCommandSquadCheck()
+	--Grab the Archon Command Squad
+	Rule_DarkEldar_Get_CommandSquad()
+
+	-- Check to see if the Command Squad has an Incubus Added to it
+	if 	SGroup_CountLeaders("sg_CommandSquad") >= 1
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_ReinforceCommandSquad.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_ReinforceCommandSquadDone)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CommandSquad)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_ReinforceCommandSquadCheck)
+		Rule_AddInterval(Rule_DarkEldar_ReinforceCommandSquadDone, 0)
+	end
+end
+
+-- Finish the "Add an Incubus" Lesson
+function Rule_DarkEldar_ReinforceCommandSquadDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		--Turn off the flashing button
+		Flash_ReinforcementButton(RT_Leader, blueprint.commander, blueprint.commander_leader, false, true)
+		
+		-- Clean Up & Move onto the next Lesson: Build Harmonculus Lab
+		Rule_Remove(Rule_DarkEldar_ReinforceCommandSquadDone)
+		Rule_AddInterval(Rule_DarkEldar_BuildHarmonculusLab, 0)
+	end
+end
+
+--Grab the Archon Command Squad
+function Rule_DarkEldar_Get_CommandSquad()
+	-- Function to Filter Squad List
+	local StripCommandSquad = function(sgroupid, itemindex, squadID )
+		if 	Squad_GetBlueprintName(squadID) == "dark_eldar_squad_archon" then
+			SGroup_Add(SGroup_CreateIfNotFound("sg_CommandSquad"), squadID)
+		end
+	end
+	
+	-- throw away any player squads that aren't Archon Command Squads
+	SGroup_ForEach(Player_GetSquads(g_Player1), StripCommandSquad)
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 15 - Build Harmonculus Lab
+--------------------------------------------------------------------------------------------
+-- Assign "Build Harmonculus Lab" Lesson & Objective
+function Rule_DarkEldar_BuildHarmonculusLab()
+	-- Define Objective: Build a HarmonculusLab
+	obj_BuildHarmonculusLab = { title_id = 3950157, short_desc_id = 3950158, help_tip_id = 3950157 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a HarmonculusLab (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildHarmonculusLab , true, EVENTS.IE_DarkEldar_BuildHarmonculusLab)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildHarmonculusLab)
+		
+		-- Flash Build Button & HarmonculusLab Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLab)
+		Rule_AddInterval(Rule_DarkEldar_BuildHarmonculusLabDoing, 0)
+	
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildHarmonculusLab
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLab)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+		
+	-- Else if they do have a Harmonculus Lab already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildHarmonculusLab , true)
+		Tut_Util_ObjectiveComplete(obj_BuildHarmonculusLab.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildHarmonculusLab_Doing)
+		
+		-- Ping the Already Built HarmonculusLab
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLab)
+		Rule_AddInterval(Rule_DarkEldar_BuildHarmonculusLabDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Harmonculus Lab
+function Rule_DarkEldar_BuildHarmonculusLabDoing()
+	-- Has the player started building the Harmonculus Lab
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildHarmonculusLab_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLabDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildHarmonculusLabCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Harmonculus Lab
+function Rule_DarkEldar_BuildHarmonculusLabCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Harmonculus Lab is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildHarmonculusLab.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildHarmonculusLab_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLabCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildHarmonculusLabDone, 0)
+	end
+end
+
+-- Finish the "Build Harmonculus Lab" Lesson
+function Rule_DarkEldar_BuildHarmonculusLabDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add Leader to Warrior Squad
+		Rule_Remove(Rule_DarkEldar_BuildHarmonculusLabDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildLeader, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 16 - Add Leader to Warrior Squad
+--------------------------------------------------------------------------------------------
+-- Assign "Add Leader to Warrior Squad" Lesson & Objective
+function Rule_DarkEldar_BuildLeader()
+	-- Define Objective: Add Leader
+	obj_BuildLeader = { title_id = 3950159, short_desc_id = 3950160, help_tip_id = 3950159 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get the Warrior Squad
+	Rule_DarkEldar_Get_WarriorSquad()
+
+	-- If they haven't got a Leader of warrior squad already (or even a warrior squad)
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) or
+		SGroup_Exists("sg_WarriorSquad") == false or
+		SGroup_CountSpawned("sg_WarriorSquad") == 0 or
+		SGroup_CountLeaders("sg_WarriorSquad") == 0
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true, EVENTS.IE_DarkEldar_BuildLeader)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildLeader)
+		
+		-- Ping the Warriors & Flash "Add Leader Button"
+		t_BuildLeader = Tut_PingBlueprint(blueprint.infantry, false)
+		Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildLeader)
+		Rule_AddInterval(Rule_DarkEldar_BuildLeaderDoing, 0)
+
+	-- else if the do have a Leader of warrior already...
+	elseif SGroup_CountLeaders("sg_WarriorSquad") >= 1
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildLeader , true)
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildLeader_Complete)
+		
+		-- Ping the Already Created Leader
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildLeader)
+		Rule_AddInterval(Rule_DarkEldar_BuildLeaderDone, 0)
+	end
+end
+
+-- Check if the Player has started building the Leader
+function Rule_DarkEldar_BuildLeaderDoing()
+	-- Has the player started building the leader in last 2 secs
+	if Command_HasBeenIssuedSquad(SCMD_ReinforceLeader, 2)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildLeader_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildLeaderDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildLeaderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building the leader
+function Rule_DarkEldar_BuildLeaderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get the Warrior Squad
+	Rule_DarkEldar_Get_WarriorSquad()
+	
+	-- Check to see if the Leader is built (& they have warrior squad)
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) and
+		SGroup_CountLeaders("sg_WarriorSquad") >= 1
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildLeader.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildLeader_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_BuildLeader)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Stop the Flashing Button
+		Flash_ReinforcementButton(RT_Leader, blueprint.infantry, "", false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildLeaderCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildLeaderDone, 0)
+	end
+end
+
+-- Finish the "Add Leader to Warrior Squad" Lesson
+function Rule_DarkEldar_BuildLeaderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Research Planetary Raid
+		Rule_Remove(Rule_DarkEldar_BuildLeaderDone)
+		Rule_AddOneShot(Rule_DarkEldar_PlanetaryRaid, 0)
+	end
+end
+
+--Grab the Warrior Squad
+function Rule_DarkEldar_Get_WarriorSquad()
+	-- Function to Filter Squad List
+	local StripWarriorSquad = function(sgroupid, itemindex, squadID )
+		if 	Squad_GetBlueprintName(squadID) == blueprint.infantry then
+			SGroup_Add(SGroup_CreateIfNotFound("sg_WarriorSquad"), squadID)
+		end
+	end
+	
+	-- throw away any player squads that aren't Archon Command Squads
+	SGroup_ForEach(Player_GetSquads(g_Player1), StripWarriorSquad)
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 17 - Planetary Raid
+--------------------------------------------------------------------------------------------
+-- Assign "Planetary Raid" Lesson & Objective
+function Rule_DarkEldar_PlanetaryRaid()
+	-- Define Objective: Research Planetary Raid Add-on
+	obj_PlanetaryRaid = { title_id = 3950161, short_desc_id = 3950162, help_tip_id = 3950161 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+	
+	-- If they haven't upgraded the HQ to Planetary Raid
+	if Tut_AddonIsDone(blueprint.hq_addon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_PlanetaryRaid , true, EVENTS.IE_DarkEldar_PlanetaryRaid)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_PlanetaryRaid)
+		
+		-- Ping the HQ & Flash the Planetary Raid Button
+		t_PlanetaryRaid = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_PlanetaryRaid)
+		Rule_AddInterval(Rule_DarkEldar_PlanetaryRaidDoing, 0)
+		
+	-- else if they have upgraded to Planetary Raid Already
+	elseif Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_PlanetaryRaid , true)
+		Tut_Util_ObjectiveComplete(obj_PlanetaryRaid.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_PlanetaryRaid_Complete)
+		
+		-- Ping the HQ (where research is done)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_PlanetaryRaid)
+		Rule_AddInterval(Rule_DarkEldar_PlanetaryRaidDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Planetary Raid
+function Rule_DarkEldar_PlanetaryRaidDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Planetary Raid
+	if (Prod_DoesListContainAddOn(blueprint.hq_addon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_PlanetaryRaid_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_AddOn, blueprint.hq_addon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_PlanetaryRaidDoing)
+		Rule_AddInterval(Rule_DarkEldar_PlanetaryRaidCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Planetary Raid
+function Rule_DarkEldar_PlanetaryRaidCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Planetary Raid is finished
+	if Tut_AddonIsDone(blueprint.hq_addon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_PlanetaryRaid.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_PlanetaryRaid_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_PlanetaryRaid)
+		Tut_PingBlueprint(blueprint.hq, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_PlanetaryRaidCheck)
+		Rule_AddInterval(Rule_DarkEldar_PlanetaryRaidDone, 0)
+	end
+end
+
+-- Finish the "Planetary Raid" Lesson
+function Rule_DarkEldar_PlanetaryRaidDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Add a Torture Pit to Slave Chamber
+		Rule_Remove(Rule_DarkEldar_PlanetaryRaidDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildTorturePit, 0)
+		
+		-- Add Rule to Remind Player to build thermo generators if power level gets low
+			-- thermos require tier 2 tech
+		Rule_AddInterval(Rule_DarkEldar_LowPower, 10)	
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 18 - Add a Torture Pit to Slave Chamber
+--------------------------------------------------------------------------------------------
+-- Assign "Add a Torture Pit to Slave Chamber" Lesson & Objective
+function Rule_DarkEldar_BuildTorturePit()
+	-- Define Objective: Add a Torture Pit to Slave Chamber
+	obj_TorturePit = { title_id = 3950147, short_desc_id = 3950148, help_tip_id = 3950147 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they haven't upgraded the Slave Chamber to Torture Pit
+	if Tut_AddonIsDone(blueprint.slaveChamber_addon, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_TorturePit , true, EVENTS.IE_DarkEldar_BuildTorturePit)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildTorturePit)
+		
+		-- Ping the Slave Chamber & Flash the Toture Pit Button
+		t_TorturePit = Tut_PingBlueprint(blueprint.population, true)
+		Flash_ProductionButton(PQ_AddOn, blueprint.slaveChamber_addon, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildTorturePit)
+		Rule_AddInterval(Rule_DarkEldar_BuildTorturePitDoing, 0)
+		
+	-- else if they have upgraded to Torture Pit Already
+	elseif Tut_AddonIsDone(blueprint.slaveChamber_addon, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_TorturePit , true)
+		Tut_Util_ObjectiveComplete(obj_TorturePit.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildTorturePit_Complete)
+		
+		-- Ping the Slave Chamber (where research is done)
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildTorturePit)
+		Rule_AddInterval(Rule_DarkEldar_BuildTorturePitDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Torture Pit
+function Rule_DarkEldar_BuildTorturePitDoing()
+	local mylist = {}
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Has the player started researching the Torture Pit
+	if (Prod_DoesListContainAddOn(blueprint.slaveChamber_addon, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildTorturePit_Doing)
+		
+		-- Turn off the Flashing Research Buttons
+		Flash_ProductionButton(PQ_AddOn, blueprint.slaveChamber_addon, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildTorturePitDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildTorturePitCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Torture Pit
+function Rule_DarkEldar_BuildTorturePitCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Torture Pit is finished
+	if Tut_AddonIsDone(blueprint.slaveChamber_addon, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_TorturePit.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildTorturePit_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_TorturePit)
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildTorturePitCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildTorturePitDone, 0)
+	end
+end
+
+-- Finish the "Torture Pit" Lesson
+function Rule_DarkEldar_BuildTorturePitDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Harvesting Souls
+		Rule_Remove(Rule_DarkEldar_BuildTorturePitDone)
+		Rule_AddOneShot(Rule_DarkEldar_HarvestSouls,0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 19 - Harvest 100 Souls
+--------------------------------------------------------------------------------------------
+-- Assign "Harvest 100 Souls" Lesson & Objective
+function Rule_DarkEldar_HarvestSouls()
+	-- Define Objective: Add a Torture Pit to Slave Chamber
+	obj_HarvestSouls = { title_id = 3950149, short_desc_id = 3950150, help_tip_id = 3950149 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they haven't gathered 100 soul yet
+	if Player_GetResource(g_Player1, RT_Souls) < 100
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_HarvestSouls , true, EVENTS.IE_DarkEldar_HarvestSouls)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_HarvestSouls)
+		
+		-- Ping the Slave Chamber (where souls harvested from)
+		t_TorturePit = Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Can't highlight the harvest soul button on the slave -- although it does light up once a soul is available
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_HarvestSouls)
+		Rule_AddInterval(Rule_DarkEldar_HarvestSoulsDoing, 0)
+		
+	-- else if they have harvested 100 soul
+	elseif Player_GetResource(g_Player1, RT_Souls) >= 100
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_HarvestSouls , true)
+		Tut_Util_ObjectiveComplete(obj_HarvestSouls.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_HarvestSouls_Complete)
+		
+		-- Ping the Slave Chamber (where souls harvested from)
+		Tut_PingBlueprint(blueprint.population, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_HarvestSouls)
+		Rule_AddInterval(Rule_DarkEldar_HarvestSoulsDone, 0)
+	end
+end
+
+-- Check if the Player has started researching Torture Pit
+function Rule_DarkEldar_HarvestSoulsDoing()
+	-- Has the harvested some soul resource
+	if Player_GetResource(g_Player1, RT_Souls) >= 60
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_HarvestSouls_Doing)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_HarvestSoulsDoing)
+		Rule_AddInterval(Rule_DarkEldar_HarvestSoulsCheck, 0)
+	end
+end
+
+-- Check if the Player has finished researching Torture Pit
+function Rule_DarkEldar_HarvestSoulsCheck()
+	-- Check to see if has harvested 100 souls
+	if Player_GetResource(g_Player1, RT_Souls) >= 100
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_HarvestSouls.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_HarvestSouls_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_HarvestSoulsCheck)
+		Rule_AddInterval(Rule_DarkEldar_HarvestSoulsDone, 0)
+	end
+end
+
+-- Finish the "Harvest 100 Souls" Lesson
+function Rule_DarkEldar_HarvestSoulsDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Give the Player 100 Extra Soul (So have enough to cast Corrosion)
+		Player_AddResource(g_Player1, RT_Souls, 100)
+	
+		-- Clean Up & Move onto the next Lesson: Cast Soul Power: Corrosion
+		Rule_Remove(Rule_DarkEldar_HarvestSoulsDone)
+		Rule_AddOneShot(Rule_DarkEldar_SoulPower,0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Dark Eldar Lesson 20 - Use Slave Powers -- Corrosion
+--------------------------------------------------------------------------------------------
+-- Assign "Cast Soul Power: Corrosion " Lesson & Objective
+function Rule_DarkEldar_SoulPower()
+	-- Define Objective: Cast Corrosion
+	obj_SoulPower = { title_id = 3950151, short_desc_id = 3950152, help_tip_id = 3950152 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Store Current Amount of Souls
+	g_Amount_Soul = Player_GetResource(g_Player1, RT_Souls)
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 60
+	
+	-- Create Objective with Repeating Intel Event
+	Tut_Util_ObjectiveCreate(obj_SoulPower , true, EVENTS.IE_DarkEldar_SoulPower)
+
+	-- Play IE:
+	Util_StartIntel(EVENTS.IE_DarkEldar_SoulPower)
+	
+	-- Flash the Corrosion Icon
+	Flash_OtherButton("soul_ability_4", 0, true, true)
+
+	-- Triggers the checking rule
+	Rule_Remove(Rule_DarkEldar_SoulPower)
+	Rule_AddInterval(Rule_DarkEldar_SoulPowerCheck, 1)
+end
+
+-- Check if the Player has cast a soul power (actually works off any soul power since no real way to track corrosion directly)
+function Rule_DarkEldar_SoulPowerCheck()
+	-- Check if Player Current Soul Total is Less than the Previous Amount they had (basically if they fired a soul power)
+	if Player_GetResource(g_Player1, RT_Souls) < g_Amount_Soul
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_SoulPower.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_SoulPower_Complete)
+		
+		--Stop the Flashing of the Corrosion Icon
+		Flash_OtherButton("soul_ability_4", 0, false, true)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_SoulPowerCheck)
+		Rule_AddInterval(Rule_DarkEldar_SoulPowerDone, 0)
+
+	else
+		-- Store the new Current Amount of Souls
+		g_Amount_Soul = Player_GetResource(g_Player1, RT_Souls)
+	end
+end
+
+-- Finish the "Cast Soul Power: Corrosion" Lesson
+function Rule_DarkEldar_SoulPowerDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Take Cover
+		Rule_Remove(Rule_DarkEldar_SoulPowerDone)
+		Rule_AddOneShot(Rule_DarkEldar_TakeCover, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 21 - Take Cover (skipped if tutorial played before)
+--------------------------------------------------------------------------------------------
+-- Assign "Take Cover" Lesson & Objective
+function Rule_DarkEldar_TakeCover()
+	-- Define Objective: Take Cover
+	obj_TakeCover = { title_id = 500310, short_desc_id = 500311, help_tip_id = 500310 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Enable the AI to begin attacking
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes")
+	then
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- loop through all the covers on the map & choose the closest to player squads
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			-- If this cover is closer, make it the new closest cover
+			if currDistance < closestDist
+			then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_DarkEldar_TakeCover)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_TakeCover)
+		
+		-- Ping the Closest Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_TakeCoverDone, 0)
+	end	
+end
+
+-- Check if the Player has taken cover in the nearest cover point
+function Rule_DarkEldar_TakeCoverCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Loop through all the covers
+	for i = 1, 9 do
+		-- Check if Player Squad is in cover
+		if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..i) and
+			Event_IsAnyRunning() == false
+		then
+			-- Complete Objective & Play IE:
+			Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+			Util_StartIntel(EVENTS.IE_DarkEldar_TakeCover_Complete)
+			
+			-- Stop Looping Ping
+			Ping_Stop(ping_TakeCover)
+			
+			-- Triggers the end of Lesson
+			Rule_Remove(Rule_DarkEldar_TakeCoverCheck)
+			Rule_AddInterval(Rule_DarkEldar_TakeCoverDone, 0)			
+			
+			--Break out of For Loop
+			break
+		end
+	end	
+end
+
+-- Finish the "Take Cover" Lesson
+function Rule_DarkEldar_TakeCoverDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture 3 Strategic Pts (with LPs)
+		Rule_Remove(Rule_DarkEldar_TakeCoverDone)
+		Rule_AddOneShot(Rule_DarkEldar_PointCount, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 22 - Capture 3 Strategic Points (with LPs)
+--------------------------------------------------------------------------------------------
+-- Assign "Capture 3 Listening Posts" Lesson & Objective
+function Rule_DarkEldar_PointCount()
+	-- Define Objective:  Capture & Secure 3 Strategic Points
+	obj_PointCount = { title_id = 500250, short_desc_id = 3950163, help_tip_id = 500250 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If player doesn't have three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or
+		not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_DarkEldar_PointCount)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_PointCount)
+		
+		-- Ping Looping:
+		t_PointCount = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_PointCountDoing, 0)
+
+	-- if player has 3 points already
+	else
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_PointCount , true)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_PointCount_Complete)
+		
+		-- Ping the Listening Posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_PointCountDone, 0)
+	end
+end
+
+-- Checks if the Player has Captured the 3 Points yet
+function Rule_DarkEldar_PointCountDoing()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- when player captures the three points, remind them to building the listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_PointCount_Doing)
+		
+		-- Triggers the Check for Listening Posts
+		Rule_Remove(Rule_DarkEldar_PointCountDoing)
+		Rule_AddInterval(Rule_DarkEldar_PointCountCheck, 0)		
+	end
+end
+
+-- Check if the Player has finished building all the Listening Posts
+function Rule_DarkEldar_PointCountCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Are the points captured & have listening posts built on them
+	if Tut_PointsCaptured(g_Player1, 1, 3) and
+		Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_PointCountCheck)
+		Rule_AddInterval(Rule_DarkEldar_PointCountDone, 0)
+	end
+end
+
+-- Finish the "Capture 3 Listening Posts" Lesson
+function Rule_DarkEldar_PointCountDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Critical Point
+		Rule_Remove(Rule_DarkEldar_PointCountDone)
+		Rule_AddOneShot(Rule_DarkEldar_CaptureCriticalPoint, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 23 - Capture Critical Point
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Critical Point" Lesson & Objective
+function Rule_DarkEldar_CaptureCriticalPoint()
+	-- Define Objective: Capture the Critical Point
+	obj_CaptureCriticalPoint = { title_id = 500260, short_desc_id = 500261, help_tip_id = 500260}
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- If they don't alreay have a Critical Point...
+	if Tut_PointsCaptured(g_Player1, 2, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_DarkEldar_CaptureCriticalPoint)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_CaptureCriticalPointCheck, 0)
+
+	-- else if the do have a critical point...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureCriticalPoint_Complete)
+		
+		-- Ping the Already captured critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_CaptureCriticalPointDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing the critical point
+function Rule_DarkEldar_CaptureCriticalPointCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the critical point is captured
+	if Tut_PointsCaptured(g_Player1, 2, 1)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_DarkEldar_CaptureCriticalPointDone, 0)
+	end
+end
+
+-- Finish the "Capture Critical Point" Lesson
+function Rule_DarkEldar_CaptureCriticalPointDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Capture Relic
+		Rule_Remove(Rule_DarkEldar_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_DarkEldar_CaptureRelic, 0)		
+	end	
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 24 - Capture Relic
+--------------------------------------------------------------------------------------------
+-- Assign "Capture Relic" Lesson & Objective
+function Rule_DarkEldar_CaptureRelic()
+	-- Define Objective: Capture Relic
+	obj_CaptureRelic = { title_id = 500270, short_desc_id = 5400314, help_tip_id = 500270 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_DarkEldar_CaptureRelic)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_CaptureRelicCheck, 0)
+
+	-- else if they do have a relic already
+	else		
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Check if the Player has finished capturing relic
+function Rule_DarkEldar_CaptureRelicCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Check to see if the relic is captured
+	if Tut_PointsCaptured(g_Player1, 3, 1)
+	then		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_CaptureRelicCheck)
+		Rule_AddInterval(Rule_DarkEldar_CaptureRelicDone, 0)		
+	end	
+end
+
+-- Finish the "Capture Relic" Lesson
+function Rule_DarkEldar_CaptureRelicDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Vehicle Bay (Dark Foundry)
+		Rule_Remove(Rule_DarkEldar_CaptureRelicDone)
+		Rule_AddInterval(Rule_DarkEldar_BuildVehicleBuilding, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 25 - Build Vehicle Bay (Dark Foundry)
+--------------------------------------------------------------------------------------------
+-- Assign "Build Dark Foundry" Lesson & Objective
+function Rule_DarkEldar_BuildVehicleBuilding()
+	-- Define Objective: Build a Dark Foundry (Vehicle Building)
+	obj_BuildVehicleBuilding = { title_id = 3950164, short_desc_id = 3950165, help_tip_id = 3950164 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- If they don't alreay have a Dark Foundry (but have a builder)
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true, EVENTS.IE_DarkEldar_BuildVehicleBuilding)
+		
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildVehicleBuilding)
+		
+		-- Flash Build Button & Dark Foundry Button
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_DarkEldar_BuildVehicleBuildingDoing, 0)
+
+	-- In Case they don't have a builder -- Tell them to make another builder
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false)
+	then
+		-- Save where we are so can return after the player rebuilds a builder
+		g_tutorialRuleState = Rule_DarkEldar_BuildVehicleBuilding
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuilding)
+		
+		-- Add Rule to tell Player to build another builder
+		Rule_Add(Rule_DarkEldar_NoBuilder)
+
+	-- Else if they do have a Dark Foundry already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_BuildVehicleBuilding , true)
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildVehicleBuilding_Doing)
+		
+		-- Ping the Already Built Dark Foundry
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuilding)
+		Rule_AddInterval(Rule_DarkEldar_BuildVehicleBuildingDone, 0)		
+	end	
+end
+
+-- Check if the Player has started building the Dark Foundry
+function Rule_DarkEldar_BuildVehicleBuildingDoing()
+	-- Has the player started building the Dark Foundry
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildVehicleBuilding_Doing)
+		
+		-- Turn off the Flashing Construction Buttons 
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the "Check if Finished" rule
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuildingDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildVehicleBuildingCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Dark Foundry
+function Rule_DarkEldar_BuildVehicleBuildingCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if the Dark Foundry is built
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true)
+	then
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_BuildVehicleBuilding.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildVehicleBuilding_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuildingCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildVehicleBuildingDone, 0)
+	end
+end
+
+-- Finish the "Build Dark Foundry" Lesson
+function Rule_DarkEldar_BuildVehicleBuildingDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Build Raider
+		Rule_Remove(Rule_DarkEldar_BuildVehicleBuildingDone)
+		Rule_AddOneShot(Rule_DarkEldar_BuildRaider, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 26 - Build a Raider
+--------------------------------------------------------------------------------------------
+-- Assign "Build Raider" Lesson & Objective
+function Rule_DarkEldar_BuildRaider()
+	-- Define Objective: Build a Raider from the Dark Foundry
+	obj_BuildRaider = { title_id = 3950166, short_desc_id = 3950167, help_tip_id = 3950166 }
+
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Set Reminder Time on IEs if player hasn't completed a step
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Raider already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_raider, 1, false)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildRaider , true, EVENTS.IE_DarkEldar_BuildRaider)
+		
+		-- Play IE: 
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildRaider)
+		
+		-- Ping the Dark Foundry & Flash Raider Production Button
+		ping_BuildRaider = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.vehicle_raider, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_BuildRaiderDoing, 0)
+
+	-- if they already have a Raider
+	else
+		-- Create/Complete Objective & Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildRaider , true)
+		Tut_Util_ObjectiveComplete(obj_BuildRaider.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildRaider_Doing)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildRaider_Complete)
+		
+		-- Ping Raider once
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_BuildRaiderDone, 0)
+	end
+end
+
+-- Check if the Player has started construction of the Raider
+function Rule_DarkEldar_BuildRaiderDoing()
+	local mylist = {}
+	-- get all Player Egroups & Sgroups
+	Tut_Player1GetAll()
+	
+	-- Get everything Player is Currently Producing
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	-- Is player currently producing Raider
+	if (Prod_DoesListContainSquad(blueprint.vehicle_raider, mylist) == true)
+	then
+		-- Play IE:
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildRaider_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_DarkEldar_BuildRaiderDoing)
+		Rule_AddInterval(Rule_DarkEldar_BuildRaiderCheck, 0)
+	end
+end
+
+-- Check if the Player has finished building Raider
+function Rule_DarkEldar_BuildRaiderCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they built Raider
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_raider, 1, true)
+	then
+		-- Complete Objective & Play Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildRaider.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_BuildRaider_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildRaider)
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_DarkEldar_BuildRaiderCheck)
+		Rule_AddInterval(Rule_DarkEldar_BuildRaiderDone, 0)
+	end
+end
+
+-- Finish the "Build Raider" Lesson
+function Rule_DarkEldar_BuildRaiderDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Move onto the next Lesson: Load Warriors into Raider
+		Rule_Remove(Rule_DarkEldar_BuildRaiderDone)
+		Rule_AddOneShot(Rule_DarkEldar_Transport, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Lesson 27 - Put Warriors into Raider (& Complete Tutorial)
+--------------------------------------------------------------------------------------------
+-- Rule_DarkEldar_Transport
+-- Assign "Put Troops in Raider" Lesson & Objective
+function Rule_DarkEldar_Transport()
+	-- Define Objective: Put Troops in Raider
+	obj_Transport = { title_id = 3950168, short_desc_id = 3950169, help_tip_id = 3950168 }
+	
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+	
+	print("SCOUNT: "..SGroup_Count("sg_Player1All"))
+	print("ACTIVE:  "..Player_GetActiveSquadCount(g_Player1))
+	
+	--if all the units are active then no one is in transport...
+	if SGroup_Count("sg_Player1All") == Player_GetActiveSquadCount(g_Player1)
+	then
+		-- Create Objective with Repeating Intel Event
+		Tut_Util_ObjectiveCreate(obj_Transport , true, EVENTS.IE_DarkEldar_BuildRaider_Complete)
+		
+		-- Ping Raider & Warrior Squad
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_DarkEldar_TransportCheck, 0)
+
+	-- else if player has more units then active ones (then someone is either in transport or garrisoned)
+	elseif SGroup_Count("sg_Player1All") > Player_GetActiveSquadCount(g_Player1)
+	then
+		-- Create/Complete Objective & Play IE:
+		Tut_Util_ObjectiveCreate(obj_Transport , true)
+		Tut_Util_ObjectiveComplete(obj_Transport.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_Transport_Complete)
+		
+		-- Ping the Raider
+		Tut_PingBlueprint(blueprint.vehicle_raider, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_DarkEldar_TransportDone, 0)		
+	end
+end
+
+-- Check if the Player has placed warriors into the transport
+function Rule_DarkEldar_TransportCheck()
+	-- Get all egroups & sgroups
+	Tut_Player1GetAll()
+
+	-- else if player has more units then active ones (then someone is either in transport or garrisoned)
+	if SGroup_Count("sg_Player1All") > Player_GetActiveSquadCount(g_Player1) and
+		Tut_SGBlueprintCheck("sg_Player1All", blueprint.vehicle_raider, 1, true)
+	then		
+		-- Complete Objective & Play IE:
+		Tut_Util_ObjectiveComplete(obj_Transport.title_id)
+		Util_StartIntel(EVENTS.IE_DarkEldar_Transport_Complete)
+		
+		-- Triggers the end of Lesson
+		Rule_Remove(Rule_DarkEldar_TransportCheck)
+		Rule_AddInterval(Rule_DarkEldar_TransportDone, 0)		
+	end	
+end
+
+-- Finish the "Put Troops in Raider" Lesson
+function Rule_DarkEldar_TransportDone()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- Clean Up & Complete the Tutorial: 
+		Rule_Remove(Rule_DarkEldar_TransportDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Hint A1 - Squad Cap Reached
+---------------------------------------------------------------------------------------------
+-- Remind Player to Build a Slave Chamber for Squad Cap
+function Rule_DarkEldar_SquadCap()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at their current max pop, but less than the 20 max
+		if ( current == cap) and
+			(cap ~= maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_DarkEldar_SquadCap)
+			
+			-- Ping Builder & Flash Slave Chamber Contruction Icons
+			Tut_PingBlueprint(blueprint.builder, false)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.population, true, true)
+			
+			--Remove Rule
+			Rule_Remove(Rule_DarkEldar_SquadCap)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Hint A2 - Squad Limit Reached
+---------------------------------------------------------------------------------------------
+-- Let PLayer know they are at MAX Squad Cap
+function Rule_DarkEldar_SquadLimit()
+	if (Event_IsAnyRunning() == false)
+	then
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		-- if Player is at max pop
+		if ( current == cap) and
+			(cap == maxcap)
+		then
+			-- PLay IE:
+			Util_StartIntel(EVENTS.IE_DarkEldar_SquadLimit)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_DarkEldar_SquadLimit)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Hint A3 - Low Resource
+---------------------------------------------------------------------------------------------
+-- Checks Player Requisition is Getting Low
+function Rule_DarkEldar_LowResource()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players requisition is getting low
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_DarkEldar_LowResource)
+			
+			-- Remove Rule:
+			Rule_Remove(Rule_DarkEldar_LowResource)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Hint A4 - Low Power
+---------------------------------------------------------------------------------------------
+-- Checks Player Power is Getting Low
+function Rule_DarkEldar_LowPower()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- If the players power is getting low
+		if (Player_GetResource(g_Player1, RT_Power) < 100)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_DarkEldar_LowPower)
+			
+			-- Remove Rule
+			Rule_Remove(Rule_DarkEldar_LowPower)
+		end
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Hint A5 - No Builder Unit
+---------------------------------------------------------------------------------------------
+-- PLayer has no builder, but needs to build something
+function Rule_DarkEldar_NoBuilder()
+	if (Event_IsAnyRunning() == false)
+	then
+		-- if player has no builders (slaves)
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+		then
+			-- Play IE:
+			Util_StartIntel(EVENTS.IE_DarkEldar_NoBuilder)
+			
+			-- Add Rule to Check for when builder builds
+			Rule_Remove(Rule_DarkEldar_NoBuilder)
+			Rule_AddInterval(Rule_DarkEldar_NoBuilderDone,0)
+		end
+	end
+end
+
+-- Readd the Rule that player was up to when they had no builder
+function Rule_DarkEldar_NoBuilderDone()
+	-- Player has built a builder
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true)
+	then
+		-- Readd the Rule for what they where told to build but had no builders
+		Rule_Add( g_tutorialRuleState )
+		Rule_Remove(Rule_DarkEldar_NoBuilderDone)
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- DarkEldar Support Function to Count Number of Caravels
+---------------------------------------------------------------------------------------------
+function Tut_EGBlueprintCheck_AllSlaveChambers(egroupname, blueprint, num, boolean)
+
+	local blueprinttable = { { name = blueprint, count = num } }
+	local local_blueprint = blueprint
+	local hasRequiredCount = EGroup_ContainsBlueprints(egroupname, blueprinttable, true)
+	
+	local t_Building = Util_MakeBlueprintTable("dark_eldar_slave_caravel")
+
+	countbuildings = EGroup_Count(EGroup_FromName("eg_Player1All"))
+
+	-- Loop through all Player Buildings
+	for i = 1, countbuildings
+	do
+		-- Get the Next Player Building
+		EGroup_Clear(EGroup_CreateIfNotFound("eg_Potential_Caravel"..i))
+		EGroup_Add(EGroup_FromName("eg_Potential_Caravel"..i), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Player1All"), i))
+	
+		-- If the Building is a Slave Caravel & is Completed
+		if EGroup_ContainsBlueprints(EGroup_FromName("eg_Potential_Caravel"..i), t_Building, true) and
+			Entity_GetBuildingProgress(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Caravel"..i), 1)) == 1.0
+		then
+			-- Add the New Caravel to the Existing Caravel Groups 
+			EGroup_Add(EGroup_CreateIfNotFound("eg_Caravel"), EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_Potential_Caravel"..i), 1))
+			local num_caravel = EGroup_Count(EGroup_FromName("eg_Caravel"))
+			
+			-- If the number of Completed Caravels equals number passed in... return true
+			if num_caravel == num then
+				return true
+			end
+		end
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--  Selection
+EVENTS.IE_DarkEldar_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400088 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400292 )
+	CTRL.WAIT()
+end
+
+-- Build a Mandrake Squad
+EVENTS.IE_DarkEldar_BuildMandrake = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400089 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_BuildMandrake_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400293 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_BuildMandrake_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400092 )
+	CTRL.WAIT()
+end
+
+-- Capture Point
+EVENTS.IE_DarkEldar_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+	
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400094 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400294 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400295 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400296 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400297 )
+	CTRL.WAIT()
+end
+
+-- Build Tortured Slave (Builder)
+EVENTS.IE_DarkEldar_BuildBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400097 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildBuilder_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400098 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildBuilder_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400099 )
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_DarkEldar_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400102 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400103 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400104 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400105 )
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_DarkEldar_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400300 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400107 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400301 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400108 )
+	CTRL.WAIT()
+end
+
+-- Control Zones
+EVENTS.IE_DarkEldar_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400350 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400351 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400352 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400353 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Barracks (Hall of Blood)
+EVENTS.IE_DarkEldar_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400111 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400112 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400113 )
+	CTRL.WAIT()
+end
+
+-- Build Warriors
+EVENTS.IE_DarkEldar_BuildInfantry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400116 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildInfantry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400117 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildInfantry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400118 )
+	CTRL.WAIT()
+end
+
+-- Reinforce Warriors
+EVENTS.IE_DarkEldar_Reinforce = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400302 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400121 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_Reinforce_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400122 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400303 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_Reinforce_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400123)		-- Congratulations! You have Reinforced your Fire Warrior Team. 
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_DarkEldar_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400346 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400347 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400348 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400349 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_DarkEldar_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400325 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400326 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400327 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400328 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400329 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400330 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400331 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400332 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- Build Slave Chamber
+EVENTS.IE_DarkEldar_BuildSlaveChamber = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400304 )	-- Your field base has supplies and logistics to support a finite number of squads. The number of squads you can support at any given time is called your Squad Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400305 )	-- You can see your current Squad Cap in the Resource Area at the top of your screen.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400306 )	-- Once you have reached your maximum Squad Cap, you will not be able to call in any additional troops, so it's very important to keep an eye on this as you're building up your forces.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400124 )	-- You can increase your Squad Cap by building Slave Chambers, but there is always a maximum beyond which you cannot go.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400127 )	-- Select a Tortured Slave and build 3 Slave Chambers.  Remember: the Tortured Slave can freely move away from a structure once it has begun and it will complete itself.
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildSlaveChamber_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400128 )	-- Dark Eldar society is greatly dependent on the labor of slaves. As such, they rely on Slave Chambers to enhance their army.  Slave Chambers are extremely versatile and provide many benefits, expanding your Control Zone, and increasing your Squad and Vehicle Caps.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_BuildSlaveChamber_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400129 )
+	CTRL.WAIT()
+end
+
+-- Build Torture Pit Add-On
+EVENTS.IE_DarkEldar_BuildTorturePit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400130 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400133 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildTorturePit_Doing = function()
+--	NO IE OCCURS HERE
+
+--	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400129 )
+--	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildTorturePit_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400134 )
+	CTRL.WAIT()
+end
+
+-- Harvest 100 Souls
+EVENTS.IE_DarkEldar_HarvestSouls = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400138 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_HarvestSouls_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400139 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_HarvestSouls_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400259 )
+	CTRL.WAIT()
+end
+
+-- Soul Power: Corrosion
+EVENTS.IE_DarkEldar_SoulPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400142 )
+	CTRL.WAIT()
+end
+
+EVENTS.IE_DarkEldar_SoulPower_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400143 )
+	CTRL.WAIT()
+end
+
+-- Build Commander
+EVENTS.IE_DarkEldar_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400146 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400147 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400148 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400149 )
+	CTRL.WAIT()
+end
+
+-- Reinforce Command Squad
+EVENTS.IE_DarkEldar_ReinforceCommandSquad = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400152 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_ReinforceCommandSquadDoing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400153 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_ReinforceCommandSquadDone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400154 )
+	CTRL.WAIT()
+end
+
+-- Build a Harmonculus Lab
+EVENTS.IE_DarkEldar_BuildHarmonculusLab = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400157 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildHarmonculusLab_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400158 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400159 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildHarmonculusLab_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400160 )
+	CTRL.WAIT()
+end
+
+-- Add Leader to Warrior Squad
+EVENTS.IE_DarkEldar_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400163 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400164 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400165 )
+	CTRL.WAIT()
+end
+
+-- Research Planetary Raid Add-on on HQ
+EVENTS.IE_DarkEldar_PlanetaryRaid = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400168 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_PlanetaryRaid_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400169 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_PlanetaryRaid_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400170 )
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_DarkEldar_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400333 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400334 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400335 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400336 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400337 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400194 )	-- While in Cover, most units will slow down to navigate the difficult terrain. Due to their incredible agility, however, the Dark Eldar can move through Cover at full speed.
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400338 )
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_DarkEldar_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400307 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400308 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400172 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400173 )
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_DarkEldar_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400310 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400311 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400174 )
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_DarkEldar_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400313 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400314 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400175 )
+	CTRL.WAIT()
+end
+
+-- Build Dark Foundry (Vehicle Building)
+EVENTS.IE_DarkEldar_BuildVehicleBuilding = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400178 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildVehicleBuilding_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400179 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400180 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildVehicleBuilding_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400181)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400182)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400183)
+	CTRL.WAIT()
+end
+
+-- Build Raider
+EVENTS.IE_DarkEldar_BuildRaider = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400186 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildRaider_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400187 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_BuildRaider_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400190)
+	CTRL.WAIT()
+end
+
+-- Put Warriors in Raider
+EVENTS.IE_DarkEldar_Transport_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400191)
+	CTRL.WAIT()
+end
+
+-- Tutorial Complete
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400192 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400319 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400193 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400320 )
+	CTRL.WAIT()
+end
+
+-- Squad Cap Warnings
+EVENTS.IE_DarkEldar_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400344 )
+	CTRL.WAIT()
+end
+EVENTS.IE_DarkEldar_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400345 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+EVENTS.IE_DarkEldar_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400321 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+
+-- Low Power Warnings
+EVENTS.IE_DarkEldar_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400322 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400323 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400324 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+EVENTS.IE_DarkEldar_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400341 )
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 5400342 )
+	CTRL.WAIT()
+end

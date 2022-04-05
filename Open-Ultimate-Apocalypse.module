@@ -1,0 +1,18 @@
+[global]
+
+UIName = Open Ultimate Apocalypse
+Description = Ultimate Apocalypse project w/ playable Campaign and other features.
+DllName = WXPMod
+Playable = 1
+ModFolder = Open-Ultimate-Apocalypse
+ModVersion = 1.0.0a
+TextureFE = Art/UI/Textures/Title_winter_assault.tga
+TextureIcon =
+
+DataFolder.1 = Data
+
+RequiredMod.1 = objective_points_SS_UA
+RequiredMod.2 = DXP2
+RequiredMod.3 = W40k
+RequiredMod.4 = Tyranids_Art
+RequiredMod.5 = Chaos_Daemons

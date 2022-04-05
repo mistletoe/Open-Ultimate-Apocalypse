@@ -1,0 +1,46 @@
+----------------------------------------------------------------------------------------------------------------
+-- Button helper functions
+-- (c) 2005 Relic Entertainment Inc.
+
+--? @group MetaMap
+--
+--? @shortdesc Returns a list of starting squads a race will currently be allocated.
+--? @extdesc This function will throw an exception if called outside of a Meta Map game, an unknown race is specified or an out of range index is given.
+--? @result Void
+--? @args String raceName, LuaTable startingSquadNameList
+function MetaMap_GetRaceStartingSquadsList(raceName, startingSquadNameList)
+
+	local bonusSquadsCount = MetaMap_GetRaceStartingSquadsCount(raceName)
+	if (bonusSquadsCount < 1) then
+		return
+	end
+
+	bonusSquadsCount = bonusSquadsCount - 1
+
+	for index = 0, bonusSquadsCount do
+		local bonusSquadName = MetaMap_GetRaceStartingSquadName(raceName, index)
+
+		table.insert(startingSquadNameList, bonusSquadName)
+	end
+end
+
+--? @shortdesc Returns a list of starting entities a race will currently be allocated.
+--? @extdesc This function will throw an exception if called outside of a Meta Map game, an unknown race is specified or an out of range index is given.
+--? @result Void
+--? @args LuaTable startingEntityNameList
+function MetaMap_GetAttackingRaceStartingEntitiesList(startingEntityNameList)
+
+	local bonusEntitiesCount = MetaMap_GetAttackingRaceStartingEntitiesCount()
+	if (bonusEntitiesCount < 1) then
+		return
+	end
+
+	bonusEntitiesCount = bonusEntitiesCount - 1
+
+	for index = 0, bonusEntitiesCount do
+		local bonusEntityName = MetaMap_GetAttackingRaceStartingEntity(index)
+
+		table.insert(startingEntityNameList, bonusEntityName)
+	end
+end
+

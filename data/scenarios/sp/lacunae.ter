@@ -1,0 +1,271 @@
+Model = "Lacunae_Moon"
+Planet = "Kaurava_IV"
+
+Name = "$3900041"
+Description = "$3900370"
+TerrainType = "$2851002"
+TerrainDescription = "$3900371"
+History = 
+{
+"$3900372",
+"$3900373",
+"$3900374",
+"$3900375",
+}
+
+ Nuggets = 
+{
+	{
+		Race = "guard_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100000",
+			"$2850018",
+			"$5100001",
+			"$2850018",
+			"$5100002",
+		},
+		Speech =
+		{
+			5100000,
+			5100001,
+			5100002,
+		}
+	},
+	{
+		Race = "space_marine_race",
+		Title = "", --"$3550630",
+		Text =
+		{
+			"$5100003",
+			"$2850018",
+			"$5100004",
+		},
+		Speech =
+		{
+			5100003,
+			5100004,
+		}
+	},
+	{
+		Race = "sisters_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100005",
+			"$2850018",
+			"$5100006",
+		},
+		Speech =
+		{
+			5100005,
+			5100006,
+		}
+	},
+	{
+		Race = "chaos_marine_race",
+		Title = "", --"$3550120",
+		Text =
+		{
+			"$5100007",
+			"$2850018",
+			"$5100008",
+			"$2850018",
+			"$5100009",
+		},
+		Speech =
+		{
+			5100007,
+			5100008,
+			5100009,
+		}
+	},
+	{
+		Race = "eldar_race",
+		Title = "", --"$3550220",
+		Text =
+		{
+			"$5100010",
+			"$2850018",
+			"$5100011",
+		},
+		Speech =
+		{
+			5100010,
+			5100011,
+		}
+	},
+	{
+		Race = "ork_race",
+		Title = "", --"$3550530",
+		Text =
+		{
+			"$5100012",
+			"$2850018",
+			"$5100013",
+		},
+		Speech =
+		{
+			5100012,
+			5100013,
+		}
+	},
+	{
+		Race = "tau_race",
+		Title = "", --"$3550730",
+		Text =
+		{
+			"$5100014",
+			"$2850018",
+			"$5100015",
+			"$2850018",
+			"$5100016",
+		},
+		Speech =
+		{
+			5100014,
+			5100015,
+			5100016,
+		}
+	},
+	{
+		Race = "necron_race",
+		Title = "", --"$3550430",
+		Text =
+		{
+			"$5100017",
+			"$2850018",
+			"$5100018",
+			"$2850018",
+			"$5100019",
+		},
+		Speech =
+		{
+			5100017,
+			5100018,
+			5100019,
+		}
+	},
+}
+
+Briefing =
+{
+	Text =
+	{
+		"$5100078",
+		"$2851718",
+		"$5100079",
+		"$2851718",
+		"$5100080",
+	},
+	Speech = 
+	{
+		5100078,
+		--5100079,
+		--5100080,
+	}
+}
+
+
+MissionFileAttacking = "Stronghold_Dark_Eldar"
+MissionFileAttackingConquered = "8P_Lacunae_Attack_Skirmish"
+MissionFileDefending = "8P_Lacunae"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 0.5
+ArmyModelScaleZoomedOut = 0.5
+
+NeighborTerritories = 
+{
+	"Parmenian_Steppe",
+	-- "Parmenie",
+}
+
+VictoryBonusSquads =
+{
+--[[
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_khorne_berserker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_veteran_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_wartrak_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_assassin_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_stealth_suit_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_wraith_squad_advance_sp",
+		Count = 1,
+	},
+	]]--
+}
+
+Stronghold = true
+WarpGate = true
+ScriptedMission = true
+
+PlanetaryRequisition = 100
+StartingMilitaryStrength = 10
+
+OwnerPrimary = "dark_eldar_race"
+OwnerSecondary = "dark_eldar_race"
+
+KeyLocationAbility =
+{
+	ID = "warp_gate",
+	Name = "$3900076",
+	HelpText =
+	{
+		"$3900435",
+		"$3900436",
+		"$3900437",
+	},
+  CommanderScreenName = "$3900494",
+	CommanderScreenHelpText =
+	{
+		"$3900495",
+		"$3900496",
+		"$3900435",
+		"$3900436",
+		"$3900437",
+	},
+  CommanderScreenLostName = "$3900494",
+	CommanderScreenLostHelpText =
+	{
+		"$3900495",
+		"$3900497",
+	}  
+}
+
+StartingResourceBonus = 0.0

@@ -1,0 +1,33 @@
+-------------------------------------------------
+--IMPORTS
+-------------------------------------------------
+import("ScarUtil.scar")
+import("BalanceTool.scar")
+
+function OnInit()
+	load_out_table =
+	{
+		"default",
+		"default",
+		"default",
+		"space_marine_missile_launcher_tactical",
+		"leader"
+	}
+	
+	grot_load_out = 
+	{
+		"default",
+		"default",
+		"default",
+		"default",
+		"default"
+	}
+	
+	g_Player1 = World_GetPlayerAt(0)
+	g_Player2 = World_GetPlayerAt(1)
+	
+	Balance_CreateSquadsAtMarkerByResource( g_Player1, "foogroup", "space_marine_squad_tactical", load_out_table, "marker1", 1000, 1000 )
+	Balance_CreateSquadsAtMarkerByResource( g_Player2, "foogroup2", "ork_squad_grot", grot_load_out, "marker2", 1000, 1000 )
+end
+
+Balance_SetInit( OnInit )

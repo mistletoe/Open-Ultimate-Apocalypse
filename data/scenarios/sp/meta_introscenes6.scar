@@ -1,0 +1,3550 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- IMPORTS
+	-- import("ScarUtil.scar")	:		has most of the scar function
+	-- import("WXPScarUtil.scar")	:	more scar functions from DC and/or WA (I honestly not sure)	
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- ONGAMESETUP
+	-- OnGameSetup() : Mandatory Function that sets up the mission & sets up the players that are in the mission (Including AI Players).
+		-- This function is run first and starts the entire mission and than starts OnInit( )
+		-- Also has list of the Global varibles defined in it ( g_ )
+	-- OnGameRestore() : Mandatory Function called after loading a saved game.
+		-- This function is used to redefine the player slots after loading a saved game
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function OnGameSetup()
+	-- Global varibles
+	
+	-- Controls all  my debug commands, true is On, false is off
+		-- Debug is Not Yet Fully Implemented Everywhere
+	g_debug = true										
+	
+	-- Place to store the player Race, so I dont have to keep calling the functions to get them
+		-- chaos_marine_race, dark_eldar_race, eldar_race, guard_race, necron_race, ork_race, space_marine_race, sisters_race, tau_race
+	g_raceName = "default_race"
+
+	-- What Intel Events race is using
+	g_intelEvent_raceId = 0 
+	
+	-- Place to store the player Faction (Example: "Blood Ravens")
+	g_factionName = "default_factionName"
+	
+	-- Place to store the Color Scheme being used for player race (Example: "default_1")
+	g_colorScheme = "default_colorScheme"
+
+	-- Place to stores the Type of HQ based on each players race (Example: "chaos_hq")
+	g_HQ_blueprint = " "
+
+	-- Place to stores the Type of Builder used based on each players race (Example: "chaos_squad_slave")
+	g_Builder_blueprint = " "
+
+	g_fireWarrior_leader 				= false
+	g_fireWarrior_shieldDrone 		= false
+	g_stealthTeam_leader 			= false
+	g_stealthTeam_fusionBlaster 	= false
+
+	--Time to Wait Until Scouts Dispatched IE from when player is given base (this delay should give player time to start building)
+		-- Note: Scouts still have to be produced after this timer
+	g_scoutDispatchDelay	= 90
+
+	-- Time between scout spawns
+	g_spawnScoutTimer = 30
+
+	-- Number of "Failed" Scout Squads sent before base is alerted 
+		-- Subtracts one everytime a pathfinder scout squad is produced to find enemy base
+		-- at 0 tau are alerted about player location due to scout failure.
+	g_SquadsUntilWarned		=	8
+
+	--------------------- Laser Timers  ---------------------------------------------
+		
+		-- Time it takes for laser to warm up from player discovered until first shot (Hidden Timer)
+		g_laserGunWarmupCounterMax = 45
+		
+		-- Time between shots of the laser (Timer is shown on screen)
+		g_laserGunCounterMax = 90
+		
+		-- Time between player shots of the laser (Timer is shown on screen)
+		g_laserGunCounterMax_Player = 90
+
+		-- Who actually owns the laser gun 
+		g_PlayerOwnsLaserGun = false
+	
+	-- ------------------------------------------BALANCE VARIBLES----------------------------------
+		
+		--------------------- Resources -------------------------------------------------
+		-- Amount of Initial Resource to give each of the AI Players
+		g_amountRequisitionToGiveAI = 10000
+		g_amountPowerToGiveAI = 5000
+	
+		-- Amount of Extra Resources to Give Player when they build Moon Base (Non Necron Races)
+		g_amountRequisitionToGivePlayer = 1500
+		g_amountPowerToGivePlayer = 500
+
+		-- Amount of Extra Resource to Give to Necron Player when they build Moon Base (Since Race doesnt use Req)
+		g_amountPowerToGiveNecron = 1500
+		
+		--------------------- Base Troop Production ---------------------------------------
+		
+		-- Interval for Base to produce units if it has a few squad that it can produce (& tells them to do stuff -- patrol, attack, etc)
+		
+		g_productionTimer_defenseBase = 90
+		
+		-- EAST BASE: Attacking Pathfinders, Broadsides & Air Units (Barracuda)
+		g_productionTimer_eastBase = 240
+		-- KROOTCENTER BASE: Attacking Kroot Carnivores & Vespids
+		g_productionTimer_krootCenterBase = 120
+		-- LASERGUN BASE: Patroling Pathfinders & Defending Broadsides
+		g_productionTimer_laserGunBase = 120
+
+		g_productionTimer_mainBase = 10
+		-- NORTHEAST BASE: Patrolling Kroot Carninvores & Krootox
+		g_productionTimer_northEastBase = 120
+		-- NORTHWEST BASE: Patroling Vespids -- Attacking KrootHound & Krootox
+		g_productionTimer_northWestBase = 240
+		-- RELIC BASE: Crisis Suits, Stealth Suits, & Attacking Drone Harbringers
+		g_productionTimer_relicBase = 180
+		-- SOUTH BASE: Attacking Fire Warriors & Drone Harbringer / Skyray
+		g_productionTimer_southBase = 240
+		-- WEST BASE: Patroling Pathfinders & Attacking Firewarriors
+		g_productionTimer_westBase = 240
+		
+		-- Time Until Tau Techs
+		g_time_Tier_One = 300
+		g_time_Tier_Two = 600
+		g_time_Tier_Three = 900
+	-- ------------------------------------------END BALANCE VARIBLES------------------------------
+	
+	---------------------------------------------RACE BASED INTEL EVENT ARRAYS---------------------
+	
+	-- FirstBase_Destroyed (Race Based) : Player Destroys the first small base -- Here is your HQ & Builders
+	g_ie_FirstBase_Destroyed_Array = {
+								EVENTS.IE_FirstBase_Destroyed_Chaos,
+								EVENTS.IE_FirstBase_Destroyed_DarkEldar, 
+								EVENTS.IE_FirstBase_Destroyed_Eldar ,
+								EVENTS.IE_FirstBase_Destroyed_Guard,
+								EVENTS.IE_FirstBase_Destroyed_Necron,
+								EVENTS.IE_FirstBase_Destroyed_Ork,
+								EVENTS.IE_FirstBase_Destroyed_Sisters,
+								EVENTS.IE_FirstBase_Destroyed_Space,
+								EVENTS.IE_FirstBase_Destroyed_Tau } -- should not be possible to get since Tau Mission
+
+	-----------------------------------------END RACE BASED INTEL EVENT ARRAYS---------------------
+	
+	-- Get the player race & store for later access
+	g_raceName = MetaMap_GetPlayerNRaceName(0)
+	
+	-- Create the Human Player
+	g_Player1 = Setup_Player(0, g_factionName, g_raceName, 1)
+
+	-- NOW THAT HUMAN IS SET UP, NEED TO SET UP THE AI PLAYERS AND TEAMS
+	
+	-- Tau AI Players 	
+	g_Player2 = Setup_Player (1, "Tau Buildings", "tau_race", 2)	
+	g_Player3 = Setup_Player (2, "Tau Troops", "tau_race", 2)
+	g_Player4 = Setup_Player (3, "Tau that Share Vision", "tau_race", 2)	
+	g_Player5 = Setup_Player (4, "Not Currently Being Used", "tau_race", 2)
+	
+	g_Player6 = Setup_Player (5, "Tau that Dave is using to attack", "tau_race", 2)
+	g_Player7 = Setup_Player (6, "Tau that Dave is using to defend", "tau_race", 2)	
+
+--	g_Player8 = Setup_Player (7, "Not Currently Being Used", "tau_race", 2)
+end
+
+-- Used to redefine the player slots (both AI and HUMAN) after loading a saved game
+function OnGameRestore()
+--	g_Player1 = World_GetPlayerAt(0)
+--	g_Player2 = World_GetPlayerAt(1)
+--	g_Player3 = World_GetPlayerAt(2)
+--	g_Player4 = World_GetPlayerAt(3)
+--	g_Player5 = World_GetPlayerAt(4)
+--	g_Player6 = World_GetPlayerAt(5)
+--	g_Player7 = World_GetPlayerAt(6)
+--	g_Player8 = World_GetPlayerAt(7)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF " GAME SETUP & RESTORE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- INITALIZATION
+	-- OnInit() : Mandatory Function that sets up the mission
+		-- Called after OnGameSetup() : Not Sure if possible for something to come between the two of them
+		-- Used for pregame functions, things that should happen before the player officially enters the world
+			--Despawn Reserve Units, Set Groups and Start commands for persistent behaviors.
+	-- Scar_AddInit(OnInit) : Mandatory Function that registers OnInit function with scar.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function OnInit()
+	-- Function Used to Setup the Sound and Music : Function Is Defined Below
+	Rule_SetupMusicPlaylist()
+
+	-- Sets up HQ, Builder, Faction Name, Color Scheme, Exception Lists, etc...
+	Rule_Player_Race_Dependant_Stuff()
+	
+	-- Grants and applies a research item to a given player : Function is Defined Below
+	Rule_SetResearchLevel() 
+
+	--Function Used to set the pregame state of the AI (basically disables all the AI) : Function Is Defined Below
+	Rule_PresetAI()
+
+	--Sets the AI Difficulty Level : Function Is Defined Below
+	Rule_SetDifficultyLevel( Difficulty_Get() )	
+
+	-- Function used to create all the Tau Buildings on the Map (including the laser gun) : Function Is Defined Below
+	Rule_Create_All_Tau_Buildings( )
+
+	-- Function used to create all the Tau Initial Units on the Map : Function Is Defined Below
+	Rule_Create_All_Tau_InitialUnits( )
+	
+	-- Rule_Objective_Define(): Sets up the Objective Lua Tables, but doesn't actually assign them : Function Is Defined Below
+	Rule_AddOneShot( Rule_Objective_Define, 0)
+
+	-- OPENING NIS STUFF GOES HERE:
+--	WXP_OpeningNISPreset( )
+--	Util_StartNIS( EVENTS.NIS_Opening )
+
+	-- Rule_GameStart : Function used to Start the Actual Mission : Function Is Defined Below
+	Rule_Add( Rule_GameStart )	
+end
+
+-- This registers your init function with scar.
+Scar_AddInit(OnInit)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL "INITALIZATION" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- EXTRA INITIAL SETUP
+	-- Rule_SetupMusicPlaylist() : Used to Setup the music & ambient soundtracks
+	-- Rule_SetDifficultyLevel( difficultyLevel ) : Used to set up AI difficulty levels & is added in OnInit( )
+	-- Rule_SetResearchLevel() : Disable, Enable, and grant research items (CURRRENTLY DOES NOTHING)
+	-- Rule_Player_Race_Dependant_Stuff(): Handles setting everything in scenario that changes based on the player race
+	-- Rule_Create_All_Player_InitialUnits(): Creates all the Players Initial Units on the Map (including Honor Guard)
+	-- Rule_PresetAI() : Used to Disable AI before Initial NIS starts : Called from OnInit( )
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Used to Setup the music & ambient soundtracks & is added in OnInit( )
+function Rule_SetupMusicPlaylist()
+	-- MUSIC TRACKS
+	
+	-- clear the music playlist
+	Sound_PlaylistClear( PC_Music )
+	-- Add tracks to the playlist
+	Sound_PlaylistAddTrack( PC_Music, "music_imperial_guard_theme_perc_choir" )
+	Sound_PlaylistAddTrack( PC_Music, "MU_IG_STR_Tau_perc_brass.wav" )
+	Sound_PlaylistAddTrack( PC_Music, "music_invasion_theme" )
+	-- Mark these tracks to play in order or random (True is in order) 
+	Sound_PlaylistSetorder( PC_Music, true )
+	-- add silence between tracks in seconds (Randomly chooses time between the two numbers)
+	Sound_PlaylistSetSilence( PC_Music, 20, 70 )
+
+	-- AMBIENT TRACKS
+
+	-- clear the ambient playlist
+	Sound_PlaylistClear( PC_Ambient )
+	--add tracks to the playlist
+	Sound_PlaylistAddTrack( PC_Ambient, "Ambient-Prototype-Battle BG" )
+	Sound_PlaylistAddTrack( PC_Ambient, "ambient_city" )
+	-- Mark these tracks to play in order or random (True is in order) 
+	Sound_PlaylistSetorder( PC_Ambient, false )
+	-- add silence between tracks in seconds (Randomly chooses time between the two numbers)
+	Sound_PlaylistSetSilence( PC_Ambient, 5, 10 )
+end
+
+
+-- Used to set up AI difficulty levels & is added in OnInit( )
+function Rule_SetDifficultyLevel( difficultyLevel )
+	-- If in Debug, Override the difficulty level for the AI
+		-- Doesnt effect Global Difficulty Settings from Metamap
+	if g_debug == true	then
+			difficultyLevel = DIFFICULTY_NORMAL
+	end
+
+	if difficultyLevel == DIFFICULTY_EASY then
+		Cpu_SetDifficulty ( g_Player3, AD_Easy )
+		Cpu_SetDifficulty ( g_Player4, AD_Easy )
+		Cpu_SetDifficulty ( g_Player5, AD_Easy )
+		Cpu_SetDifficulty ( g_Player6, AD_Easy )
+		Cpu_SetDifficulty ( g_Player7, AD_Easy )
+--		Cpu_SetDifficulty ( g_Player8, AD_Easy )
+
+	elseif difficultyLevel == DIFFICULTY_NORMAL then
+		Cpu_SetDifficulty ( g_Player3, AD_Standard )
+		Cpu_SetDifficulty ( g_Player4, AD_Standard )
+		Cpu_SetDifficulty ( g_Player5, AD_Standard )
+		Cpu_SetDifficulty ( g_Player6, AD_Standard )
+		Cpu_SetDifficulty ( g_Player7, AD_Standard )
+--		Cpu_SetDifficulty ( g_Player8, AD_Standard )
+		
+	elseif difficultyLevel == DIFFICULTY_HARD then
+		Cpu_SetDifficulty ( g_Player3, AD_Hard )
+		Cpu_SetDifficulty ( g_Player4, AD_Hard )
+		Cpu_SetDifficulty ( g_Player5, AD_Hard )
+		Cpu_SetDifficulty ( g_Player6, AD_Hard )
+		Cpu_SetDifficulty ( g_Player7, AD_Hard )
+--		Cpu_SetDifficulty ( g_Player8, AD_Hard )
+
+	end
+end
+
+
+-- Used to Disable, Enable, and grant research items & is added in OnInit( )
+	-- Restricted Stuff just prevents building, can still use scar to give them the units
+function Rule_SetResearchLevel()
+	-- Set up a table of all Tau Units to make it easier to restrict them
+		-- Simplier to just restrict everything and than unrestrict the things each base can build as they can build them
+	t_allTauUnits = {
+		"tau_broadside_battlesuit_squad",
+		"tau_builder_squad",
+		"tau_commander_squad",
+		"tau_crisis_suit_squad",
+		"tau_devilfish_troop_carrier",
+		"tau_drone_harbinger_squad",
+--		"tau_drone_squad",
+		"tau_ethereal_squad",
+		"tau_fire_warrior_squad",
+		"tau_greater_knarloc_squad",
+		"tau_hammerhead_gunship_squad",
+		"tau_kroot_carnivore_squad",
+		"tau_kroot_hound_squad",
+		"tau_kroot_shaper_squad",
+		"tau_krootox_squad",
+		"tau_pathfinder_squad",
+		"tau_skyray_squad",
+		"tau_stealth_team_squad",
+		"tau_vespid_auxiliary_squad" }
+	
+	-- Restrict Everything at start
+	Player_RestrictSquadList(g_Player2, t_allTauUnits)
+	Player_RestrictSquadList(g_Player3, t_allTauUnits)	
+--	Player_RestrictSquadList(g_Player4, t_allTauUnits)
+--	Player_RestrictSquadList(g_Player5, t_allTauUnits)
+	Player_RestrictSquadList(g_Player6, t_allTauUnits)
+	Player_RestrictSquadList(g_Player7, t_allTauUnits)
+	
+	-- Set up a table of all tau buildings to make it easier to restrict buildings
+		-- Simplier to just restrict everything and than unrestrict the 2 or 3 things each base can build
+	t_allTauBuildings = {
+		"tau_barracks",
+		"tau_hq",
+		"tau_kroot_nest",
+		"tau_listening_post",
+		"tau_plasma_generator",
+		"tau_research_building",
+		"tau_shrine_of_kauyon",
+		"tau_shrine_of_montka",
+		"tau_shrine_of_purpose",
+		"tau_thermoplasma_generator",
+		"tau_vehicle_building"}
+	
+	-- Restrict Everybuilding at start
+--	Player_RestrictBuildingList(g_Player2, t_allTauBuildings)
+	Player_RestrictBuildingList(g_Player3, t_allTauBuildings)
+	Player_RestrictBuildingList(g_Player4, t_allTauBuildings)
+	Player_RestrictBuildingList(g_Player5, t_allTauBuildings)
+	Player_RestrictBuildingList(g_Player6, t_allTauBuildings)
+	Player_RestrictBuildingList(g_Player7, t_allTauBuildings)
+
+
+	
+end
+
+-- Handles setting everything in scenario that changes based on the player race : Called from OnInit( )
+function Rule_Player_Race_Dependant_Stuff()
+	if g_raceName == "chaos_marine_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 1
+	
+		-- Faction name that Race is using
+		g_factionName = "Chaos Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+		
+		-- HQ that Race uses
+		g_HQ_blueprint = "chaos_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "chaos_squad_slave"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "chaos_squad_cultist_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "chaos_squad_cultist_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "chaos_marine_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "chaos_marine_squad_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"chaos_thermo_plasma_generator",
+			"chaos_plasma_generator",
+			"chaos_turret_bolter",
+			"chaos_mine_field"}
+		
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	elseif g_raceName == "dark_eldar_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 2
+		
+		-- Faction name that Race is using
+		g_factionName = "Dark Eldar Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "dark_eldar_hq"
+		--_sp_dxp3_player
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "dark_eldar_squad_slave"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "dark_eldar_squad_warrior_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "dark_eldar_squad_wych_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "dark_eldar_squad_haemonculus_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "dark_eldar_squad_warrior_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {}
+		
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	-- Should not be possible to be this race on this map
+	elseif g_raceName == "eldar_race"
+	then
+		-- What Intel Events race is using (not actually used)
+		g_intelEvent_raceId = 3 
+		
+		-- Faction name that Race is using
+		g_factionName = "Eldar Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "eldar_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "eldar_squad_bonesinger"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "eldar_guardian_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "eldar_guardian_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "eldar_squad_banshees_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "eldar_squad_banshees_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"eldar_advanced_warp_generator",
+			"eldar_warp_generator",
+			"eldar_support_platform_scatterlaser",
+			"eldar_mine_field"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	elseif g_raceName == "guard_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 4
+		
+		-- Faction name that Race is using
+		g_factionName = "Guard Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "guard_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "guard_squad_enginseer"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "guard_squad_ogryns_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "guard_squad_guardsmen_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"guard_thermo_plasma",
+			"guard_plasma_generator",
+			"guard_turret_heavy_bolter",
+			"guard_mines"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+	
+	elseif g_raceName == "necron_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 5
+		
+		-- Faction name that Race is using
+		g_factionName = "Necron Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+		
+		-- HQ that Race uses
+		g_HQ_blueprint = "monolith"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "necron_builder_scarab_squad"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "necron_basic_warrior_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "necron_basic_warrior_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "necron_wraith_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "necron_wraith_squad_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"necron_thermoplasma_generator",
+			"necron_plasma_generator",
+			"necron_turret",}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	elseif g_raceName == "ork_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 6
+		
+		-- Faction name that Race is using
+		g_factionName = "Ork Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+	
+		-- HQ that Race uses
+		g_HQ_blueprint = "ork_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "ork_squad_grot"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "ork_squad_shoota_boy_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "ork_squad_shoota_boy_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "ork_squad_slugga_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "ork_squad_slugga_sp_dxp3_prisoner"
+		
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"ork_bigger_generator",
+			"ork_generator",
+			"ork_waagh_banner",
+			"ork_mine_field"}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}		
+	
+	elseif g_raceName == "sisters_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 7
+		
+		-- Faction name that Race is using
+		g_factionName = "Sister Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "sisters_hq"
+
+		-- Builder that Race uses
+		g_Builder_blueprint = "sisters_squad_servitor"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "sisters_squad_battle_missionary_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "sisters_squad_battle_missionary_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "sisters_squad_battle_sister_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "sisters_squad_battle_sister_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {	}
+
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+
+	elseif g_raceName == "space_marine_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 8
+		
+		-- Faction name that Race is using
+		g_factionName = "Space Marine Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "space_marine_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "space_marine_squad_servitor"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "space_marine_squad_scout_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "space_marine_squad_scout_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "space_marine_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "space_marine_squad_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"space_marine_thermo_generator",
+			"space_marine_generator",
+			"space_marine_turret_bolter",
+			"space_marine_mine_field"}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}
+		
+	-- NOT NEEDED SINCE IS TAU LEVEL
+	elseif g_raceName == "tau_race"
+	then
+		-- What Intel Events race is using
+		g_intelEvent_raceId = 9
+		
+		-- Faction name that Race is using
+		g_factionName = "Tau Minions of Player One"
+		
+		-- Color Scheme that Race is using
+		g_colorScheme = "default_0"
+
+		-- HQ that Race uses
+		g_HQ_blueprint = "tau_hq"
+		
+		-- Builder that Race uses
+		g_Builder_blueprint = "tau_builder_squad"
+		
+		-- Starting Troops for the Mission
+		g_starting_blueprint_1 = "tau_kroot_alpha_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_2 = "tau_kroot_alpha_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_3 = "tau_honor_guard_fire_warrior_squad_sp_dxp3_prisoner"
+		g_starting_blueprint_4 = "tau_honor_guard_fire_warrior_squad_sp_dxp3_prisoner"
+
+		-- Used for Defeat Checks
+		t_building_exceptions = {
+			"tau_thermoplasma_generator",
+			"tau_plasma_generator",}
+			
+		-- Used for Defeat Checks
+		t_unit_exceptions = {}	
+	end
+	
+	-- Set the Faction Name of the player
+	Setup_SetPlayerName(g_Player1, g_factionName)
+	
+	-- Set the Color Schemes Here 
+	Misc_PlayerTeamColor(g_Player1, g_colorScheme)
+end
+
+-- Function used to creates all the Players Initial Units on the Map (including Honor Guard)
+function Rule_Create_All_Player_InitialUnits()
+	-- Clear the Honor Guard List
+	t_honorGuardUnits = {}
+
+	--Set up the Unlocked wargear upgrades
+	MetaMap_UpdatePlayerWargear(g_Player1)
+
+	--Set up the List of the Honor Guard units
+	MetaMap_GetRaceStartingSquadsList(g_raceName, t_honorGuardUnits)
+
+	-- Create the Honor Guard Units on the Map
+	for j = 1,  table.getn(t_honorGuardUnits) do
+		Util_CreateSquadsAtMarker(g_Player1, "sg_honorGuard", t_honorGuardUnits[j], "mkr_honorGuard_Location", 1)
+	end
+
+	-- Create the starting troop squads 
+	Util_CreateSquadsAtMarkerEx(g_Player1,  "sg_startingTroops_1", g_starting_blueprint_1, "mkr_startingTroops_1", 1, 10)
+	Util_CreateSquadsAtMarkerEx(g_Player1,  "sg_startingTroops_2", g_starting_blueprint_2, "mkr_startingTroops_2", 1, 10)
+	Util_CreateSquadsAtMarkerEx(g_Player1,  "sg_startingTroops_3", g_starting_blueprint_3, "mkr_startingTroops_3", 1, 10)
+	Util_CreateSquadsAtMarkerEx(g_Player1,  "sg_startingTroops_4", g_starting_blueprint_4, "mkr_startingTroops_4", 1, 10)
+
+	-- Add leaders to the squads (Not all starting squad types have leaders, so this will do nothing)
+	for i =1,4 do
+		SGroup_AddLeaders("sg_startingTroops_"..i)
+	end
+end
+
+-- Used to Disable AI Players (Done Before Initial NIS) : Called from OnInit( )
+function Rule_PresetAI()
+	Cpu_Enable(g_Player2, false)
+	Cpu_Enable(g_Player3, false)
+	Cpu_Enable(g_Player4, false)
+	Cpu_Enable(g_Player5, false)
+	Cpu_Enable(g_Player6, false)
+	Cpu_Enable(g_Player7, false)
+end
+------------------------------------------------------------------------
+-- END OF ALL "EXTRA INITIAL SETUP" RULES
+------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------
+-- GAME START
+	-- Rule_GameStart( ) : Starts the actual mission : Called from OnInit
+		-- Optional: this all could be done in OnInit( ) but this makes it easier to read and is clearer
+		-- Sets up objective, win/lose conditions, tracks characters, etc...
+	-- Rule_StartAI() : Used to Enable the AI after the NIS Finishes : Called from GameStart( )
+-----------------------------------------------------------------------------------------------------------------------
+function Rule_GameStart()
+
+	-- Not 100% sure what this is for...
+	if not Event_IsAnyRunning() then
+		-- Remove the Fog of War from Map
+		--FOW_RevealAll()
+
+		-- Show and Control the Game Timer
+		Rule_UI_Game_Timer()
+	
+		-- Function used to create all the Player Initial Units on the Map (including Honor Guard)
+			-- Player HQ is created later based on objective complete
+			-- Done here so they are created after into NIS plays
+		Rule_Create_All_Player_InitialUnits( )
+
+		-- Play Initial IE:
+		Util_StartNIS(EVENTS.IE_Initial)
+		
+		-- Assign the First Two Primary Mission Objectives (waits 2 seconds before Assigning and than checks every 2 seconds) : Functions are defined below
+		Rule_AddInterval(Rule_DestroyCoalitionCenter_Objective, 2)
+		Rule_AddInterval(Rule_BreachDefenses_Objective, 2)
+
+		-- Set up the check for DEFEAT (will check for lose condition every 10 secs) : Function is Defined Below
+		Rule_AddInterval(Rule_EndGame_Defeat, 10)
+
+		-- Check if player has entered 1st region by defenseBase: Begin production & send out patrols to meet the player
+		Rule_AddInterval(Rule_Enable_DefenseBase, 1)
+
+		-- Create the SGroups & Sync attacks
+		Rule_Create_And_Sync_Attacks()
+		
+		-- Creates all the troops that wander around the bases to create feeling of life (& to provide small defense forces)
+		Rule_Create_Wandering_Troops()
+		
+		--Causes a few units in each base to wander around it -- giving it the feeling of some life
+		Rule_AddInterval(Rule_RandomMovement_Base,15)
+
+		-- Testing
+		--Rule_AddOneShot(Rule_Launch_First_Major_Attack, 30)
+
+		-- Remove this rule so that it never runs again 
+		Rule_Remove(Rule_GameStart) 
+	end
+end
+
+-- Initially sets up the timer that shows the total elapsed time
+function Rule_UI_Game_Timer()
+	g_UI_gameTimer	= 0
+	WinWarning_Add( "ui_gameTime", World_GetPlayerAt(0), "", "", "" )
+ 	Rule_AddInterval(Rule_UI_Game_Timer_Tick, 1)
+end
+
+-- Updates & Shows the game timer every second
+function Rule_UI_Game_Timer_Tick()
+	g_UI_gameTimer = g_UI_gameTimer+1
+	WinWarning_SetText( "ui_gameTime", Loc_FormatText1( 60445, Loc_FormatTime( 60409, g_UI_gameTimer ) ) )
+end
+
+--------------------------------------------------------
+-- END OF ALL "GAME START" RULES
+--------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- CREATE AI BUILDINGS RULES
+	-- Rule_Create_All_Tau_Buildings() : Create all AI Bases & give them initial resources & strategic points : Called from OnInit( )
+		-- Rule_Create_DefenseBase_Buildings() : Create Buildings for Defense Base & the Comm Tower (one you destroy to build yours)
+			--Base belongs to AI Player: g_Player2	
+		-- Rule_Create_KrootCenterBase_Buildings( ) : Create Buildings for Small Kroot Base in Center of Map 
+			--Base belongs to AI Player: g_Player5
+		-- Rule_Create_KrootEastBase_Buildings( ) : Create Buildings for Small Kroot Base on East Side of Map
+			-- Base belongs to AI Player: g_Player5
+		-- Rule_Create_KrootWestBase_Buildings( ) : Create Buildings for Small Kroot Base on West Side of Map
+			-- Base belongs to AI Player: g_Player5
+		-- Rule_Create_LaserGunBase_Buildings( ) : Create Buildings for Laser Gun Base in Center of Map
+			-- Base belongs to AI Player: g_Player3
+		-- Rule_Create_Laser_Gun( ) : Create Actual Laser gun that the Tau starts with (Also sets the critical point associated with it)
+			-- Gun belongs to AI Player: g_Player3
+		-- Rule_Create_MainTauStronghold_Buildings( ) : Create Buildings for Main Tau Base (one with final objective)
+			-- Base belongs to AI Player: g_Player3
+		-- Rule_Create_SouthBase_Buildings( ) : Create Buildings for Small Tau Base on South Side of Map
+			-- Base belongs to AI Player: g_Player4
+		-- Rule_Setup_AI_StrategicPoints( ) : Setup the Strategic Points, Critical Points,  & Relics to AI Control (DOES NOT SET THE LASER GUN CRITICAL POINT)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create all AI Bases & give them initial resources & strategic points : Called from OnInit( )
+function Rule_Create_All_Tau_Buildings()
+	-- Create Buildings for Defense Base & the Comm Tower (one you destroy to build yours)
+	Rule_Create_DefenseBase_Buildings( )
+
+	-- Create Buildings for Small Kroot Base on East Side of Map
+	Rule_Create_EastBase_Buildings( )
+	
+	-- Create Buildings for Small Kroot Base in Center of Map	
+	Rule_Create_KrootCenterBase_Buildings( )
+
+	-- Create Buildings & Laser for Laser Gun Base
+	Rule_Create_LaserGunBase_Buildings( )
+
+	-- Create Buildings for Main Tau Base (one with final objective)
+	Rule_Create_MainTauStronghold_Buildings( )
+	
+	-- Create Buildings for Base on NorthEast Side of Map
+	Rule_Create_NorthEastBase_Buildings( )
+
+	-- Create Buildings for Base on NorthWest Side of Map
+	Rule_Create_NorthWestBase_Buildings( )
+
+	-- Create Buildings for the Base by the Relic in Center of Map
+	Rule_Create_RelicBase_Buildings()
+
+	-- Create Buildings for Base on South Side of Map
+	Rule_Create_SouthBase_Buildings( )
+
+	-- Create Buildings for Base on West Side of Map
+	Rule_Create_WestBase_Buildings( )
+
+	-- Setup the Strategic Points, Critical Points,  & Relics to AI Control (DOES NOT SET THE LASER GUN CRITICAL POINT)
+	Rule_Setup_AI_StrategicPoints( )
+	
+	-- Set AI Starting Resources
+	Player_SetAllResources(g_Player2, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+	Player_SetAllResources(g_Player3, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+	Player_SetAllResources(g_Player4, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+	Player_SetAllResources(g_Player5, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+	Player_SetAllResources(g_Player6, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+	Player_SetAllResources(g_Player7, g_amountRequisitionToGiveAI, g_amountPowerToGiveAI, 0)
+end
+
+-- Create Buildings for Defense Base (one you destroy to build yours)
+	-- Contains: HQ(1), Barracks(1), Kroot Nest(1), Power(2)
+function Rule_Create_DefenseBase_Buildings()
+	-- used to track when all buildings in the base are destroyed (PRIMARY OBJECTIVE)
+	EGroup_Create("eg_defenseBase_Buildings_Objective")
+
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_defenseBase_HQ"..i, "tau_hq","mkr_defenseBase_HQ"..i, 1)
+		EGroup_AddGroup("eg_defenseBase_Buildings_Objective", "eg_defenseBase_HQ"..i)
+	end
+
+	-- Create the Normal Tau Barracks
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_defenseBase_Barracks"..i, "tau_barracks","mkr_defenseBase_Barracks"..i, 1)
+		EGroup_AddGroup("eg_defenseBase_Buildings_Objective", "eg_defenseBase_Barracks"..i)
+	end
+
+	-- Create the Kroot Barracks
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_defenseBase_KrootNest"..i, "tau_kroot_nest","mkr_defenseBase_KrootNest"..i, 1)
+		EGroup_AddGroup("eg_defenseBase_Buildings_Objective", "eg_defenseBase_KrootNest"..i)
+	end
+
+	-- Create the Power Generators
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_defenseBase_Power"..i, "tau_plasma_generator","mkr_defenseBase_Power"..i, 1)
+		EGroup_AddGroup("eg_defenseBase_Buildings_Objective", "eg_defenseBase_Power"..i)
+	end
+end
+
+--  Create Buildings for Small Kroot Base in Center of Map
+	-- Contains: HQ(1), Kroot Nest(2), Power(2), PathToEnlightment(1), Kauyon(1)
+function Rule_Create_KrootCenterBase_Buildings( )
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_krootCenterBase_HQ"..i, "tau_hq","mkr_krootCenterBase_HQ"..i, 1)
+	end
+	
+	-- Create the Kroot Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_krootCenterBase_KrootNest"..i, "tau_kroot_nest","mkr_krootCenterBase_KrootNest"..i, 1)
+	end
+	
+	-- Create the Kauyon Command Post ( Krootox)
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_krootCenterBase_KauyonShrine"..i, "tau_shrine_of_kauyon","mkr_krootCenterBase_KauyonShrine"..i, 1)
+	end
+	
+	-- Create the Power Generators
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_krootCenterBase_Power"..i, "tau_plasma_generator","mkr_krootCenterBase_Power"..i, 1)
+	end
+end
+
+-- Create Buildings for Small Kroot Base on East Side of Map
+	-- Barracks(2), Vehicle(2), Montka(1), Power(4)
+function Rule_Create_EastBase_Buildings( )
+	-- Create the Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_eastBase_Barracks"..i, "tau_barracks","mkr_eastBase_Barracks"..i, 1)
+	end
+
+	-- Create the Mont'Ka Command Post
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_eastBase_MontkaShrine"..i, "tau_shrine_of_montka","mkr_eastBase_MontkaShrine"..i, 1)
+	end
+
+	-- Create the Vehicle Beacon
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_eastBase_VehicleBuilding"..i, "tau_vehicle_building","mkr_eastBase_VehicleBuilding"..i, 1)
+	end
+
+	-- Create the Normal Power Generators
+	for i = 1, 4 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_eastBase_Power"..i, "tau_plasma_generator","mkr_eastBase_Power"..i, 1)
+	end
+end
+
+--  Create Buildings for Kroot Base in North East
+	-- Kroot Nest(2), Kauyon(1)
+function Rule_Create_NorthEastBase_Buildings( )
+	-- Create the Kroot Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_northEastBase_KrootNest"..i, "tau_kroot_nest","mkr_northEastBase_KrootNest"..i, 1)
+	end
+	
+	-- Create the Kauyon Command Post ( Krootox)
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_northEastBase_KauyonShrine"..i, "tau_shrine_of_kauyon","mkr_northEastBase_KauyonShrine"..i, 1)
+	end
+end
+
+--  Create Buildings for Kroot Base in North West
+	-- HQ(1), Kroot Nest(2), Kauyon(1)
+function Rule_Create_NorthWestBase_Buildings( )
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_northWestBase_HQ"..i, "tau_hq","mkr_northWestBase_HQ"..i, 1)
+	end
+	
+	-- Create the Kroot Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_northWestBase_KrootNest"..i, "tau_kroot_nest","mkr_northWestBase_KrootNest"..i, 1)
+	end
+	
+	-- Create the Kauyon Command Post ( Krootox)
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_northWestBase_KauyonShrine"..i, "tau_shrine_of_kauyon","mkr_northWestBase_KauyonShrine"..i, 1)
+	end
+end
+
+-- Create Buildings for Small Base on West Side of Map
+	-- HQ(1), Barracks(2), Montka (1), Power(4)
+function Rule_Create_WestBase_Buildings( )
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_westBase_HQ"..i, "tau_hq","mkr_westBase_HQ"..i, 1)
+	end
+	
+	-- Create the Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_westBase_Barracks"..i, "tau_barracks","mkr_westBase_Barracks"..i, 1)
+	end
+	
+	-- Create the Mont'Ka Command Post
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_westBase_MontkaShrine"..i, "tau_shrine_of_montka","mkr_westBase_MontkaShrine"..i, 1)
+	end
+	
+	-- Create the Normal Power Generators
+	for i = 1, 4 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_westBase_Power"..i, "tau_plasma_generator","mkr_westBase_Power"..i, 1)
+	end
+end
+
+-- Create Buildings & Laser for Laser Gun Base
+	-- Barracks(2), Power(4), Laser(1)
+function Rule_Create_LaserGunBase_Buildings( )
+	-- Create the Normal Tau Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_laserGunBase_Barracks"..i, "tau_barracks","mkr_laserGunBase_Barracks"..i, 1)
+	end
+
+	-- Create the Normal Power Generators
+	for i = 1, 4 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_laserGunBase_Power"..i, "tau_plasma_generator","mkr_laserGunBase_Power"..i, 1)
+	end
+	
+	-- Make sure that the computer owns the laser gun
+	g_PlayerOwnsLaserGun = false
+
+	-- Create the Actual Laser Gun : (Temp using Orbital Relay Weapon)
+	Entity_CreateBuildingMarker(g_Player2,"eg_laserGun_Weapon", "tau_lasergun","mkr_laserGun_Location", 1)
+
+	-- Make it so the Laser Gun can't be destroyed
+	EGroup_SetHealthInvulnerable("eg_laserGun_Weapon", true)
+
+	-- Add a button to the gun for firing it
+	Rule_AddOneShot(Rule_Laser_Button_Setup, 1)	
+end
+
+-- Create Buildings for Main Tau Base (one with final objective)
+	-- HQ(1), Barracks(2), Kroot Nest(2), Path to Enlightment(2), Power(10), Purpose(1), Vehicle(2), Kauyon(2)
+function Rule_Create_MainTauStronghold_Buildings( )
+	EGroup_Create("eg_mainStronghold_EtherealBuilding_Objective")	-- Used to track when Coalition Center is destroyed, for showing of the final Ethereal (OBJECTIVE)
+
+	--Create the Comm Towers in the Base -- Side Objective
+	for i=1,3 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_commTower_"..i, "dark_eldar_hq","mkr_commTower_"..i, 1)
+	end
+
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_HQ"..i, "tau_hq","mkr_mainStronghold_HQ"..i, 1)
+	end
+
+	-- Create the Normal Tau Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_Barracks"..i, "tau_barracks","mkr_mainStronghold_Barracks"..i, 1)
+	end
+	
+	-- Create the Kroot Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_KrootNest"..i, "tau_kroot_nest","mkr_mainStronghold_KrootNest"..i, 1)
+	end
+	
+	-- Create the Path to Enlightment (Upgrade Building)
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_PathToEnlightment"..i, "tau_research_building","mkr_mainStronghold_PathToEnlightment"..i, 1)
+	end
+	
+	-- Create the Vehicle Beacon
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_VehicleBuilding"..i, "tau_vehicle_building","mkr_mainStronghold_VehicleBuilding"..i, 1)
+	end
+	
+	-- Create the Kauyon Command Post ( Krootox)
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_KauyonShrine"..i, "tau_shrine_of_kauyon","mkr_mainStronghold_KauyonShrine"..i, 1)
+	end
+
+	-- Create the Coalition Center (Ethereal Building / Greater Knarloc) -- Should only be one of these
+	-- DESTROYING this is also the PRIMARY OBJECTIVE of the MISSION
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_PurposeShrine"..i, "tau_shrine_of_purpose","mkr_mainStronghold_PurposeShrine"..i, 1)
+		EGroup_AddGroup("eg_mainStronghold_EtherealBuilding_Objective", "eg_mainStronghold_PurposeShrine"..i)
+	end
+
+	-- Create the Normal Power Generators in the Main Base
+	for i = 1, 10 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_mainStronghold_Power"..i, "tau_plasma_generator","mkr_mainStronghold_Power"..i, 1)
+	end
+end
+
+-- Create Buildings for Relic Base in Center of Map
+	-- HQ(1), Barracks(2), Vehicle Beacon(1)
+function Rule_Create_RelicBase_Buildings( )
+	-- Create the Cadre HQ
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_relicBase_HQ"..i, "tau_hq","mkr_relicBase_HQ"..i, 1)
+	end
+
+	-- Create the Normal Tau Barracks
+	for i = 1, 2 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_relicBase_Barracks"..i, "tau_barracks","mkr_relicBase_Barracks"..i, 1)
+	end
+	
+	-- Create the Vehicle Beacon
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_relicBase_VehicleBuilding"..i, "tau_vehicle_building","mkr_relicBase_VehicleBuilding"..i, 1)
+	end
+end
+
+-- Create Buildings for South Tau Base
+	-- Barracks(1), VehicleBay(1), Montka(1), Power(4)
+function Rule_Create_SouthBase_Buildings( )
+	-- Create the Normal Tau Barracks
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_southBase_Barracks"..i, "tau_barracks","mkr_southBase_Barracks"..i, 1)
+	end
+
+	-- Create the Vehicle Beacon
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_southBase_VehicleBuilding"..i, "tau_vehicle_building","mkr_southBase_VehicleBuilding"..i, 1)
+	end
+
+	-- Create the Mont'Ka Command Post
+	for i = 1, 1 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_southBase_MontkaShrine"..i, "tau_shrine_of_montka","mkr_southBase_MontkaShrine"..i, 1)
+	end
+
+	-- Create the Normal Power Generators in the Main Base
+	for i = 1, 4 do
+		Entity_CreateBuildingMarker(g_Player2,"eg_southBase_Power"..i, "tau_plasma_generator","mkr_southBase_Power"..i, 1)
+	end
+end
+
+-- Setup the Strategic Points, Critical Points,  & Relics to AI Control
+	-- All EGroups are set in the editor
+function Rule_Setup_AI_StrategicPoints( )
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Strategic Point Ownership & Upgrades to Listening Posts
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Strategic Points by the Defensive Base
+	for i=1, 2 do
+		EGroup_SetPlayerOwner("eg_defenseBase_stratPoint"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_defenseBase_listeningPost"..i, "tau_listening_post", EGroup_GetPosition("eg_defenseBase_stratPoint"..i), 1)
+	end
+
+	-- Strategic Point by the East Base
+	EGroup_SetPlayerOwner("eg_eastBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_eastBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_eastBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_eastBase_listeningPost1", "addon_tau_list_post_1" )
+
+	-- Strategic Point by the KrootCenter Base
+	EGroup_SetPlayerOwner("eg_krootCenterBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_krootCenterBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_krootCenterBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_krootCenterBase_listeningPost1", "addon_tau_list_post_1" )
+	
+	-- Strategic Points by the Main Tau Stronghold to the Main Tau Player: g_Player3
+	for i=1, 2 do
+		EGroup_SetPlayerOwner("eg_mainStronghold_stratPoint"..i, g_Player2)
+		Entity_CreateBuildingPosition(g_Player2, "eg_mainStronghold_listeningPost"..i, "tau_listening_post", EGroup_GetPosition("eg_mainStronghold_stratPoint"..i), 1)
+		EGroup_ForceAddOn("eg_mainStronghold_listeningPost"..i, "addon_tau_list_post_1" )
+	end
+
+	-- Strategic Point by the NorthEast Base
+	EGroup_SetPlayerOwner("eg_northEastBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_northEastBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_northEastBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_northEastBase_listeningPost1", "addon_tau_list_post_1" )
+
+	-- Strategic Point by the NorthWest Base
+	EGroup_SetPlayerOwner("eg_northWestBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_northWestBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_northWestBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_northWestBase_listeningPost1", "addon_tau_list_post_1" )
+
+	-- Strategic Point by the South Base
+	EGroup_SetPlayerOwner("eg_southBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_southBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_southBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_southBase_listeningPost1", "addon_tau_list_post_1" )
+
+	-- Strategic Point by the West Base
+	EGroup_SetPlayerOwner("eg_westBase_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_westBase_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_westBase_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_westBase_listeningPost1", "addon_tau_list_post_1" )
+
+	-- Strategic Points by the Laser Gun 
+	EGroup_SetPlayerOwner("eg_laserGun_stratPoint1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_laserGun_listeningPost1", "tau_listening_post", EGroup_GetPosition("eg_laserGun_stratPoint1"), 1)
+	EGroup_ForceAddOn("eg_laserGun_listeningPost1", "addon_tau_list_post_1" )
+
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Critical Point Ownership
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Set the Critical location connected to the laser gun
+	EGroup_SetPlayerOwner("eg_laserGun_critPoint", g_Player3)
+
+	-- Critical Point by the West Base
+	EGroup_SetPlayerOwner("eg_westBase_critPoint", g_Player2)
+
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Relic Ownership  & Upgrades to Listening Posts (Also Upgrade them to Level 2)
+	-------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Relic by RelicBase (Center of Map) :
+	EGroup_SetPlayerOwner("eg_relicBase_relic1", g_Player2)
+--	Entity_CreateBuildingPosition(g_Player2, "eg_relicBase_listeningPostRelic1", "tau_listening_post", EGroup_GetPosition("eg_relicBase_relic1"), 1)
+--	EGroup_ForceAddOn("eg_relicBase_listeningPostRelic1", "addon_tau_list_post_2" )
+
+	-- Relic by the Main Tau Stronghold :
+	EGroup_SetPlayerOwner("eg_mainStronghold_relic1", g_Player2)
+	Entity_CreateBuildingPosition(g_Player2, "eg_mainStronghold_listeningPostRelic1", "tau_listening_post", EGroup_GetPosition("eg_mainStronghold_relic1"), 1)
+	EGroup_ForceAddOn("eg_mainStronghold_listeningPostRelic1", "addon_tau_list_post_2" )
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " CREATE AI BUILDINGS " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- OBJECTIVES
+	-- INTIAL DEFINE:	
+		-- Rule_Objective_Define(): Sets up the actual Objective Lua Tables
+			-- Doesn't actually assign the objectives -- Just sets up the tables for them
+
+	-- ASSIGNING AND CHECKING:
+		-- Rule_DestroyCoalitionCenter_Objective() : Primary Objective
+			-- Checks if the Ethereal Building Has been destroyed
+			-- Completion calls: Rule_EtherealBuilding_HasBeenDestroyed( )
+		-- Rule_BreachDefenses_Objective() : Primary Ojective
+			-- Checks if buildings that make up Defense Base are destroyed
+			-- Completing gives player Moon Base
+		-- Rule_CaptureLaserGun_Objective : Secondary Objective
+			-- Checks if the Laser Gun has been captured by Player
+			-- Completing removes objective (everything else is done elsewhere)
+		-- Rule_ReCaptureLaserGun_Objective()
+			-- Checks if the Laser Gun has been recaptured back by Player
+			-- NOT CURRENTLY USED
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Sets up the actual Objective Lua Tables & is called from OnInit( )
+function Rule_Objective_Define()
+	-- Primary Objective : Assigned at Intro (Completion equals VICTORY of SCENARIO)
+	Objective_DestroyCoalitionCenter = { title_id = 2825000, short_desc_id = 2825002, help_tip_id = 2825004 }
+	
+	-- Primary Ojective : Assigned at Intro (Completed once player is by heavy defences and has cleared area for base)
+	Objective_BreachDefenses = { title_id = 2821000, short_desc_id = 2821002, help_tip_id = 2821004 }
+
+	-- Secondary Objective: Assigned once Gun starts firing at player (Completed once Laser Gun in under player control)
+	Objective_CaptureLaserGun = { title_id = 2822000, short_desc_id = 2822002, help_tip_id = 2822004 }
+	
+	-- Secondary Objective: Assigned if Tau regain control of of Gun after player has captured it (Completed once Laser Gun in back under player control)
+	Objective_ReCaptureLaserGun = { title_id = 2823000, short_desc_id = 2823002, help_tip_id = 2823004 }
+	
+	-- Secondary Objective: Assigned once in range of BreachDefenses base (Completed once Comm Tower is Destroyed -- Failed if timer expires)
+	Objective_DestroyCommTower = { title_id = 2824000, short_desc_id = 2824002, help_tip_id = 2824004 }
+end	
+
+-- Assigns & Checks for Primary Ojective :  (Destroy the Ethereal Building) & is added in ??
+function Rule_DestroyCoalitionCenter_Objective()
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_DestroyCoalitionCenter.title_id) == false
+	then
+		-- Create ( & Assign)  the objective as a primary one
+		Util_ObjectiveCreate(Objective_DestroyCoalitionCenter, true)
+		
+		-- Ping the Location of the Building in the Objective Screen
+		Objective_PingMarker(Objective_DestroyCoalitionCenter.title_id, "mkr_mainStronghold_PurposeShrine1", true, default)
+		
+		-- Ping the location of the Building in the Main Game screen & breifly reveal Fog of War around location
+		Ping_Marker("mkr_mainStronghold_PurposeShrine1",false,"default")
+		FOW_RevealMarker("mkr_mainStronghold_PurposeShrine1", 20)
+	
+	-- Else Check if the CoalitionCenter in Main Stronghold has been destroyed
+	elseif Event_IsAnyRunning() == false and
+		Objective_Exists(Objective_DestroyCoalitionCenter.title_id) == true and
+		EGroup_Count( EGroup_FromName("eg_mainStronghold_EtherealBuilding_Objective")) == 0
+	then	
+		-- Complete the Objective and Remove the Rule
+		Util_ObjectiveComplete(Objective_DestroyCoalitionCenter.title_id)
+		Rule_Remove( Rule_DestroyCoalitionCenter_Objective )
+			
+		-- Add the Victory & Remove the Defeat Rule since Player Won (in case defeat occurs in delay time)
+		Rule_AddOneShot(Rule_EndGame_Victory,10)
+		Rule_Remove(Rule_EndGame_Defeat)
+	end
+end
+
+-- Assigns & Checks for Primary Ojective : (Breach Initial Tau defences and clear area)
+function Rule_BreachDefenses_Objective()
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_BreachDefenses.title_id) == false
+		then
+		-- Create (Assign)  the objective as a primary one
+		Util_ObjectiveCreate(Objective_BreachDefenses, true)
+
+	-- check if all buildings that make up the Initial Tau Defenses are Destroyed
+	elseif Event_IsAnyRunning() == false and
+		EGroup_Count( EGroup_FromName("eg_defenseBase_Buildings_Objective")) == 0
+		then
+			-- Complete the Objective and Remove the Rule
+			Util_ObjectiveComplete( Objective_BreachDefenses.title_id )
+			Rule_Remove( Rule_BreachDefenses_Objective )
+			
+			-- Now that defense are breached -- give the player their bases 
+			Rule_AddOneShot( Rule_BuildMoonBase, 0)
+	end
+
+	-- Reveal the Fog of War Around the Base (reveal until objective complete)
+	FOW_RevealMarker("mkr_Ai_FoundPlayerBase",10)
+end
+
+-- Assigns & Check for Secondary Objective : (Capture the Laser Gun) & is added in Rule_Aim_And_Fire_Laser_Gun_FirstTime()
+function Rule_CaptureLaserGun_Objective( )
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_CaptureLaserGun.title_id) == false
+	then
+		-- Create (Assign)  the objective as a secondary one
+		Util_ObjectiveCreate(Objective_CaptureLaserGun, false)
+		Objective_PingMarker(Objective_CaptureLaserGun.title_id, "mkr_laserGun_Location", true, attack)
+		
+		-- Set up a ping on the ingame screen
+		Ping_Marker("mkr_laserGun_Location", false, "default")
+
+		-- Set Amount of time between laser guns shots
+		g_laserGunCounter = g_laserGunCounterMax
+	
+		-- Show the timer on the screen
+			-- 2840000 is the localized string that appears on screen
+		UI_ShowCountDXP("LaserGunUi", g_Player1, 2840000, g_laserGunCounter )
+		
+		-- Checks if the player has captured the laser gun (critical point by the gun)
+		Rule_AddInterval(Rule_Check_Player_Control_Laser, 2)
+
+	-- if the player captures the laser gun
+	elseif	Event_IsAnyRunning() == false and
+			Objective_Exists(Objective_CaptureLaserGun.title_id) == true and
+			g_PlayerOwnsLaserGun == true
+	then	
+		-- Complete the Objective and Remove the Rule
+		Util_ObjectiveComplete(Objective_CaptureLaserGun.title_id)
+		Rule_Remove(Rule_CaptureLaserGun_Objective)
+
+		-- Hide UI Timer
+		UI_HideCount("LaserGunUi")
+	end
+	
+	-- Reveal Fog of War for the Objective (reveals until objective complete)
+	FOW_RevealMarker("mkr_laserGun_Location", 5)
+end
+
+-- Assigns & Checks for Secondary Objective : (Recapture the Laser Gun) & is added in ??
+function Rule_ReCaptureLaserGun_Objective()
+	-- First check if Objective exists and add if not...
+	if 	Event_IsAnyRunning() == false and 
+		Objective_Exists(Objective_ReCaptureLaserGun.title_id) == false
+	then
+		-- Create (Assign)  the objective as a secondary one
+		Util_ObjectiveCreate(Objective_ReCaptureLaserGun, false)
+		Objective_PingMarker(Objective_ReCaptureLaserGun.title_id, "mkr_laserGun_Location", true, attack)
+	
+	-- Check if Exsists, is completed, and yet player doesn't own gun
+		-- Used for resetting this after completed the first time
+	elseif Event_IsAnyRunning() == false and 
+			Objective_Exists(Objective_ReCaptureLaserGun.title_id) == true and
+			g_PlayerOwnsLaserGun == false and
+			Objective_GetState(Objective_ReCaptureLaserGun.title_id) == OS_Complete
+	then
+		-- Re-ping the locatopn and set objective back to failed (can't set to incomplete?)
+		Objective_PingMarker(Objective_ReCaptureLaserGun.title_id, "mkr_laserGun_Location", true, attack)
+		Objective_SetState(Objective_ReCaptureLaserGun.title_id, OS_Failed)
+
+	-- if the player captures the laser gun
+	elseif	Event_IsAnyRunning() == false and
+				g_PlayerOwnsLaserGun == true
+	then	
+		-- Complete the Objective and Remove the Rule
+		Util_ObjectiveComplete(Objective_ReCaptureLaserGun.title_id)
+		Rule_Remove(Rule_ReCaptureLaserGun_Objective)
+	end
+	
+	-- Reveal Fog of War for the Objective (Reveals Until Objective is Completed
+	FOW_RevealMarker("mkr_laserGun_Location", 10)
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " OBJECTIVES " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--Handles the Delayed Tech-ing & Activation of Enemy Bases & granting of research
+function Rule_Tech_And_Activate_Tier_One()
+	
+	-- Rule For Vect Attacks to Start
+--	Rule_AddInterval(Rule_VectAttack, g_timer_vectAttack)
+	
+	-- Jumping Hellions from East Base
+--	g_skimmerShop8_activated = true
+	
+	-- Grant Building Retaliation Damage
+--	Player_GrantResearch(g_Player2, "dark_eldar_barbed_walls_research")
+end
+
+function Rule_Tech_And_Activate_Tier_Two()
+	
+	--Taunt Player (Since Tiered Up)
+--	Util_StartIntel(EVENTS.IE_Taunt_One)
+	
+	-- Warriors from East Base
+--	g_hallOfBlood4_activated  = true
+
+	-- Grant Mandrake Cloaking
+--	Player_GrantResearch(g_Player2, "dark_eldar_infiltration_mandrake_research")
+end
+
+function Rule_Tech_And_Activate_Tier_Three()
+	
+	--Taunt Player (Since Tiered Up)
+--	Util_StartIntel(EVENTS.IE_Taunt_Two)
+	
+	-- Ravager for North Base
+--	g_skimmerShop4_activated = true
+
+	-- Grant 2nd Increase Melee Damage for Leaders
+--	Player_GrantResearch(g_Player2, "dark_eldar_upgrade_agonizer")
+end
+
+-- Create all the SGroups used in the mission & sync the attack waves
+function Rule_Create_And_Sync_Attacks()
+	-- Set up Initial Attack Targets for the Bases 
+	g_eastBase_target = Marker_GetPosition(Marker_FromName("mkr_east_stagingGround", "basic_marker"))
+	g_eastBase_airUnit_target = Marker_GetPosition(Marker_FromName("mkr_east_stagingGround", "basic_marker"))
+	g_krootCenter_target1 = Marker_GetPosition(Marker_FromName("mkr_Ai_Attack_PlayerWestSide", "basic_marker"))
+	g_krootCenter_target2 = Marker_GetPosition(Marker_FromName("mkr_Ai_Attack_PlayerEastSide", "basic_marker"))
+	g_mainBase_target = Marker_GetPosition(Marker_FromName("mkr_main_stagingGround", "basic_marker"))
+	g_northWestBase_target = Marker_GetPosition(Marker_FromName("mkr_northWest_stagingGround", "basic_marker"))
+	g_relicBase_vehicle_target = Marker_GetPosition(Marker_FromName("mkr_relicBase_jumpZone", "basic_marker"))
+	g_southBase_target = Marker_GetPosition(Marker_FromName("mkr_Ai_Attack_PlayerEastSide", "basic_marker"))
+	g_westBase_target = Marker_GetPosition(Marker_FromName("mkr_Ai_Attack_PlayerEastSide", "basic_marker"))
+	g_westBase_stealthSuit_target = Marker_GetPosition(Marker_FromName("mkr_Ai_Attack_PlayerEastSide", "basic_marker"))
+
+	-- Vespid & Stealth Suit jump ability
+	Player_GrantResearch(g_Player3, "tau_anti_grav_research")
+	
+	-- Used to Store All the player units for Laser Gun Targeting
+	SGroup_Create("sg_players_units")
+	
+	-- Used to Track & Attack Player Buildings
+	EGroup_Create("eg_players_buildings_startingArea")
+	EGroup_Create("eg_vespidTarget")
+
+	-- Create the DefenseBase Troops
+	for i = 1,3 do
+		SGroup_Create("sg_defenseBase_troops"..i)
+	end
+
+	-- Create the EastBase Troops
+	for i = 1,4 do
+		SGroup_Create("sg_eastBase_troops"..i)
+	end
+	
+	-- Create the Air Units from East Base
+	for i = 1,4 do
+		SGroup_Create("sg_eastBase_barracuda"..i)
+	end	
+	
+	-- Create the KrootCenterBase Troops
+	for i = 1,2 do
+		SGroup_Create("sg_krootCenterBase_troops"..i)
+	end
+	
+	--KrootCenterBase Vespids
+	SGroup_Create("sg_krootCenterBase_vespids1")
+	
+	-- LaserGunBase Patrol Squads
+	SGroup_Create("sg_laserGunBase_patrol1")
+	SGroup_Create("sg_laserGunBase_patrol2")
+
+	-- Create the NorthEast Patrol Squads
+	for i = 1,4 do
+		SGroup_Create("sg_northEastBase_patrol"..i)
+	end
+	
+	-- Create the NorthWest Troops Squads
+	for i = 1,4 do
+		SGroup_Create("sg_northWestBase_troops"..i)
+	end
+	
+	-- Create the NorthWest Patrol Squads
+	for i = 1,4 do
+		SGroup_Create("sg_northWestBase_patrol"..i)
+	end
+	
+	-- Create the RelicBase Crisis Suits
+	for i = 1,4 do
+		SGroup_Create("sg_relicBase_crisis"..i)
+	end
+	
+	-- RelicBase Stealth Suits
+	SGroup_Create("sg_relicBase_stealthSuit1")
+	
+	-- RelicBase Vehicle Squad
+	SGroup_Create("sg_relicBase_vehicle1")
+	SGroup_Create("sg_relicBase_vehicle2")
+
+	-- Create the SouthBase Troops
+	for i = 1,2 do
+		SGroup_Create("sg_southBase_troops"..i)
+	end
+
+	-- Create the SouthBase Vehicles
+	for i = 1,2 do
+		SGroup_Create("sg_southBase_vehicles"..i)
+	end
+
+	-- Create the WestBase Troops
+	for i = 1,2 do
+		SGroup_Create("sg_westBase_troops"..i)
+	end
+
+	-- West Base Patrol Squads
+	SGroup_Create("sg_westBase_patrol1")
+	SGroup_Create("sg_westBase_patrol2")
+
+	-- West Base Stealth Suits
+	SGroup_Create("sg_westBase_stealthSuit1")
+end
+
+-- Launchs the first Major Tau Attack here & Enable First Tau Bases
+	-- Also start the hidden timer for laser gun
+function Rule_Launch_First_Major_Attack()
+	-- START BASE PRODUCTION & ATTACKING
+	
+	-- IE: Tau know the player is here (Assign Fleet Objective Here Also)
+	Util_StartIntel(EVENTS.IE_SendTroops_PlayerFound)
+	
+	-- EAST BASE: Attacking Pathfinders, Broadsides & Air Units (Barracuda)
+	Rule_AddInterval(Rule_Production_EastBase, g_productionTimer_eastBase)
+	
+	-- KROOTCENTER BASE: Attacking Kroot Carnivores & Vespids
+	Rule_AddInterval(Rule_Production_KrootCenterBase, g_productionTimer_krootCenterBase)
+
+	-- LASERGUN BASE: Patroling Pathfinders & Defending Broadsides
+	Rule_AddInterval(Rule_Production_LaserGunBase, g_productionTimer_laserGunBase)
+	
+	-- MAIN BASE:
+--	Rule_AddInterval(Rule_Production_MainBase, g_productionTimer_mainBase)
+	
+	-- NORTHEAST BASE: Patrolling Kroot Carninvores & Krootox
+	Rule_AddInterval(Rule_Production_NorthEastBase, g_productionTimer_northEastBase)
+	
+	-- NORTHWEST BASE: Patroling Vespids -- Attacking KrootHound & Krootox
+	Rule_AddInterval(Rule_Production_NorthWestBase, g_productionTimer_northWestBase)	
+	
+	-- RELIC BASE: Crisis Suits, Stealth Suits, & Attacking Drone Harbringers
+	Rule_AddInterval(Rule_Production_RelicBase, g_productionTimer_relicBase)
+
+	-- SOUTH BASE: Attacking Fire Warriors & Drone Harbringer / Skyray
+	Rule_AddInterval(Rule_Production_SouthBase, g_productionTimer_southBase)
+
+	-- WEST BASE: Patroling Pathfinders & Attacking Firewarriors
+	Rule_AddInterval(Rule_Production_WestBase,g_productionTimer_westBase)
+
+	-- Controls KrootCenterBase Vespid Jumping & Building Attacking
+	Rule_AddInterval(Rule_KrootCenterBase_VespidSkill,1)
+	Rule_AddInterval(Rule_KrootCenterBase_VespidJump,1)
+
+	-- Handles the Patroling Pathfinders from the Lasergun Base
+	Rule_AddInterval(Rule_PatrolOne_LaserGunBase,5)
+	Rule_AddInterval(Rule_PatrolTwo_LaserGunBase,5)
+	
+	-- Handles the Patroling Pathfinders from the NorthEast Base
+	Rule_AddInterval(Rule_PatrolOne_NorthEastBase,5)
+	Rule_AddInterval(Rule_PatrolTwo_NorthEastBase,5)
+	
+	-- Handles the Patroling Vespids from the NorthWest Base
+	Rule_AddInterval(Rule_PatrolOne_NorthWestBase,5)
+	Rule_AddInterval(Rule_PatrolTwo_NorthWestBase,5)
+	
+	-- Handles the Patroling Pathfinders from the West Base
+	Rule_AddInterval(Rule_PatrolOne_WestBase,5)
+	Rule_AddInterval(Rule_PatrolTwo_WestBase,5)
+
+	-- FIRST MAJOR ATTACK:
+	-- Produce squad of Firewarriors & send at west side of player base 
+	for i = 1,1 do
+		Rule_Produce_Firewarrior(g_Player3, "sg_westBase_troops"..i, "eg_defenseBase_Barracks1", "mkr_defenseBase_Barracks1")
+		Cmd_AttackMoveMarker("sg_westBase_troops"..i, "mkr_Ai_Attack_PlayerWestSide")
+	end
+
+	-- Produce a squad of Carnivores & send at west side of player base 
+	Rule_Produce_KrootCarnivore(g_Player3, "sg_krootCenterBase_troops1", "eg_krootCenterBase_KrootNest1", "mkr_krootCenterBase_KrootNest1")
+	Cmd_AttackMovePos("sg_krootCenterBase_troops1", g_krootCenter_target1)
+
+	-- Produce a squad of Carnivores & send at east side of player base 
+	Rule_Produce_KrootCarnivore(g_Player3, "sg_krootCenterBase_troops2", "eg_krootCenterBase_KrootNest2", "mkr_krootCenterBase_KrootNest2")
+	Cmd_AttackMovePos("sg_krootCenterBase_troops2", g_krootCenter_target2)
+
+	-- Produce squad of Firewarriors & send at east side of player base 
+	for i = 1,1 do
+		Rule_Produce_Firewarrior(g_Player3, "sg_southBase_troops"..i, "eg_southBase_Barracks1", "mkr_southBase_Barracks1")
+		Cmd_AttackMoveMarker("sg_southBase_troops"..i, "mkr_Ai_Attack_PlayerEastSide")
+	end
+
+	-- Set the Hidden Timer up for Laser Gun Warm up
+	g_laserGunWarmupCounter = g_laserGunWarmupCounterMax
+
+	-- Start the Hidden Timer until first laser shot fires
+	Rule_AddInterval(Rule_Hidden_Laser_Gun_Warm_Up,1)
+end
+
+-- Causes a few units in each base to wander around it -- giving it the feeling of some life
+function Rule_RandomMovement_Base()
+	-- EAST BASE: Hammerhead, Pathfinders, & Builders
+	Rule_RandomMovement_Support("sg_eastBase_wander1", "mkr_eastBase_wandering")
+	Rule_RandomMovement_Support("sg_eastBase_wander2", "mkr_eastBase_wandering")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_eastBase_wander3", "mkr_eastBase_builder_wander")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_eastBase_wander4", "mkr_eastBase_builder_wander")
+
+	-- KROOTCENTER BASE: Hounds, Carnivores & Snapers
+	Rule_RandomMovement_Support("sg_krootCenterBase_wander1", "mkr_krootCenterBase_wandering")
+	Rule_RandomMovement_Support("sg_krootCenterBase_wander2", "mkr_krootCenterBase_wandering")
+	Rule_RandomMovement_Support("sg_krootCenterBase_wander3", "mkr_krootCenterBase_wandering")
+	
+	-- LASERGUN BASE:  Builders
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_laserGunBase_wander1", "mkr_laserGunBase_builder_wander")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_laserGunBase_wander2", "mkr_laserGunBase_builder_wander")
+	
+	-- NORTHEAST BASE: Greater Knarloc & Hounds w/ Shaper
+	Rule_RandomMovement_Support("sg_northEastBase_wander1", "mkr_northEastBase_wandering")
+	Rule_RandomMovement_Support("sg_northEastBase_wander2", "mkr_northEastBase_wandering")
+	
+	-- NORTHWEST BASE: Greater Knarloc & Hounds w/ Shaper
+	Rule_RandomMovement_Support("sg_northWestBase_wander1", "mkr_northWestBase_wandering")
+	Rule_RandomMovement_Support("sg_northWestBase_wander2", "mkr_northWestBase_wandering")
+	
+	-- RELIC BASE: Hammerhead, Pathfinders, Builders
+	Rule_RandomMovement_Support("sg_relicBase_wander1", "mkr_relic_wandering")
+	Rule_RandomMovement_Support("sg_relicBase_wander2", "mkr_relic_wandering")
+	
+	Rule_RandomMovement_Support("sg_relicBase_wander3", "mkr_relicBase_wandering")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_relicBase_wander4", "mkr_relicBase_wandering")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_relicBase_wander5", "mkr_relicBase_wandering")
+
+	-- SOUTH BASE: Troops (Pathfinders & Firewarriors) & Builder
+	Rule_RandomMovement_Support("sg_southBase_wander1", "mkr_southBase_wandering")
+	Rule_RandomMovement_Support("sg_southBase_wander2", "mkr_southBase_wandering")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_southBase_wander3", "mkr_southBase_builder_wander")
+
+	--WEST BASE: Troops (Pathfinders) & Builder
+	Rule_RandomMovement_Support("sg_westBase_wander1", "mkr_westBase_wandering")
+	
+	--WEST BASE: Builders
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_westBase_wander2", "mkr_westBase_builder_wander")
+	Rule_RandomMovement_Support_Builder(g_Player3, "sg_westBase_wander3", "mkr_westBase_builder_wander")
+end
+
+-- Makes sure the squad Exists & has units, before telling the squad to randomly move to a locatio inside marker
+function Rule_RandomMovement_Support(squadName, markerName  )
+	if SGroup_Exists(squadName) and
+		SGroup_Count(squadName) > 0
+	then
+		Util_AttackMoveMarkerRandomRadius(squadName, markerName)
+	end
+end
+
+-- Causes Units to Move (Instead of Attack Move) to random location inside marker
+function Rule_RandomMovement_Support_Builder(playerName, squadName, markerName  )
+	if SGroup_Exists(squadName) and
+		SGroup_Count(squadName) > 0
+	then
+		local pos = Marker_GetPosition( Marker_FromName( markerName, "basic_marker" ) )
+		local prox = Marker_GetProximity( Marker_FromName( markerName, "basic_marker" ) )
+		
+		local xrand = World_GetRand( -prox, prox ) 
+		local zrand = World_GetRand( -prox, prox ) 
+
+		local movePos = World_Pos( xrand + pos.x, pos.y, zrand + pos.z )
+
+		Command_SquadPos(g_Player3, squadName, SCMD_Move, movePos)
+	end
+end
+
+-- mkr_Ai_Crisis_LaserJump1-4
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "BASE" PRODUCTION RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "DEFENSE BASE" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Gives the Base some units for initial attack & then Enables Unit Production for DefenseBase
+function Rule_Enable_DefenseBase()
+	-- Check if the player has entered the area...
+	if Player_AreSquadsNearMarker(g_Player1, "mkr_defenseBase_EnableBaseAI")
+	then
+		-- Produce some Initial Fire Warriors
+		Rule_Produce_Firewarrior(g_Player3, "sg_defenseBase_troops1", "eg_defenseBase_Barracks1", "mkr_defenseBase_Barracks1")
+		Rule_Produce_Firewarrior(g_Player3, "sg_defenseBase_troops2", "eg_defenseBase_Barracks1", "mkr_defenseBase_Barracks1")
+		
+		-- Produce some Initial PathFinders
+		Rule_Produce_Pathfinder(g_Player3, "sg_defenseBase_troops3", "eg_defenseBase_Barracks1", "mkr_defenseBase_Barracks1")
+		
+		for i = 1,3 do
+			-- Order the Initial Squads to Attack the Player
+			Cmd_AttackMoveMarker("sg_defenseBase_troops"..i, "mkr_Ai_Patrol_InitialArea")
+		end
+		
+		-- Produce Vespids & Either Firewarriors or Kroot Carnivores from DefenseBase  
+		Rule_AddInterval(Rule_Production_DefenseBase, g_productionTimer_defenseBase)
+		
+		-- Remove this Rule since it has done its job
+		Rule_Remove(Rule_Enable_DefenseBase)
+	end
+end 
+
+-- Produce Vespids & Either Firewarriors or Kroot Carnivores from DefenseBase  
+function Rule_Production_DefenseBase()
+	local defenseBase_troopsProduced = false
+
+	-- if the Barracks still exists
+	if EGroup_Count("eg_defenseBase_Barracks1") == 1
+	then
+		-- Loop through all the possible defenseBase_troop Squads
+		for i =1,3	do
+			-- If the SGroup is Not Currently Used...
+			if defenseBase_troopsProduced == false and
+				SGroup_Count("sg_defenseBase_troops"..i) == 0
+			then
+				-- Try to Produce Fire Warriors
+				if Rule_Produce_Firewarrior(g_Player3, "sg_defenseBase_troops"..i, "eg_defenseBase_Barracks1", "mkr_defenseBase_Barracks1") == true
+				then
+					print("defenseBase -- Producing FireWarrior")
+					defenseBase_troopsProduced = true
+				end
+			end
+		end
+
+	-- Else if the Kroot Barracks still exists
+	elseif EGroup_Count("eg_defenseBase_KrootNest1") == 1
+	then
+		-- Loop through all the possible defenseBase_troop Squads
+		for i =1,3	do
+			-- If the SGroup is Not Currently Used...
+			if defenseBase_troopsProduced == false and
+				SGroup_Count("sg_defenseBase_troops"..i) == 0
+			then
+				-- Try to Produce Kroot Carnivores
+				if Rule_Produce_KrootCarnivore(g_Player3, "sg_defenseBase_troops"..i, "eg_defenseBase_KrootNest1", "mkr_defenseBase_KrootNest1") == true
+				then
+					print("defenseBase -- Producing Kroot Carnivore")
+					defenseBase_troopsProduced = true
+				end
+			end
+		end
+	end
+
+	-- if the HQ still exists
+	if EGroup_Count("eg_defenseBase_HQ1") == 1
+	then
+		defenseBase_troopsProduced = false
+		
+		-- Loop through all the possible defenseBase_troop Squads
+		for i =1,3	do
+			-- If the SGroup is Not Currently Used...
+			if defenseBase_troopsProduced == false and
+				SGroup_Count("sg_defenseBase_troops"..i) == 0
+			then
+				-- Try to Produce Fire Warriors
+				if Rule_Produce_Vespid(g_Player3, "sg_defenseBase_troops"..i, "eg_defenseBase_HQ1", "mkr_defenseBase_HQ1") == true
+				then
+					print("defenseBase -- Producing Vespid")
+					defenseBase_troopsProduced = true
+				end
+			end
+		end
+	end
+	
+	for i = 1,3 do
+		-- Order the Squads to Attack the Player
+		Cmd_AttackMoveMarker("sg_defenseBase_troops"..i, "mkr_Ai_Patrol_InitialArea")
+	end
+
+	--if barracks, krootnest, & HQ are destroyed, remove rules since base is gone
+	if 	EGroup_Count("eg_defenseBase_Barracks1") == 0 and
+		EGroup_Count("eg_defenseBase_KrootNest1") == 0 and
+		EGroup_Count("eg_defenseBase_HQ1") == 0
+	then
+		Rule_Remove(Rule_Production_DefenseBase)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- " EAST BASE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Pathfinder & Broadsides from Barracks & Air Units From Vehicle Bays
+function Rule_Production_EastBase()
+	--Loop through all Barracks & if still exists...
+	for j =1,2 do
+		local eastBase_troopsProduced = false
+	
+		if EGroup_Count("eg_eastBase_Barracks"..j) == 1
+		then
+			-- Loop through all troop squads
+			for i =1,4	do
+				-- If the SGroup is Not Currently Used...
+				if eastBase_troopsProduced == false and
+					SGroup_Count("sg_eastBase_troops"..i) == 0
+				then
+					-- Try to Produce Pathfinders Squad (1&3) 
+					if  (i == 1 or i == 3) and						
+						Rule_Produce_Pathfinder(g_Player3, "sg_eastBase_troops"..i, "eg_eastBase_Barracks"..j, "mkr_eastBase_Barracks"..j) == true
+					then
+						print("eastBase -- Producing Pathfinder")
+						eastBase_troopsProduced = true
+						
+						-- Order Patrol Squad to First Patrol Point
+						Cmd_AttackMovePos("sg_eastBase_troops"..i, g_eastBase_target)
+					
+					-- Try to Produce a Broadside (2 & 4)
+					elseif  (i == 2 or i == 4) and
+						Rule_Produce_Broadside(g_Player3, "sg_eastBase_troops"..i, "eg_eastBase_Barracks"..j, "mkr_eastBase_Barracks"..j) == true
+					then
+						print("eastBase -- Producing Broadsides")
+						eastBase_troopsProduced = true
+						
+						-- Order to Attack
+						Cmd_AttackMovePos("sg_eastBase_troops"..i, g_eastBase_target)
+					end
+				end
+			end
+		end
+		
+		local eastBase_troopsProduced = false
+		
+		-- Vehicle Bay: Air Units
+		if EGroup_Count("eg_eastBase_VehicleBuilding"..j) == 1
+		then
+			-- Loop through all troop squads
+			for i =1,4	do
+				-- If the SGroup is Not Currently Used...
+				if eastBase_troopsProduced == false and
+					SGroup_Count("sg_eastBase_barracuda"..i) == 0
+				then
+					-- Try to Produce Air Units Squad 
+					if Rule_Produce_Barracuda(g_Player3, "sg_eastBase_barracuda"..i, "eg_eastBase_VehicleBuilding"..j, "mkr_eastBase_VehicleBuilding"..j) == true
+					then
+						print("eastBase -- Producing Barracuda")
+						eastBase_troopsProduced = true
+						
+						-- Order Squad to Attack
+						Cmd_AttackMovePos("sg_eastBase_barracuda"..i, g_eastBase_airUnit_target)
+					end
+				end
+			end
+		end		
+	end
+	
+	-- All Baracks are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_eastBase_Barracks1") == 0 and
+		EGroup_Count("eg_eastBase_Barracks2") == 0 and
+		EGroup_Count("eg_eastBase_VehicleBuilding1") == 0 and
+		EGroup_Count("eg_eastBase_VehicleBuilding2") == 0
+	then
+		Rule_Remove(Rule_Production_NorthEastBase)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- " KROOT CENTER BASE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produces Carnivores & Vespids
+function Rule_Production_KrootCenterBase()
+	--Loop through all Kroot Nests & if still exists...
+	for j =1,2 do
+		local krootCenter_troopsProduced = false
+	
+		if EGroup_Count("eg_krootCenterBase_KrootNest"..j) == 1
+		then
+			-- Loop through all the possible krootCenter_troop Squads
+			for i =1,2	do
+				-- If the SGroup is Not Currently Used...
+				if krootCenter_troopsProduced == false and
+					SGroup_Count("sg_krootCenterBase_troops"..i) == 0
+				then
+					-- Try to Produce Kroot Carnivores
+					if Rule_Produce_KrootCarnivore(g_Player3, "sg_krootCenterBase_troops"..i, "eg_krootCenterBase_KrootNest"..j, "mkr_krootCenterBase_KrootNest"..j) == true
+					then
+						print("krootCenter Nest 1 -- Producing Kroot Carnivore")
+						krootCenter_troopsProduced = true
+						
+						-- Choose your attack target based on Nest Spawned From
+						if j == 1
+						then
+							Cmd_AttackMovePos("sg_krootCenterBase_troops"..i, g_krootCenter_target1)
+						else
+							Cmd_AttackMovePos("sg_krootCenterBase_troops"..i, g_krootCenter_target2)
+						end						
+					end
+				end
+			end
+		end
+	end
+	
+	if SGroup_Count("sg_krootCenterBase_vespids1") == 0
+	then
+		-- Try to Produce a New Vespid if HQ is Still Alive
+		if Rule_Produce_Vespid(g_Player3, "sg_krootCenterBase_vespids1", "eg_krootCenterBase_HQ1", "mkr_krootCenterBase_HQ1") == true
+		then
+			-- Order the Vespid Squad to Jump Zone
+			Cmd_AttackMoveMarker("sg_krootCenterBase_vespids1", "mkr_Ai_VespidJumpZone")
+			
+			-- In case last group was killed before the skill gets off...
+			g_krootCenterBase_UsedSkill = false
+			EGroup_Clear("eg_vespidTarget")	
+		end
+	end
+	
+	-- All Kroot Nests & HQ are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_krootCenterBase_KrootNest1") == 0 and
+		EGroup_Count("eg_krootCenterBase_KrootNest2") == 0 and
+		EGroup_Count("eg_krootCenterBase_HQ1") == 0
+	then
+		Rule_Remove(Rule_Production_KrootCenterBase)
+	end
+end
+
+-- Check for & then cause the Vespids to jump to a random building in the Players Starting Area
+function Rule_KrootCenterBase_VespidJump()
+	if SGroup_Exists("sg_krootCenterBase_vespids1") and
+		Prox_AllSquadsNearMarker("sg_krootCenterBase_vespids1", "mkr_Ai_VespidJumpZone") == true and
+		EGroup_Count("eg_vespidTarget") == 0
+	then	
+		-- Get All Player Buildings in Opening Area
+		EGroup_Clear("eg_players_buildings_startingArea")
+		Player_GetAllEntitiesNearMarker( g_Player1, "eg_players_buildings_startingArea", "mkr_player_baseArea" )
+
+		eCount = EGroup_Count("eg_players_buildings_startingArea")
+		
+		if eCount >= 1
+		then
+			print("Vespid Jump")
+			
+			-- Get Location of Building
+			eNumber = World_GetRand(1, eCount)
+			vespid_pos = Entity_GetPosition(EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_players_buildings_startingArea"), eNumber))
+			Cmd_JumpToPos("sg_krootCenterBase_vespids1", vespid_pos)
+			
+			-- Get the Actual Building so can target with skills
+			EGroup_Add("eg_vespidTarget", EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_players_buildings_startingArea"), eNumber))
+		end
+	end
+end
+
+-- Use the Vespid Destabalization Skill on the Target Building (Building Takes Double Damage)
+function Rule_KrootCenterBase_VespidSkill()
+	if SGroup_Exists("sg_krootCenterBase_vespids1") and
+		EGroup_Count("eg_vespidTarget") == 1 and
+		Prox_AllSquadsNearMarker("sg_krootCenterBase_vespids1", "mkr_player_baseArea") == true and
+		g_krootCenterBase_UsedSkill == false
+	then
+		print("Vespid Use Skill")
+		Cmd_CastAbilitySGroupE("sg_krootCenterBase_vespids1", "tau_devour", "eg_vespidTarget")
+		Rule_AddOneShot(Rule_KrootCenterBase_VespidAttack,3)
+		g_krootCenterBase_UsedSkill = true
+	end
+end
+
+-- Order the Vespids to attack the building after using the skill on it
+function Rule_KrootCenterBase_VespidAttack()
+	print("Vespid Attack Egroup")
+	Cmd_AttackEGroup("sg_krootCenterBase_vespids1", "eg_vespidTarget")
+	g_krootCenterBase_UsedSkill = false
+	EGroup_Clear("eg_vespidTarget")	
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "LASER GUN BASE" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Patroling Pathfinders & Defending Broadsides
+function Rule_Production_LaserGunBase()
+	--Loop through all Barracks & if still exists...
+	for j =1,2 do
+		local laserGunBase_troopsProduced = false
+	
+		if EGroup_Count("eg_laserGunBase_Barracks"..j) == 1
+		then
+			-- Loop through all the possible laserGunBase_patrol Squads
+			for i =1,2	do
+				-- If the SGroup is Not Currently Used...
+				if laserGunBase_troopsProduced == false and
+					SGroup_Count("sg_laserGunBase_patrol"..i) == 0
+				then
+					-- Try to Produce Pathfinders
+					if Rule_Produce_Pathfinder(g_Player3, "sg_laserGunBase_patrol"..i, "eg_laserGunBase_Barracks"..j, "mkr_laserGunBase_Barracks"..j) == true
+					then
+						print("laserGunBase -- Producing Patroling PathFinder")
+						laserGunBase_troopsProduced = true
+						
+						-- Order Patrol Squad to First Patrol Point
+						Cmd_AttackMoveMarker("sg_laserGunBase_patrol"..i, "mkr_laserGunBase_Patrol5")
+					end
+				end
+			end
+			
+			-- If didn't produce a patrol squad -- check if need to replace a broadside
+			for i =1,3	do
+				-- If the SGroup is Not Currently Used...
+				if laserGunBase_troopsProduced == false and
+					SGroup_Count("sg_laserGunBase_broadside"..i) == 0
+				then
+					-- Try to Produce Broadside
+					if Rule_Produce_Broadside(g_Player3, "sg_laserGunBase_broadside"..i, "eg_laserGunBase_Barracks"..j, "mkr_laserGunBase_Barracks"..j) == true
+					then
+						print("laserGunBase -- Producing Broadside")
+						laserGunBase_troopsProduced = true
+						
+						-- Order Broadside to Entrench Location
+						Cmd_AttackMoveMarker("sg_laserGunBase_broadside"..i, "mkr_laserGunBase_broadside"..i)
+					end
+				end
+			end			
+		end
+	end
+	
+	-- All Barracks are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_laserGunBase_Barracks1") == 0 and
+		EGroup_Count("eg_laserGunBase_Barracks2") == 0
+	then
+		Rule_Remove(Rule_Production_LaserGunBase)
+	end
+end
+
+-- Controls the Counter-Clockwise Patroling Pathfinders from LaserGun Base
+function Rule_PatrolOne_LaserGunBase()
+	-- If the Squad is Killed
+	if SGroup_Exists("sg_laserGunBase_patrol1") and
+		SGroup_Count("sg_laserGunBase_patrol1") == 0
+	then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+	-- Check if the Squad arrived at the Patrol Location 1
+	elseif SGroup_Exists("sg_laserGunBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol1")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol2")
+
+	-- Check if the Squad arrived at the Patrol Location 2
+	elseif SGroup_Exists("sg_laserGunBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol2")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol3")	
+
+	-- Check if the Squad arrived at the Patrol Location 3
+	elseif SGroup_Exists("sg_laserGunBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol3")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol4")
+
+	-- Check if the Squad arrived at the Patrol Location 4
+	elseif SGroup_Exists("sg_laserGunBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol4")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol5")
+
+	-- Check if the Squad arrived at the Patrol Location 5
+	elseif SGroup_Exists("sg_laserGunBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol5")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol1", "mkr_laserGunBase_Patrol1")		
+	end
+end
+
+-- Controls the Clockwise Patroling Pathfinders from LaserGun Base
+function Rule_PatrolTwo_LaserGunBase()
+	-- If the Squad is Killed
+	if SGroup_Exists("sg_laserGunBase_patrol2") and
+		SGroup_Count("sg_laserGunBase_patrol2") == 0
+	then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+	-- Check if the Squad arrived at the Patrol Location 5
+	elseif SGroup_Exists("sg_laserGunBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol5")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol4")
+
+	-- Check if the Squad arrived at the Patrol Location 4
+	elseif SGroup_Exists("sg_laserGunBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol4")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol3")	
+
+	-- Check if the Squad arrived at the Patrol Location 3
+	elseif SGroup_Exists("sg_laserGunBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol3")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol2")
+
+	-- Check if the Squad arrived at the Patrol Location 2
+	elseif SGroup_Exists("sg_laserGunBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol2")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol1")
+
+	-- Check if the Squad arrived at the Patrol Location 1
+	elseif SGroup_Exists("sg_laserGunBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol1")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_laserGunBase_patrol2", "mkr_laserGunBase_Patrol5")		
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "NORTH EAST BASE" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Patroling Kroot Squads
+function Rule_Production_NorthEastBase()
+	--Loop through all Barracks & if still exists...
+	for j =1,2 do
+		local northEastBase_troopsProduced = false
+	
+		if EGroup_Count("eg_northEastBase_KrootNest"..j) == 1
+		then
+			-- Loop through all kroot patrol Squads
+			for i =1,4	do
+				-- If the SGroup is Not Currently Used...
+				if northEastBase_troopsProduced == false and
+					SGroup_Count("sg_northEastBase_patrol"..i) == 0
+				then
+					-- Try to Produce Kroot Squad (Patrols 1&3) 
+					if  (i == 1 or i == 3) and						
+						Rule_Produce_KrootCarnivore(g_Player3, "sg_northEastBase_patrol"..i, "eg_northEastBase_KrootNest"..j, "mkr_northEastBase_KrootNest"..j) == true
+					then
+						print("northEastBase -- Producing Patroling Kroot Carnivore")
+						northEastBase_troopsProduced = true
+						
+						-- Order Patrol Squad to First Patrol Point
+						Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+					
+					-- Try to Produce a Krootox (Patrols 2 & 4)
+					elseif  (i == 2 or i == 4) and
+						Rule_Produce_Krootox(g_Player3, "sg_northEastBase_patrol"..i, "eg_northEastBase_KrootNest"..j, "mkr_northEastBase_KrootNest"..j) == true
+					then
+						print("northEastBase -- Producing Patroling Krootox")
+						northEastBase_troopsProduced = true
+						
+						-- Order Patrol Squad to First Patrol Point
+						Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+					end
+				end
+			end
+		end
+	end
+	
+	-- All KrootNests are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_northEastBase_KrootNest1") == 0 and
+		EGroup_Count("eg_northEastBase_KrootNest2") == 0
+	then
+		Rule_Remove(Rule_Production_NorthEastBase)
+	end
+end
+
+
+-- Controls the Counter-Clockwise Patroling Krootox from NorthEast Base
+function Rule_PatrolOne_NorthEastBase()
+	for i = 1,2 do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_northEastBase_patrol"..i) and
+			SGroup_Count("sg_northEastBase_patrol"..i) == 0
+		then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol2")
+
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol3")	
+
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol4")
+
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+		end
+	end
+end
+
+-- Controls the Clockwise Patroling Kroot from NorthEast Base
+function Rule_PatrolTwo_NorthEastBase()
+	for i =3,4 do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_northEastBase_patrol"..i) and
+			SGroup_Count("sg_northEastBase_patrol"..i) == 0
+		then
+			-- Unit is Dead, Do Nothing, since production is handled differently
+
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol3")	
+
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol2")
+
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_northEastBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northEastBase_patrol"..i, "mkr_northEastBase_Patrol4")		
+		end
+	end
+end
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "NORTH WEST BASE" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Patroling Vespids & Attacking KrootHound & Krootox Squads
+function Rule_Production_NorthWestBase()
+	--Loop through all Barracks & if still exists...
+	for j =1,2 do
+		local northWestBase_troopsProduced = false
+	
+		if EGroup_Count("eg_northWestBase_KrootNest"..j) == 1
+		then
+			-- Loop through all Kroot Squads
+			for i =1,4	do
+				-- If the SGroup is Not Currently Used...
+				if northWestBase_troopsProduced == false and
+					SGroup_Count("sg_northWestBase_troops"..i) == 0
+				then
+					-- Try to Produce KrootHound (Patrols 1&3) 
+					if  (i == 1 or i == 3) and						
+						Rule_Produce_KrootHound(g_Player3, "sg_northWestBase_troops"..i, "eg_northWestBase_KrootNest"..j, "mkr_northWestBase_KrootNest"..j) == true
+					then
+						print("northWestBase -- Producing Kroot Hounds")
+						northWestBase_troopsProduced = true
+						
+						-- Order Troops to Attack
+						Cmd_AttackMovePos("sg_northWestBase_troops"..i, g_northWestBase_target)
+					
+					-- Try to Produce a Krootox (Patrols 2 & 4)
+					elseif  (i == 2 or i == 4) and
+						Rule_Produce_Krootox(g_Player3, "sg_northWestBase_troops"..i, "eg_northWestBase_KrootNest"..j, "mkr_northWestBase_KrootNest"..j) == true
+					then
+						print("northWestBase -- Producing Krootox")
+						northWestBase_troopsProduced = true
+						
+						-- Order Troops to Attack
+						Cmd_AttackMovePos("sg_northWestBase_troops"..i, g_northWestBase_target)
+					end
+				end
+			end
+		end
+	end
+	
+	northWestBase_troopsProduced = false
+	
+	-- If Hq still Exists
+	if EGroup_Count("eg_northWestBase_HQ1") == 1
+	then
+		-- Loop through all Patrol Squads
+		for i =1,4	do
+			-- If the SGroup is Not Currently Used...
+			if northWestBase_troopsProduced == false and
+				SGroup_Count("sg_northWestBase_patrol"..i) == 0
+			then
+				-- Try to Produce Patrol Vespid 
+				if  Rule_Produce_Vespid(g_Player3, "sg_northWestBase_patrol"..i, "eg_northWestBase_HQ1", "mkr_northWestBase_HQ1") == true
+				then
+					print("northWestBase -- Producing Patrolling Vespids")
+					northWestBase_troopsProduced = true
+						
+					-- Order Troops to Patrol Point
+					Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol1")
+				end
+			end
+		end
+	end
+	
+	-- All KrootNests & HQ are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_northWestBase_KrootNest1") == 0 and
+		EGroup_Count("eg_northWestBase_KrootNest2") == 0 and
+		EGroup_Count("eg_northWestBase_HQ1") == 0
+	then
+		Rule_Remove(Rule_Production_NorthWestBase)
+	end
+end
+
+-- Controls the Counter-Clockwise Patroling Vespid from NorthWest Base
+function Rule_PatrolOne_NorthWestBase()
+	for i = 1,2 do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_northWestBase_patrol"..i) and
+			SGroup_Count("sg_northWestBase_patrol"..i) == 0
+		then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol1")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol2")
+
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol2")
+		then
+			-- Task (JUMP) to Next Patrol Point
+			Cmd_JumpToMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol3")
+
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol3")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol4")
+
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol5")
+		
+		-- Check if the Squad arrived at the Patrol Location 5
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol5")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol6")
+		
+		-- Check if the Squad arrived at the Patrol Location 6
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol6")
+		then
+			-- Task (JUMP) to Next Patrol Point
+			Cmd_JumpToMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol1")
+		end
+	end
+end
+
+-- Controls the Clockwise Patroling Vespid from NorthWest Base
+function Rule_PatrolTwo_NorthWestBase()
+	for i = 3,4 do
+		-- If the Squad is Killed
+		if SGroup_Exists("sg_northWestBase_patrol"..i) and
+			SGroup_Count("sg_northWestBase_patrol"..i) == 0
+		then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+		-- Check if the Squad arrived at the Patrol Location 1
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol1")
+		then
+			-- Task (JUMP) to Next Patrol Point
+			Cmd_JumpToMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol6")
+
+		-- Check if the Squad arrived at the Patrol Location 6
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol6")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol5")
+
+		-- Check if the Squad arrived at the Patrol Location 5
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol5")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol4")
+
+		-- Check if the Squad arrived at the Patrol Location 4
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol4")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol3")
+		
+		-- Check if the Squad arrived at the Patrol Location 3
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol3")
+		then
+			-- Task (JUMP) to Next Patrol Point
+			Cmd_JumpToMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol2")
+		
+		-- Check if the Squad arrived at the Patrol Location 2
+		elseif SGroup_Exists("sg_northWestBase_patrol"..i) and
+			Prox_AllSquadsNearMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol2")
+		then
+			-- Task to Next Patrol Point
+			Cmd_AttackMoveMarker("sg_northWestBase_patrol"..i, "mkr_northWestBase_Patrol1")
+		end
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- " RELIC BASE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Crisis Suits, Stealth Suits, & Attacking Drone Harbringers
+function Rule_Production_RelicBase()
+	--Loop through Barracks & if still exists...
+	for j =1,2 do
+		local relicBase_troopsProduced = false
+	
+		if EGroup_Count("eg_relicBase_Barracks"..j) == 1
+		then
+			-- Loop through all the possible sg_relicBase_crisis squads
+			for i =1,4	do
+				-- If the SGroup is Not Currently Used...
+				if relicBase_troopsProduced == false and
+					SGroup_Count("sg_relicBase_crisis"..i) == 0
+				then
+					-- Try to Produce Crisis Suit
+					if Rule_Produce_CrisisSuit(g_Player3, "sg_relicBase_crisis"..i, "eg_relicBase_Barracks"..j, "mkr_relicBase_Barracks"..j) == true
+					then
+						print("relicBase -- Producing Crisis Suit")
+						relicBase_troopsProduced = true						
+					end
+				end
+			end
+		end
+	end
+	
+	if SGroup_Count("sg_relicBase_stealthSuit1") == 0
+	then
+		-- Try to Produce a New Stealth Suit if HQ is Still Alive
+		if Rule_Produce_StealthTeam(g_Player3, "sg_relicBase_stealthSuit1", "eg_relicBase_HQ1", "mkr_relicBase_HQ1") == true
+		then
+			-- Order the Stealth Suit Squad to Jump Zone
+			Cmd_AttackMoveMarker("sg_relicBase_stealthSuit1", "mkr_relicBase_jumpZone")
+			print("relicBase -- Producing Stealth Suit")
+		end
+	end
+	
+	relicBase_troopsProduced = false
+	
+	-- Vehicle Beacon
+	if EGroup_Count("eg_relicBase_VehicleBuilding1") == 1
+	then
+		-- Loop through all the possible sg_relicBase_vehicles
+		for i =1,2	do
+			-- If the SGroup is Not Currently Used...
+			if relicBase_troopsProduced == false and
+				SGroup_Count("sg_relicBase_vehicle"..i) == 0
+			then
+				-- Try to Produce Drone Harbinger
+				if Rule_Produce_DroneHarbinger(g_Player3, "sg_relicBase_vehicle"..i, "eg_relicBase_VehicleBuilding1", "mkr_relicBase_VehicleBuilding1") == true
+				then
+					print("relicBase -- Producing DroneHarbinger")
+					relicBase_troopsProduced = true
+					
+					-- Order Troops to Attack
+					Cmd_AttackMovePos("sg_relicBase_vehicle"..i, g_relicBase_vehicle_target)
+				end
+			end
+		end
+	end
+	
+	-- All Barracks, Vehicle Beacon & HQ are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_relicBase_Barracks1") == 0 and
+		EGroup_Count("eg_relicBase_Barracks2") == 0 and
+		EGroup_Count("eg_relicBase_VehicleBuilding1") == 0 and
+		EGroup_Count("eg_relicBase_HQ1") == 0
+	then
+		Rule_Remove(Rule_Production_RelicBase)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- " SOUTH BASE " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Firewarrior, DroneHarbringer, & Skyray
+function Rule_Production_SouthBase()
+	local southBase_troopsProduced = false
+	
+	-- Produce Troops from Barracks if Free SGroup
+	for i =1,2	do
+		-- If the SGroup is Not Currently Used...
+		if southBase_troopsProduced == false and
+			SGroup_Count("sg_southBase_troops"..i) == 0
+		then
+			-- Try to Produce Firewarriors
+			if Rule_Produce_Firewarrior(g_Player3, "sg_southBase_troops"..i, "eg_southBase_Barracks1", "mkr_southBase_Barracks1") == true
+			then
+				print("southBase -- Producing Firewarrior")
+				southBase_troopsProduced = true
+				
+				-- Order Troops to Attack
+				Cmd_AttackMovePos("sg_southBase_troops"..i, g_southBase_target)
+			end
+		end
+	end
+
+	-- Produce a Drone Harbinger if none exist
+	if SGroup_Count("sg_southBase_vehicles1") == 0
+	then
+		-- Try to Produce Drone Harbinger
+		if Rule_Produce_DroneHarbinger(g_Player3, "sg_southBase_vehicles1", "eg_southBase_VehicleBuilding1", "mkr_southBase_VehicleBuilding1") == true
+		then
+			print("southBase -- Producing Drone Harbinger")
+			
+			-- Order Troops to Attack
+			Cmd_AttackMovePos("sg_southBase_vehicles1", g_southBase_target)
+		end
+	
+	-- Produce a Skyray if none exist
+	elseif SGroup_Count("sg_southBase_vehicles2") == 0
+	then
+		-- Try to Produce Skyray
+		if Rule_Produce_Skyray(g_Player3, "sg_southBase_vehicles2", "eg_southBase_VehicleBuilding1", "mkr_southBase_VehicleBuilding1") == true
+		then
+			print("southBase -- Producing Skyray")
+			
+			-- Order Troops to Attack
+			Cmd_AttackMovePos("sg_southBase_vehicles2", g_southBase_target)
+		end
+	end
+
+	-- Barracks & Vehicle Bay are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_southBase_Barracks1") == 0 and
+		EGroup_Count("eg_southBase_VehicleBuilding1") == 0
+	then
+		Rule_Remove(Rule_Production_SouthBase)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- "WEST BASE" RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Produce Patroling Pathfinders & Attacking Firewarriors
+function Rule_Production_WestBase()
+	--Loop through all Barracks & if still exists...
+	for j =1,2 do
+		local westBase_troopsProduced = false
+	
+		if EGroup_Count("eg_westBase_Barracks"..j) == 1
+		then
+			-- Loop through all the possible westBase_patrol Squads
+			for i =1,2	do
+				-- If the SGroup is Not Currently Used...
+				if westBase_troopsProduced == false and
+					SGroup_Count("sg_westBase_patrol"..i) == 0
+				then
+					-- Try to Produce Pathfinders
+					if Rule_Produce_Pathfinder(g_Player3, "sg_westBase_patrol"..i, "eg_westBase_Barracks"..j, "mkr_westBase_Barracks"..j) == true
+					then
+						print("westBase -- Producing Patroling PathFinder")
+						westBase_troopsProduced = true
+						
+						-- Order Patrol Squad to First Patrol Point
+						Cmd_AttackMoveMarker("sg_westBase_patrol"..i, "mkr_westBase_Patrol1")
+					end
+				end
+			end
+			
+			-- If didn't produce a patrol squad -- check if need to replace a troop squad
+			for i =1,2	do
+				-- If the SGroup is Not Currently Used...
+				if westBase_troopsProduced == false and
+					SGroup_Count("sg_westBase_troops"..i) == 0
+				then
+					-- Try to Produce Firewarriors
+					if Rule_Produce_Firewarrior(g_Player3, "sg_westBase_troops"..i, "eg_westBase_Barracks"..j, "mkr_westBase_Barracks"..j) == true
+					then
+						print("westBase -- Producing Firewarrior")
+						westBase_troopsProduced = true
+						
+						-- Order Troops to Attack
+						Cmd_AttackMovePos("sg_westBase_troops"..i, g_westBase_target)
+					end
+				end
+			end			
+		end
+	end
+	
+	-- Try to Produce Stealth Suit from HQ if none on battle field
+	if SGroup_Count("sg_westBase_stealthSuit1") == 0
+	then
+		if Rule_Produce_StealthTeam(g_Player3, "sg_westBase_stealthSuit1", "eg_westBase_HQ1", "mkr_westBase_HQ1") == true
+		then
+			print("westBase -- Producing StealthSuit")
+			Cmd_AttackMovePos("sg_westBase_stealthSuit1", g_westBase_stealthSuit_target)
+		end
+	end
+	
+	-- All Barracks & HQ are destroyed...Remove Rules since Base is dead
+	if EGroup_Count("eg_westBase_Barracks1") == 0 and
+		EGroup_Count("eg_westBase_Barracks2") == 0 and
+		EGroup_Count("eg_westBase_HQ1") == 0		
+	then
+		Rule_Remove(Rule_Production_WestBase)
+	end
+end
+
+-- Controls the Clockwise Patroling Pathfinders from West Base
+function Rule_PatrolOne_WestBase()
+	-- If the Squad is Killed
+	if SGroup_Exists("sg_westBase_patrol1") and
+		SGroup_Count("sg_westBase_patrol1") == 0
+	then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+	-- Check if the Squad arrived at the Patrol Location 1
+	elseif SGroup_Exists("sg_westBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol1", "mkr_westBase_Patrol1")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol1", "mkr_westBase_Patrol2")	
+
+	-- Check if the Squad arrived at the Patrol Location 2
+	elseif SGroup_Exists("sg_westBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol1", "mkr_westBase_Patrol2")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol1", "mkr_westBase_Patrol3")
+
+	-- Check if the Squad arrived at the Patrol Location 3
+	elseif SGroup_Exists("sg_westBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol1", "mkr_westBase_Patrol3")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol1", "mkr_westBase_Patrol4")
+
+	-- Check if the Squad arrived at the Patrol Location 4
+	elseif SGroup_Exists("sg_westBase_patrol1") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol1", "mkr_westBase_Patrol4")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol1", "mkr_westBase_Patrol1")		
+	end
+end
+
+-- Controls the Couter-Clockwise Patroling Pathfinders from West Base
+function Rule_PatrolTwo_WestBase()
+	-- If the Squad is Killed
+	if SGroup_Exists("sg_westBase_patrol2") and
+		SGroup_Count("sg_westBase_patrol2") == 0
+	then
+		-- Unit is Dead, Do Nothing, since production is handled differently
+
+	-- Check if the Squad arrived at the Patrol Location 4
+	elseif SGroup_Exists("sg_westBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol2", "mkr_westBase_Patrol4")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol2", "mkr_westBase_Patrol3")	
+
+	-- Check if the Squad arrived at the Patrol Location 3
+	elseif SGroup_Exists("sg_westBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol2", "mkr_westBase_Patrol3")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol2", "mkr_westBase_Patrol2")
+
+	-- Check if the Squad arrived at the Patrol Location 2
+	elseif SGroup_Exists("sg_westBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol2", "mkr_westBase_Patrol2")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol2", "mkr_westBase_Patrol1")
+
+	-- Check if the Squad arrived at the Patrol Location 1
+	elseif SGroup_Exists("sg_westBase_patrol2") and
+		Prox_AllSquadsNearMarker("sg_westBase_patrol2", "mkr_westBase_Patrol1")
+	then
+		-- Task to Next Patrol Point
+		Cmd_AttackMoveMarker("sg_westBase_patrol2", "mkr_westBase_Patrol4")		
+	end
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL "BASE" PRODUCTION RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- Play IE & Setup for the Dispatching of Scouts to find Player Base
+function Rule_Begin_Scout_Dispatching()
+	-- Play IE ordering the Dispatching of Scouts
+	Util_StartIntel(EVENTS.IE_DispatchScouts)
+	
+	-- So the Player can see the Scouts
+	World_EnablePlayerToPlayerFOW(g_Player1, g_Player4, false)
+	
+	-- Create the Sgroups used to control scoutSquads
+	for i =1,4 do
+		SGroup_Create("sg_scoutSquad"..i)
+		SGroup_SetPlayerOwner("sg_scoutSquad"..i, g_Player4)
+	end
+	
+	-- Creates Pathfinder Scouts & Send them to find player base
+	Rule_AddInterval(Rule_Task_Scouts_Find_PlayerBase, g_spawnScoutTimer)
+	
+	-- Check if the Scouts find the player base
+	Rule_AddInterval(Rule_Check_Scouts_Found_PlayerBase, 2)
+end
+
+-- Create a Group of Scouts (Pathfinders) & Send them to find player base
+function Rule_Task_Scouts_Find_PlayerBase()
+	local scoutsProduced = false
+	
+	-- Produce Scout squads of Pathfinders from West Base
+	for i =1,4	do
+		-- If the SGroup is Not Currently Used...
+		if scoutsProduced == false and
+			SGroup_Count("sg_scoutSquad"..i) == 0
+		then
+			-- Try to Produce Pathfinders from West Base
+			if Rule_Produce_Pathfinder(g_Player4, "sg_scoutSquad"..i, "eg_westBase_Barracks1", "mkr_westBase_Barracks1") == true
+			then
+				print("westBase -- Producing Scout Pathfinders")
+				Cmd_AttackMoveMarker("sg_scoutSquad"..i, "mkr_Ai_Attack_PlayerWestSide")
+				scoutsProduced = true
+				
+				-- Since Player Varible in Produce_Pathfinders doesn't work
+				SGroup_SetPlayerOwner("sg_scoutSquad"..i, g_Player4)
+				
+				-- Subtract from counter until scouts report they have been unable to break player defenses
+				g_SquadsUntilWarned	 = g_SquadsUntilWarned - 1
+			end
+		end
+	end
+	
+	scoutsProduced = false
+	
+	-- Produce Scout squads of Pathfinders from South Base
+	for i =1,4	do
+		-- If the SGroup is Not Currently Used...
+		if scoutsProduced == false and
+			SGroup_Count("sg_scoutSquad"..i) == 0
+		then
+			-- Try to Produce Pathfinders from South Base
+			if Rule_Produce_Pathfinder(g_Player4, "sg_scoutSquad"..i, "eg_southBase_Barracks1", "mkr_southBase_Barracks1") == true
+			then
+				print("southBase -- Producing Scout Pathfinders")
+				Cmd_AttackMoveMarker("sg_scoutSquad"..i, "mkr_Ai_Attack_PlayerEastSide")
+				scoutsProduced = true
+				
+				-- Since Player Varible in Produce_Pathfinders doesn't work
+				SGroup_SetPlayerOwner("sg_scoutSquad"..i, g_Player4)
+				
+				-- Subtract from counter until scouts report they have been unable to break player defenses 
+				g_SquadsUntilWarned	 = g_SquadsUntilWarned - 1				
+			end
+		end
+	end
+end
+
+-- Checks if any scouts have actually reached the player base
+function Rule_Check_Scouts_Found_PlayerBase( )
+	-- Warn them if the scouts found the player base (basically if a squad reaches it alive)
+	if Player_AreSquadsNearMarker(g_Player4, "mkr_Ai_FoundPlayerBase")
+	then
+		-- Play Intel that Base was found
+		Util_StartIntel(EVENTS.IE_ScoutsFoundPlayer)
+			
+		-- Launch major Tau Attack here
+		Rule_AddOneShot(Rule_Launch_First_Major_Attack, 1)
+
+		-- Base found:  no longer need to produce scouts or check if found
+		Rule_Remove(Rule_Task_Scouts_Find_PlayerBase)
+		Rule_Remove(Rule_Check_Scouts_Found_PlayerBase)
+
+	-- Warn Them based on the fact that they keep sending squads out and they are all getting killed... (tau forced to assume somethings up)
+	elseif g_SquadsUntilWarned <= 0
+	then
+		-- Play Intel that Base was found
+		Util_StartIntel(EVENTS.IE_ScoutsKilled)
+		
+		-- Launch major Tau Attack here
+		Rule_AddOneShot(Rule_Launch_First_Major_Attack, 1)
+
+		-- Base found:  no longer need to produce scouts or check if found
+		Rule_Remove(Rule_Task_Scouts_Find_PlayerBase)
+		Rule_Remove(Rule_Check_Scouts_Found_PlayerBase)
+	end
+end
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- LASER GUN RULES
+	-- Rule_Hidden_Laser_Gun_Warm_Up() : Controls the Hidden Timer for the Laser Gun Warming Up to Fire -- Plays IE & Assigns secondary obj when ready to fire
+	-- Rule_Laser_Gun_Warning() : Controls the On Screen Countdown Timer on the Laser Gun
+	-- Rule_Aim_And_Fire_Laser_Gun( ) : Picks Random Player Unit & Fires at them
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Controls the Hidden Timer for the Laser Gun Warming Up to Fire, and Plays IE when ready to fire
+function Rule_Hidden_Laser_Gun_Warm_Up( )
+	--counting down from g_laserGunCounterMax to 0
+	g_laserGunWarmupCounter = g_laserGunWarmupCounter-1
+	
+	--once you hit 0 the laser gun will fire
+	if g_laserGunWarmupCounter == 0
+	then
+		-- Intel Event: First time the Tau Fire the Laser Cannon
+		Util_StartIntel(EVENTS.IE_FirstLaserAttack)
+	
+		-- Pick you target and fire the laser (Time to end of IE)
+		Rule_AddOneShot(Rule_Aim_And_Fire_Laser_Gun, 22)
+		
+		-- Assign the Objective to Capture the Laser Gun
+		Rule_AddIntervalDelay(Rule_CaptureLaserGun_Objective,2,30)
+		
+		-- Remove this rule
+		Rule_Remove(Rule_Hidden_Laser_Gun_Warm_Up)
+	end
+end
+
+-- Controls the On Screen Countdown Timer on the Laser Gun
+function Rule_Laser_Gun_Warning( )
+
+	--counting down from g_laserGunCounterMax to 0
+	g_laserGunCounter = g_laserGunCounter -1
+	
+	--2840000 is the localized string that appears on screen
+	UI_ShowCountUpdateDxp("LaserGunUi", g_laserGunCounter, 2840000)
+		
+	--once you hit 0 the laser gun will try and fire
+	if g_laserGunCounter == 0
+	then
+		-- Pick you target and fire the laser
+		Rule_AddOneShot(Rule_Aim_And_Fire_Laser_Gun, 0.5)
+		
+		-- Remove this rule (will be readded next time ready to start laser countdown)
+		Rule_Remove(Rule_Laser_Gun_Warning)
+	end
+
+end
+
+-- Choose a Random Player unit & fire the laser gun at it...
+function Rule_Aim_And_Fire_Laser_Gun( )
+	-- Find All the Player Units
+	SGroup_Clear("sg_players_units")
+	SGroup_AddGroup("sg_players_units", Player_GetSquads(g_Player1))
+	
+	--if we got someone...
+	if SGroup_Count("sg_players_units") > 0
+	then
+		-- Get Number of Active Player Squads (incase someone is garrisoned in building or something)
+		numUnits = Player_GetActiveSquadCount(g_Player1)
+		-- Get the Number we counted
+		sCount = SGroup_Count("sg_players_units")
+		
+		print("Active Squads: "..numUnits)
+		print("SCount: "..sCount)
+		
+		--use the lowest
+		if sCount < numUnits
+		then
+			numUnits = sCount
+		end
+		
+		-- If Player Unit was found...
+		if numUnits >= 1
+		then
+			-- Fire the laser Blast at location of random player unit (Ping & Fire)
+			local laserTarget_pos = Squad_GetPosition(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_players_units"), World_GetRand(1, numUnits)))
+			
+			Ping_Position(laserTarget_pos, false, "default")
+			Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_laserGun_Weapon"), 1), "tau_lasergun_sp", laserTarget_pos)
+		else
+			-- Fire the Laser Blast at the default target location since no player units found (Ping & Fire)			
+			Ping_Marker("mkr_laserGun_default", false, "default")
+			Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_laserGun_Weapon"), 1), "tau_lasergun_sp", 
+				Marker_GetPosition(Marker_FromName("mkr_laserGun_default", "basic_marker")))
+		end
+	
+	-- Fire the Laser Blast at the default target location since no player units found (Ping & Fire)
+	else
+		Ping_Marker("mkr_laserGun_default", false, "default")
+		Command_EntityAbilityPos(g_Player2,EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_laserGun_Weapon"), 1), "tau_lasergun_sp", 
+			Marker_GetPosition(Marker_FromName("mkr_laserGun_default", "basic_marker")))
+	end
+	
+	-- Restarts the timer and prepares for the next shot (Warning Delay is to give effect time to disolve out before starting recharge
+	g_laserGunCounter = g_laserGunCounterMax
+	Rule_AddIntervalDelay(Rule_Laser_Gun_Warning, 1,15)
+		
+	-- Remove Rule so dont have multiple running (Since Warning will readd once it decides to fire again)
+	Rule_Remove(Rule_Aim_And_Fire_Laser_Gun)
+end
+
+-- Checks if the player owns the laser
+function Rule_Check_Player_Control_Laser( )
+	-- Check if the player has captured the laser gun critical point
+	if g_PlayerOwnsLaserGun == false and
+		EGroup_IsCapturedByPlayer("eg_laserGun_critPoint", g_Player1, false)
+	then
+		-- So Game knows the player owns the Gun (will complete the objective also)
+		g_PlayerOwnsLaserGun = true
+		
+		-- Play IE for Player has captured laserGun
+		Util_StartIntel(EVENTS.IE_PlayerCapturedLaser)
+		
+		-- Enable the Ui Button
+		Button_SetEnabled(g_laser_button_spawn, true)
+		
+		-- Checks if player if trying to fire the gun (and fires it)
+		Rule_AddDelay(Rule_Laser_Button_Click,5)
+		
+		-- Set the Gun Building to be controlled by the player
+		EGroup_SetPlayerOwner("eg_laserGun_Weapon", g_Player1)
+		
+		-- Add Rule to Check if the AI takes the gun back
+		Rule_AddInterval(Rule_Check_Ai_Control_Laser, 10)
+		
+		-- Hide the AI Fire Timer
+		UI_HideCount("LaserGunUi")
+		
+		-- Remove the Rule Controlling When Ai Fires
+		Rule_Remove(Rule_Laser_Gun_Warning)
+		
+		-- remove the rule since the player now owns gun
+		Rule_Remove(Rule_Check_Player_Control_Laser)
+	
+		--Cmd_Capture("sg_CritPointScarab", "eg_SouthCriticalPoint")
+	end
+end
+
+-- Checks if Tau are able to recapture the laser gun back
+function Rule_Check_Ai_Control_Laser( )
+	-- Check if the player has captured the laser gun
+	if g_PlayerOwnsLaserGun == true and
+		EGroup_IsCapturedByPlayer("eg_laserGun_critPoint", g_Player1, false) == false
+	then
+		-- Give Gun Control Back to AI
+		g_PlayerOwnsLaserGun = false
+		
+		-- Play IE for Tau has captured laserGun again
+		Util_StartIntel(EVENTS.IE_TauCapturedLaser)
+		
+		-- Set the Gun Building to be controlled by the Tau Again
+		EGroup_SetPlayerOwner("eg_laserGun_Weapon", g_Player2)
+		
+		-- Set the Critical location connected to the gun to be controlled by Tau : gPlayer3
+		EGroup_SetPlayerOwner("eg_laserGun_critPoint", g_Player3)
+
+		-- Set Amount of time between laser guns shots
+		g_laserGunCounter = g_laserGunCounterMax
+	
+		-- Show the timer on the screen
+			-- 2840000 is the localized string that appears on screen
+		UI_ShowCountDXP("LaserGunUi", g_Player1, 2840000, g_laserGunCounter )
+		
+		-- Shows UI Countdown til laser fires, than will fire laser
+		Rule_AddInterval(Rule_Laser_Gun_Warning, 1)
+		
+		-- Readd the rule to check for objective complete
+		Rule_AddInterval(Rule_ReCaptureLaserGun_Objective, 2)
+	
+		-- Add Rule to Check if player has recaptured the Gun Back
+		Rule_AddInterval(Rule_Check_Player_Control_Laser, 5)
+		
+		-- Remove the Rule Check for player click and Ui Timer
+		Rule_Remove(Rule_Laser_Button_Click)
+		Rule_Remove(Rule_Laser_Gun_Warning_Player)
+		UI_HideCount("LaserGunUi_Player")
+		
+		-- Disable the Firecontrol for the Laser
+		Button_SetEnabled(g_laser_button_spawn, false)
+		
+		-- remove the rule since the player now owns gun (have to readd it if tau recapture)
+		Rule_Remove(Rule_Check_Ai_Control_Laser)
+	
+		--Cmd_Capture("sg_CritPointScarab", "eg_SouthCriticalPoint")
+	end
+end
+
+-- Creates the actual button on the laser that the player clicks to fire the laser
+function Rule_Laser_Button_Setup()
+
+	t_laser_firing = {
+		-- enabled icon, disabled icon, mouseover icon (need new icons)
+		button_icon = {"Scar_buttons/fire_orbital", "Scar_buttons/fire_orbital", "Scar_buttons/fire_orbital"},
+		-- title, description (need to localize)
+		button_description = {"$2774602", "$2774603"}, 
+	}
+	g_laser_button_spawn = Util_AbilityButton_CreateModal(t_laser_firing.button_icon, t_laser_firing.button_description, true)
+	
+	-- Make the button show up on the Building UI
+	Util_EGroupAbilityButton_Add2Manager(g_laser_button_spawn, "eg_laserGun_Weapon")
+	
+	-- Disable the Firecontrol for the Laser
+	Button_SetEnabled(g_laser_button_spawn, false)
+end
+
+-- Rule that fires the laser when the player clicks the button and than clicks on screen
+function Rule_Laser_Button_Click()
+	-- Player has clicked the UI Button on the laser building
+	if Button_GetPressed(g_laser_button_spawn) == true
+	then
+		-- location of where player has clicked in the world
+		local pos  = Button_GetPressedPosition(g_laser_button_spawn)
+		
+		-- So can only fire into areas that you can see & not into Fog of War
+		if Player_CanSeePosition(g_Player1, pos)
+		then
+			-- Ping & Fire laser on the Position
+			Ping_Position(pos, false, "default")
+			Command_EntityAbilityPos(g_Player1, EGroup_GetSpawnedEntityAt(EGroup_FromName("eg_laserGun_Weapon"), 1), "tau_lasergun_sp", pos)
+			
+			-- disable the skill button while it "refreshes"
+			Button_SetEnabled(g_laser_button_spawn, false)
+			
+			-- Reset the Timer For Player to Fire Laser Gun Again
+			g_laserGunCounter_Player = g_laserGunCounterMax_Player
+			UI_ShowCountDXP("LaserGunUi_Player", g_Player1, 2840000, g_laserGunCounter_Player )
+			
+			-- Rule that controls the actual onscreen countdown for the rule (Delay is for Laser Effect to fade out first)
+			Rule_AddIntervalDelay(Rule_Laser_Gun_Warning_Player, 1, 15)
+		end
+	end
+end
+
+-- Controls the On screen timer until the laser is refreshed (so player knows when can fire again
+function Rule_Laser_Gun_Warning_Player()
+	--counting down from g_laserGunCounterMax to 0
+	g_laserGunCounter_Player = g_laserGunCounter_Player -1
+	
+	--2840000 is the localized string that appears on screen
+	UI_ShowCountUpdateDxp("LaserGunUi_Player", g_laserGunCounter_Player, 2840000)
+		
+	--once you hit 0 the laser gun will be ready to fire again
+	if g_laserGunCounter_Player == 0
+	then
+		-- reenable the skill button  on the laser so player can choose to fire again
+		Button_SetEnabled(g_laser_button_spawn, true)
+		
+		-- Remove this rule (will be readded next time ready to start laser countdown)
+		Rule_Remove(Rule_Laser_Gun_Warning_Player)
+	end
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " LASER GUN " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+-- " UNIT PRODUCTION " RULES
+------------------------------------------------------------------------
+-- Produce a Builder (Earth Caste) from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Builder(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a builder
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_builder_squad", markerName, 1)
+		
+		-- Builder was Created
+		return true
+	end
+	
+	-- Builder not created since building doesn't exist
+	return false
+end
+
+-- Produce (& Give Leaders) a Firewarrior Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Firewarrior(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		print("Create Warriors")
+		-- get size of firewarrior squad
+		local loadout = World_GetRand(3,6)
+		
+		-- Create a squad of fire warriors
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_fire_warrior_squad", markerName, 1, loadout)
+		
+		-- Give squad the leader (Shas'ui -- Enables Grenades)
+		if g_fireWarrior_leader == true
+		then
+			print("Add Leader")
+			SGroup_AddLeaders(squadName)
+		end
+		
+		-- Give Squad Shield Drone Here is Enabled
+		if g_fireWarrior_shieldDrone == true
+		then
+			print("Add Shield")
+			SGroup_AddLeadersAtIndex(squadName,2)
+		end
+		
+		-- Firewarrior Squad was Created
+		return true
+	end
+	print("Create Failed")
+	-- Fire Warrior squad not created since building doesn't exist
+	return false
+end
+
+-- Produce a Pathfinder Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Pathfinder(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- get size of firewarrior squad
+		local loadout = World_GetRand(2,5)
+		
+		-- Create a squad of pathfinders
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_pathfinder_squad", markerName, 1, loadout)
+		
+		-- Path Finder Squad was Created
+		return true
+	end
+	
+	-- Path Finder squad not created since building doesn't exist
+	return false
+end
+
+-- Produce a Stealth Team Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_StealthTeam(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- get size of stealth team
+		local loadout = World_GetRand(1,3)
+		
+		-- Create Stealth Team
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_stealth_team_squad", markerName, 1, loadout)
+		
+		-- Give squad the leader (Shas'vre -- Enables Emp Grenades)
+		if g_stealthTeam_leader == true
+		then
+			SGroup_AddLeaders(squadName)
+		end
+		
+		-- Give squad Fusion Blasters (Anti-Vehicle) if enabled
+		if g_stealthTeam_fusionBlaster == true
+		then
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(squadName), 1),"tau_fusion_blaster_stealth_suit", loadout)
+		end
+		
+		-- Stealth Team was Created
+		return true
+	end
+	
+	-- Stealth Team not created since building doesn't exist
+	return false
+end
+
+-- Produce a Vespid Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Vespid(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- get size of Vespid squad
+		local loadout = World_GetRand(3,5)
+		
+		-- Create Vespid (Special Vespid with Infinate Jump Range for Scar) & give leader
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_vespid_auxiliary_squad_sp_dxp3", markerName, 1, loadout)
+		SGroup_AddLeaders(squadName)
+		
+		-- Vespid was Created
+		return true
+	end
+	
+	-- Vespid not created since building doesn't exist
+	return false
+end
+
+-- Produce a Kroot Carnivore Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_KrootCarnivore(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- get size of Kroot Carnivore squad
+		local loadout = World_GetRand(4,10)
+		
+		-- Create a squad of Kroot Carnivore
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_kroot_carnivore_squad", markerName, 1, loadout)
+		
+		-- KrootCarnivore Squad was Created
+		return true
+	end
+	
+	-- Kroot Carnivore squad not created since building doesn't exist
+	return false
+end
+
+-- Produce a Kroot Houd Squad from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_KrootHound(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- get size of Kroot Hound squad
+		local loadout = World_GetRand(4,8)
+		
+		-- Create a squad of Kroot Hound
+		Util_CreateSquadsAtMarkerEx(g_Player3, squadName, "tau_kroot_hound_squad", markerName, 1, loadout)
+		
+		-- Kroot Hounds were Created
+		return true
+	end
+	
+	-- Kroot Hounds not created since building doesn't exist
+	return false
+end
+
+-- Produce a Kroot Shaper from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_KrootShaper(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Kroot Shaper
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_kroot_shaper_squad", markerName, 1)
+		
+		-- Kroot Shaper was Created
+		return true
+	end
+	
+	-- Kroot Shaper not created since building doesn't exist
+	return false
+end
+
+-- Produce a Krootox from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Krootox(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Krootox
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_krootox_squad", markerName, 1)
+		
+		-- Krootox was Created
+		return true
+	end
+	
+	-- Krootox not created since building doesn't exist
+	return false
+end
+
+-- Produce a GreaterKnarloc from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_GreaterKnarloc(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a GreaterKnarloc
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_greater_knarloc_squad", markerName, 1)
+		
+		-- GreaterKnarloc was Created
+		return true
+	end
+	
+	-- GreaterKnarloc not created since building doesn't exist
+	return false
+end
+
+-- Produce a Broadside from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Broadside(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Broadside
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_broadside_battlesuit_squad", markerName, 1)
+		
+		-- Broadside was created
+		return true
+	end
+	
+	-- Broadside not created since building doesn't exist
+	return false
+end
+
+-- Produce a Barracuda from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Barracuda(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Barracuda (NEEDS TO BE MADE)
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "eldar_squad_falcon_grav_tank", markerName, 1)
+		
+		-- Barracuda was created
+		return true
+	end
+	
+	-- Barracuda not created since building doesn't exist
+	return false
+end
+
+-- Produce a Drone Harbinger from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_DroneHarbinger(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Drone Harbinger
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_drone_harbinger_squad", markerName, 1)
+		
+		-- Drone Harbinger was created
+		return true
+	end
+	
+	-- Drone Harbinger not created since building doesn't exist
+	return false
+end
+
+-- Produce a Hammerhead from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Hammerhead(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Hammerhead
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_hammerhead_gunship_squad", markerName, 1)
+		
+		-- Hammerhead was created
+		return true
+	end
+
+	-- Hammerhead not created since building doesn't exist
+	return false
+end
+
+-- Produce a Skyray from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_Skyray(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a Skyray
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_skyray_squad", markerName, 1)
+		
+		-- Skyray was created
+		return true
+	end
+
+	-- Skyray not created since building doesn't exist
+	return false
+end
+
+-- Produce a CrisisSuit from Building at Marker for g_Player(playerNumber) and assign it to SGroup(squadName)
+function Rule_Produce_CrisisSuit(playerNunber, squadName, buildingName, markerName)
+	-- if building still exists
+	if EGroup_Count(buildingName) == 1
+	then
+		-- Create a CrisisSuit
+		Util_CreateSquadsAtMarker(g_Player3, squadName, "tau_crisis_suit_squad", markerName, 1)
+		
+		-- Randomly Pick Weapon Upgrade Type: Missile Pod Or Flamer
+		if World_GetRand(0,1) == 0
+		then
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(squadName), 1),"tau_missile_pod_crisis_suit", 1)
+		else
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(squadName), 1),"tau_flamer_crisis_suit", 1)
+		end		
+		-- CrisisSuit was created
+		return true
+	end
+	
+	-- CrisisSuit not created since building doesn't exist
+	return false
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- END OF ALL " UNIT PRODUCTION " RULES
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Create all of the initial units in the AI Bases : Called from OnInit
+function Rule_Create_All_Tau_InitialUnits( )
+	-- Create the Units for the Initial Defense Area before the Defense Base
+	Rule_Create_DefenseBase_InitialUnits( )
+	
+	-- Create the Defense Units around rest of bases (entrench broadsides, burrow drones)
+	Rule_Create_Initial_BaseDefenses()
+end
+
+-- Create Units for the Defense Base
+function Rule_Create_DefenseBase_InitialUnits()
+	-- Create & Entrench the Braodsides in the Initial Area
+	for i=1,2	do
+		Util_CreateSquadsAtMarker(g_Player3, "sg_DefenseBase_broadSide"..i, "tau_broadside_battlesuit_squad", "mkr_defenseBase_broadSide_entrench"..i, 1)
+		Command_Squad( g_Player3, "sg_DefenseBase_broadSide"..i, SCMD_Entrench )
+	end
+
+	-- Create the Firewarriors in the Initial Area
+	for i=1,3	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_DefenseBase_Initial_fireWarrior"..i, "tau_fire_warrior_squad", "mkr_defenseBase_fireWarrior_Spawn"..i, 1, 6)
+	end
+
+	-- Create the Pathfinders in the Initial Area
+	for i=1,2	do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_DefenseBase_Initial_pathFinder"..i, "tau_pathfinder_squad", "mkr_defenseBase_pathFinder_Spawn"..i, 1, 5)
+	end
+end
+
+-- Create the Initial Entrench Broadsides & Burrowed Drones
+function Rule_Create_Initial_BaseDefenses()
+	-- Create the Broadsides for rest of bases
+	for i=1,16 do
+		Util_CreateSquadsAtMarker(g_Player3, "sg_initial_broadSide"..i, "tau_broadside_battlesuit_squad", "mkr_initial_broadside_entrench"..i, 1)
+		Command_Squad( g_Player3, "sg_initial_broadSide"..i, SCMD_Entrench )
+	end
+
+	-- create & burrow the drones
+	for i=1,18 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_initial_drone"..i, "tau_drone_squad", "mkr_initial_drone_burrow"..i, 1,5)
+		Command_Squad( g_Player3, "sg_initial_drone"..i, SCMD_BurrowToggle )
+	end
+
+	-- LASERGUNBASE: Create & Entrench Broadsides (these are replaced by base when they die)
+	for i = 1,3 do
+		Util_CreateSquadsAtMarker(g_Player3, "sg_laserGunBase_broadside"..i, "tau_broadside_battlesuit_squad", "mkr_laserGunBase_broadside"..i, 1)
+		Command_Squad(g_Player3, "sg_laserGunBase_broadside"..i, SCMD_Entrench)
+	end
+end
+
+-- Creates all the troops that wander around the bases to create feeling of life (& to provide small defense forces)
+function Rule_Create_Wandering_Troops()
+	--EASTBASE: Create Hammerhead, Pathfinder, & Builders
+	Rule_Produce_Hammerhead(g_Player3, "sg_eastBase_wander1", "eg_commTower_2", "mkr_commTower_2")
+	Rule_Produce_Pathfinder(g_Player3, "sg_eastBase_wander2", "eg_commTower_2", "mkr_commTower_2") 
+	Rule_Produce_Builder(g_Player3, "sg_eastBase_wander3", "eg_commTower_2", "mkr_commTower_2")
+	Rule_Produce_Builder(g_Player3, "sg_eastBase_wander4", "eg_commTower_2", "mkr_commTower_2")
+
+	-- KROOTCENTERBASE: Create the Kroot Hound & Shaper squad
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_krootCenterBase_wander1", "tau_kroot_hound_squad", "mkr_krootCenterBase_KauyonShrine1", 1, 4)
+	Util_CreateSquadsAtMarker(g_Player3, "sg_krootCenterBase_shaper", "tau_kroot_shaper_squad", "mkr_krootCenterBase_KauyonShrine1", 1)
+	Cmd_AttachSquads("sg_krootCenterBase_wander1", "sg_krootCenterBase_shaper")
+
+	-- KROOTCENTERBASE: Create squads of kroot carnivores
+	for i=1,2 do
+		Util_CreateSquadsAtMarkerEx(g_Player3, "sg_krootCenterBase_wander"..i, "tau_kroot_carnivore_squad", "mkr_krootCenterBase_troops_"..i, 1, 6)
+	end
+	
+	-- LASERGUNBASE: Create Builders
+	Rule_Produce_Builder(g_Player3, "sg_laserGunBase_wander1", "eg_laserGunBase_Barracks2", "mkr_laserGunBase_Barracks2")
+	Rule_Produce_Builder(g_Player3, "sg_laserGunBase_wander2", "eg_laserGunBase_Barracks2", "mkr_laserGunBase_Barracks2")
+	
+	-- NORTHEAST BASE: Greater Knarloc & Hound w/ Shaper
+	Rule_Produce_GreaterKnarloc(g_Player3, "sg_northEastBase_wander1", "eg_northEastBase_KauyonShrine1", "mkr_northEastBase_KauyonShrine1")
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_northEastBase_wander2", "tau_kroot_hound_squad", "mkr_northEastBase_KauyonShrine1", 1, 4)
+	Util_CreateSquadsAtMarker(g_Player3, "sg_northEastBase_shaper", "tau_kroot_shaper_squad", "mkr_northEastBase_KauyonShrine1", 1)
+	Cmd_AttachSquads("sg_northEastBase_wander2", "sg_northEastBase_shaper")
+	
+	-- NORTHWEST BASE: Greater Knarloc & Hound w/ Shaper
+	Rule_Produce_GreaterKnarloc(g_Player3, "sg_northWestBase_wander1", "eg_northWestBase_KauyonShrine1", "mkr_northWestBase_KauyonShrine1")
+	Util_CreateSquadsAtMarkerEx(g_Player3, "sg_northWestBase_wander2", "tau_kroot_hound_squad", "mkr_northWestBase_KauyonShrine1", 1, 4)
+	Util_CreateSquadsAtMarker(g_Player3, "sg_northWestBase_shaper", "tau_kroot_shaper_squad", "mkr_northWestBase_KauyonShrine1", 1)
+	Cmd_AttachSquads("sg_northWestBase_wander2", "sg_northWestBase_shaper")
+	
+	-- RELICBASE: Hammerheads, Pathfinds, Builders
+	Rule_Produce_Hammerhead(g_Player3, "sg_relicBase_wander1", "eg_relicBase_HQ1", "mkr_relicBase_HQ1")
+	Rule_Produce_Hammerhead(g_Player3, "sg_relicBase_wander2", "eg_relicBase_HQ1", "mkr_relicBase_HQ1")
+	Rule_Produce_Pathfinder(g_Player3, "sg_relicBase_wander3", "eg_relicBase_HQ1", "mkr_relicBase_HQ1") 
+	Rule_Produce_Builder(g_Player3, "sg_relicBase_wander4", "eg_relicBase_HQ1", "mkr_relicBase_HQ1")
+	Rule_Produce_Builder(g_Player3, "sg_relicBase_wander5", "eg_relicBase_HQ1", "mkr_relicBase_HQ1")
+	
+	-- SOUTHBASE: Create Pathfinders & Firewarriors
+	Rule_Produce_Pathfinder(g_Player3, "sg_southBase_wander1", "eg_commTower_1", "mkr_commTower_1") 
+	Rule_Produce_Firewarrior(g_Player3, "sg_southBase_wander2", "eg_commTower_1", "mkr_commTower_1")
+	Rule_Produce_Builder(g_Player3, "sg_southBase_wander3", "eg_commTower_1", "mkr_commTower_1")
+
+	-- WESTBASE: Create Builders & Pathfinders
+	Rule_Produce_Pathfinder(g_Player3, "sg_westBase_wander1", "eg_westBase_HQ1", "mkr_westBase_HQ1") 
+	Rule_Produce_Builder(g_Player3, "sg_westBase_wander2", "eg_westBase_HQ1", "mkr_westBase_HQ1")
+	Rule_Produce_Builder(g_Player3, "sg_westBase_wander3", "eg_westBase_HQ1", "mkr_westBase_HQ1")
+end
+
+-----------------------------------------------------------------------
+-- END OF ALL " AI " RULES
+------------------------------------------------------------------------
+
+-- Create the Player Base after the initial line of defenses have been breached
+function Rule_BuildMoonBase()
+	-- Intel Event: FirstBase_Destroyed (Race Based) : Player Destroys the first small base -- Here is your HQ & Builders
+	Util_StartIntel(g_ie_FirstBase_Destroyed_Array[g_intelEvent_raceId])
+
+	-- Bring in the Builders
+	for i = 1, 3 do
+		Util_CreateSquadsAndDropPodIn(g_Player1 , "sg_player_mainBase_builder"..i, g_Builder_blueprint, Marker_GetPosition(Marker_FromName( "mkr_reinforcementLocation_builder"..i, "basic_marker")) ,1,1)
+	end
+	
+	-- Create the EGroups for the player buildings
+	EGroup_Create("eg_player_mainBase_HQ1")
+	
+	-- Varible to track failures of building attempts
+	g_attempt_build_hq = 0
+
+	-- Try to bring in the HQ
+	Rule_AddInterval(Rule_Build_Player_HQ,5)
+	
+	-- Add extra resources to players current amounts (RT_Requisition, RT_Power, RT_Pop(Orks Only))
+	if g_raceName == "necron_race"
+	then
+		-- If Necron, Only Give Power
+		Player_AddResource(g_Player1, RT_Power, g_amountPowerToGiveNecron)
+	else
+		-- Otherwise give both
+		Player_AddResource(g_Player1, RT_Requisition, g_amountRequisitionToGivePlayer)
+		Player_AddResource(g_Player1, RT_Power, g_amountPowerToGivePlayer)
+	end
+	
+	--Handles the Delayed Teching & Activation of Enemy Bases & research
+	Rule_AddOneShot(Rule_Tech_And_Activate_Tier_One, g_time_Tier_One)
+	Rule_AddOneShot(Rule_Tech_And_Activate_Tier_Two, g_time_Tier_Two)
+	Rule_AddOneShot(Rule_Tech_And_Activate_Tier_Three, g_time_Tier_Three)
+	
+	-- Dispatch Scouts to find the Player Base
+	Rule_AddOneShot(Rule_Begin_Scout_Dispatching, g_scoutDispatchDelay)
+end
+
+-- Create the actual player base buildings
+function Rule_Build_Player_HQ()
+	-- If you succeed last time in creating the building (or have tried and failed multiple times, then remove the rule
+	if EGroup_Count("eg_player_mainBase_HQ1") == 1 or
+		g_attempt_build_hq == 5
+	then
+		Rule_Remove(Rule_Build_Player_HQ)		
+	
+	-- Try and Create the Building 
+	else
+		Entity_CreateBuildingMarker(g_Player1,"eg_player_mainBase_HQ1", g_HQ_blueprint,"mkr_player_mainBase_HQ1", 0)
+		g_attempt_build_hq = g_attempt_build_hq + 1
+	end
+end
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- VICTORY / DEFEAT RULES
+	-- Rule_EndGame_Victory() : Wins the Mission and Plays Final NIS
+		-- Added in Rule_KillTauEtherealInStronghold_Objective( ) when the ethereal is killed
+	-- Rule_EndGame_Defeat() : Checks if mission has been lost (Player Killed)
+		-- Added in Rule_GameStart( ) or Rule_Stop_DropPod_Troops( )
+	-- Rule_GameOver() : Sets Game Over 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Wins the Mission and Plays Final NIS : Added in Rule_KillTauEtherealInStronghold_Objective( ) when the ethereal is killed
+function Rule_EndGame_Victory()
+	-- Kills all rules (Basically cleans up any extra rules that were running and prepares for scenario complete)
+	Rule_RemoveAll()
+
+	-- NIS: Play the mission complete scripted scene
+	WXP_OpeningNISPreset( )
+	Util_StartNIS(EVENTS.NIS_Closing)	
+	
+	Rule_GameOver()
+end
+
+
+-- Rule for Losing the Game : Rule Checks Every 10 secs & is Added in Rule_GameStart( ) or Rule_Stop_DropPod_Troops
+function Rule_EndGame_Defeat()
+	-- define the "enemy" who will win when the player 'loses'
+	g_enemy = g_Player4
+
+	--Lose because of Player Annihilation	
+	if( Player_HasBuildingsExcept(g_Player1, t_building_exceptions) == false ) then
+		if( Player_HasSquadsExcept(g_Player1, t_unit_exceptions ) == false ) then
+			
+			Rule_RemoveAll()
+			Fade_Start(4, false)
+			World_SetTeamWin( g_enemy, "" )
+			Rule_AddIntervalEx( Rule_GameOver,5,1 )
+			Rule_Remove( Rule_EndGame_Defeat )
+		end
+	end
+end
+
+
+-- Actually sets the Game Over & is added from Rule_EndGame_Victory( ) or Rule_EndGame_Defeat( )
+function Rule_GameOver()
+	World_SetGameOver() 
+end
+
+----------------------------------------------------------------
+-- END OF ALL " VICTORY / DEFEAT  " RULES
+----------------------------------------------------------------

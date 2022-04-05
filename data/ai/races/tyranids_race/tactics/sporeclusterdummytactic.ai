@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'sporeclusterdummytactic.ai'
+-- Edited by Gambit @ 11.08.2017
+
+class 'SporeClusterDummyTactic' (InfantryTactic)
+
+function SporeClusterDummyTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("Spore Cluster Detector Dummy")
+end
+
+function SporeClusterDummyTactic:Update()
+	return true
+end

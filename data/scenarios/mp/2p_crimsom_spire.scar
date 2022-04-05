@@ -1,0 +1,263 @@
+-------------------------------------------------
+--[[ IMPORTS ]]
+-------------------------------------------------
+import("ScarUtil.scar")
+import("WXPScarUtil.scar")
+
+-------------------------------------------------
+--[[Blood Pulse Scar plus Telepoting gates scar]]
+-------------------------------------------------
+
+function OnGameSetup()
+
+
+    
+
+        t_Player = {} 
+  
+        g_PulseStop = false
+        g_Counter = 40
+	
+end
+
+
+
+function OnInit()
+
+Rule_SetupMusicPlaylist()
+Rule_AddInterval(Rule_Pulse_Warning, 1)
+Rule_AddInterval(Rule_Pulse_Halt, 1)
+Rule_AddInterval(Rule_websails, 1)
+        
+end
+
+
+
+
+
+
+
+Scar_AddInit(OnInit)
+
+
+
+
+
+-------------------------------------------------
+--[[ MUSIC ]]
+-------------------------------------------------
+
+function Rule_SetupMusicPlaylist()
+
+	t_ambient = {"Snowy_wind_1" }
+	
+--~ 	
+--~ 	
+--~ 		"Rain_thunder_amb",
+--~ 		"Snowy_wind_1",
+--~ 		"Snowy_wind_2",
+		
+		
+	Playlist_Manager( PC_Ambient, t_ambient, true , true , {5, 10})
+	
+end
+
+
+------------------------------------------------
+--[[The teleport gates]]
+------------------------------------------------
+
+function Rule_websails()
+	local count = World_GetPlayerCount();
+	for i = 0, count -1 do
+		local j = (i+1);
+		t_Player[j] = World_GetPlayerAt(i);
+	end
+	for j = 1, count do
+		if Player_IsAlive(t_Player[j]) == true then
+			for NCno = 1, EGroup_Count("eg_WebEnt") do
+				if Player_AreSquadsNearMarker( t_Player[j], "mkr_gatein"..NCno ) == true then
+				local group = Player_GetAllSquadsNearMarker(t_Player[j], "sg_wbsl"..NCno, "mkr_gatein"..NCno );
+					World_FXEventSquad( "data:Art/Events/eldar_unit_fx/warp_fx", "sg_wbsl"..NCno)
+					SGroup_DeSpawn("sg_wbsl"..NCno)
+					SGroup_ReSpawnMarker("sg_wbsl"..NCno, "mkr_gateout"..NCno)
+					World_FXEventSquad( "data:Art/Events/eldar_unit_fx/warp_fx", "sg_wbsl"..NCno)
+					SGroup_Clear("sg_wbsl"..NCno)
+				end
+			end
+		end
+	end
+end
+-------------------------------------------------
+--[[THE BLOOD PULSE FUNCTION]]
+-------------------------------------------------
+
+
+function Rule_Pulse_Warning()
+
+
+-------------------------------------------------
+--[[creating the counter g_Counter is set at 40 for the moment]]
+----------------------------------------------
+
+	--counting down from 40 to 0
+	g_Counter = g_Counter -1
+	
+		
+		--once you hit 0 the pulse fires
+		
+		if g_Counter == 10 then
+		
+			--this will play the warning laugh
+			Anim_PlayEGroupAnim(EGroup_FromName("eg_Blood_Warning"), "audio_warning")
+		
+
+		end
+		
+		
+		if g_Counter == 0 then
+			Rule_AddOneShot(Rule_Blood_Pulse_Effect, 0.5)
+			Rule_AddOneShot(Rule_Blood_Pulse, 1)
+			Rule_Remove(Rule_Pulse_Warning)
+
+					
+		end
+end
+
+
+function Rule_Blood_Pulse_Effect()
+
+	for i = 1, 4 do
+		Util_MarkerFX("mkr_Pulse"..i, "data:Art/Events/Chaos/Blood_Pulse")
+
+	end
+		
+end
+
+
+
+function Rule_Blood_Pulse()
+
+--units that should be ignored by the blood pulse
+
+t_Vehicle = Util_MakeBlueprintTable(
+
+--[[eldar]]"eldar_squad_avatar", "eldar_squad_falcon_grav_tank", 
+"eldar_squad_falcon_grav_tank_advance_sp", "eldar_squad_fire_prism", "eldar_squad_grav_platform", 
+"eldar_squad_grav_platform_brightlance", "eldar_squad_grav_platform_brightlance_advance_sp", "eldar_squad_vypers", "eldar_squad_vypers_advance_sp", "eldar_squad_wraithlord", "eldar_squad_wraithlord_advance_sp",
+
+--[[IG]]"guard_squad_baneblade", "guard_squad_basilisk", "guard_squad_basilisk_sp_mso2",
+"guard_squad_chimera", "guard_squad_chimera_sp_test", "guard_squad_hellhound", "guard_squad_hellhound_advance_sp",
+"guard_squad_lemanruss", "guard_squad_sentinel", "guard_squad_sentinel_advance_sp",
+
+--[[ork]]"ork_squad_killa_kan", "ork_squad_killa_kan_advance_sp",
+"ork_squad_looted_tank", "ork_squad_looted_tank_sp",
+"ork_squad_squiggoth", "ork_squad_squiggoth_sp_long_rampage", "ork_squad_trukk", "ork_squad_trukk_advance_sp", "ork_squad_wartrak", "ork_squad_wartrak_advance_sp",
+
+--[[space marine]]"space_marine_squad_dreadnought", "space_marine_squad_dreadnought_advance_sp", 
+"space_marine_squad_dreadnought_hellfire", "space_marine_squad_dreadnought_hellfire_advance_sp", 
+"space_marine_squad_land_raider", "space_marine_squad_land_speeder", "space_marine_squad_land_speeder_advance_sp", "space_marine_squad_predator", "space_marine_squad_rhino", 
+"space_marine_squad_skull_probe", "space_marine_squad_whirlwind", 
+
+--[[Tau]] "tau_devilfish_troop_carrier", "tau_drone_harbinger_squad", "tau_drone_harbinger_squad_advance_sp", "tau_drone_squad",
+"tau_hammerhead_gunship_squad", "tau_skyray_squad", "tau_skyray_squad_advance_sp", "tau_greater_knarloc_squad", "tau_broadside_battlesuit_squad",
+"tau_broadside_battlesuit_squad_clone_sp", "tau_commander_squad", "tau_commander_squad_advance_sp", 
+
+--[[Necron]]"necron_night_bringer", "necron_restored_monolith_squad", "necron_destroyer_squad", "necron_destroyer_squad_advance_sp", 
+"necron_heavy_destroyer_squad", "necron_lord_destroyer_squad", "necron_tomb_spyder_squad", "necron_tomb_spyder_squad_advance_sp", 
+
+--[[Chaos]]
+"chaos_squad_bloodthirster", "chaos_squad_daemon_prince", "chaos_squad_daemon_prince_advance_sp", "chaos_squad_defiler", "chaos_squad_defiler_advance_sp", 
+"chaos_squad_predator", "chaos_squad_predator_advance_sp", "chaos_squad_rhino", 
+
+--[[Inquisition]]"inquisition_squad_chimera_transport", "inquisition_squad_dreadnought_assault", "inquisition_squad_dreadnought_support", "inquisition_squad_land_raider", "inquisition_squad_land_raider_crusader", "inquisition_squad_rhino")
+
+--then the pulse
+
+
+local count = World_GetPlayerCount();
+ 	for k = 0, count -1 do
+ 		local l = (k+1);
+ 		t_Player[l] = World_GetPlayerAt(k);
+ 	end
+	
+	
+ 	for k = 1, count do
+		if Player_IsAlive(t_Player[k]) == true then
+        
+
+			for i = 1, 4 do
+
+				if Player_AreSquadsNearMarker(t_Player[k], "mkr_Pulse"..i) then
+			
+					--clean up the group to make sure nothing odd happens
+					SGroup_Clear(SGroup_CreateIfNotFound("sg_Sacrifice"..i))
+			
+					--get all the player's units near that specific pulse tower and place them in a specific group
+					Player_GetAllSquadsNearMarker(t_Player[k], "sg_Sacrifice"..i, "mkr_Pulse"..i)
+					count = SGroup_Count(SGroup_FromName("sg_Sacrifice" ..i))
+
+					for j =1, count do
+
+						SGroup_Clear(SGroup_CreateIfNotFound("sg_Potentials"..j))
+						SGroup_Add(SGroup_FromName("sg_Potentials"..j), SGroup_GetSpawnedSquadAt("sg_Sacrifice"..i, j))
+
+						--check to see if the group does not contain any of the forbidden units.
+						if SGroup_ContainsBlueprints("sg_Potentials"..j, t_Vehicle, false) == false then
+						
+							--give them to the sacrifice player
+							SGroup_SetPlayerOwner("sg_Potentials"..j, t_Player[k])
+						
+							--stop them from going anywhere
+							Cmd_StopSquads("sg_Potentials"..j)
+						
+							--play a suitably gruesome animation
+							World_FXEventSquad("data:Art/Events/Chaos/Blood_Pulse_Hit", SGroup_FromName("sg_Potentials"..j))
+						
+							
+						
+							--kill the units
+							SGroup_SelfDestroy("sg_Potentials"..j, true)
+						
+						end
+					end	
+				end
+			end
+		end	
+	end
+	g_Counter = 41
+	Rule_AddInterval(Rule_Pulse_Warning, 1)
+
+end
+
+
+
+-------------------------------------------------
+--[[Stopping the pulse ]]
+-------------------------------------------------
+--Capturing the blood pit strategic point stops the pulses
+
+
+function Rule_Pulse_Halt()
+
+	local count = World_GetPlayerCount();
+			for k = 0, count -1 do
+				local l = (k+1);
+				t_Player[l] = World_GetPlayerAt(k);
+			end
+		
+		for k = 1, count do
+			if Player_IsAlive(t_Player[k]) == true then
+		
+				if EGroup_IsCapturedByPlayer("eg_Blood_Point", t_Player[k], true) then
+
+					Rule_Remove(Rule_Pulse_Warning)
+					Rule_Remove(Rule_Blood_Pulse)
+		
+					--despawns the effect that's around the strat point.
+					EGroup_DeSpawn("eg_Chaos_Star")		
+					Rule_Remove(Rule_Pulse_Halt)
+				end
+			end
+		end
+end

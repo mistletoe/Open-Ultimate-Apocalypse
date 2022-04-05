@@ -1,0 +1,104 @@
+Model = "Kier_Harrad"
+Planet = "Kaurava_III"
+
+Name = "$3900028"
+Description = "$3900280"
+TerrainDescription = "$3900281"
+History = 
+{
+"$3900282",
+"$3900283",
+"$3900284",
+"$3900285",
+"$3900286",
+"$3900287",
+"$3900288",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "8P_Kier_Harrad"
+MissionFileAttackingConquered = "8P_Kier_Harrad"
+MissionFileDefending = "8P_Kier_Harrad"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1
+
+NeighborTerritories = 
+{
+	"Nirraein",
+	"Principian_Badlands",
+	"Coastal_Imossa",
+	"Upper_Wastes",
+	"Broken_Lands",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_khorne_berserker_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_librarian_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_wartrak_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_heavy_weapons_team_squad_hg_dxp3",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_fire_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_basic_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_servitor_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_scourge_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 50
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "necron_race"
+OwnerSecondary = "eldar_race"
+
+StartingResourceBonus = 0.0

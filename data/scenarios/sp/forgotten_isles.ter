@@ -1,0 +1,51 @@
+Model = "Forgotten_Isles"
+Planet = "Kaurava_II"
+
+Name = "$3900022"
+Description = "$3900242"
+TerrainDescription = "$3900243"
+
+History = 
+{
+"$3900244",
+"$3900245",
+"$3900246",
+"$3900247",
+"$3900248",
+"$3900249",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "4P_Forgotten_Isles"
+MissionFileAttackingConquered = "4P_Forgotten_Isles"
+MissionFileDefending = "4P_Forgotten_Isles"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = 1
+ArmyModelScaleZoomedOut = 1.3
+
+NeighborTerritories = 
+{
+	"Rokclaw_Foothills",
+	"Trivian_Groves",
+}
+
+VictoryBonusSquads =
+{
+ --/// +10% REQ BONUS ///
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 25
+StartingMilitaryStrength = 5
+
+OwnerPrimary = "ork_race"
+OwnerSecondary = "tau_race"
+
+StartingResourceBonus = 0.1

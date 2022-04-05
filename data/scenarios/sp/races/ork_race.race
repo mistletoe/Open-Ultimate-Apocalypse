@@ -1,0 +1,2332 @@
+IntroMovie = "" 
+IntroMovieText =
+{
+
+}
+
+OutroMovie = "ss_ork_race_outro"
+OutroMovieText =
+{
+	{
+		Text = "$5200178",
+		Start = 12.200,
+		End = 35.020,
+	},
+	{
+		Text = "$5200179",
+		Start = 42.270,
+		End = 66.020,
+	},
+	{
+		Text = "$5200180",
+		Start = 71.240,
+		End = 110.090,
+	},
+}
+
+
+NuggetMovie = "ork_race_nugget"
+
+ForceName = "$690013"
+TeamColourForceName = "Evil Sunz"
+TeamColour = "default_4"
+CommanderName = "ork_squad_warboss_advance_sp"
+
+ArmyModel = "Art/UI/3D_Models/MM_Ork_Warboss"
+ArmyModelScale = 0.11
+ArmyModelBone = "master"
+
+TerritoryColour = { 9, 73, 5 }
+
+-- Delays used for army move fx
+TeleportFXLength = 0.5
+SpacePortTeleportFXLength = 0.5
+
+ApplyTeamColours = true
+
+CommanderScreenModel = "Art/UI/3D_Models/Race_Ork"
+CommanderScreenBackgroundImage = "Art/UI/RaceImages/Race_Ork"
+CommanderScreenAction = "sp_wargear"
+
+WargearScreenModel = "Art/EBPs/Races/Orks/Troops/Warboss_TGD"
+WargearScreenBackgroundImage = "Art/UI/Wargear/ork wargear backdrop"
+WargearScreenAction = "default"
+
+RetractedStartingSquads = {}
+
+-- Territory special ability values
+IndustrialProductionRequisitionBonus = 1000
+IndustrialProductionPowerBonus = 0
+
+IncreasedManpowerStartingSquadCapBonus = 4
+IncreasedManpowerMaximumSquadCapBonus = 4
+IncreasedManpowerStartingVehicleCapBonus = 2
+IncreasedManpowerMaximumVehicleCapBonus = 2
+
+RequisitionReducedCostBonus = 0.85
+
+PopulationGrowthTerritoryRate = 3
+PopulationGrowthTerritoryChance = 0.33
+PopulationGrowthArmyRate = 3
+PopulationGrowthMilitaryStrengthIncrement = 1
+PopulationGrowthAIRankIncrement = 1
+
+RessurectionChancePlayer = 0.33
+RessurectionChanceAI = 0.33
+
+TauGunMinDamageAI = 0
+TauGunMaxDamageAI = 1
+TauGunMinDamagePlayer = 0
+TauGunMaxDamagePlayer = 1
+
+RoadwaySeedsMaxDistance = 3
+
+DisconnectedSupplyModifier = 0.0
+
+RaceSelectionScreen =
+{
+	Model = "Race_Ork",
+	RaceImage = "Race_Ork",
+	ExitAnimationLength = 2.2,
+	AmbientLight = { 128, 128, 128 }
+}
+
+VictoryScreen =
+{
+	ImageVictory = "OrkVictory",
+	ImageDefeat = "OrkDefeat",
+
+	TextVictoryAttacking = "$3000600",
+	TextVictoryDefending = "$3000601",
+
+	TextDefeatAttacking = "$3000602",
+	TextDefeatDefending = "$3000603",
+
+	TextDescription_chaos_marine_race = "$3000604",
+	TextDescription_eldar_race = "$3000605",
+	TextDescription_guard_race = "$3000606",
+	TextDescription_necron_race = "$3000607",
+	TextDescription_space_marine_race = "$3000608",
+	TextDescription_tau_race = "$3000609",
+	TextDescription_dark_eldar_race  = "$3900444",
+	TextDescription_sisters_race  = "$3900452",
+}
+
+Messages =
+{
+	-- Bonus Units
+	NewBonusUnit = "$3003010",
+	PreservedBonusUnit = "$3003011",
+	FailedToGainBonusUnit = "$3003013",
+	LostBonusUnit = "$3003012",
+
+	-- Abilities
+	NewAbility = "$3003010",
+	PreservedAbility = "$3003011",
+	FailedToGainAbility = "$3003013",
+	LostAbility = "$3003012",
+
+	-- Race elimination
+	DefeatedRace = "$3003014",
+}
+
+BonusSquadCosts =
+{
+	ork_squad_slugga_advance_sp = 275,
+	ork_squad_shoota_boy_advance_sp = 300,
+	ork_squad_tankbusta_advance_sp = 425,
+	ork_squad_stormboy_advance_sp = 375,
+	ork_squad_nob_advance_sp = 450,
+	ork_squad_bad_dok_advance_sp = 350,
+	ork_squad_armored_nob_advance_sp = 550,
+	ork_squad_mek_boy_advance_sp = 450,
+	ork_squad_wartrak_advance_sp = 700,
+	ork_squad_killa_kan_advance_sp = 850,
+}
+
+ReinforcementStructures =
+{
+	{
+		Blueprint = "ork_generator",
+		Cost = 50,
+		Markers =
+		{
+			"MM_Reinforcement0", "MM_Reinforcement1", "MM_Reinforcement2",
+			"MM_Reinforcement3"
+		}
+	},
+	{
+		Blueprint = "ork_waagh_banner",
+		Cost = 100,
+		Markers =
+		{
+			"MM_Reinforcement6", "MM_Reinforcement7", "MM_Reinforcement8", "MM_Reinforcement9"
+		}
+	},
+	{
+		Blueprint = "ork_boy_hut",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement10"
+		}
+	},
+	{
+		Blueprint = "ork_pile_o_guns",
+		Cost = 150,
+		Markers =
+		{
+			"MM_Reinforcement11"
+		}
+	},
+}
+
+ReinforcementSquads = 
+{
+	{
+		Blueprint = "ork_squad_grot",
+		Cost = 25,
+		Markers =
+		{
+			"MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_shoota_boy",
+		Cost = 75,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_stormboy",
+		Cost = 110,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_wartrak",
+		Cost = 200,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+}
+
+DeepStrikeSquads = 
+{
+	{
+		Blueprint = "ork_squad_grot",
+		Cost = 125,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_slugga",
+		Cost = 300,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_shoota_boy",
+		Cost = 325,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+	{
+		Blueprint = "ork_squad_wartrak",
+		Cost = 750,
+		Markers =
+		{
+			"MM_Reinforcement12", "MM_Reinforcement12"
+		}
+	},
+}
+
+TechLevel2Structures =
+{
+	"ork_mek_shop"
+}
+
+TechLevel3Structures =
+{
+	"ork_hq_addon"
+}
+
+WarGear =
+{
+
+	{
+	Research = "ork_wargear_upgrade_03_big_shoota_wargear_research",
+	WeaponName = "ork_big_shoota_warboss",
+	WeaponNameDefault = "ork_shoota_warboss",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Ork_Big_Shoota",
+	ClauseValueDefault = "Ork_Shoota",
+	Name = "$3001600",
+	Icon = 03,
+	Description  = "$3001601",
+	Specification  = "$3001602",
+  AIVictoriesRequired = 1,
+	},
+	{
+	Research = "ork_wargear_upgrade_04_mega_blasta_wargear_research",
+	WeaponName = "ork_mega_blasta_warboss",
+	WeaponNameDefault = "ork_shoota_warboss",
+	ClauseKey = "Weapon_Range_Upgrade_Main",
+	ClauseValueOn = "Ork_Mega_Blasta",
+	ClauseValueDefault = "Ork_Shoota",
+	Name = "$4000128",
+	Icon = 04,
+	Description  = "$4000129",
+	Specification  = "$4000130",
+  AIVictoriesRequired = 2,
+	},
+	{
+	Research = "ork_wargear_upgrade_01_bigga_claw_wargear_research",
+	WeaponName = "ork_power_claw_boss_mission",
+	WeaponNameDefault = "ork_power_claw_boss",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Ork_Bigga_Klaw",
+	ClauseValueDefault = "Ork_Power_Klaw",
+	Name = "$3001620",
+	Icon = 01,
+	Description  = "$3001621",
+	Specification  = "$3001622",
+  AIVictoriesRequired = 3,
+	},
+	{
+	Research = "ork_wargear_upgrade_02_mega_claw_wargear_research",
+	WeaponName = "ork_mega_claw_boss",
+	WeaponNameDefault = "ork_power_claw_boss",
+	ClauseKey = "Weapon_Melee_Upgrade_Main",
+	ClauseValueOn = "Ork_Mega_Klaw",
+	ClauseValueDefault = "Ork_Power_Klaw",
+	Name = "$4000125",
+	Icon = 02,
+	Description  = "$4000126",
+	Specification  = "$4000127",
+  AIVictoriesRequired = 4,
+	},
+	{
+	Research = "ork_wargear_upgrade_06_red_gob_research",
+	WeaponName = "ork_warboss_red_gob",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_01",
+	ClauseValueOn = "Wargear_01",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001640",
+	Icon = 06,
+	Description  = "$3001641",
+	Specification  = "$3001642",
+  AIVictoriesRequired = 5,
+	},
+	{
+	Research = "ork_wargear_upgrade_08",
+	WeaponName = "ork_warboss_fasta_legz",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_02",
+	ClauseValueOn = "Wargear_02",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000134",
+	Icon = 08,
+	Description  = "$4000135",
+	Specification  = "$4000136",
+  AIVictoriesRequired = 6,
+	},
+	{
+	Research = "ork_wargear_upgrade_05_big_horns_research",
+	WeaponName = "ork_warboss_big_horns",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_03",
+	ClauseValueOn = "Wargear_03",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001660",
+	Icon = 05,
+	Description  = "$3001661",
+	Specification  = "$3001662",
+  AIVictoriesRequired = 7,
+	},
+	{
+	Research = "ork_wargear_upgrade_07",
+	WeaponName = "ork_warboss_mega_eavy_armor",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_04",
+	ClauseValueOn = "Wargear_04",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000131",
+	Icon = 07,
+	Description  = "$4000132",
+	Specification  = "$4000133",
+  AIVictoriesRequired = 8,
+	},
+	{
+	Research = "ork_wargear_upgrade_09_skullz_research",
+	WeaponName = "ork_warboss_skullz",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_05",
+	ClauseValueOn = "Wargear_05",
+	ClauseValueDefault = "<NONE>",
+	Name = "$3001680",
+	Icon = 09,
+	Description  = "$3001681",
+	Specification  = "$3001682",
+  AIVictoriesRequired = 9,
+	},
+	{
+	Research = "ork_wargear_upgrade_10_boss_pole_research",
+	WeaponName = "ork_warboss_boss_pole",
+	WeaponNameDefault = "nil",
+	ClauseKey = "Wargear_Upgrade_06",
+	ClauseValueOn = "Wargear_06",
+	ClauseValueDefault = "<NONE>",
+	Name = "$4000137",
+	Icon = 10,
+	Description  = "$4000138",
+	Specification  = "$4000139",
+  AIVictoriesRequired = 10,
+	},
+
+}
+
+Promotions =
+{
+	{
+		Name = "$3002000",
+		Description = "$3003001",
+		Conditions = 
+		{
+			ConqueredTerritories = 1
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003002",
+		Conditions = 
+		{
+			ConqueredTerritories = 5
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003003",
+		Conditions = 
+		{
+			ConqueredTerritories = 15
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003004",
+		Conditions = 
+		{
+			UnitKillsLifetime = 2000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003005",
+		Conditions = 
+		{
+			UnitKillsLifetime = 5000
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003006",
+		Conditions = 
+		{
+			ConqueredStrongholds = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003000",
+		Conditions = 
+		{
+			UnitKillsMission = 200,
+			KillRatioMission = 3
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003007",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 1,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003008",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 3,
+		}
+	},
+	{
+		Name = "$3002000",
+		Description = "$3003009",
+		Conditions = 
+		{
+			DefensiveMissionsWon = 5,
+		}
+	},
+}
+
+AIStartingStructuresAttacking =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 2,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+		MilitaryStrength = 3,
+		Structures =
+		{
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start4_",
+				},
+			},
+
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start6_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start7_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingStructuresDefending =
+{
+
+	{
+		MilitaryStrength = 1,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+		},
+	},
+
+	{
+		MilitaryStrength = 2,
+		Structures =
+		{
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+		},
+	},
+	
+	{
+
+		MilitaryStrength = 3,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 5,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 7,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+		},
+	},	
+
+	
+	{
+
+		MilitaryStrength = 8,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 9,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+
+		},
+	},	
+	
+	
+	{
+
+		MilitaryStrength = 10,
+		Structures =
+		{
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start1_",
+				},
+			},
+
+			{
+				Blueprint = "ork_generator",
+				Markers =
+				{
+					"start2_",
+				},
+			},
+
+			{
+				Blueprint = "ork_boy_hut",
+				Markers =
+				{
+					"start3_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start12_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start14_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_turret",
+				Markers =
+				{
+					"start13_",
+				},
+			},
+			
+			{
+				Blueprint = "ork_pile_o_guns",
+				Markers =
+				{
+					"start5_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start15_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start16_",
+				},
+			},
+
+			{
+				Blueprint = "ork_waagh_banner_missile",
+				Markers =
+				{
+					"start17_",
+				},
+			},
+			{
+				Blueprint = "ork_mek_shop",
+				Markers =
+				{
+					"start8_",
+				},
+			},
+--[[			{
+				Blueprint = "chaos_sacrificial_circle",
+				Markers =
+				{
+					"start9_",
+				},
+			},]]
+		},
+	},	
+}
+
+AIStartingSquadsAttacking =
+{
+	{
+
+		MilitaryStrength = 2,
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 3,
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},		
+
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+}
+
+AIStartingSquadsDefending =
+{
+	{
+
+		MilitaryStrength = 4,
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 5,
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+
+	{
+
+		MilitaryStrength = 6,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 7,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 8,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},	
+	
+	{
+
+		MilitaryStrength = 9,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+
+	{
+
+		MilitaryStrength = 10,
+		Squads =
+		{
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+		},
+	},	
+}
+
+ArmyRanks =
+{
+	-- Rank 1
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 2
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 3
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 4
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 5
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 6
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_wartrak",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 7
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_wartrak",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_bad_dok",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 8
+	{
+		Difficulty = "standard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_wartrak",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_bad_dok",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_killa_kan",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 9
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_wartrak",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_bad_dok",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_killa_kan",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_nob",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+	-- Rank 10
+	{
+		Difficulty = "hard",
+		Squads =
+		{
+			{
+				Blueprint = "ork_squad_warboss_advance_sp",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_slugga",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_shoota_boy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_stormboy",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_wartrak",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_bad_dok",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_killa_kan",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_nob",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+			{
+				Blueprint = "ork_squad_looted_tank",
+				Markers =
+				{
+					"start11_",
+				},
+			},
+		},
+	},
+}

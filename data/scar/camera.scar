@@ -1,0 +1,16 @@
+----------------------------------------------------------------------------------------------------------------
+-- Camera helper functions
+-- (c) 2003 Relic Entertainment Inc.
+
+--? @group Camera
+
+----------------------------------------------------------------------------------------------------------------
+-- 
+
+--? @shortdesc Focus the camera on a named marker.
+--? @extdesc This function can be called through a CTRL object in NISlets.
+--? @args String markername, Real secs
+--? @result Void
+function Camera_FocusOnTargetMarker( markername, secs )
+	Camera_FocusOnTargetPos( Marker_GetPosition( Marker_FromName( markername, "basic_marker" ) ), secs )
+end

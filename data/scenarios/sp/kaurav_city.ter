@@ -1,0 +1,106 @@
+Model = "Kaurav_City"
+Planet = "Kaurava_I"
+
+Name = "$3900011"
+Description = "$3900107"
+TerrainDescription = "$3900108"
+History = 
+{
+"$3900109",
+"$3900110",
+"$3900111",
+"$3900112",
+"$3900113",
+"$3900114",
+"$3900115",
+"$3900116",
+"$3900117",
+}
+
+TerrainType = "$2851402"
+
+MissionFileAttacking = "6P_Kaurav_City"
+MissionFileAttackingConquered = "6P_Kaurav_City"
+MissionFileDefending = "6P_Kaurav_City"
+
+CinematicIntro = "cinematic"
+ZoomOutDuration = 1
+
+ArmyModelScaleZoomedIn = .75
+ArmyModelScaleZoomedOut = 2
+
+NeighborTerritories = 
+{
+	"Vyasastan",
+	--"Eastern_Kauravia",
+	"Jalaganda_Lowlands",
+	"Sama_Desert",
+	"Dussala_Precinct",
+}
+
+VictoryBonusSquads =
+{
+	{
+		Race = "chaos_marine_race",
+		Blueprint = "chaos_squad_cultist_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "space_marine_race",
+		Blueprint = "space_marine_squad_land_speeder_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "ork_race",
+		Blueprint = "ork_squad_shoota_boy_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "guard_race",
+		Blueprint = "guard_squad_guardsmen_advance_sp",
+		Count = 1,
+	},
+
+	{
+		Race = "eldar_race",
+		Blueprint = "eldar_squad_rangers_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "tau_race",
+		Blueprint = "tau_honor_guard_fire_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	
+	{
+		Race = "necron_race",
+		Blueprint = "necron_basic_warrior_squad_advance_sp",
+		Count = 1,
+	},
+	{
+		Race = "sisters_race",
+		Blueprint = "sisters_squad_battle_sister_hg_dxp3",
+		Count = 1,
+	},
+	{
+		Race = "dark_eldar_race",
+		Blueprint = "dark_eldar_squad_warrior_leader_hg_dxp3",
+		Count = 1,
+	},
+}
+
+Stronghold = false
+WarpGate = false
+ScriptedMission = false
+
+PlanetaryRequisition = 75
+StartingMilitaryStrength = 3
+
+OwnerPrimary = "sisters_race"
+OwnerSecondary = "guard_race"
+
+StartingResourceBonus = 0.0

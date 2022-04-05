@@ -1,0 +1,76 @@
+----------------------------------------------------------------------------------------------------------------
+-- Sudden Death Win Condtition
+--
+--	Player loses if they lose ANY strategic point they have captured
+--
+-- (c) 2003 Relic Entertainment Inc.
+import("ScarUtil.scar")
+import("WCUtil.scar")
+
+--addinit function
+function SuddenDeath()
+	
+	-- create global table
+	-- this keeps track of the players objectives and how many they have
+	_SD = {}
+
+	SDTable()
+	
+	-- add the total annihlation check so game doest keep going if all enemies are totally annihlated (this is different than regular annihilate)
+	WCUtil_AddCheckTotalAnnhilate() 
+	
+	--
+	Rule_AddInterval(SDRule_CheckNumberPoints, 1);
+	
+	obj_table_P8 = { title_id = 60005, short_desc_id = 60305, help_tip_id = 60305 }
+	
+	Objective_Add( obj_table_P8, 1 )
+	
+end
+
+--sets up the table that tracks how many points a player has
+function SDTable()
+	local j = World_GetPlayerCount()
+	for i = 1, j do
+		_SD[i] = {}
+		_SD[i].held=0
+	end
+end
+
+_SDSettings = 
+{
+	--global variable, how many points the player can lose before they LOSE
+	g_numPointsCanLose = 1
+	
+}
+
+-- checks how many points a player has
+function SDRule_CheckNumberPoints()
+
+	-- total number of players
+	local count = World_GetPlayerCount();
+	
+	--iterates through all of the player slots to see if they're holding/have held an obj for the required amount of time
+	for i = 1, count do
+		
+		local playerId = World_GetPlayerAt(i-1);
+		
+		--checks how many points this player has
+		local pointsHeld = Player_GetNumStrategicPoints( playerId ) 
+		
+		-- player dies
+		if ( pointsHeld < _SD[i].held ) then
+			Player_Kill(playerId);
+		else
+			_SD[i].held = pointsHeld
+		end
+		
+		
+	end
+	
+	-- check if only one team left -- if only one team left, they win and everybody else loses
+	Util_CheckOneTeamLeft("suddendeath");
+end
+
+Scar_AddInit(SuddenDeath)
+

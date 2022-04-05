@@ -1,0 +1,3170 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Tau Tutorial 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Rule_Tau_Start()
+	Rule_AddOneShot(Rule_Tau_Selection, 0)
+    Rule_AddInterval(Rule_Tau_SquadCap, 10)
+	Rule_AddInterval(Rule_Tau_SquadLimit, 10)
+	Rule_AddInterval(Rule_Tau_LowResource, 10)
+	Rule_AddInterval(Rule_Tau_LowPower, 10)
+	Rule_AddOneShot(Rule_Restrict_Building, 1)
+	
+end
+
+-- Lessons:
+-- 1	Selection
+-- 2	Build Stealth Team
+-- 3	Capture Point
+-- 4	Build Earth Caste Builder
+-- 5	Build Listening Post
+-- 6	Build Generator (including Control Zones - skipped if tutorial has been played before)
+-- 7	Build Barracks
+-- 8	Build Fire Warrior Team
+-- 9	Reinforce Fire Warriors
+-- 10	Health (skipped if tutorial has been played before)
+-- 11	Morale (skipped if tutorial has been played before)
+-- 12	Build Kroot Nest
+-- 13	Build Kroot Carnivores
+-- 14	Build Commander
+-- 15	Upgrade Weaponry
+-- 16	Build Path to Enlightenment
+-- 17	Build Leader
+-- 18	Take Cover (skipped if tutorial has been played before)
+-- 19	Capture Points
+-- 20	Capture Critical Location
+-- 21	Capture Relic
+-- 22	Build Vehicle Beacon
+-- 23  Build a Skyray
+-- 24  Shrine of Mont'ka
+-- 25  Build a Crisis Suit
+-- 26 Research Teachings of Mont'ka
+-- 27  Build a Hammerhead
+-- 28  Build a Coalition Center
+-- 29   Build an Ethereal
+-- 30	End of Tutorial
+
+-- A1	Squad Cap Reached
+-- A2	Squad Limit Reached
+-- A3	Low Resource
+-- A4	Low Power
+-- A5	No Builder
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 1 - Selection
+
+function Rule_Tau_Selection()
+
+	-- Define Objective
+	
+	obj_Selection = {title_id = 1100600, short_desc_id = 1100601, help_tip_id = 1100600 } -- Select the HQ
+
+	Tut_Player1GetAll()
+	Misc_GetSelectedEntities(EGroup_CreateIfNotFound("eg_P1Selected"))
+
+	-- Check to see if the HQ isn't already selected
+	if not Tut_EGBlueprintCheck("eg_P1Selected", blueprint.hq, 1, true) then
+
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_Selection, true, EVENTS.IE_Tau_Selection)
+		Util_StartIntel(EVENTS.IE_Tau_Selection)
+	
+		-- Ping the HQ
+		ping_HQSelection = Tut_PingBlueprint(blueprint.hq, true)
+		
+	    -- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_SelectionCheck, 0)
+
+	-- If they do have it selected
+	else
+	
+		-- Move on to the next lesson
+		Rule_AddInterval(Rule_Tau_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Tau_SelectionCheck()
+
+	-- Get all the selected items
+	Misc_GetSelectedEntities(EGroup_FromName("eg_P1Selected"))
+	
+	if EGroup_ContainsBlueprints("eg_P1Selected", Util_MakeBlueprintTable(blueprint.hq), false) then
+	
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Selection.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_SelectionComplete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_HQSelection)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_SelectionCheck)
+		Rule_AddInterval(Rule_Tau_SelectionDone, 0)
+		
+	end
+end
+
+function Rule_Tau_SelectionDone()
+
+	if (Event_IsAnyRunning() == false) then
+	
+		Rule_Remove(Rule_Tau_SelectionDone)
+		Rule_AddOneShot(Rule_Tau_BuildStealth, 0)
+		
+	end
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 2 - Build a Stealth Team 
+
+function Rule_Tau_BuildStealth()
+
+	-- Define Objective
+	obj_BuildStealth = { title_id = 1100603, short_desc_id = 1100604, help_tip_id = 1100603 }	-- Build a Stealth Squad
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a stealth squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildStealth , true, EVENTS.IE_Tau_BuildStealth)
+		Util_StartIntel(EVENTS.IE_Tau_BuildStealth)
+		
+		-- Ping the HQ
+		ping_BuildStealth = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.basic_infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildStealthDoing, 0)
+		
+	-- if they already have a stealth squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildStealth , true)
+		Tut_Util_ObjectiveComplete(obj_BuildStealth.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildStealth_Complete)
+		
+		-- Ping stealth team once
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildStealthDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildStealthDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.basic_infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildStealth_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildStealthDoing)
+		Rule_AddInterval(Rule_Tau_BuildStealthCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildStealthCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a stealth team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildStealth.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildStealth_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildStealth)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildStealthCheck)
+		Rule_AddInterval(Rule_Tau_BuildStealthDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildStealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildStealthDone)
+		Rule_AddOneShot(Rule_Tau_CapturePoint, 0) 
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 3 - Capture Point
+
+function Rule_Tau_CapturePoint()
+	
+	-- Define Objective
+	obj_CapturePoint = { title_id = 1100606, short_desc_id = 1100607, help_tip_id = 1100606 }	-- Capture a Strategic Point
+
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 200
+	
+	
+	-- need to do this check in reverse because function checks greater than or equal to (which if the player has 1, is greater than 0)
+	
+	-- If they have a point captured already...
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true)
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CapturePoint_Info)
+		
+		-- Ping the captured points
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_CapturePointDone, 0)
+		
+	-- If they haven't captured a point...
+	elseif Tut_PointsCaptured(g_Player1, 1, 0) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.basic_infantry, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CapturePoint , true, EVENTS.IE_Tau_CapturePoint)
+		Util_StartIntel(EVENTS.IE_Tau_CapturePoint)
+		
+		-- Ping points and infantry
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		ping_CapturePoint = Tut_PingPointsCaptured(nil, 1, true)
+	
+		-- Trigger the checking rule
+		Rule_AddInterval(Rule_Tau_CapturePointDoing, 0)	
+		
+	end
+	
+end
+
+function Rule_Tau_CapturePointDoing()
+
+	Tut_Player1GetAll()
+	
+	if (Cmd_IsCapturing("sg_Player1All", false) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_CapturePoint_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_CapturePointDoing)
+		Rule_AddInterval(Rule_Tau_CapturePointCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_CapturePointCheck()
+	
+	--[[Get ALL egroups and sgroups]]
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CapturePoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CapturePoint_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CapturePoint)
+		Tut_PingPointsCaptured(g_Player1, 1, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_CapturePointCheck)
+		Rule_AddInterval(Rule_Tau_CapturePointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_CapturePointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_CapturePointDone)
+		Rule_AddOneShot(Rule_Tau_BuildBuilder, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 4 - Build Earth Caste Builder
+
+function Rule_Tau_BuildBuilder()
+	
+	-- Define Objective
+	obj_BuildBuilder = { title_id = 1100609, short_desc_id = 1100610, help_tip_id = 1100609 }	-- Build an Earth Caste Builder
+
+	Tut_Player1GetAll()
+	
+	-- Check to see they don't already have a builder...
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder , true, EVENTS.IE_Tau_BuildBuilder)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBuilder)
+		
+		-- Ping the HQ
+		ping_BuildBuilder = Tut_PingBlueprint(blueprint.hq, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.builder, true, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Tau_BuildBuilderDoing, 0)
+		
+	-- else if they DO have an builder already...
+	else
+		
+		-- Create/Complete Objective and give a quick Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBuilder, true)
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBuilder_Doing)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildBuilderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildBuilderDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.builder, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildBuilder_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildBuilderDoing)
+		Rule_AddInterval(Rule_Tau_BuildBuilderCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildBuilderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBuilder.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBuilder_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildBuilder)
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildBuilderCheck)
+		Rule_AddInterval(Rule_Tau_BuildBuilderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildBuilderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildBuilderDone)
+		Rule_AddInterval(Rule_Tau_BuildPost, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+--  Tau Lesson 5 - Build Listening Post
+
+function Rule_Tau_BuildPost()
+	
+	-- Define Objective
+	obj_BuildPost = { title_id = 1100612, short_desc_id = 1100613, help_tip_id = 1100612 }	-- Build a Listening Post
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 300
+
+	-- If they don't already have a listening post...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, false) 
+		and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) 
+		and Tut_PointsCaptured(g_Player1, 1, 1) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true, EVENTS.IE_Tau_BuildPost)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPost)
+		
+		-- Ping the captured flag and the Servitor
+		ping_BuildPost = Tut_PingPointsCaptured(g_Player1, 1, true)
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.listening_post, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Tau_BuildPost)
+		Rule_AddInterval(Rule_Tau_BuildPostDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildPost
+		Rule_Remove(Rule_Tau_BuildPost)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- esle if they do somehow have a post already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPost , true)
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPost_Doing)
+		
+		-- Ping Looping = true, Non = false
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildPost)
+		Rule_AddInterval(Rule_Tau_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildPostDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.listening_post) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildPost_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.listening_post, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildPostDoing)
+		Rule_AddInterval(Rule_Tau_BuildPostCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildPostCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.listening_post, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPost.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPost_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildPost)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildPostCheck)
+		Rule_AddInterval(Rule_Tau_BuildPostDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildPostDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildPostDone)
+		Rule_AddInterval(Rule_Tau_BuildGenerator, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 6 - Build Generator
+
+function Rule_Tau_BuildGenerator()
+	
+	-- Define Objective
+	obj_BuildGenerator = { title_id = 1100615, short_desc_id = 1100616, help_tip_id = 1100615 }	-- Build a Plasma Generator
+	
+	Tut_Player1GetAll()
+
+	-- If they don't alreay have a Generator
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true, EVENTS.IE_Tau_BuildGenerator)
+		Util_StartIntel(EVENTS.IE_Tau_BuildGenerator)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.generator, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildGenerator)
+		Rule_AddInterval(Rule_Tau_BuildGeneratorDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildGenerator
+		Rule_Remove(Rule_Tau_BuildGenerator)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- else if the do have a Generator already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildGenerator , true)
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildGenerator_Complete)
+		
+		-- Ping the Generator
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildGenerator)
+		Rule_AddInterval(Rule_Tau_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildGeneratorDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.generator) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildGenerator_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.generator, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildGeneratorDoing)
+		Rule_AddInterval(Rule_Tau_BuildGeneratorCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildGeneratorCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.generator, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildGenerator.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildGenerator_Complete)
+		if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+			Util_StartIntel(EVENTS.IE_Tau_ControlZone)
+		end
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.generator, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildGeneratorCheck)
+		Rule_AddInterval(Rule_Tau_BuildGeneratorDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildGeneratorDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildGeneratorDone)
+		Rule_AddInterval(Rule_Tau_BuildBarracks, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 7 - Build Barracks
+
+function Rule_Tau_BuildBarracks()
+	
+	-- Define Objective
+	obj_BuildBarracks = { title_id = 1100618, short_desc_id = 1100619, help_tip_id = 1100618 }	-- Build a barracks
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true, EVENTS.IE_Tau_BuildBarracks)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBarracks)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.barracks, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildBarracks)
+		Rule_AddInterval(Rule_Tau_BuildBarracksDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildBarracks
+		Rule_Remove(Rule_Tau_BuildBarracks)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- Else if they do have a Barracks already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildBarracks , true)
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBarracks_Doing)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildBarracks)
+		Rule_AddInterval(Rule_Tau_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildBarracksDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.barracks) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildBarracks_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.barracks, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildBarracksDoing)
+		Rule_AddInterval(Rule_Tau_BuildBarracksCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildBarracksCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildBarracks.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildBarracks_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildBarracksCheck)
+		Rule_AddInterval(Rule_Tau_BuildBarracksDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildBarracksDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildBarracksDone)
+		Rule_AddOneShot(Rule_Tau_BuildInfantry, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 8 - Build a Fire Warrior Team 
+
+function Rule_Tau_BuildInfantry()
+
+	-- Define Objective
+	obj_BuildInfantry = { title_id = 1100630, short_desc_id = 1100631, help_tip_id = 1100630 }	-- Build a Fire Warrior Team
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a fire warrior team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true, EVENTS.IE_Tau_BuildInfantry)
+		Util_StartIntel(EVENTS.IE_Tau_BuildInfantry)
+		
+		-- Ping the HQ
+		ping_BuildInfantry = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.infantry, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildInfantryDoing, 0)
+		
+	-- if they already have a fire warrior squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildInfantry , true)
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildInfantry_Complete)
+		
+		-- Ping fire warrior team once
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildInfantryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildInfantryDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.infantry, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildInfantry_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildInfantryDoing)
+		Rule_AddInterval(Rule_Tau_BuildInfantryCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildInfantryCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a fire warrior team already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.infantry, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildInfantry.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildInfantry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildInfantry)
+		Tut_PingBlueprint(blueprint.infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildInfantryCheck)
+		Rule_AddInterval(Rule_Tau_BuildInfantryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildInfantryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildInfantryDone)
+		Rule_AddOneShot(Rule_Tau_Reinforce, 0) 
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 9 - Reinforce
+
+function Rule_Tau_Reinforce()
+
+	-- Define Objective
+	obj_Reinforce = { title_id = 1100621, short_desc_id = 1100622, help_tip_id = 1100621 }	-- Reinforce your Stealth Squad
+	
+	Tut_Player1GetAll()
+
+	-- Intel Event
+	Tut_Util_ObjectiveCreate(obj_Reinforce , true, EVENTS.IE_Tau_Reinforce)
+	Util_StartIntel(EVENTS.IE_Tau_Reinforce)
+	
+	-- Ping the Stealth Team
+	Tut_PingBlueprint(blueprint.infantry, false)
+	Flash_ReinforcementButton(RT_Trooper, blueprint.infantry, "", true, true)
+	
+	-- Triggers the checking rule
+	Rule_AddInterval(Rule_Tau_ReinforceDoing, 0)
+	
+end
+
+function Rule_Tau_ReinforceDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't stealth teams
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.infantry) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsReinforcing("sg_Player1All", false)) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_Reinforce_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_ReinforceDoing)
+		Rule_AddInterval(Rule_Tau_ReinforceCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_ReinforceCheck()
+
+	
+	Tut_Player1GetAll()
+
+	if (SGroup_HasAnyReinforced("sg_Player1All", blueprint.infantry) == true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_Reinforce.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_Reinforce_Complete)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_ReinforceCheck)
+		Rule_AddInterval(Rule_Tau_ReinforceDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_ReinforceDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_ReinforceDone)
+		Rule_AddOneShot(Rule_Tau_Health, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 10 - Health
+
+function Rule_Tau_Health()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Tau_Health)
+		Rule_AddInterval(Rule_Tau_HealthDone, 0)
+	else
+		Rule_AddOneShot(Rule_Tau_Morale, 0)
+	end
+	
+end
+
+function Rule_Tau_HealthDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_HealthDone)
+		Rule_AddOneShot(Rule_Tau_Morale, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 11 - Morale
+
+function Rule_Tau_Morale()
+	
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+		Util_StartIntel(EVENTS.IE_Tau_Morale)
+		Rule_AddInterval(Rule_Tau_MoraleDone, 0)
+	else
+		Rule_AddOneShot(Rule_Tau_BuildKroot, 0)
+	end
+	
+end
+
+function Rule_Tau_MoraleDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_MoraleDone)
+		Rule_AddOneShot(Rule_Tau_BuildKroot, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 12 - Build Kroot Nest
+--[[
+function Rule_Tau_BuildNest()
+	
+	-- Define Objective
+	obj_BuildNest = { title_id = 1100624, short_desc_id = 1100625, help_tip_id = 1100624 }	-- Build a Kroot Nest
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Nest...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.nest, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildNest , true, EVENTS.IE_Tau_BuildNest)
+		Util_StartIntel(EVENTS.IE_Tau_BuildNest)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.nest, true, true)
+		
+		-- Ping the Builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildNest)
+		Rule_AddInterval(Rule_Tau_BuildNestDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildNest
+		Rule_Remove(Rule_Tau_BuildNest)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- Else if they do have a Nest already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.nest, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildNest , true)
+		Tut_Util_ObjectiveComplete(obj_BuildNest.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildNest_Doing)
+		
+		-- Ping the Nest
+		Tut_PingBlueprint(blueprint.nest, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildNest)
+		Rule_AddInterval(Rule_Tau_BuildNestDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildNestDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.nest) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildNest_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.nest, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildNestDoing)
+		Rule_AddInterval(Rule_Tau_BuildNestCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildNestCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.nest, 1, true) then
+		
+		-- enable the AI now
+		g_enableAI = true
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildNest.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildNest_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.nest, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildNestCheck)
+		Rule_AddInterval(Rule_Tau_BuildNestDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildNestDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildNestDone)
+		Rule_AddOneShot(Rule_Tau_BuildKroot, 0)
+		
+	end
+	
+end
+]]--
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 13 - Build a Kroot Carnivore 
+
+function Rule_Tau_BuildKroot()
+
+	-- Define Objective
+	obj_BuildKroot = { title_id = 1100627, short_desc_id = 1100628, help_tip_id = 1100627 }	-- Build a Kroot Carnivore
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Kroot Carnivore already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.kroot, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildKroot , true, EVENTS.IE_Tau_BuildKroot)
+		Util_StartIntel(EVENTS.IE_Tau_BuildKroot)
+		
+		-- Ping the HQ
+		ping_BuildKroot = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.kroot, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildKrootDoing, 0)
+		
+	-- if they already have a kroot squad
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildKroot , true)
+		Tut_Util_ObjectiveComplete(obj_BuildKroot.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildKroot_Complete)
+		
+		-- Ping kroot once
+		Tut_PingBlueprint(blueprint.kroot, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildKrootDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildKrootDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.kroot, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildKroot_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildKrootDoing)
+		Rule_AddInterval(Rule_Tau_BuildKrootCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildKrootCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a kroot squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.kroot, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildKroot.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildKroot_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildKroot)
+		Tut_PingBlueprint(blueprint.kroot, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildKrootCheck)
+		Rule_AddInterval(Rule_Tau_BuildKrootDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildKrootDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildKrootDone)
+		Rule_AddOneShot(Rule_Tau_BuildCommander, 0) 
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 14 - Build a Commander 
+
+function Rule_Tau_BuildCommander()
+	
+	-- Define Objective
+	obj_BuildCommander = { title_id = 1100633, short_desc_id = 1100634, help_tip_id = 1100633 }	-- Build a Commander
+	
+	Tut_Player1GetAll()
+	
+	-- If they don't have a commander...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.barracks, 1, true) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true, EVENTS.IE_Tau_BuildCommander)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCommander)
+		
+		-- Ping the Barracks
+		ping_BuildCommander = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, true, true)
+		
+		-- Triggers the checker rule
+		Rule_Remove(Rule_Tau_BuildCommander)
+		Rule_AddInterval(Rule_Tau_BuildCommanderDoing, 0)
+		
+	-- else if they have the Commander...
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCommander , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCommander_Doing)
+		
+		-- Ping the Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildCommander)
+		Rule_AddInterval(Rule_Tau_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCommanderDoing()
+
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.commander, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildCommander_Doing)
+		
+		Flash_ProductionButton(PQ_Squad, blueprint.commander, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildCommanderDoing)
+		Rule_AddInterval(Rule_Tau_BuildCommanderCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildCommanderCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCommander.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCommander_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCommander)
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildCommanderCheck)
+		Rule_AddInterval(Rule_Tau_BuildCommanderDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCommanderDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildCommanderDone)
+		Rule_AddInterval(Rule_Tau_UpgradeWeaponry, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 15 - Upgrade Weaponry
+
+function Rule_Tau_UpgradeWeaponry()
+	
+	-- Define Objective
+	obj_UpgradeWeaponry = { title_id = 1100642, short_desc_id = 1100643, help_tip_id = 1100642 }	-- Upgrade your Commander's weaponry
+	
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 420
+
+	-- If they don't have any upgraded weapons...
+	if not SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.commander, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry , true, EVENTS.IE_Tau_UpgradeWeaponry)
+		Util_StartIntel(EVENTS.IE_Tau_UpgradeWeaponry)
+		
+		-- Ping the Stealth Team
+		ping_Stealth = Tut_PingBlueprint(blueprint.commander, false)
+		Flash_ReinforcementButton(RT_WeaponUpgrade, blueprint.commander, blueprint.weapon1, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Tau_UpgradeWeaponryDoing, 0)
+		
+	-- else if they have upgraded their weapons already...
+	elseif SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_UpgradeWeaponry, true)
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_UpgradeWeaponry_Doing)
+		
+		-- Ping the Commander
+		Tut_PingBlueprint(blueprint.commander, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_UpgradeWeaponry)
+		Rule_AddInterval(Rule_Tau_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_UpgradeWeaponryDoing()
+
+	Tut_Player1GetAll()
+	
+	-- throw away any squads that aren't Tau
+	local FilterList = function(gID, idx, sID)
+		if (Squad_GetBlueprintName(sID) ~= blueprint.commander) then
+			SGroup_Remove(gID, sID)
+		end
+	end
+	SGroup_ForEach(SGroup_FromName("sg_Player1All"), FilterList)
+
+	if (Cmd_IsUpgrading("sg_Player1All", false)) then
+		Util_StartIntel(EVENTS.IE_Tau_UpgradeWeaponry_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_UpgradeWeaponryDoing)
+		Rule_AddInterval(Rule_Tau_UpgradeWeaponryCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_UpgradeWeaponryCheck()
+	
+	Tut_Player1GetAll()
+
+	if SGroup_ContainsWeaponBlueprints("sg_Player1All", blueprint.weapon1, 1, false) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_UpgradeWeaponry.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_UpgradeWeaponry_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_Stealth)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_UpgradeWeaponryCheck)
+		Rule_AddInterval(Rule_Tau_UpgradeWeaponryDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_UpgradeWeaponryDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_UpgradeWeaponryDone)
+		Rule_AddOneShot(Rule_Tau_BuildPath, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 16 - Build a Path to Enlightenment
+
+function Rule_Tau_BuildPath()
+	
+	-- Define Objective
+	obj_BuildPath = { title_id = 1100636, short_desc_id = 1100637, help_tip_id = 1100636 }	-- Build a Path to Enlightenment
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Path to Enlightenment...
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPath , true, EVENTS.IE_Tau_BuildPath)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPath)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.research_facility, true, true)
+		
+		-- Ping the builder
+		Tut_PingBlueprint(blueprint.builder, false)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildPath)
+		Rule_AddInterval(Rule_Tau_BuildPathDoing, 0)
+	
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildPath
+		Rule_Remove(Rule_Tau_BuildPath)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- Else if they do have a Path already...
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildPath, true)
+		Tut_Util_ObjectiveComplete(obj_BuildPath.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPath_Complete)
+		
+		-- Ping the Path
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildPath)
+		Rule_AddInterval(Rule_Tau_BuildPathDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildPathDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.research_facility) == true) then
+
+		Util_StartIntel(EVENTS.IE_Tau_BuildPath_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.research_facility, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildPathDoing)
+		Rule_AddInterval(Rule_Tau_BuildPathCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildPathCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.research_facility, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildPath.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildPath_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.research_facility, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildPathCheck)
+		Rule_AddInterval(Rule_Tau_BuildPathDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildPathDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildPathDone)
+		Rule_AddOneShot(Rule_Tau_TakeCover, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 18 - Take Cover
+
+function Rule_Tau_TakeCover()
+	
+	-- Define Objective
+	obj_TakeCover = { title_id = 1100270, short_desc_id = 1100271, help_tip_id = 1100270 }	-- Take Cover
+
+	Tut_Player1GetAll()
+	
+	g_enableAIAttack = true
+
+	-- If this is the first time through the tutorial
+	if (PlayerProfile_GetVar("hasPlayedTutorial") ~= "yes") then
+	
+		-- find closest cover
+		local closestDist = Prox_MarkerSGroup("cover_1", "sg_Player1All", PROX_SHORTEST)
+		coverMarker = 1
+		
+		-- choose the closest cover
+		for i=1,9 do	
+			local currDistance = Prox_MarkerSGroup("cover_"..i, "sg_Player1All", PROX_SHORTEST)
+			
+			if currDistance < closestDist then
+				closestDist = currDistance
+				coverMarker = i
+			end	
+		end
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_TakeCover , true, EVENTS.IE_Tau_TakeCover)
+		Util_StartIntel(EVENTS.IE_Tau_TakeCover)
+		
+		-- Ping the Cover
+		ping_TakeCover = Ping_Marker("cover_"..coverMarker, true )
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Tau_TakeCoverCheck, 0)
+		
+	-- else they've played the tutorial once already, let's not reiterate this
+	else
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_TakeCoverDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_TakeCoverCheck()
+	
+	Tut_Player1GetAll()
+
+	for i = 1, 9 do
+		if Prox_AnySquadNearMarker("sg_Player1All", "cover_"..i) then
+			
+			-- Complete Objective and Intel Event
+			Tut_Util_ObjectiveComplete(obj_TakeCover.title_id)
+			Util_StartIntel(EVENTS.IE_Tau_TakeCover_Complete)
+			
+			-- Stop Looping Ping
+			Ping_Stop(ping_TakeCover)
+			
+			-- Triggers the next lesson
+			Rule_Remove(Rule_Tau_TakeCoverCheck)
+			Rule_AddInterval(Rule_Tau_TakeCoverDone, 0)
+			
+			break
+		end
+	end	
+	
+end
+
+function Rule_Tau_TakeCoverDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_TakeCoverDone)
+		Rule_AddOneShot(Rule_Tau_PointCount, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 19 - Point Count
+
+function Rule_Tau_PointCount()
+	
+	-- Define Objective
+	obj_PointCount = { title_id = 1100280, short_desc_id = 1100281, help_tip_id = 1100280 }	-- Capture and Secure more Strategic Points
+
+	Tut_Player1GetAll()
+
+	-- if they haven't got three points already
+	if Tut_PointsCaptured(g_Player1, 1, 3) == false or not Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, false) then
+		
+		print("order to capture and build" )
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , true, EVENTS.IE_Tau_PointCount)
+		Util_StartIntel(EVENTS.IE_Tau_PointCount)
+		
+		-- Ping Looping = true, Non = false
+		t_PointCount = Tut_PingBlueprint(blueprint.basic_infantry, false)
+		t_CapturePoint2 = Tut_PingPointsCaptured(nil, 1, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Tau_PointCountDoing, 0)
+		
+	-- if they've got a load of points already
+	else
+		print("already capture and build" )
+		--Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_PointCount , false)
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_PointCount_Complete)
+		
+		-- Ping the posts
+		Tut_PingBlueprint(blueprint.listening_post, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_PointCountDone, 0)
+		
+	end
+	
+end
+
+
+function Rule_Tau_PointCountDoing()
+
+	Tut_Player1GetAll()
+
+	-- when you capture three points, mention building listening posts
+	if (Tut_PointsCaptured(g_Player1, 1, 3) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_PointCount_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_PointCountDoing)
+		Rule_AddInterval(Rule_Tau_PointCountCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_PointCountCheck()
+	
+	Tut_Player1GetAll()
+	
+	if Tut_PointsCaptured(g_Player1, 1, 3) and Tut_EGBlueprintCount("eg_Player1All", blueprint.listening_post, 3, true) then
+		print("completed capture and build" )
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_PointCount.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_PointCount_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(t_CapturePoint2)
+		Tut_PingBlueprint(blueprint.basic_infantry, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_PointCountCheck)
+		Rule_AddInterval(Rule_Tau_PointCountDone, 0)
+		
+	end
+
+end
+
+function Rule_Tau_PointCountDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_PointCountDone)
+		Rule_AddOneShot(Rule_Tau_CaptureCriticalPoint, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 20 - Capture Critical Point
+
+function Rule_Tau_CaptureCriticalPoint()
+	
+	-- Define Objective
+	obj_CaptureCriticalPoint = { title_id = 1100290, short_desc_id = 1100291, help_tip_id = 1100290 }		-- Capture a Critical Location
+
+	Tut_Player1GetAll()
+	
+	-- Check they don't have a Critical Point already...
+	if Tut_PointsCaptured(g_Player1, 2, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true, EVENTS.IE_Tau_CaptureCriticalPoint)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureCriticalPoint)
+		
+		-- Ping the critical points
+		ping_CaptureCriticalPoint = Tut_PingPointsCaptured(nil, 2, true)
+		
+		-- Triggers the checker rule
+		Rule_AddInterval(Rule_Tau_CaptureCriticalPointCheck, 0)
+		
+	-- If they have already...
+	elseif Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureCriticalPoint , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureCriticalPoint_Complete)
+		
+		-- Ping the critical points
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_CaptureCriticalPointCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 2, 1) then
+		
+		--Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureCriticalPoint.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureCriticalPoint_Complete)
+		
+		-- Stop Looping Ping 
+		Tut_PingBlueprintStop(ping_CaptureCriticalPoint)
+		Tut_PingPointsCaptured(g_Player1, 2, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_CaptureCriticalPointCheck)
+		Rule_AddInterval(Rule_Tau_CaptureCriticalPointDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_CaptureCriticalPointDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_CaptureCriticalPointDone)
+		Rule_AddOneShot(Rule_Tau_CaptureRelic, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 21 - Capture Relic
+
+function Rule_Tau_CaptureRelic()
+	
+	-- Define Objective
+	obj_CaptureRelic = { title_id = 1100300, short_desc_id = 1100301, help_tip_id = 1100300 }	-- Capture a Relic
+	
+	Tut_Player1GetAll()
+
+	-- if they don't have a relic
+	if Tut_PointsCaptured(g_Player1, 3, 0) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true, EVENTS.IE_Tau_CaptureRelic)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureRelic)
+		
+		-- Ping Relics
+		ping_CaptureRelic = Tut_PingPointsCaptured(nil, 3, true)
+		
+		-- Triggers the Next Rule
+		Rule_AddInterval(Rule_Tau_CaptureRelicCheck, 0)
+		
+	-- else if they do have a relic already
+	else
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_CaptureRelic , true)
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureRelic_Complete)
+		
+		-- Ping the captured Relics
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_CaptureRelicCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_PointsCaptured(g_Player1, 3, 1) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_CaptureRelic.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_CaptureRelic_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_CaptureRelic)
+		Tut_PingPointsCaptured(g_Player1, 3, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_CaptureRelicCheck)
+		Rule_AddInterval(Rule_Tau_CaptureRelicDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_CaptureRelicDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_CaptureRelicDone)
+		Rule_AddInterval(Rule_Tau_BuildMech, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 22 - Build Vehicle Beacon
+
+function Rule_Tau_BuildMech()
+
+	-- Define Objective
+	obj_BuildMech = { title_id = 1100645, short_desc_id = 1100646, help_tip_id = 1100645 }	-- Build a Vehicle Building
+
+	Tut_Player1GetAll()
+	
+	g_enableAIVehicles = true
+	
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true, EVENTS.IE_Tau_BuildMech)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMech)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.vehicle_building, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildMech)
+		Rule_AddInterval(Rule_Tau_BuildMechDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildMech
+		Rule_Remove(Rule_Tau_BuildMech)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMech , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMech_Doing)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildMech)
+		Rule_AddInterval(Rule_Tau_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildMechDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.vehicle_building) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildMech_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.vehicle_building, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildMechDoing)
+		Rule_AddInterval(Rule_Tau_BuildMechCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildMechCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.vehicle_building, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMech.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMech_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildMechCheck)
+		Rule_AddInterval(Rule_Tau_BuildMechDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildMechDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildMechDone)
+		Rule_AddOneShot(Rule_Tau_BuildSkyray, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 23 - Build a Skyray 
+
+function Rule_Tau_BuildSkyray()
+
+	-- Define Objective
+	obj_BuildSkyray = { title_id = 1100648, short_desc_id = 1100649, help_tip_id = 1100648 }	-- Build a Skyray
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Skyray already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.artillery, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSkyray , true, EVENTS.IE_Tau_BuildSkyray)
+		Util_StartIntel(EVENTS.IE_Tau_BuildSkyray)
+		
+		-- Ping the Vehicle Beacon
+		ping_BuildSkyray = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.artillery, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildSkyrayDoing, 0)
+		
+	-- if they already have a Skyray
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildSkyray , true)
+		Tut_Util_ObjectiveComplete(obj_BuildSkyray.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildSkyray_Complete)
+		
+		-- Ping Skyray once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildSkyrayDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildSkyrayDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.artillery, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildSkyray_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildSkyrayDoing)
+		Rule_AddInterval(Rule_Tau_BuildSkyrayCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildSkyrayCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Skyray already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.artillery, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildSkyray.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildSkyray_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildSkyray)
+		Tut_PingBlueprint(blueprint.artillery, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildSkyrayCheck)
+		Rule_AddInterval(Rule_Tau_BuildSkyrayDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildSkyrayDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildSkyrayDone)
+		Rule_AddOneShot(Rule_Tau_BuildMont, 0)
+		
+	end
+	
+end
+
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 24 - Build Shrine of Mont'Ka
+
+function Rule_Tau_BuildMont()
+
+	-- Define Objective
+	obj_BuildMont = { title_id = 1100651, short_desc_id = 1100652, help_tip_id = 1100651 }	-- Build a Shrine
+
+	Tut_Player1GetAll()
+	
+
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.montka, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMont , true, EVENTS.IE_Tau_BuildMont)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMont)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.montka, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildMont)
+		Rule_AddInterval(Rule_Tau_BuildMontDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildMont
+		Rule_Remove(Rule_Tau_BuildMont)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.montka, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildMont , true)
+		Tut_Util_ObjectiveComplete(obj_BuildMont.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMont_Doing)
+		
+		-- Ping the Shrine
+		Tut_PingBlueprint(blueprint.montka, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildMont)
+		Rule_AddInterval(Rule_Tau_BuildMontDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildMontDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.montka) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildMont_Doing)
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.montka, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildMontDoing)
+		Rule_AddInterval(Rule_Tau_BuildMontCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildMontCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.montka, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildMont.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildMont_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.montka, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildMontCheck)
+		Rule_AddInterval(Rule_Tau_BuildMontDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildMontDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildMontDone)
+		Rule_AddOneShot(Rule_Tau_BuildCrisis, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 25 - Build Crisis Suit
+
+function Rule_Tau_BuildCrisis()
+
+	-- Define Objective
+	obj_BuildCrisis = { title_id = 1100654, short_desc_id = 1100655, help_tip_id = 1100654 }	-- Build an Crisis Suit
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have an Crisis Suit Squad already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.crisis, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCrisis , true, EVENTS.IE_Tau_BuildCrisis)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCrisis)
+		
+		-- Ping the Infantry Command
+		ping_BuildCrisis = Tut_PingBlueprint(blueprint.barracks, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.crisis, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildCrisisDoing, 0)
+		
+	-- if they already have a Crisis Suit
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCrisis , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCrisis.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCrisis_Complete)
+		
+		-- Ping barracks once
+		Tut_PingBlueprint(blueprint.barracks, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildCrisisDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCrisisDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.crisis, mylist) == true) then
+		
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildCrisisDoing)
+		Rule_AddInterval(Rule_Tau_BuildCrisisCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCrisisCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Crisis Suit already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.crisis, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCrisis.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCrisis_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildCrisis)
+		Tut_PingBlueprint(blueprint.crisis, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildCrisisCheck)
+		Rule_AddInterval(Rule_Tau_BuildCrisisDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCrisisDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildCrisisDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 26 - Research Teachings of Mont'Ka
+
+function Rule_Tau_ResearchTeachings()
+	
+	-- Define Objective
+	obj_BuildResearchTeachings = { title_id = 1100657, short_desc_id = 1100658, help_tip_id = 1100657 }	-- Research Teachings of Montka
+	
+	Tut_Player1GetAll()
+
+	-- If they don't have a Barracks...
+	if Tut_ResearchIsDone( g_Player1, blueprint.teachings, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchTeachings , true, EVENTS.IE_Tau_ResearchTeachings)
+		Util_StartIntel(EVENTS.IE_Tau_ResearchTeachings)
+		
+		-- Ping the Barracks
+		ping_ResearchTeachings = Tut_PingBlueprint(blueprint.montka, true)
+		Flash_ProductionButton(PQ_Research, blueprint.teachings, true, true)
+				
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_ResearchTeachings)
+		Rule_AddInterval(Rule_Tau_ResearchTeachingsCheck, 0)
+			
+	-- Else if they do have a Barracks already...
+	elseif Tut_ResearchIsDone( g_Player1, blueprint.teachings, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildResearchTeachings , true)
+		Tut_Util_ObjectiveComplete(obj_BuildResearchTeachings.title_id)
+		
+		-- Ping the Barracks
+		Tut_PingBlueprint(blueprint.montka, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_ResearchTeachings)
+		Rule_AddInterval(Rule_Tau_ResearchTeachingsDone, 0)
+		
+	end
+	
+end
+
+
+
+function Rule_Tau_ResearchTeachingsCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_ResearchIsDone( g_Player1, blueprint.teachings, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildResearchTeachings.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_ResearchTeachings_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprint(blueprint.montka, false)
+		Tut_PingBlueprintStop(ping_ResearchTeachings)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_ResearchTeachingsCheck)
+		Rule_AddInterval(Rule_Tau_ResearchTeachingsDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_ResearchTeachingsDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_ResearchTeachingsDone)
+		Rule_AddOneShot(Rule_Tau_BuildHammer,0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 27 - Build a Hammerhead 
+
+function Rule_Tau_BuildHammer()
+
+	-- Define Objective
+	obj_BuildHammer = { title_id = 1100660, short_desc_id = 1100661, help_tip_id = 1100660 }	-- Build a Hammerhead
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have a Hammerhead already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.hammer, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildHammer , true, EVENTS.IE_Tau_BuildHammer)
+		Util_StartIntel(EVENTS.IE_Tau_BuildHammer)
+		
+		-- Ping the Vehicle Beacon
+		ping_BuildHammer = Tut_PingBlueprint(blueprint.vehicle_building, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.hammer, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildHammerDoing, 0)
+		
+	-- if they already have a Hammerhead
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildHammer , true)
+		Tut_Util_ObjectiveComplete(obj_BuildHammer.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildHammer_Complete)
+		
+		-- Ping Vehicle Beacon once
+		Tut_PingBlueprint(blueprint.vehicle_building, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildHammerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildHammerDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.hammer, mylist) == true) then
+	
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildHammerDoing)
+		Rule_AddInterval(Rule_Tau_BuildHammerCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildHammerCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Hammerhead already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.hammer, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildHammer.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildHammer_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildHammer)
+		Tut_PingBlueprint(blueprint.hammer, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildHammerCheck)
+		Rule_AddInterval(Rule_Tau_BuildHammerDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildHammerDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildHammerDone)
+		Rule_AddOneShot(Rule_Tau_BuildCoalition, 0)
+		
+	end
+	
+end
+
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 28 - Build a Coalition Center
+
+function Rule_Tau_BuildCoalition()
+
+	-- Define Objective
+	obj_BuildCoalition = { title_id = 1100663, short_desc_id = 1100664, help_tip_id = 1100663 }	-- Build a Coalition Center
+	Tut_Player1GetAll()
+	
+
+	-- IF THEY DON'T HAVE IT
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.coalition, 1, false) and Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCoalition , true, EVENTS.IE_Tau_BuildCoalition)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCoalition)
+		
+		-- Ping the Enginseer
+		Tut_PingBlueprint(blueprint.builder, false)
+		Flash_OtherButton("build_structures_menu", 0, true, true)
+		Flash_ConstructionButton(blueprint.coalition, true, true)
+		
+		-- Triggers the checking rule
+		Rule_Remove(Rule_Tau_BuildCoalition)
+		Rule_AddInterval(Rule_Tau_BuildCoalitionDoing, 0)
+		
+	elseif Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, false) then
+	
+		g_tutorialRuleState = Rule_Tau_BuildCoalition
+		Rule_Remove(Rule_Tau_BuildCoalition)
+		
+		Rule_Add(Rule_Tau_NoBuilder)
+		
+	-- IF THEY DO HAVE IT
+	elseif Tut_EGBlueprintCheck("eg_Player1All", blueprint.coalition, 1, true) then
+		
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildCoalition , true)
+		Tut_Util_ObjectiveComplete(obj_BuildCoalition.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCoalition_Doing)
+		
+		-- Ping the Coalition Center
+		Tut_PingBlueprint(blueprint.coalition, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildCoalition)
+		Rule_AddInterval(Rule_Tau_BuildCoalitionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCoalitionDoing()
+
+	if (Prod_IsPlayerConstructing(g_Player1, blueprint.coalition) == true) then
+		
+		Flash_OtherButton("build_structures_menu", 0, false, false)
+		Flash_ConstructionButton(blueprint.coalition, false, false)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildCoalitionDoing)
+		Rule_AddInterval(Rule_Tau_BuildCoalitionCheck, 0)
+		
+	end
+
+end
+
+function Rule_Tau_BuildCoalitionCheck()
+	
+	Tut_Player1GetAll()
+
+	if Tut_EGBlueprintCheck("eg_Player1All", blueprint.coalition, 1, true) then
+
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildCoalition.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildCoalition_Complete)
+		
+		-- Ping the Mechanized Command
+		Tut_PingBlueprint(blueprint.coalition, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildCoalitionCheck)
+		Rule_AddInterval(Rule_Tau_BuildCoalitionDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildCoalitionDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildCoalitionDone)
+		Rule_AddOneShot(Rule_Tau_BuildEthereal, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Lesson 29 - Build an Ethereal 
+
+function Rule_Tau_BuildEthereal()
+
+	-- Define Objective
+	obj_BuildEthereal = { title_id = 1100666, short_desc_id = 1100667, help_tip_id = 1100666 }	-- Build an Ethereal
+
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+	
+	g_ReminderTime = 120
+
+	-- Check to see if they don't have an Ethereal already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.ethereal, 1, false) then
+		
+		-- Create Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildEthereal , true, EVENTS.IE_Tau_BuildEthereal)
+		Util_StartIntel(EVENTS.IE_Tau_BuildEthereal)
+		
+		-- Ping the Coalition Center
+		ping_BuildEthereal = Tut_PingBlueprint(blueprint.coalition, true)
+		Flash_ProductionButton(PQ_Squad, blueprint.ethereal, true, true)
+		
+		-- Triggers the checking rule
+		Rule_AddInterval(Rule_Tau_BuildEtherealDoing, 0)
+		
+	-- if they already have an Ethereal
+	else
+		-- Create/Complete Objective and Intel Event
+		Tut_Util_ObjectiveCreate(obj_BuildEthereal , true)
+		Tut_Util_ObjectiveComplete(obj_BuildEthereal.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildEthereal_Complete)
+		
+		-- Ping Coalition Center once
+		Tut_PingBlueprint(blueprint.coalition, false)
+		
+		-- Triggers the next lesson
+		Rule_AddInterval(Rule_Tau_BuildEtherealDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildEtherealDoing()
+	
+	local mylist = {}
+	Tut_Player1GetAll()
+	Prod_GetProductionList("eg_Player1All", mylist)
+	
+	if (Prod_DoesListContainSquad(blueprint.ethereal, mylist) == true) then
+		
+		Util_StartIntel(EVENTS.IE_Tau_BuildEthereal_Doing)
+		
+		-- Triggers the complete rule
+		Rule_Remove(Rule_Tau_BuildEtherealDoing)
+		Rule_AddInterval(Rule_Tau_BuildEtherealCheck, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildEtherealCheck()
+	
+	-- Get ALL egroups and sgroups
+	Tut_Player1GetAll()
+
+	-- Check to see if they don't have a Baneblade already
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.ethereal, 1, true) then
+		
+		-- Complete Objective and Intel Event
+		Tut_Util_ObjectiveComplete(obj_BuildEthereal.title_id)
+		Util_StartIntel(EVENTS.IE_Tau_BuildEthereal_Complete)
+		
+		-- Stop Looping Ping
+		Tut_PingBlueprintStop(ping_BuildEthereal)
+		Tut_PingBlueprint(blueprint.ethereal, false)
+		
+		-- Triggers the next lesson
+		Rule_Remove(Rule_Tau_BuildEtherealCheck)
+		Rule_AddInterval(Rule_Tau_BuildEtherealDone, 0)
+		
+	end
+	
+end
+
+function Rule_Tau_BuildEtherealDone()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		Rule_Remove(Rule_Tau_BuildEtherealDone)
+		Rule_AddOneShot(Rule_TutorialComplete, 0)
+		
+	end
+	
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Hint A1 - Squad Cap Reached
+
+function Rule_Tau_SquadCap()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap ~= maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Tau_SquadCap)
+			Tut_PingBlueprint(blueprint.builder, false)
+			Flash_OtherButton("build_structures_menu", 0, true, true)
+			Flash_ConstructionButton(blueprint.barracks, true, true)
+			
+			Rule_Remove(Rule_Tau_SquadCap)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Hint A2 - Squad Limit Reached
+
+function Rule_Tau_SquadLimit()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		local current = Player_GetCurrentSquadCap(g_Player1, CT_SquadCap)
+		local cap = Player_GetMaxSquadCap(g_Player1, CT_SquadCap)
+		local maxcap = 20
+		
+		if ( current == cap) and (cap == maxcap) then
+			
+			Util_StartIntel(EVENTS.IE_Tau_SquadLimit)
+			
+			Rule_Remove(Rule_Tau_SquadLimit)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Hint A3 - Low Resource
+
+function Rule_Tau_LowResource()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Requisition) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Tau_LowResource)
+			
+			Rule_Remove(Rule_Tau_LowResource)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Hint A4 - Low Power
+
+function Rule_Tau_LowPower()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if (Player_GetResource(g_Player1, RT_Power) < 100) then
+			
+			Util_StartIntel(EVENTS.IE_Tau_LowPower)
+			
+			Rule_Remove(Rule_Tau_LowPower)
+			
+		end
+		
+	end
+
+end
+
+---------------------------------------------------------------------------------------------
+-- Tau Hint A5 - No Builder Unit
+
+function Rule_Tau_NoBuilder()
+
+	if (Event_IsAnyRunning() == false) then
+		
+		if not Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+			Util_StartIntel(EVENTS.IE_Tau_NoBuilder)
+			
+			Rule_Remove(Rule_Tau_NoBuilder)
+			Rule_AddInterval(Rule_Tau_NoBuilderDone,0)
+			
+		end
+		
+	end
+
+end
+
+-- once the player has a builder, continue where we left off
+function Rule_Tau_NoBuilderDone()
+	if Tut_SGBlueprintCheck("sg_Player1All", blueprint.builder, 1, true) then
+			
+		Rule_Add( g_tutorialRuleState )
+			
+		Rule_Remove(Rule_Tau_NoBuilderDone)
+			
+	end
+		
+end
+
+---------------------------------------------------------------------------------------------
+-- Player Restrictions
+
+function Rule_Restrict_Building()
+
+
+	Player_RestrictBuilding(g_Player1, "tau_shrine_of_kauyon")
+
+end
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--
+--    Intel Events 
+--
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--~ EVENTS = {}
+
+--  Selection
+
+EVENTS.IE_Tau_Selection = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102075 )   -- To select a unit or structure, simply click on it with the left mouse button. Go to your base and select the Stronghold. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_SelectionComplete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101074 )  -- Congratulations! You have just learned how to select units and structures in the game.
+	CTRL.WAIT()
+end
+
+-- Build a Stealth Team
+
+EVENTS.IE_Tau_BuildStealth = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102090 )	-- Select your Cadre Headquarters and look for the Stealthsuit Team icon located in the lower-right corner of the screen. Click this button now..
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildStealth_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101084 )	-- Take note of the small bar that is gradually filling up. This Progress Bar gives you an indication of how close something is to being ready.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildStealth_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102092 )	-- Excellent! You now have a Stealthsuit Team.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102100 )	-- Stealthsuits use advanced technology to make them virtually invisible to enemy units. In Dawn of War, units of this type are said to be Infiltrated.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102101 )	-- Infiltrated units can do everything standard units can without revealing their position, including firing on enemy units. This makes infiltrated units very powerful.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102102 )	-- Be careful, though. Some enemy units are detectors, and any infiltrated units who get close to them are revealed. Revealed units can be targeted by any enemies.
+	CTRL.WAIT()
+end
+
+-- Capture Point
+
+EVENTS.IE_Tau_CapturePoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101093 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.WAIT()
+	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101094 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+	
+	Flash_OtherButton("player_resource", 1, false, false)
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102112 )	-- Order the Stealthsuit to capture a Strategic Point by right-clicking on the Point.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_CapturePoint_Info = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101093 )	-- Strategic Points are located in areas of high strategic value on the battlefield.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101094 )	-- Capturing and controlling the Strategic Points on the battlefield is how you increase your Requisition Resource.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_CapturePoint_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101098 )	-- Capturing a Strategic Point takes time. Do not move the capturing squad away from the Strategic Point until the progress bar is full. Otherwise, you will not take control of the Strategic Point.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_CapturePoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101099 )	-- Excellent! The point is ours! You must continue to capture Strategic Points to get more Requisition Resource, which allows you to build more units and structures.
+	CTRL.WAIT()
+end
+
+-- Build Earth Caste Builder
+EVENTS.IE_Tau_BuildBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102120 )	-- Select your Cadre Haedquarters and build an Earth-Caste Builder.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildBuilder_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102121 )	-- Earth-Caste Builders are required to build additional structures. Builders are always available from the Cadre Headquarters. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildBuilder_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102122 )	-- The Earth-Caste Builder has arrived! Builder drones are the Tau Empire's builder unit. Any time you wish to build a new structure, you must use an Earth-Caste Builder drone.
+	CTRL.WAIT()
+end
+
+-- Build Listening Post
+EVENTS.IE_Tau_BuildPost = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102130 )	-- Select the Earth-Caste Builder and build a Listening Post on the captured Strategic Point.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildPost_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101114 )	-- The Listening Post fortifies your hold of a Strategic Point, increasing your Requisition rate at the same time.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildPost_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101115 )	-- Excellent! The point is now protected from enemy retaliation. You should continue to build Listening Posts on all your captured Strategic Points.
+	CTRL.WAIT()
+end
+
+-- Build Generator
+EVENTS.IE_Tau_BuildGenerator = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101123 )	-- Some structures, vehicles, and research require Power to function. Building a Plasma Generator will supply you with the Power you need to keep your force going.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102141 )	-- Select your Earth-Caste Builder and build a Plasma Generator.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildGenerator_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101125 )	-- The more Plasma Generators you have, the faster you will build up the Power Resource.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildGenerator_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102143 )	-- You now have Power! Plasma Generators will continue to produce Power at a constant rate. Note that there is a limit to how many Plasma Generators can be built per Cadre Headquarters.
+	CTRL.WAIT()
+end
+
+-- Control Zones
+EVENTS.IE_Tau_ControlZone = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101193 )	-- Notice the white ring that appears around some of your structures when you are deciding where to build. This is the Control Zone. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101194 )	-- Most structures can only be constructed within the Control Zone, while others, like Listening Posts, can be built at other locations.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101195 )	-- When you are trying to place a new structure, its colour changes from Red to Green as you move it around.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101196 )	-- A Green colour indicates that the structure can be placed at that location so that building will begin. 
+	CTRL.WAIT()
+end
+
+-- Build Barracks
+EVENTS.IE_Tau_BuildBarracks = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102160 )	-- Select your Earth-Caste Builder and build a Tau Barracks.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildBarracks_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102161 )	-- The Barracks is the structure where you can build basic and advanced infantry units from the Tau Empire's Fire caste.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildBarracks_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102162 )	-- Excellent, the Tau Barracks is finished. 
+	CTRL.WAIT()
+end
+
+-- Build Fire Warriors
+EVENTS.IE_Tau_BuildInfantry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102170 )	-- Select your Tau Barracks and build a Fire Warrior Team.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildInfantry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102171 )	-- Fire Warriors are the basic infantrymen of the Tau Empire. They have excellent range and damage with their pulse rifles, but are very weak in melee. To keep your Fire Warriors alive, you'll need to keep them at a distance from enemy units.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildInfantry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102172 )	-- Excellent. You have built a Fire Warrior Team. 
+	CTRL.WAIT()
+end
+
+-- Reinforce Fire Warriors
+EVENTS.IE_Tau_Reinforce = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101143 )	-- Now we should focus on bringing our squads to full strength by reinforcing them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102181 )	-- Reinforcing is the act of calling in additional troops to bring your squad to maximum combat effectiveness.  Select a Fire Warrior Team. Click the Reinforce Squad button to add one new unit to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_Reinforce_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102183 )	-- You can Reinforce during battle, in the event that a Fire Warrior falls to the enemy.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101147 )	-- You can click the Reinforce Squad button multiple times to bring the squad to full strength.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_Reinforce_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102185)		-- Congratulations! You have Reinforced your Fire Warrior Team. 
+	CTRL.WAIT()
+end
+
+-- Health
+EVENTS.IE_Tau_Health = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101153 )	-- All units and vehicles have a Health rating. Health is represented by the small green bar underneath each squad or vehicle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101155 )	-- If you lose any units during a fight, you can Reinforce to bring your squad back to full strength.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101156 )	-- Make sure you watch the strength of your squad in battle. Reinforce often, to make sure your squads are as effective as possible.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101157 )	-- Remember that when a unit with a heavy weapon dies, you lose that weapon from the squad. You will need to upgrade the squad to get the heavy weapon back.
+	CTRL.WAIT()
+end
+
+-- Morale
+EVENTS.IE_Tau_Morale = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101162 )	-- Now select a squad and take note of the small blue bar just under the squad's Health bar. This blue bar represents the Morale of your squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101163 )	-- Morale represents the effectiveness of your units in battle. Think of it as a combination of mental focus, courage, and the willingness to fight.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101164 )	-- Various weapons in the game inflict Morale damage as well as Health damage. When your squad takes Morale damage, the small blue bar will decrease, just like the Health bar does.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101165 )	-- When a squad's Morale becomes too low, the squad will break. A broken squad has lost the will to fight, and its combat effectiveness is drastically reduced.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101166 )	-- You do not lose control of broken squads. It is your choice whether to leave them in battle, or retreat to gather strength. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101167 )	-- Morale can be an effective tool against your enemies. Also remember that certain units have abilities that can increase the Morale of a squad.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101168 )	-- By destroying your enemy's Morale, you cause them to lose combat effectiveness, making them much easier to kill. In this way, a small but properly armed squad can destroy an enemy force of superior numbers. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101169 )	-- Remember, tactics and strategy can turn the tide of almost any battle. Make sure you use this knowledge to achieve victory on the battlefield!
+	CTRL.WAIT()
+end
+
+-- Build Kroot Nest
+EVENTS.IE_Tau_BuildNest = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102210 )	-- To make up for the weakness of Fire Warriors at close quarters, the Tau Empire uses warriors from their allied race, the Kroot.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102211 )	-- Select your Earth-Caste Builder and build a Kroot Nest.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildNest_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102212 )	-- All Kroot units are build from the Kroot Nest. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildNest_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102213 )	-- Excellent. You now have a Kroot Nest and can build Kroot units. 
+	CTRL.WAIT()
+end
+
+-- Build Kroot Carnivores
+EVENTS.IE_Tau_BuildKroot = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102220 )	-- Select your Kroot Nest and build a Kroot Carnivore squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildKroot_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102221 )	-- Kroot Carnivores are primal warriors who have allied themselves with the Tau Empire. They are experts at melee combat and can tie up enemies so that Fire Warriors can gun them down.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildKroot_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102222 )	-- Excellent. You have built a Kroot carnivore squad.
+	CTRL.WAIT()
+end
+
+
+-- Build Commander
+EVENTS.IE_Tau_BuildCommander = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102240 )	-- Most races have a single hero they can build that can lead their entire force. For the Tau Empire, this hero is the Tau Commander, a senior member of the Fire Caste who pilots a cutting-edge XV22 Battlesuit.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102241 )	-- Select the Tau Barracks and build the Tau Commander now.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildCommander_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102242 )	-- The Tau Commander's Battlesuit can be upgraded with a variety of weapon systems, including a flamer, fusion cannon and missile launchers.  The Tau Commander is the epitome of the Tau Empire's battle philosophy, moving quickly and packing a lot of ranged firepower. He is very vulnerable to melee attacks however, and has no melee of his own.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildCommander_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102243 )	-- Congratulations! You have finished building the Tau Commander.
+	CTRL.WAIT()
+end
+
+-- Upgrade Weaponry
+EVENTS.IE_Tau_UpgradeWeaponry = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102280 )	-- Select your Tau Commander and click the Upgrade: Missile Launcher icon to upgrade his battlesuit with that weapon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_UpgradeWeaponry_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102281 )	-- Notice the new weapon appears on the Commander. This procedure can be performed with any of his available weapon upgrades.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_UpgradeWeaponry_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102282 )	-- Excellent. You have upgraded your Tau Commander.
+	CTRL.WAIT()
+end
+
+-- Build a Path to Enlightenment
+EVENTS.IE_Tau_BuildPath = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102250 )	-- Select your Earth-Caste Builder and build the Path to Enlightenment now.  
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildPath_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102251 )	-- You must build the Path to Enlightenment in order to access research and weapon upgrades. Research increases your squads' effectiveness. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildPath_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102252 )	-- Excellent, the Path to Enlightenment is now operational.
+	CTRL.WAIT()
+end
+
+
+-- Build Leader
+EVENTS.IE_Tau_BuildLeader = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102260 )	-- Select a Fire Warrior Team and click the Add Leader: Shas'ui icon. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildLeader_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102261 )	-- Shas'ui are veteran Fire Warriors who add more power to your squad.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildLeader_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102262 )	-- Excellent! Your Shas'ui has arrived. Note that your Shas'ui are part of the squad and cannot leave it.
+	CTRL.WAIT()
+end
+
+-- Take Cover
+EVENTS.IE_Tau_TakeCover = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101273 )	-- Some types of terrain can provide your squads with protection from enemy fire. This is called Cover.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101274 )	-- Select one of your infantry squads and move it into Cover. The area of Cover has been identified with a marker known as a Ping. It is visible on the Mini-Map as well as in the world.
+	CTRL.WAIT()
+	CTRL.Event_Delay(3)
+	CTRL.WAIT()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101275 )	-- Cover is useful in that it can provide your squads with additional defensive bonuses, which make them harder to kill.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101276 )	-- It's easy to see Cover in the terrain -- just look for your mouse cursor to change as you pass over large bombed-out craters in cities, or patches of thick foliage in jungles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101277 )	-- You'll notice that when you move your squads into an area of Cover, a small Cover icon will appear above them. This indicates they are receiving a defensive bonus.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_TakeCover_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101278 )	-- Excellent! Your squad is in Cover. Units in Cover are harder targets to shoot and take less damage from Ranged attacks because of this. Use Cover well to gain tactical advantages over your enemies.
+	CTRL.WAIT()
+end
+
+-- Point Count
+EVENTS.IE_Tau_PointCount = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101283 )	-- The best way to make sure you have enough Requisition Resource is to capture and secure Strategic Points.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102351 )	-- Explore the map around your base with your Infantry Squads and capture any Strategic Points you encounter along the way. To complete this objective you must Capture 3 Strategic Points.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_PointCount_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102352 )	-- Make sure to use your Earth-Caste Builder to build Listening Posts on any captured Strategic Points. This fortifies them against your enemies.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_PointCount_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101286 )	-- Excellent! You have captured 3 Strategic Points and built Listening Posts on them. Taking and holding Strategic Points is key to defeating your enemies.
+	CTRL.WAIT()
+end
+
+-- Capture Critical Point
+EVENTS.IE_Tau_CaptureCriticalPoint = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101293 )	-- You can capture Critical Locations just like Strategic Points. In some multiplayer games, capturing and holding one or more of these Critical Locations can win you the game! You also get Requisition from any Critical Locations you control.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101294 )	-- Use a squad to capture a Critical Location. Critical Locations are points on the map that represent locations of critical strategic importance. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_CaptureCriticalPoint_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101295 )	-- Excellent! You've captured a Critical Location. Note that Critical Locations cannot have Listening Posts built on them. You must find other ways to hold them.
+	CTRL.WAIT()
+end
+
+-- Capture Relic
+EVENTS.IE_Tau_CaptureRelic = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101303 )	-- Use a squad to capture a Relic. Relics are sacred points of great value.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101304 )	-- Relics gain you additional Requisition, but aren't strictly necessary to build any Tau units. Most other races need Relics to build their most potent units, however, so by capturing Relics you deny your enemy access to their best units and technology. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_CaptureRelic_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101305 )	-- Excellent! You have captured a Relic. You can build Listening Posts to fortify captured Relics.
+	CTRL.WAIT()
+end
+
+-- Build Vehicle Beacon
+EVENTS.IE_Tau_BuildMech = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102400 )	-- Select your Earth-Caste Builder and build a Vehicle Beacon.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildMech_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102401 )	-- Just like the Tau Barracks and Kroot Nest are used to build infantry units, the Vehicle Beacon is used to build vehicles.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101325 )	-- Vehicles are tough and nearly impervious to the attacks of non-upgraded infantry. They are a fundamental part of your army, and can carry powerful support weapons.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildMech_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102403)		-- Excellent! You now have a Vehicle Beacon. You can build powerful vehicles from this building.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101327 )	-- Note that your field base can only support a finite number of vehicles. This limit is known as the Vehicle Cap.	
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102405 )	-- Once you have reached your maximum, you cannot build any more vehicles. You can increase your Vehicle Cap by building research buildings, just like Squad Cap.	
+	CTRL.WAIT()
+end
+
+-- Build Skyray
+
+EVENTS.IE_Tau_BuildSkyray = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102410 )	-- Select your Vehicle Beacon and build a Stingray Missile Gunship. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildSkyray_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102411 )	-- Stingrays are versatile support vehicles that fire missiles. They have excellent range and excel at disrupting infantry.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildSkyray_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102412 )	-- Excellent! You now have a Stingray. You can upgrade thr stingray by researching the Missile Barrage ability at the Path to Enlightenment.
+	CTRL.WAIT()
+end
+
+-- Build a Shrine of Mont'ka
+EVENTS.IE_Tau_BuildMont = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102420 )	-- Tau Empire cadres generally follow one of two broad strategies. Each strategy has its own research building called a Command Post and allows construction of special units.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102421 )	-- The Mont'ka Command Post commits the cadre to the "Killing Blow" strategy that focuses on mobile firepower. The shrine allows construction of powerful vehicles and battlesuits like the XV-8 Crisis Battlesuit. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102422 )	-- The Kauyon Command Post commits the cadre to the "Patient Hunter" strategy that relies of infantry and Kroot special units. The shrine allows construction of specialized Kroot like the Kroot Hound. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102423 )	-- You cannot build both command posts during the same battle, so in each battle you will have to choose which strategy is best for the situation at hand. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102430 )	-- For the purposes of this Tutorial, we will pursue the Mont'ka or "Killing Blow" strategy. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildMont_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102421 )	-- The Mont'ka Command Post commits the cadre to the "Killing Blow" strategy that focuses on mobile firepower. The shrine allows construction of powerful vehicles and battlesuits like the XV-8 Crisis Battlesuit. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildMont_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102432 )	-- Excellent! You are now committed to the Mont'ka tech tree. Note that the Command Post has increased your Squad Cap and Vehicle Cap.
+	CTRL.WAIT()
+end
+
+-- Build Crisis Suit
+
+EVENTS.IE_Tau_BuildCrisis = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102440 )	-- The Mont'ka Command Post has made new units available for your army. Seklect your Tau Barracks and build an XV8 Crisis Suit Team. 
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildCrisis_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102441 )	-- Crisis Suits are mechanized battlesuits with upgradeable weapons. Like all Tau battlesuits, they use Squad Cap rather than Support Cap (used by heavier vehicles).
+	CTRL.WAIT()
+end
+
+-- Research Teachings of Mont'ka
+EVENTS.IE_Tau_ResearchTeachings = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102450 )	-- The most powerful units of the Mont'ka philosophy are heavy vehicles like the Hammerhead Gunship. To build this vehicle, however, you need to pursue additional research.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_ResearchTeachings_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102451 )	-- Select the Mont'ka Command Post and research the Teachings of Mont'ka. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_ResearchTeachings_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102452 )	-- Excellent. You can now build the Hammerhead Gunship. 
+	CTRL.WAIT()
+end
+
+
+-- Build a Hammerhead
+EVENTS.IE_Tau_BuildHammer = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102460 )	-- Select your Vehicle Beacon and build a Hammerhead Gunship.. 
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildHammer_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102461 )	-- Excellent. You now have a powerful Hammerhead Gunship on the field. This heavy tank can deal out huge amounts of punishment to the enemy.
+	CTRL.WAIT()
+end
+
+-- Build a Coalition Center
+EVENTS.IE_Tau_BuildCoalition = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102470 )	-- Select your Earth-caste Builder and build a Coalition Center.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_BuildCoalition_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102471 )	-- Excellent. Your Coalition Center is ready. 
+	CTRL.WAIT()
+end
+
+-- Build an Ethereal
+
+EVENTS.IE_Tau_BuildEthereal = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102480 )	-- The Coalition Center allows you to build the ultimate Tau unit, the Ethereal. This hero is from the caste that leads the Tau Empire and has several powerful abilities.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102481 )	-- Select your Coalition Center and build an Ethereal.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildEthereal_Doing = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102482 )	-- Excellent. The presence of the Ethereal strengthens all your Tau units, increasing their morale, health and the amount of damage they do
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102483 )	-- The Ethereal himself also has several special abilities, such as calling down a strike from the orbital artillery of the Tau Air Caste.
+	CTRL.WAIT()
+end
+
+EVENTS.IE_Tau_BuildEthereal_Complete = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102484 )	-- Be careful, though. The death of an Ethereal can be a crushing blow to a Tau cadre. If your Ethereal dies in combat, all Tau units will suffer a temporary loss of morale and health.
+	CTRL.WAIT()
+end
+
+-- Squad Cap Warnings
+EVENTS.IE_Tau_SquadCap = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102490 )	-- To increase the number of squads you can field as the Tau Empire, you need to build research facilities like the Path to Enlightenment or the Mont'ka Command Post.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_SquadLimit = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101441 )	-- You've reached the maximum number of squads you're allowed to field. Be sure to Reinforce your squads to full strength to get the most out of them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101452 )	-- If you have invested unwisely, you can press the 'Delete' button on your keyboard to terminate unwanted squads.
+	CTRL.WAIT()
+end
+
+-- Low Resource Warnings
+
+EVENTS.IE_Tau_LowResource = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101442 )	-- Remember, holding Strategic Points increases your Requsition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
+	CTRL.WAIT()
+end
+EVENTS.IE_Tau_LowPower = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101443 )	-- Slag Deposits are concentrated points of energy hidden just under the planet's surface.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101444 )	-- Take a quick look at your Mini-Map. There are dots on the map that represent Slag Deposits. 
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101445 )	-- Build a Thermo-Plasma Generator on a Slag Deposit to access large amounts of the Power Resource.
+	CTRL.WAIT()
+end
+
+-- No Builder
+
+EVENTS.IE_Tau_NoBuilder = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102510 )	-- In order to further establish your base you need an Earth-Caste Builder.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102511 )	-- Select your Field Command and build an Earth-Caste Builder.
+	CTRL.WAIT()
+end
+
+-- Tutorial Complete
+
+EVENTS.IE_Tutorial_Complete2 = function()
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1102520 )	-- Use infantry units to capture Strategic Points, and Earth-Caste Builders to build Listening Posts on them.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101449 )	-- Continue to build structures, and carry out research that will increase your effectiveness in battle.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101450 )	-- Build additional squads and vehicles. Make sure you build research structures that will increase both your Squad Cap and Vehicle Cap.
+	CTRL.Actor_PlaySpeech( ACTOR_SetForRace, 1101451 )	-- Take this battlefield, and the next, and the next after that. The fight will never end until your enemies are crushed.
+	CTRL.WAIT()
+end
+
