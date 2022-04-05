@@ -242,6 +242,8 @@ GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["summon_teleport_building_check_override"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
 --INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

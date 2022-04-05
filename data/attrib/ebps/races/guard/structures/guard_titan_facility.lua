@@ -79,7 +79,9 @@ GameData["structure_ext"]["control_structure_radius"] = 35
 GameData["structure_ext"]["control_structure_use"] = true 
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500051]] -- Building Toughness 9
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500052]] -- Building Toughness 10
 --INTENTIONAL SPACER
 
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])

@@ -147,7 +147,7 @@ GameData["structure_ext"]["control_structure_is"] = true
 GameData["structure_ext"]["control_structure_radius"] = 40
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500052]] -- Building
 
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 

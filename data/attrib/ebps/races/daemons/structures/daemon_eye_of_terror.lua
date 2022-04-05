@@ -75,7 +75,7 @@ GameData["structure_ext"] = Reference([[ebpextensions\structure_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500050]] -- Toughness 8 Building
 
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

@@ -296,6 +296,8 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["synckill_id"] = Re
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
 
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_stone.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

@@ -182,7 +182,7 @@ GameData["syncdeath_ext"]["syncdeathinfos"]["syncdeathinfo_04"]["synckill_id"] =
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["summon_teleport_building_check_override"] = true 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90107]] -- Vehicle
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500052]] -- Building
 --INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

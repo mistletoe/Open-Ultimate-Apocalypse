@@ -184,7 +184,7 @@ GameData["structure_ext"]["control_structure_use_allied"] = true
 GameData["summon_ext"] = Reference([[ebpextensions\summon_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500050]] -- Toughness 8 Building
 --INTENTIONAL SPACER
 
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_emplacement.lua]])

@@ -110,6 +110,8 @@ GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["summon_teleport_destination"] = false
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS4.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500033]] -- TOUGHNESS 4
 
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_light_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

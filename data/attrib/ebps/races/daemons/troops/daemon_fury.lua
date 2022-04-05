@@ -159,6 +159,8 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_04"]["distance"] = 0
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS4.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500033]] -- TOUGHNESS 4
 --INTENTIONAL SPACER
 
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_demon.lua]])
