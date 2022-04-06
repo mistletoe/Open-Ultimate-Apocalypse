@@ -73,7 +73,6 @@ GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500051]] -- Buildin
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500052]] -- Building Toughness 10
 --INTENTIONAL SPACER
-
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

@@ -135,7 +135,7 @@ GameData["possess_ext"]["area_effect"]["throw_data"]["force_max"] = 55
 GameData["possess_ext"]["area_effect"]["throw_data"]["force_min"] = 35
 GameData["possess_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 65
 GameData["possess_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 25
-GameData["possess_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
+--INTENTIONAL SPACER
 
 GameData["possess_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 80
 GameData["possess_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 60

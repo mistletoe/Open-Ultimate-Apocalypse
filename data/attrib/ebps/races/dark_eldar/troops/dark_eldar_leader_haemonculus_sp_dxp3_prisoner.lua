@@ -138,67 +138,67 @@ GameData["soul_destruction_ext"] = Reference([[ebpextensions\soul_destruction_ex
 GameData["soul_destruction_ext"]["action_duration"] = 2
 GameData["soul_destruction_ext"]["action_name"] = [[special_ability_2]]
 GameData["soul_destruction_ext"]["action_time"] = 2
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_01"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_02"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_03"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_04"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_05"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_06"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_07"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_08"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_09"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_10"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_11"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_12"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_13"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_14"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["area_effect_information"]["target_filter"]["entry_15"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 100
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_01"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_01"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_01"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_02"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_02"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_02"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_03"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_03"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_03"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_04"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_04"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_04"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_05"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_05"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_05"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_06"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_06"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_06"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_07"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_07"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_07"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_08"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_08"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_08"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_09"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_09"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_09"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_10"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_10"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_10"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_11"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_11"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_11"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_12"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_12"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_12"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_13"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_13"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_13"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_14"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_14"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_14"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_15"]["armour_piercing_value"] = 0
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_15"]["armour_type"] = Reference([[type_armour\tp_armour.lua]])
-GameData["soul_destruction_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_15"]["armour_type"]["screen_name_id"] = [[$90100]] -- Armour
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
+--REPLACE ME
 GameData["soul_destruction_ext"]["cast_delay_time"] = 1
 GameData["soul_destruction_ext"]["effect_time"] = 3
 GameData["soul_destruction_ext"]["recharge_time"] = 90
@@ -364,7 +364,7 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS7.lua]
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500036]] -- TOUGHNESS 7
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500037]] -- TOUGHNESS 8
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 

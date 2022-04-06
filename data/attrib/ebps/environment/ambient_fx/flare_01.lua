@@ -6,7 +6,7 @@ GameData["sim_entity_ext"]["is_in_spatial_bucket"] = false
 GameData["structure_ext"] = Reference([[ebpextensions\structure_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 --INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["screen_name_id"] = [[$0]]

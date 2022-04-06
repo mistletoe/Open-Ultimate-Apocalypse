@@ -962,8 +962,11 @@ GameData["sight_ext"]["sight_radius"] = 40
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500050]] -- Toughness 8 Building
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500051]] -- Building Toughness 9
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 

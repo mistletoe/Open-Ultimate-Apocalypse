@@ -180,7 +180,7 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS5.lua]
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500034]] -- TOUGHNESS 5
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS6.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500035]] -- TOUGHNESS 6
-
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 

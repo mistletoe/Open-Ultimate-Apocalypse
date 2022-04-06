@@ -46,7 +46,7 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9.lua]
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500038]] -- TOUGHNESS 9
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 --INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[- A warp pillar that summons warp storms and dozens of monster units to the aid of Chaos.]]

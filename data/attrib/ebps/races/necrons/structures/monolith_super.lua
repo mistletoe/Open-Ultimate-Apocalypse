@@ -255,7 +255,7 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_max"] = 60
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_min"] = 10
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
---REPLACE ME
+--INTENTIONAL SPACER
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
@@ -394,7 +394,9 @@ GameData["structure_ext"]["control_structure_radius"] = 40
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500052]] -- Building
-
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500052]] -- Building Toughness 10
+--INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_none.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

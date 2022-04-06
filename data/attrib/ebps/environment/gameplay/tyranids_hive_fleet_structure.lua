@@ -21,67 +21,7 @@ GameData["deep_strike_ext"] = Reference([[ebpextensions\deep_strike_ext.lua]])
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["start_from_caster"] = false
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
@@ -249,7 +189,7 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS4.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500033]] -- TOUGHNESS 4
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 

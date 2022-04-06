@@ -48,8 +48,6 @@ GameData["impact_ability"] = [[]]
 GameData["kill_enemy_at_percent_life"] = 0
 GameData["kill_enemy_at_percent_life_cooldown_time"] = 0
 GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
-GameData["kill_enemy_at_percent_life_target_filter"]["0xE50C8830"] = Reference([[type_armour\tp_armour.lua]])
-GameData["kill_enemy_at_percent_life_target_filter"]["0xE50C8830"]["screen_name_id"] = [[$90100]] -- Armour
 
 GameData["linger_on_target_after_fire_time"] = 1.5
 GameData["max_range"] = 90

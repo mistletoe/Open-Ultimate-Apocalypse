@@ -229,7 +229,7 @@ GameData["possess_ext"] = Reference([[ebpextensions\possess_ext.lua]])
 
 GameData["possess_ext"]["area_effect"]["sweeping_information"]["sweep_duration"] = 2
 GameData["possess_ext"]["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type_areasweep\tp_areasweep_in_to_out.lua]])
-GameData["possess_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 1
+--INTENTIONAL SPACER
 
 GameData["possess_ext"]["automatic_possession_time"] = 1
 GameData["possess_ext"]["possession_ui_type"] = [[]]

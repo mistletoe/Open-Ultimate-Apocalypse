@@ -27,7 +27,7 @@ GameData["suicide_ext"]["lifetime"] = 30
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 --INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[$4100125]] -- - Maelstrom of destructive power.

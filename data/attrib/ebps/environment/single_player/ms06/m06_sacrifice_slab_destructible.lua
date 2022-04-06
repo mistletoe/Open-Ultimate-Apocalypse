@@ -23,7 +23,7 @@ GameData["structure_ext"] = Reference([[ebpextensions\structure_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["single_player_only"] = true 
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90100]] -- Armour
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_color_b"] = 0
 GameData["ui_ext"]["minimap_color_r"] = 0

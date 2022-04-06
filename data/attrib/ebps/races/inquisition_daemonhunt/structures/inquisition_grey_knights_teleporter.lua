@@ -40,7 +40,7 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_max"] = 60
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["force_min"] = 10
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
---REPLACE ME
+--INTENTIONAL SPACER
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 160

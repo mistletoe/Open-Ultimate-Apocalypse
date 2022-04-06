@@ -30,7 +30,7 @@ GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
 GameData["type_ext"]["can_be_possessed_by_enemy"] = false
 GameData["type_ext"]["summon_teleport_destination"] = false
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$90102]] -- Building
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 --INTENTIONAL SPACER
 GameData["ui_ext"]["ui_info"]["help_text_list"]["text_01"] = [[- A Necron portal which leads to the homeworld of Mefara Secundas.]]

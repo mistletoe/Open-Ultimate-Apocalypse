@@ -31,18 +31,6 @@ GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = R
 
 
 GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
-GameData["attack_priorities"]["0x295550CB"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0x295550CB"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["attack_priorities"]["0x2F82FC16"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0x2F82FC16"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["attack_priorities"]["0x8F7CE457"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0x8F7CE457"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["attack_priorities"]["0xB58F3096"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0xB58F3096"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["attack_priorities"]["0xC8BE4F69"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0xC8BE4F69"]["screen_name_id"] = [[$90100]] -- Armour
-GameData["attack_priorities"]["0xDEEA7FFD"] = Reference([[type_armour\tp_armour.lua]])
-GameData["attack_priorities"]["0xDEEA7FFD"]["screen_name_id"] = [[$90100]] -- Armour
 
 GameData["can_attack_air_units"] = false
 GameData["can_attack_ground_units"] = true 

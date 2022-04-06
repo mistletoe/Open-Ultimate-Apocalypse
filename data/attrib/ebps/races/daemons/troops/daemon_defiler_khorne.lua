@@ -359,7 +359,7 @@ GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500038]] -- TOUGH
 --INTENTIONAL SPACER
 GameData["type_ext"]["type_speech"] = Reference([[type_speech\speech_monstrosity.lua]])
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
-
+--INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 
 GameData["ui_ext"]["minimap_teamcolor"] = true 

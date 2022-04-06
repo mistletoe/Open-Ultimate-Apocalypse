@@ -11,7 +11,7 @@ GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["radius"] 
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
---REPLACE ME
+--INTENTIONAL SPACER
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 160
