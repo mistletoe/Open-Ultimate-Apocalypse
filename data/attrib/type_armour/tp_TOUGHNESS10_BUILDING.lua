@@ -1,2 +1,2 @@
 GameData = Inherit([[]])
-GameData["screen_name_id"] = [[$17500029]] -- Structure
+GameData["screen_name_id"] = [[$17500052]] -- T 10 Building

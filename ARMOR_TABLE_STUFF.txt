@@ -29,10 +29,19 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10.lua
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500039]] -- TOUGHNESS 10
 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500050]] -- T 8 Building
 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500051]] -- T 9 Building
 
 GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500029]] -- Building
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500052]] -- T 10 Building
+
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS6_VEHICLE.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500053]] -- T 6 Vehicle
+
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_VEHICLE.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500054]] -- T 8 Vehicle
+
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS10_VEHICLE.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500055]] -- T 10 Vehicle
