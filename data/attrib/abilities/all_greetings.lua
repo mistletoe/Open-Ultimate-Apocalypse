@@ -11,12 +11,10 @@ GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
 GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_enemy.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 2000
-GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_01"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
-
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\enable_vision_granting.lua]])
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["value"] = 3
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["value"] = 0
 
 GameData["backfire_action_name"] = [[]]
 GameData["backfire_area_effect"] = Reference([[tables\area_effect_table.lua]])

@@ -93,7 +93,7 @@ GameData["ui_hotkey_name"] = [[hotkey_z]]
 GameData["ui_index_hint"] = 9
 GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
 GameData["ui_info"]["help_text_id"] = [[$0]]
-GameData["ui_info"]["help_text_list"]["text_01"] = [[$582351]] -- - Use the Communications Tower to send out a localized pulse that will disrupt the enemys stealth.
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$582351]] -- - Use the Communications Tower to send out a localized pulse that will disrupt the enemy's stealth.
 GameData["ui_info"]["help_text_list"]["text_02"] = [[$673452]] -- - Left-click and target a location to activate.
 GameData["ui_info"]["icon_name"] = [[tau_icons/tau_ability_detection_icon]]
 

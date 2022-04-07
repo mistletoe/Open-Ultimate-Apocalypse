@@ -53,7 +53,6 @@ GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_02"]["target_typ
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_02"]["value"] = 150
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_03"] = Reference([[modifiers\enable_infiltration.lua]])
-
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_03"]["value"] = -1
 
 GameData["modifier_ext"] = Reference([[ebpextensions\modifier_ext.lua]])
