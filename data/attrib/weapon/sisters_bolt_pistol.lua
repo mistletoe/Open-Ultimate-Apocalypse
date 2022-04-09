@@ -1,13 +1,13 @@
 GameData = Inherit([[]])
-GameData["accuracy"] = 0.8500000238
-GameData["accuracy_reduction_when_moving"] = 0.6999999881
-GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+GameData["accuracy"] = 0.85
+GameData["accuracy_reduction_when_moving"] = 0.5
+GameData["area_effect"] = Reference([[tables\STRENGTH_4.lua]])
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 30
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 25
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 55
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 40
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 1
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 4
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_Impact_events\Blood_Splatter_Impact_S]]
@@ -53,7 +53,7 @@ GameData["raider_weapon_index"] = 0
 GameData["random_aim_on_create"] = false
 GameData["rear_facing"] = false
 GameData["reload_show_progress"] = false
-GameData["reload_time"] = 0.8000000119
+GameData["reload_time"] = 0.5
 GameData["setup_time"] = 0
 GameData["shot_delay_time"] = 0
 GameData["show_in_reinforce"] = true 

@@ -1267,13 +1267,13 @@ function MoveTrapDudes()
 			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttack"), 1),"chaos_heavy_bolter_tactical", 5)
 		end
 		if EGroup_Exists("eg_ChaosMainBaseMachinePit") and EGroup_Count("eg_ChaosMainBaseMachinePit") > 0 then
-			Util_CreateSquadsAtMarkerEx(g_Player5, "sg_SlagAttackTanks", "chaos_squad_predator", "mkr_mainbase_machinepit", 1, 1)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_autocannon_predator_improved", 2)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"haos_heavy_bolter_predator_r_improved", 2)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_heavy_bolter_predator_l_improved", 2)			
+			--Util_CreateSquadsAtMarkerEx(g_Player5, "sg_SlagAttackTanks", "chaos_squad_predator", "mkr_mainbase_machinepit", 1, 1)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_autocannon_predator_improved", 2)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_heavy_bolter_predator_r_improved", 2)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SlagAttackTanks"), 1),"chaos_heavy_bolter_predator_l_improved", 2)			
 		end
 		Cmd_AttackMoveMarker("sg_SlagAttack","mkr_specialattackdrop")
-		Cmd_AttackMoveMarker("sg_SlagAttackTanks","mkr_specialattackdrop")
+		--Cmd_AttackMoveMarker("sg_SlagAttackTanks","mkr_specialattackdrop")
 		Rule_Remove(MoveTrapDudes)
 	end
 end
@@ -1345,9 +1345,9 @@ function SpawnInitialDreadnoughts()
 	-- eh, lets spawn a couple predators on the map too :)
 	for i=1,3 do
 		Util_CreateSquadsAtMarkerEx(g_Player6, "sg_RandomPredators"..i, "chaos_squad_predator", "mkr_random_predator"..i, 1, 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_autocannon_predator_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_RandomPredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
 		SGroup_FaceMarker("sg_RandomPredators"..i, "mkr_faceme"..i)
 	end
 end
@@ -1489,9 +1489,9 @@ function MainBaseAttack()
 				end
 				if g_BaseAttackTier > 6 then
 					if Blueprint == "chaos_squad_predator" then
-						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_autocannon_predator_improved", 1)
-						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_r_improved", 1)
-						Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+						--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_autocannon_predator_improved", 1)
+						--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+						--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"chaos_heavy_bolter_predator_l_improved", 1)
 					end			
 				end
 				
@@ -1719,9 +1719,9 @@ function SpawnDefilerBaseDefenseForce()
 	for i=1,1 do
 		Util_CreateSquadsAtMarkerEx(g_Player2, "sg_DefilerDefensePredators"..i, "chaos_squad_predator", "mkr_predatordefense"..i, 1, 1)
 		SGroup_AddGroup("sg_DefilerBaseDefense", "sg_DefilerDefensePredators"..i)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DefilerDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
 	end
 	
 	-- defiler wanderers
@@ -1836,9 +1836,9 @@ function SpawnDreadnaughtBaseDefenseForce()
 	for i=1,2 do
 		Util_CreateSquadsAtMarkerEx(g_Player7, "sg_DreadnaughtDefensePredators"..i, "chaos_squad_predator", "mkr_dreadnaughtdefense_predator"..i, 1, 1)
 		SGroup_AddGroup("sg_DreadnaughtBaseDefense", "sg_DreadnaughtDefensePredators"..i)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
-		Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+		--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_DreadnaughtDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
 	end
 	
 	--dreadnoughts
@@ -1913,9 +1913,9 @@ function SpawnMainBaseDefenseForce()
 		for i=1,1 do
 			Util_CreateSquadsAtMarkerEx(g_Player2, "sg_MainDefensePredators"..i, "chaos_squad_predator", "mkr_mainbase_predators"..i, 1, 1)
 			SGroup_AddGroup("sg_MainBaseDefense", "sg_MainDefensePredators"..i)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_autocannon_predator_improved", 1)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_r_improved", 1)
+			--Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_MainDefensePredators"..i), 1),"chaos_heavy_bolter_predator_l_improved", 1)
 		end
 		
 		-- defiler
