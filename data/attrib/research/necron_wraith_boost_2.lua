@@ -2,16 +2,16 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\capture_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[necron_wraith_squad]]
 GameData["modifiers"]["modifier_01"]["value"] = 3
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[necron_wraith_claw]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
@@ -19,12 +19,12 @@ GameData["modifiers"]["modifier_04"]["target_type_name"] = [[necron_wraith_claw]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[necron_wraith_advance_sp]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.75
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\sight_radius_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.5
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\keen_sight_radius_modifier.lua]])

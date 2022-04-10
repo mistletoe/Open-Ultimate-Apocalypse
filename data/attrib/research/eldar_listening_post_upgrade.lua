@@ -4,22 +4,22 @@ GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_starcannon_listenpost]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[eldar_starcannon_listenpost]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[weapon\eldar_brightlance_listenpost.lua]]
 GameData["modifiers"]["modifier_04"]["value"] = 2
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[weapon\eldar_brightlance_listenpost.lua]]
 GameData["modifiers"]["modifier_05"]["value"] = 2
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[weapon\eldar_starcannon_listenpost.lua]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[weapon\eldar_brightlance_listenpost.lua]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.25
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\keen_sight_radius_modifier.lua]])

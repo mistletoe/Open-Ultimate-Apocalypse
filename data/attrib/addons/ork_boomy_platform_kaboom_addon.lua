@@ -2,16 +2,16 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\sight_radius_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["value"] = 0
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_armour_2.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_structure_type.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[ork_boomy_platform]]
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_27"] = nil
 GameData["modifiers"]["modifier_28"] = nil

@@ -1,10 +1,10 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[eldar_dark_reaper_exarch]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_reaper_launcher]]
 GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 5

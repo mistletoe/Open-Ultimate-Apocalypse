@@ -2,22 +2,22 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[eldar_shining_spear]]
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = 150
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_shining_spear_exarch]]
 GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 300
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[eldar_squad_shining_spears]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[eldar_squad_shining_spears]]
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])

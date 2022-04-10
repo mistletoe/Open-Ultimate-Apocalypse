@@ -2,17 +2,17 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[addon_1]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["value"] = 2
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\income_requisition_player_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 1.399999976
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\income_power_player_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["value"] = 1.399999976
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\production_speed_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["value"] = 2
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\ability_recharge_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["value"] = 0.3000000119
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_1"] = Reference([[requirements\required_research.lua]])

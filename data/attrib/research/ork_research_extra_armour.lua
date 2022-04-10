@@ -2,32 +2,32 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_killa_kan]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[ork_squiggoth]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[ork_wartrak]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[ork_trukk]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[ork_looted_tank]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[ork_deff_dread]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\enable_armour_2.lua]])
@@ -47,57 +47,57 @@ GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[ork_kommando_nob]]
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_12"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[ork_battle_wagon]]
 GameData["modifiers"]["modifier_12"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[ork_gun_wagon]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[ork_battlefortress]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[ork_grot_tank]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_16"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[ork_grot_gun_cart_zzzap]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[ork_grot_gun_cart_kannon]]
 GameData["modifiers"]["modifier_17"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[ork_kill_bursta]]
 GameData["modifiers"]["modifier_18"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_19"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[ork_kill_krusha]]
 GameData["modifiers"]["modifier_19"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_20"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_20"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[ork_looted_rhino]]
 GameData["modifiers"]["modifier_20"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_21"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_21"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[ork_battle_wagon_armageddon]]
 GameData["modifiers"]["modifier_21"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_22"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_22"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[ork_battlefortress_armageddon]]
 GameData["modifiers"]["modifier_22"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

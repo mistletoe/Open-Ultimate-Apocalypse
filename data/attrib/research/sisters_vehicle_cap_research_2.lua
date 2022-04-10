@@ -1,38 +1,38 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["value"] = 5
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sisters_exorcist_tank]]
 GameData["modifiers"]["modifier_02"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[sisters_immolator_tank]]
 GameData["modifiers"]["modifier_03"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[sisters_lightning]]
 GameData["modifiers"]["modifier_04"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[sisters_rhino]]
 GameData["modifiers"]["modifier_05"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_penitent_engine]]
 GameData["modifiers"]["modifier_06"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_exorcist_mk]]
 GameData["modifiers"]["modifier_07"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_lightning_strike]]
 GameData["modifiers"]["modifier_08"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[sisters_sentinel]]
 GameData["modifiers"]["modifier_09"]["value"] = 0.8999999762
 GameData["requirements"] = Reference([[tables\requirements.lua]])

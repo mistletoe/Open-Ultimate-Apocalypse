@@ -7,7 +7,7 @@ GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierus
 GameData["modifiers"]["modifier_01"]["value"] = 28
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\ability_waagh_event.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_cultist]]
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])

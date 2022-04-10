@@ -1,28 +1,28 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[sisters_mace_of_valaan]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[sisters_mace_of_valaan]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[sisters_power_sword_veteran_superior]]
 GameData["modifiers"]["modifier_05"]["value"] = 2
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_power_sword_veteran_superior]]
 GameData["modifiers"]["modifier_06"]["value"] = 2
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_power_sword_veteran_superior_seraphim]]
 GameData["modifiers"]["modifier_07"]["value"] = 2
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_power_sword_veteran_superior_seraphim]]
 GameData["modifiers"]["modifier_08"]["value"] = 2
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[sisters_power_sword_veteran_superior_celestian]]
 GameData["modifiers"]["modifier_09"]["value"] = 2
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])

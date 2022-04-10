@@ -3,10 +3,10 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint8.lua]])
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_warboss_advance_sp]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\population_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["value"] = 20
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["value"] = 4
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\recruit_time_player_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["value"] = 0.8500000238

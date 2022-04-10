@@ -1,39 +1,39 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[chaos_marine_squad]]
 GameData["modifiers"]["modifier_01"]["value"] = 1
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_squad_raptor]]
 GameData["modifiers"]["modifier_02"]["value"] = 1
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[chaos_squad_cultist]]
 GameData["modifiers"]["modifier_05"]["value"] = 5
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[chaos_havoc_marine_squad]]
 GameData["modifiers"]["modifier_06"]["value"] = 1
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[chaos_rubric_marine_squad]]
 GameData["modifiers"]["modifier_07"]["value"] = 5
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[chaos_squad_renegades]]
 GameData["modifiers"]["modifier_08"]["value"] = 2
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[chaos_terminator_squad]]
 GameData["modifiers"]["modifier_09"]["value"] = 1
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_10"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[chaos_noise_marine_squad]]
 GameData["modifiers"]["modifier_10"]["value"] = 1
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[chaos_plague_marine_squad]]
 GameData["modifiers"]["modifier_11"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

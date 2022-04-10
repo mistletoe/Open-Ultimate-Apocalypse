@@ -2,85 +2,85 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[daemon_squad_bloodletters]]
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[daemon_squad_screamers]]
 GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[daemon_squad_daemonettes]]
 GameData["modifiers"]["modifier_03"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_03"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[daemon_squad_pink_horror_minions]]
 GameData["modifiers"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_04"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[daemon_squad_plague_bearers]]
 GameData["modifiers"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_05"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[daemon_squad_flesh_hound]]
 GameData["modifiers"]["modifier_06"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_06"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[daemon_squad_fury]]
 GameData["modifiers"]["modifier_07"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_07"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[daemon_squad_pink_horror]]
 GameData["modifiers"]["modifier_08"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_08"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[daemon_squad_horblu]]
 GameData["modifiers"]["modifier_09"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_09"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_10"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[daemon_squad_fiends]]
 GameData["modifiers"]["modifier_10"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_10"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[daemon_squad_flamers]]
 GameData["modifiers"]["modifier_11"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_11"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_12"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[daemon_squad_horblu_stature]]
 GameData["modifiers"]["modifier_12"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_12"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[daemon_squad_nurgling]]
 GameData["modifiers"]["modifier_13"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_13"]["value"] = -0.6000000238
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[daemon_squad_daemonettes_greater]]
 GameData["modifiers"]["modifier_14"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_14"]["value"] = -0.6000000238

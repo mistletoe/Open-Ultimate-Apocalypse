@@ -1,7 +1,7 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[chaos_laspistol]]
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = 3
@@ -9,7 +9,7 @@ GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_laspistol]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[chaos_laspistol]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.299999952
 GameData["requirements"] = Reference([[tables\requirements.lua]])

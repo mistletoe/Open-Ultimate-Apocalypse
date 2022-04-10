@@ -4,14 +4,14 @@ GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_scyth_genestealer]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[tyranids_scyth_genestealer]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.25
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[tyranids_rending_claw_genestealer]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.25
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[tyranids_rending_claw_genestealer]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["requirements"] = Reference([[tables\requirements.lua]])

@@ -45,47 +45,47 @@ GameData["modifiers"]["modifier_12"]["target_type_name"] = [[guard_basilisk_magn
 GameData["modifiers"]["modifier_12"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_12"]["value"] = -3000
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[guard_earthshaker_cannon_basilisk]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[guard_earthshaker_cannon_basilisk_magnus]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[guard_earthshaker_cannon_turret]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_16"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[guard_autocannon_twin_hydra]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\reload_time_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[guard_autocannon_twin_hydra]]
 GameData["modifiers"]["modifier_17"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\reload_time_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[guard_earthshaker_cannon_basilisk]]
 GameData["modifiers"]["modifier_18"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\reload_time_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_19"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[guard_heavy_mortar]]
 GameData["modifiers"]["modifier_19"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\reload_time_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_20"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[guard_heavy_mortar_inferno]]
 GameData["modifiers"]["modifier_20"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_21"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[guard_heavy_mortar]]
 GameData["modifiers"]["modifier_21"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_22"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[guard_heavy_mortar_inferno]]
 GameData["modifiers"]["modifier_22"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\reload_time_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_23"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[guard_earthshaker_cannon_turret]]
 GameData["modifiers"]["modifier_23"]["value"] = 0.8999999762
 --REPLACE_ME

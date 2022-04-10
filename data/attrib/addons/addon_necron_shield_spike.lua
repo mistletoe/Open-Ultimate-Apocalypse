@@ -4,7 +4,7 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\ability_tau_shield_event.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = -10
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\ability_speed_fiend_event.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_3"] = Reference([[requirements\required_structure.lua]])
 GameData["requirements"]["required_3"]["structure_name"] = [[ebps\races\necrons\structures\necron_summoning_core_big.lua]]

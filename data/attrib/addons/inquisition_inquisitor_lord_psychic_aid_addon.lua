@@ -4,22 +4,22 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\morale_maximum_player_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["value"] = 5
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\support_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["value"] = 5
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_squad_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["value"] = 5
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_support_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["value"] = 5
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\population_cap_player_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["value"] = 200
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\population_growth_rate_player_modifier.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["value"] = 0.1000000015
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_1"] = Reference([[requirements\local_required_addon_exclusive.lua]])

@@ -52,9 +52,7 @@ GameData["requirement_ext"]["requirements"]["required_1"]["structure_name"] = [[
 GameData["requirement_ext"]["requirements"]["required_10"] = Reference([[requirements\required_structure.lua]])
 GameData["requirement_ext"]["requirements"]["required_10"]["structure_name"] = [[ebps\races\sisters\structures\sisters_hq.lua]]
 GameData["research_ext"] = Reference([[ebpextensions\research_ext.lua]])
-GameData["research_ext"]["research_table"]["0x04756E7F"] = [[research\sisters_blessed_bionics_2.lua]]
-GameData["research_ext"]["research_table"]["0x068A9DA7"] = [[research\sisters_health_research_2.lua]]
-GameData["research_ext"]["research_table"]["0xC175B3AD"] = [[research\sisters_blessed_bionics.lua]]
+
 GameData["research_ext"]["research_table"]["research_01"] = [[research\sisters_laud_hailer_research.lua]]
 GameData["research_ext"]["research_table"]["research_02"] = [[research\sisters_zealot_charge.lua]]
 GameData["research_ext"]["research_table"]["research_03"] = [[research\sisters_max_weapons_research.lua]]
@@ -75,6 +73,11 @@ GameData["research_ext"]["research_table"]["research_17"] = [[research\sisters_f
 GameData["research_ext"]["research_table"]["research_18"] = [[research\sisters_smoke_grenade_research.lua]]
 GameData["research_ext"]["research_table"]["research_19"] = [[research\sisters_phosphor_grenades_research.lua]]
 GameData["research_ext"]["research_table"]["research_20"] = [[research\sisters_krak_grenades_research.lua]]
+
+GameData["research_ext"]["research_table"]["research_21"] = [[research\sisters_blessed_bionics_2.lua]]
+GameData["research_ext"]["research_table"]["research_22"] = [[research\sisters_health_research_2.lua]]
+GameData["research_ext"]["research_table"]["research_23"] = [[research\sisters_blessed_bionics.lua]]
+
 GameData["resource_ext"] = Reference([[ebpextensions\resource_ext.lua]])
 GameData["resource_ext"]["0xE0A3B637"] = 1
 GameData["resource_ext"]["faith_per_second"] = 10

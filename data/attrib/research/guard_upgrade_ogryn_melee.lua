@@ -4,39 +4,39 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_ripper_gun_melee_ogryn]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_ripper_gun_melee_ogryn]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_ripper_gun_melee_ogryn_sergeant]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.5
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[guard_ripper_gun_melee_ogryn_sergeant]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.5
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[guard_knife_guardsmen]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.5
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[guard_knife_guardsmen]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.5
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[guard_knife_guardsmen_conscript]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.5
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[guard_knife_guardsmen_conscript]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.5
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[guard_knife_kasrkin]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.5
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[guard_knife_kasrkin]]
 GameData["modifiers"]["modifier_10"]["value"] = 1.5
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[guard_knife_poison]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.25
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])

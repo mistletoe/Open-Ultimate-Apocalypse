@@ -4,7 +4,7 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[inquisition_storm_bolter_gk_hero]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.5
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[inquisition_storm_bolter_gk_hero]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.5
 GameData["requirements"] = Reference([[tables\requirements.lua]])

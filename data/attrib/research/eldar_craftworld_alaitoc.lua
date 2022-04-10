@@ -1,45 +1,45 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[eldar_rangers]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_squad_rangers]]
 GameData["modifiers"]["modifier_02"]["value"] = 1
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[eldar_dire_avenger_exarch]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[eldar_banshee_exarch]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[eldar_swooping_hawk_exarch]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[eldar_dark_reaper_exarch]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[eldar_striking_scorpion_exarch]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[eldar_fire_dragon_exarch]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[eldar_warp_spider_exarch]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
@@ -82,88 +82,88 @@ GameData["modifiers"]["modifier_22"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[eldar_deathspinner_warpspiderexarch]]
 GameData["modifiers"]["modifier_22"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_23"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[eldar_rangers]]
 GameData["modifiers"]["modifier_23"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_24"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_24"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_24"]["target_type_name"] = [[eldar_dire_avenger]]
 GameData["modifiers"]["modifier_24"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_25"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_25"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_25"]["target_type_name"] = [[eldar_banshees]]
 GameData["modifiers"]["modifier_25"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_26"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_26"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_26"]["target_type_name"] = [[eldar_swooping_hawk]]
 GameData["modifiers"]["modifier_26"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_27"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_27"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_27"]["target_type_name"] = [[eldar_dark_reapers]]
 GameData["modifiers"]["modifier_27"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_28"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_28"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_28"]["target_type_name"] = [[eldar_striking_scorpion]]
 GameData["modifiers"]["modifier_28"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_29"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_29"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_29"]["target_type_name"] = [[eldar_fire_dragon]]
 GameData["modifiers"]["modifier_29"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_30"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_30"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_30"]["target_type_name"] = [[eldar_warp_spider]]
 GameData["modifiers"]["modifier_30"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_31"] = Reference([[modifiers\cost_requisition_modifier.lua]])
-GameData["modifiers"]["modifier_31"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_31"]["target_type_name"] = [[eldar_shining_spear]]
 GameData["modifiers"]["modifier_32"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_32"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_32"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_32"]["target_type_name"] = [[eldar_wave_serpent]]
 GameData["modifiers"]["modifier_32"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_33"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_33"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_33"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_33"]["target_type_name"] = [[eldar_falcon_grav_tank]]
 GameData["modifiers"]["modifier_33"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_34"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_34"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_34"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_34"]["target_type_name"] = [[eldar_vypers]]
 GameData["modifiers"]["modifier_34"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_35"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_35"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_35"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_35"]["target_type_name"] = [[eldar_nightwing]]
 GameData["modifiers"]["modifier_35"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_36"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_36"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_36"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_36"]["target_type_name"] = [[eldar_wraithlord]]
 GameData["modifiers"]["modifier_36"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_37"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_37"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_37"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_37"]["target_type_name"] = [[eldar_war_walker]]
 GameData["modifiers"]["modifier_37"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_38"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_38"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_38"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_38"]["target_type_name"] = [[eldar_hornet]]
 GameData["modifiers"]["modifier_38"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_39"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_39"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_39"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_39"]["target_type_name"] = [[eldar_nightspinner]]
 GameData["modifiers"]["modifier_39"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_40"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_40"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_40"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_40"]["target_type_name"] = [[eldar_fire_prism]]
 GameData["modifiers"]["modifier_40"]["value"] = 0.8500000238
 GameData["modifiers"]["modifier_41"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_41"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_41"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_41"]["target_type_name"] = [[eldar_wraithwalker]]
 GameData["modifiers"]["modifier_41"]["value"] = 0.8500000238
 --REPLACE_ME

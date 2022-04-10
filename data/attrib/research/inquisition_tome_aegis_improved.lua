@@ -2,122 +2,122 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[inquisition_grey_knights]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[inquisition_grey_knights]]
 GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 3
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[inquisition_grey_knights_interceptor]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[inquisition_grey_knights_interceptor]]
 GameData["modifiers"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_04"]["value"] = 3
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[inquisition_grey_knights_justicar]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[inquisition_grey_knights_justicar]]
 GameData["modifiers"]["modifier_06"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_06"]["value"] = 3
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[inquisition_grey_knights_purgator]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[inquisition_grey_knights_purgator]]
 GameData["modifiers"]["modifier_08"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_08"]["value"] = 3
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[inquisition_grey_knights_purifier]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_10"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[inquisition_grey_knights_purifier]]
 GameData["modifiers"]["modifier_10"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_10"]["value"] = 3
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[inquisition_grey_knights_terminator]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_12"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[inquisition_grey_knights_terminator]]
 GameData["modifiers"]["modifier_12"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_12"]["value"] = 3
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[inquisition_grey_knights_terminator_justicar]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[inquisition_grey_knights_terminator_justicar]]
 GameData["modifiers"]["modifier_14"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_14"]["value"] = 3
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[inquisition_grey_knights_terminator_paladin]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_16"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[inquisition_grey_knights_terminator_paladin]]
 GameData["modifiers"]["modifier_16"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_16"]["value"] = 3
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[inquisition_grey_knight_champion]]
 GameData["modifiers"]["modifier_17"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[inquisition_grey_knight_champion]]
 GameData["modifiers"]["modifier_18"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_18"]["value"] = 3
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_23"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_23"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[inquisition_grey_knights_astra]]
 GameData["modifiers"]["modifier_23"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_24"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_24"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_24"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_24"]["target_type_name"] = [[inquisition_grey_knights_astra]]
 GameData["modifiers"]["modifier_24"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_24"]["value"] = 3
 GameData["modifiers"]["modifier_29"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_29"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_29"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_29"]["target_type_name"] = [[inquisition_dreadknight_titan]]
 GameData["modifiers"]["modifier_29"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_30"] = Reference([[modifiers\armour_modifier.lua]])
 GameData["modifiers"]["modifier_30"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_30"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_30"]["target_type_name"] = [[inquisition_dreadknight_titan]]
 GameData["modifiers"]["modifier_30"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_30"]["value"] = 2

@@ -4,7 +4,7 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[daemons_hellsword_greater]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[daemons_hellsword_greater]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.350000024
 --REPLACE_ME

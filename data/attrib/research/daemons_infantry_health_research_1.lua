@@ -48,67 +48,67 @@ GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modi
 --REPLACE_ME
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[daemon_squad_flesh_hound]]
 GameData["modifiers"]["modifier_13"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_13"]["value"] = 50
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[daemon_squad_nurgling]]
 GameData["modifiers"]["modifier_14"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_14"]["value"] = 100
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[daemon_squad_bloodletters]]
 GameData["modifiers"]["modifier_15"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_15"]["value"] = 200
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_16"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[daemon_squad_plague_bearers]]
 GameData["modifiers"]["modifier_16"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_16"]["value"] = 50
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[daemon_squad_daemonettes]]
 GameData["modifiers"]["modifier_17"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_17"]["value"] = 50
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[daemon_squad_screamers]]
 GameData["modifiers"]["modifier_18"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_18"]["value"] = 50
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_19"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[daemon_squad_pink_horror]]
 GameData["modifiers"]["modifier_19"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_19"]["value"] = 200
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_20"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_20"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[daemon_squad_flamers]]
 GameData["modifiers"]["modifier_20"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_20"]["value"] = 100
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_21"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_21"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[daemon_squad_fiends]]
 GameData["modifiers"]["modifier_21"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_21"]["value"] = 200
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_22"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_22"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[daemon_squad_daemonettes_greater]]
 GameData["modifiers"]["modifier_22"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_22"]["value"] = 100
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_23"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_23"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[daemon_squad_blue_horror]]
 GameData["modifiers"]["modifier_23"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_23"]["value"] = 50

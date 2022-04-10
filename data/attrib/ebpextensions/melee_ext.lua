@@ -4,13 +4,13 @@ GameData["charge_modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["charge_range"] = 10
 GameData["in_melee_modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["in_melee_modifiers"]["modifier_01"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
-GameData["in_melee_modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["in_melee_modifiers"]["modifier_01"]["value"] = 0.773999989
 GameData["in_melee_modifiers"]["modifier_02"] = Reference([[modifiers\morale_rangeddamage_received_modifier.lua]])
-GameData["in_melee_modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["in_melee_modifiers"]["modifier_02"]["value"] = 0.1000000015
 GameData["in_melee_modifiers"]["modifier_03"] = Reference([[modifiers\health_rangedamage_received_2_modifier.lua]])
-GameData["in_melee_modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["in_melee_modifiers"]["modifier_03"]["value"] = 0.773999989
 GameData["melee_leap_action_distance_label"] = [[melee_leap_distance]]
 GameData["melee_leap_action_name"] = [[Melee_Move]]

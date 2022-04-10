@@ -1,1 +1,0 @@
-GameData = Inherit([[weapon\sisters_bolt_pistol.lua]])

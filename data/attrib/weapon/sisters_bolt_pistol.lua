@@ -18,7 +18,6 @@ GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
-
 GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
 
 GameData["can_attack_air_units"] = true 

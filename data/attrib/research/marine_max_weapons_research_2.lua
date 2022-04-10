@@ -1,19 +1,19 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[space_marine_squad_tactical]]
 GameData["modifiers"]["modifier_01"]["value"] = 1
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[space_marine_squad_scout]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[space_marine_squad_devastator]]
 GameData["modifiers"]["modifier_03"]["value"] = 1
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[space_marine_squad_assault]]
 GameData["modifiers"]["modifier_04"]["value"] = 1
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
@@ -29,11 +29,11 @@ GameData["modifiers"]["modifier_08"] = Reference([[modifiers\max_upgrades_squad_
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[space_marine_squad_terminator_assault]]
 GameData["modifiers"]["modifier_08"]["value"] = 1
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[space_marine_squad_tactical_bike]]
 GameData["modifiers"]["modifier_09"]["value"] = 1
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
-GameData["modifiers"]["modifier_10"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[space_marine_squad_lotd_tactical]]
 GameData["modifiers"]["modifier_10"]["value"] = 1
 GameData["requirements"] = Reference([[tables\requirements.lua]])

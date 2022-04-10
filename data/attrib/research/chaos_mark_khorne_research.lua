@@ -9,7 +9,7 @@ GameData["modifiers"]["modifier_03"]["target_type_name"] = [[chaos_marine_havoc]
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\default_weapon_modifier_hardpoint5.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[chaos_lord_terminator]]
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\default_weapon_modifier_hardpoint3.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[chaos_marine_icon_bearer]]
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_2"] = Reference([[requirements\required_research.lua]])

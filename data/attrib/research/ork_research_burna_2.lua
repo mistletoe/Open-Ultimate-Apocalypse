@@ -4,21 +4,21 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_burna_slugga]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[ork_burna_slugga]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[ork_burna_shoota]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[ork_burna_shoota]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[ork_burna_skarboyz]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[ork_burna_skarboyz]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.600000024
 GameData["requirements"] = Reference([[tables\requirements.lua]])

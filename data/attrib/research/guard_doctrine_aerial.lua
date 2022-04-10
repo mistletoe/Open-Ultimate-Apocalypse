@@ -37,24 +37,24 @@ GameData["modifiers"]["modifier_10"]["target_type_name"] = [[guard_infantry_stor
 GameData["modifiers"]["modifier_10"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_10"]["value"] = -10
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[guard_infantry_stormtrooper]]
 GameData["modifiers"]["modifier_11"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_12"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[guard_vehicles_vulture]]
 GameData["modifiers"]["modifier_12"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[guard_vehicles_marauder]]
 GameData["modifiers"]["modifier_13"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\cost_time_modifier.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[guard_vehicles_valkyrie_transport]]
 GameData["modifiers"]["modifier_14"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\armour_minimum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[guard_infantry_stormtrooper]]
 GameData["modifiers"]["modifier_15"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_15"]["value"] = 10

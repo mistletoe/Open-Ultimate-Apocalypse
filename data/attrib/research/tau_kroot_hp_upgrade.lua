@@ -16,7 +16,7 @@ GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[tau_vespid_strain_leader]]
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[tau_vespid_auxiliary_squad]]
 GameData["modifiers"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_05"]["value"] = 150

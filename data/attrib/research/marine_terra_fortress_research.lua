@@ -2,102 +2,102 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[space_marine_hq]]
 GameData["modifiers"]["modifier_01"]["value"] = 3
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[space_marine_barracks]]
 GameData["modifiers"]["modifier_02"]["value"] = 3
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[space_marine_armoury]]
 GameData["modifiers"]["modifier_03"]["value"] = 3
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[space_marine_armoury_emperor]]
 GameData["modifiers"]["modifier_04"]["value"] = 3
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_05"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[space_marine_hq_super]]
 GameData["modifiers"]["modifier_05"]["value"] = 3
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[space_marine_ability_building]]
 GameData["modifiers"]["modifier_06"]["value"] = 3
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_07"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[space_marine_vehicle_building]]
 GameData["modifiers"]["modifier_07"]["value"] = 3
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_08"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[space_marine_turret_bolter]]
 GameData["modifiers"]["modifier_08"]["value"] = 2
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[space_marine_generator]]
 GameData["modifiers"]["modifier_09"]["value"] = 2
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_10"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[space_marine_thermo_generator]]
 GameData["modifiers"]["modifier_10"]["value"] = 3
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_11"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[space_marine_thermonuclear_generator]]
 GameData["modifiers"]["modifier_11"]["value"] = 2
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_12"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[space_marine_turret_missile_sp]]
 GameData["modifiers"]["modifier_12"]["value"] = 2
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_13"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[space_marine_orbital_relay]]
 GameData["modifiers"]["modifier_13"]["value"] = 3
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[space_marine_landraider_building]]
 GameData["modifiers"]["modifier_14"]["value"] = 3
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[space_marine_titan_facility]]
 GameData["modifiers"]["modifier_15"]["value"] = 3
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[space_marine_tanktrap]]
 GameData["modifiers"]["modifier_17"]["value"] = 3
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[space_marine_wall]]
 GameData["modifiers"]["modifier_18"]["value"] = 3
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_19"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[space_marine_interface_relay]]
 GameData["modifiers"]["modifier_19"]["value"] = 3
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_20"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_20"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[space_marine_listening_post]]
 GameData["modifiers"]["modifier_20"]["value"] = 3
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_21"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_21"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[space_marine_mine_field]]
 GameData["modifiers"]["modifier_21"]["value"] = 3
 GameData["requirements"] = Reference([[tables\requirements.lua]])

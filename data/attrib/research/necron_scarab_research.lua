@@ -2,12 +2,12 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["exclusive"] = true 
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[necron_scarab_air_squad]]
 GameData["modifiers"]["modifier_01"]["value"] = 7
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["exclusive"] = true 
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[necron_scarab_squad]]
 GameData["modifiers"]["modifier_02"]["value"] = 7
 --REPLACE_ME

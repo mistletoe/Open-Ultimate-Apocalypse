@@ -18,7 +18,7 @@ GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["value"] = 0.8000000119
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_07"]["max_lifetime"] = 2
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_08"] = Reference([[tables\time_modify_entry.lua]])

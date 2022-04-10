@@ -5,11 +5,11 @@ GameData["modifiers"]["modifier_01"]["target_type_name"] = [[tyranids_hive_tyran
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
 GameData["modifiers"]["modifier_02"]["exclusive"] = true 
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_hive_tyrant_hg_dxp3]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.5
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_melee_hivetyrant]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])

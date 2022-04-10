@@ -64,7 +64,7 @@ GameData["modifiers"]["modifier_14"]["usage_type"] = Reference([[type_modifierus
 GameData["modifiers"]["modifier_14"]["value"] = 100
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\morale_maximum_squad_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[space_marine_squad_sternguard_veteran]]
 GameData["modifiers"]["modifier_15"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_15"]["value"] = 150

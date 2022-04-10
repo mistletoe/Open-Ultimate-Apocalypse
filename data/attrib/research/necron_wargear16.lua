@@ -16,7 +16,7 @@ GameData["modifiers"]["modifier_03"]["target_type_name"] = [[necron_lord_destroy
 GameData["modifiers"]["modifier_03"]["value"] = 0.75
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\ability_recharge_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_04"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[necron_lord_destroyer]]
 GameData["modifiers"]["modifier_04"]["value"] = 0.75
 --REPLACE_ME

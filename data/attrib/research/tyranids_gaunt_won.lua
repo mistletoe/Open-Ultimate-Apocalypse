@@ -8,7 +8,7 @@ GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_hormagaunt
 GameData["modifiers"]["modifier_02"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_hormagaunt]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.130429983
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\cost_requisition_modifier.lua]])
@@ -19,7 +19,7 @@ GameData["modifiers"]["modifier_05"]["target_type_name"] = [[tyranids_termagant]
 GameData["modifiers"]["modifier_05"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_06"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[tyranids_termagant]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.130429983
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\cost_requisition_modifier.lua]])
@@ -30,7 +30,7 @@ GameData["modifiers"]["modifier_08"]["target_type_name"] = [[tyranids_gargoyle]]
 GameData["modifiers"]["modifier_08"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_09"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[tyranids_gargoyle]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.080000043
 GameData["requirements"] = Reference([[tables\requirements.lua]])

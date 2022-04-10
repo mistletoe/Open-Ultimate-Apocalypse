@@ -2,17 +2,17 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\enable_general_combat.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[necron_pylon_sentry]]
 GameData["modifiers"]["modifier_01"]["value"] = -3
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\enable_general_combat.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[necron_turret_battery]]
 GameData["modifiers"]["modifier_02"]["value"] = -3
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_general_combat.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_03"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[necron_pylon]]
 GameData["modifiers"]["modifier_03"]["value"] = -3
 GameData["requirements"] = Reference([[tables\requirements.lua]])

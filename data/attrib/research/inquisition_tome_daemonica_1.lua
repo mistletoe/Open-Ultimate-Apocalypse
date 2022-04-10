@@ -54,67 +54,67 @@ GameData["modifiers"]["modifier_13"]["target_type_name"] = [[inquisition_dreadno
 GameData["modifiers"]["modifier_13"]["value"] = 2
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_14"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[inquisition_grey_knights]]
 GameData["modifiers"]["modifier_14"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_15"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[inquisition_grey_knights_justicar]]
 GameData["modifiers"]["modifier_15"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_16"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[inquisition_grey_knights_interceptor]]
 GameData["modifiers"]["modifier_16"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_17"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[inquisition_grey_knights_purgator]]
 GameData["modifiers"]["modifier_17"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_18"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[inquisition_grey_knights_purifier]]
 GameData["modifiers"]["modifier_18"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_19"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[inquisition_grey_knights_terminator]]
 GameData["modifiers"]["modifier_19"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_20"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_20"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[inquisition_grey_knights_terminator_justicar]]
 GameData["modifiers"]["modifier_20"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_21"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_21"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[inquisition_grey_knights_terminator_paladin]]
 GameData["modifiers"]["modifier_21"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_22"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_22"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[inquisition_grey_knight_champion]]
 GameData["modifiers"]["modifier_22"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_23"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_23"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[inquisition_grey_knight_hero]]
 GameData["modifiers"]["modifier_23"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_24"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_24"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_24"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_24"]["target_type_name"] = [[inquisition_dreadnought_assault]]
 GameData["modifiers"]["modifier_24"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_25"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_25"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_25"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_25"]["target_type_name"] = [[inquisition_dreadnought_support]]
 GameData["modifiers"]["modifier_25"]["value"] = 0.9499999881
 GameData["modifiers"]["modifier_26"] = Reference([[modifiers\health_meleedamage_received_modifier.lua]])
 GameData["modifiers"]["modifier_26"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
-GameData["modifiers"]["modifier_26"]["shield_of_faith"] = false
+--REPLACE ME
 GameData["modifiers"]["modifier_26"]["target_type_name"] = [[inquisition_dreadnought_venerable]]
 GameData["modifiers"]["modifier_26"]["value"] = 0.9499999881
 GameData["requirements"] = Reference([[tables\requirements.lua]])
