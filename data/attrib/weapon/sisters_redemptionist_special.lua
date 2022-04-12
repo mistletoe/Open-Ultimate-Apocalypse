@@ -1,23 +1,25 @@
 GameData = Inherit([[]])
-GameData["accuracy"] = 0.75
-GameData["accuracy_reduction_when_moving"] = 0.4499999881
-GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+--This pretends to be a "bolter", but it's anything but, so the name has been changed.
+GameData["accuracy"] = 0.9
+GameData["accuracy_reduction_when_moving"] = 0.45
+GameData["area_effect"] = Reference([[tables\STRENGTH_6.lua]])
+GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
+GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_enemy.lua]])
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 30
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 22
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 125
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 75
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 1
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 5
-GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_Impact_events\Blood_Splatter_Impact_S]]
-GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Impact_Bolter_Metal_S]]
-GameData["area_effect"]["weapon_damage"]["hit_events"]["entry03"]["event"] = [[Impact_Bolter_Metal_S]]
-GameData["area_effect"]["weapon_damage"]["hit_events"]["entry04"]["event"] = [[unit_impact_events/Impact_Bolter_Hvy]]
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 10
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Sisters\EmperorsTouch_Impact]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Sisters\EmperorsTouch_Impact]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry03"]["event"] = [[Sisters\EmperorsTouch_Impact]]
+GameData["area_effect"]["weapon_damage"]["hit_events"]["entry04"]["event"] = [[Sisters\EmperorsTouch_Impact]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
-
 
 GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
 
@@ -37,7 +39,7 @@ GameData["kill_enemy_at_percent_life_cooldown_time"] = 0
 GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
 
 GameData["linger_on_target_after_fire_time"] = 0
-GameData["max_range"] = 30
+GameData["max_range"] = 35
 GameData["max_traverse_down"] = -60
 GameData["max_traverse_left"] = -90
 GameData["max_traverse_right"] = 90
@@ -72,10 +74,10 @@ GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
 GameData["ui_info"]["help_text_id"] = [[$0]]
 GameData["ui_info"]["help_text_list"]["text_01"] = [[$18210121]] -- - Description will be reworked in version 1.9.
 GameData["ui_info"]["help_text_list"]["text_02"] = [[$18010004]] -- - Effective versus: Infantry
-GameData["ui_info"]["help_text_list"]["text_03"] = [[$18210131]] -- - Range: Standard.
-GameData["ui_info"]["help_text_list"]["text_04"] = [[$18210127]] -- - Accuracy: Standard.
-GameData["ui_info"]["help_text_list"]["text_05"] = [[$0]]
-GameData["ui_info"]["help_text_list"]["text_06"] = [[$0]]
+GameData["ui_info"]["help_text_list"]["text_03"] = [[$18010005]] -- - Effective versus: Heavy Infantry
+GameData["ui_info"]["help_text_list"]["text_04"] = [[$18010008]] -- - Effective versus: Vehicles
+GameData["ui_info"]["help_text_list"]["text_05"] = [[$18210131]] -- - Range: Standard.
+GameData["ui_info"]["help_text_list"]["text_06"] = [[$18210127]] -- - Accuracy: Standard.
 
 GameData["ui_info"]["icon_name"] = [[space_marine_icons/upgrade]]
 

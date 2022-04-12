@@ -32,8 +32,8 @@ GameData["ui_hotkey_name"] = [[hotkey_s]]
 GameData["ui_index_hint"] = 6
 GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
 --REPLACE_ME
-GameData["ui_info"]["help_text_list"]["text_01"] = [[$18210282]] -- - Equips infantry with advanced Psyocculum wargear, further increasing weapon damage
-GameData["ui_info"]["help_text_list"]["text_02"] = [[$4350081]] -- - Increases the damage done by all Battle Sister weapons.
+GameData["ui_info"]["help_text_list"]["text_01"] = [[$18210282]] -- - Equips infantry with advanced Psyocculum wargear.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$4350081]] -- - Increases the damage done by many standard Battle Sister infantry weapons.
 
 GameData["ui_info"]["icon_name"] = [[sisters_icons/research_infantry_range2]]
 --REPLACE_ME

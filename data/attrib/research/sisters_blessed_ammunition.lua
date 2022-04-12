@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 --Xeno note: made consistent w/ sisters_blessed_ammunition_2, since they're both supposed to provide the same Modifier, including table entry positions!
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_bolter_battle_sister]]
+GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_bolter]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.5
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sisters_bolter_celestian]]
@@ -17,27 +17,18 @@ GameData["modifiers"]["modifier_05"] = Reference([[modifiers\cover_damage_bonus_
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[sisters_bolt_pistol_elites]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.5
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_bolter_battle_sister_initiate]]
+GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_storm_bolter_rhino]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.5
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_storm_bolter_rhino]]
+GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_heavy_bolter_battle_sister]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.5
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_heavy_bolter_battle_sister]]
+GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_heavy_bolter_capitol]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.5
---INTENTIONAL SPACER 
--- 09 - 13 are now cleared
-GameData["modifiers"]["modifier_14"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_14"]["target_type_name"] = [[sisters_bolter_battle_sister_redemptionist]]
-GameData["modifiers"]["modifier_14"]["value"] = 1.5
-GameData["modifiers"]["modifier_15"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_15"]["target_type_name"] = [[sisters_heavy_bolter_capitol]]
-GameData["modifiers"]["modifier_15"]["value"] = 1.5
-GameData["modifiers"]["modifier_16"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
-GameData["modifiers"]["modifier_16"]["target_type_name"] = [[sisters_storm_bolter_battle_sister]]
-GameData["modifiers"]["modifier_16"]["value"] = 1.5
---INTENTIONAL SPACER
--- 17 - 32 are now cleared
+GameData["modifiers"]["modifier_09"] = Reference([[modifiers\cover_damage_bonus_modifier.lua]])
+GameData["modifiers"]["modifier_09"]["target_type_name"] = [[sisters_storm_bolter_battle_sister]]
+GameData["modifiers"]["modifier_09"]["value"] = 1.5
+
 
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])

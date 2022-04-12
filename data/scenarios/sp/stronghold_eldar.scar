@@ -1420,23 +1420,23 @@ function Rule_GameStart()
 		Rule_AddInterval(Rule_PreTeleport_CenterBase,1)
 		
 		-- Make Initial Base Buildings Invulnurable (so cant be destroyed pre-teleport): 
-		--EGroup_SetHealthInvulnerable("eg_centerBase_HQ", true)
-		--EGroup_SetHealthInvulnerable("eg_centerBase_aspectPortal", true)
-		--EGroup_SetHealthInvulnerable("eg_centerBase_supportPortal", true)
+		EGroup_SetHealthInvulnerable("eg_centerBase_HQ", true)
+		EGroup_SetHealthInvulnerable("eg_centerBase_aspectPortal", true)
+		EGroup_SetHealthInvulnerable("eg_centerBase_supportPortal", true)
 		
 		names = {"eldar_hq_sp_dxp3","eldar_aspect_portal_sp_dxp3","eldar_support_portal_sp_dxp3"}
 		
-		g_modifier_invulnurable1 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[1])
-		g_modifier_invulnurable2 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[2])
-		g_modifier_invulnurable3 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[3])
+		--g_modifier_invulnurable1 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[1])
+		--g_modifier_invulnurable2 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[2])
+		--g_modifier_invulnurable3 = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, -1, names[3])
 		
 --		g_modifier_killable = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, 1, names[1])
 --		g_modifier_killable = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, 1, names[2])
 --		g_modifier_killable = Modifier_Create(MAT_EntityType,"enable_health_damage",MUT_Enable, false, 1, names[3])
 		
-		Modifier_ApplyToEntity( g_modifier_invulnurable1, EGroup_GetSpawnedEntityAt("eg_centerBase_HQ",1))
-		Modifier_ApplyToEntity( g_modifier_invulnurable2, EGroup_GetSpawnedEntityAt("eg_centerBase_aspectPortal",1))
-		Modifier_ApplyToEntity( g_modifier_invulnurable3, EGroup_GetSpawnedEntityAt("eg_centerBase_supportPortal",1))
+		--Modifier_ApplyToEntity( g_modifier_invulnurable1, EGroup_GetSpawnedEntityAt("eg_centerBase_HQ",1))
+		--Modifier_ApplyToEntity( g_modifier_invulnurable2, EGroup_GetSpawnedEntityAt("eg_centerBase_aspectPortal",1))
+		--Modifier_ApplyToEntity( g_modifier_invulnurable3, EGroup_GetSpawnedEntityAt("eg_centerBase_supportPortal",1))
 		
 		-- Check for the player destroying the CenterBase (so we know when to warp out the Base & spring the trap)
 		Rule_Add(Rule_Check_For_Center_Base_Damage)

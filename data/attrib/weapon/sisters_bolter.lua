@@ -1,13 +1,15 @@
 GameData = Inherit([[]])
-GameData["accuracy"] = 0.6000000238
-GameData["accuracy_reduction_when_moving"] = 0.4499999881
-GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+--Better range than a Sisters Bolt Pistol, but that's pretty much all that's better about them.
+--Now has enough range that squads can overlap fire a bit, and respond to some kiting.
+GameData["accuracy"] = 0.85
+GameData["accuracy_reduction_when_moving"] = 0.5
+GameData["area_effect"] = Reference([[tables\STRENGTH_4.lua]])
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 28
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 22
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 35
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 20
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 1
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 4
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_Impact_events\Blood_Splatter_Impact_S]]
@@ -37,7 +39,7 @@ GameData["kill_enemy_at_percent_life_cooldown_time"] = 0
 GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
 
 GameData["linger_on_target_after_fire_time"] = 0
-GameData["max_range"] = 25
+GameData["max_range"] = 35
 GameData["max_traverse_down"] = -60
 GameData["max_traverse_left"] = -90
 GameData["max_traverse_right"] = 90
@@ -60,7 +62,7 @@ GameData["show_in_reinforce"] = true
 GameData["single_shot"] = false
 GameData["single_shot_duration"] = 0
 GameData["squad_max"] = 0
-GameData["stationary_horizontal_multiplier"] = 0.1000000015
+GameData["stationary_horizontal_multiplier"] = 0.1
 GameData["ui_effective_against"] = Reference([[tables\text_table.lua]])
 GameData["ui_effective_against"]["text_01"] = [[$90104]] -- Infantry
 GameData["ui_effective_against"]["text_02"] = [[$0]]

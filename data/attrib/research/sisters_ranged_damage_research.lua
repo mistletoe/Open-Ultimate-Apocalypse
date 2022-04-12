@@ -28,7 +28,7 @@ GameData["ui_index_hint"] = 6
 GameData["ui_info"] = Reference([[tables\ui_info_table.lua]])
 --REPLACE_ME
 GameData["ui_info"]["help_text_list"]["text_01"] = [[$4350079]] -- - Equips all Battle Sister units with Psyocculum wargear.
-GameData["ui_info"]["help_text_list"]["text_02"] = [[$4350081]] -- - Increases the damage done by all Battle Sister weapons.
+GameData["ui_info"]["help_text_list"]["text_02"] = [[$4350081]] -- - Increases the damage done by many standard Battle Sister infantry weapons.
 --REPLACE_ME
 GameData["ui_info"]["icon_name"] = [[sisters_icons/research_infantry_range]]
 --REPLACE_ME

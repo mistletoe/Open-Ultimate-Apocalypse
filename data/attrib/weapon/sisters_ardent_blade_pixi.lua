@@ -1,28 +1,18 @@
 GameData = Inherit([[]])
 GameData["accuracy"] = 0.8999999762
 GameData["accuracy_reduction_when_moving"] = 0
-GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+GameData["area_effect"] = Reference([[tables\STRENGTH_6.lua]])
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 12
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 6
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 35
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 20
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 1
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 2
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["max_lifetime"] = 3
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\health_degeneration_modifier.lua]])
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["exclusive"] = true 
-
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_02"]["max_lifetime"] = 3
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_02"]["modifier"] = Reference([[modifiers\flamer_hit_event.lua]])
-
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_07"]["max_lifetime"] = 2
-
 
 GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
 
@@ -42,7 +32,7 @@ GameData["melee_weapon"] = true
 GameData["raider_weapon_index"] = 0
 GameData["rear_facing"] = false
 GameData["reload_show_progress"] = false
-GameData["reload_time"] = 1
+GameData["reload_time"] = 0.5
 GameData["setup_time"] = 0
 GameData["show_in_reinforce"] = true 
 GameData["squad_max"] = 0
