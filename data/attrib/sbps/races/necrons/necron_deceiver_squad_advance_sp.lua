@@ -24,26 +24,7 @@ GameData["squad_deceive_ext"]["possess_entity_max_radius"] = 10
 GameData["squad_deceive_ext"]["take_possession_anim_name"] = [[special_ability_2]]
 GameData["squad_deceive_ext"]["take_possession_duration"] = 20
 GameData["squad_deceive_ext"]["take_possession_event_name"] = [[Necron/Deceiver_MC_AOE]]
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\block.lua]]
 GameData["squad_grand_illusion_ext"] = Reference([[sbpextensions\squad_grand_illusion_ext.lua]])
@@ -81,21 +62,7 @@ GameData["squad_possess_enemy_ext"]["no_ui_button"] = true
 GameData["squad_possess_enemy_ext"]["take_possession_anim_name"] = [[special_ability_2]]
 GameData["squad_possess_enemy_ext"]["take_possession_duration"] = 2
 GameData["squad_possess_enemy_ext"]["take_possession_event_name"] = [[Necron/Deceiver_MC_AOE]]
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["squad_possess_enemy_ext"]["ui_index_hint"] = nil
 GameData["squad_ui_ext"] = Reference([[sbpextensions\squad_ui_ext.lua]])
 GameData["squad_ui_ext"]["counter_text_id"] = [[$0]]

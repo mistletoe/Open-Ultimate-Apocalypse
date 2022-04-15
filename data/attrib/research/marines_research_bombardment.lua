@@ -1,7 +1,7 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\cost_time_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[space_marine_thermonuclear_generator]]
 GameData["modifiers"]["modifier_01"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

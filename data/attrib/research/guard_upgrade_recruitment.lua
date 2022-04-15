@@ -1,11 +1,11 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_infantry_guardsmen_conscript]]
 GameData["modifiers"]["modifier_01"]["value"] = 0
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_squad_guardsmen_conscript]]
 GameData["modifiers"]["modifier_02"]["value"] = 14
 GameData["requirements"] = Reference([[tables\requirements.lua]])

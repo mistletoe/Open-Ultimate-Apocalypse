@@ -1,19 +1,19 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_slugga_boy]]
 GameData["modifiers"]["modifier_01"]["value"] = 0
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[ork_grot_gang]]
 GameData["modifiers"]["modifier_02"]["value"] = 0
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\cost_time_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[ork_grot_gang]]
 GameData["modifiers"]["modifier_03"]["value"] = 0.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[ork_slugga_boy]]
 GameData["modifiers"]["modifier_04"]["value"] = 0.5
 GameData["requirements"] = Reference([[tables\requirements.lua]])

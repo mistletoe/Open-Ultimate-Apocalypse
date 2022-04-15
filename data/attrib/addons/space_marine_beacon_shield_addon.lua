@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\ability_energy_field_event.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = nil
+--INTENTIONAL SPACER
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_1"] = Reference([[requirements\global_required_addon.lua]])
 GameData["requirements"]["required_1"]["global_addon_name"] = [[addons\space_marine_hq_addon_2.lua]]

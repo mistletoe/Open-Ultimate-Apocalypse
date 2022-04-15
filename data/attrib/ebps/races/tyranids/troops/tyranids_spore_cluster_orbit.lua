@@ -79,21 +79,12 @@ GameData["health_ext"]["spawn_usable_body_on_death"] = nil
 GameData["mine_field_ext"] = Reference([[ebpextensions\mine_field_ext.lua]])
 GameData["mine_field_ext"]["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_own.lua]])
 --INTENTIONAL SPACER
-GameData["mine_field_ext"]["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = nil
+--INTENTIONAL SPACER
 GameData["mine_field_ext"]["area_effect"]["area_effect_information"]["start_from_caster"] = nil
 --INTENTIONAL SPACER
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = nil
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_02"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_03"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_04"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_05"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_06"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_07"]["modifier"]["shield_of_faith"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_08"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_09"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_10"] = nil
+--INTENTIONAL SPACER
 GameData["moving_ext"] = Reference([[ebpextensions\moving_ext.lua]])
 GameData["moving_ext"]["acceleration_time"] = 0
 GameData["moving_ext"]["air_unit_float_height"] = 0

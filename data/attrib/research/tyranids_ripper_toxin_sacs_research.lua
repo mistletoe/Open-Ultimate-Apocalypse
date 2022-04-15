@@ -4,7 +4,7 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[tyranids_melee_ripperswarm]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.5
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_melee_ripperswarm]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.5
 GameData["requirements"] = Reference([[tables\requirements.lua]])

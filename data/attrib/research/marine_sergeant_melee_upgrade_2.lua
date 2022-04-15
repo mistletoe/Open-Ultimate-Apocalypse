@@ -1,37 +1,37 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sergeant]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sergeant_assault_marine]]
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[space_marine_chainsword_apothecary]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[space_marine_chainsword_apothecary]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.25
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[space_marine_crozius_arcanum]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[space_marine_crozius_arcanum]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[space_marine_force_weapon]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[space_marine_force_weapon]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[space_marine_power_sword_librarian]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[space_marine_power_sword_librarian]]
 GameData["modifiers"]["modifier_12"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

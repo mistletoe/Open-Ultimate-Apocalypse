@@ -3,7 +3,7 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint8.lua]])
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_leaders_captain]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_leaders_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_squad_command_squad]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

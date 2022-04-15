@@ -8,7 +8,7 @@ GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_genesteale
 GameData["modifiers"]["modifier_02"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_genestealer]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.130429983
 GameData["requirements"] = Reference([[tables\requirements.lua]])

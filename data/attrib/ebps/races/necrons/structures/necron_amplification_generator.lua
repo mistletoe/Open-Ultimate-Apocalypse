@@ -59,14 +59,7 @@ GameData["entity_blueprint_ext"] = Reference([[ebpextensions\entity_blueprint_ex
 GameData["entity_blueprint_ext"]["animator"] = [[Races/Necrons/Structures/Necron_Plasma_Generator_Cosmo]]
 GameData["entity_blueprint_ext"]["minimum_update_radius"] = 1
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[structure_fx/relocate]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[relocation_event_modifier]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[Necron/Abilities/necron_amplify]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[morale_break_event]]
-GameData["event_manager_ext"]["event_24"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\wraith_tomb]]
-GameData["event_manager_ext"]["event_24"]["modifier_name"] = [[ability_wraith_tomb_event]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["can_be_repaired"] = true 

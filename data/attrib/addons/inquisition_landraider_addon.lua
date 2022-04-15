@@ -3,7 +3,7 @@ GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\enable_hardpoint_02.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = -1
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_hardpoint_04.lua]])

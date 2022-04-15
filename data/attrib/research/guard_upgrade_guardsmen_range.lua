@@ -1,27 +1,27 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_lasgun_guardsmen]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_plasma_gun_guardsmen]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_laspistol_guardsmen_sergeant]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[guard_lasgun_conscripts]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[guard_lasgun_guardsmen_prisoner]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[guard_laspistol_guardsmen_rider]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

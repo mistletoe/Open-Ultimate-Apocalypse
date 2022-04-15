@@ -1,11 +1,11 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint3.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[chaos_lord_advance_sp]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_lord_advance_sp]]
 GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 150
@@ -19,15 +19,15 @@ GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[chaos_melta_gun_lord]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[chaos_bolt_pistol_lord]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[chaos_plasma_pistol_lord]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[chaos_melta_gun_lord]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
@@ -40,22 +40,22 @@ GameData["modifiers"]["modifier_11"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[chaos_accursed_crozius]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[chaos_power_sword_lord]]
 GameData["modifiers"]["modifier_12"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[chaos_manreaper]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[chaos_accursed_crozius]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[chaos_daemon_prince_sword]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[chaos_daemon_prince_sword]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

@@ -21,10 +21,6 @@ GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
 
-
-
-
-
 --REPLACE_ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 30
@@ -70,11 +66,8 @@ GameData["divine_retribution_event"] = [[Art/Events/Sisters/DR_FirePillar]]
 GameData["duration_time"] = 15
 GameData["enemy_opacity_while_active"] = 1
 GameData["entity_busy_time"] = 0
-GameData["execute_table"] = Reference([[tables\execute_table.lua]])
 
-GameData["execute_table"]["weapon_damage_table"]["armour_damage"]["life_leech_damage"] = 0
-GameData["execute_table"]["weapon_damage_table"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["execute_table"]["weapon_damage_table"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
+GameData["execute_table"] = Reference([[tables\execute_table.lua]])
 
 GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
 GameData["friendly_opacity_while_active"] = 1

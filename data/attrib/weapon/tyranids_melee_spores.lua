@@ -9,11 +9,7 @@ GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] =
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_03"] = nil
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_04"] = nil
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_05"] = nil
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_06"] = nil
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_07"] = nil
+--INTENTIONAL SPACER
 GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
 
 

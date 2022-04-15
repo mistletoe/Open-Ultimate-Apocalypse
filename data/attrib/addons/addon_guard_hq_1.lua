@@ -2,19 +2,19 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[addon_1]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = 500
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_squad_guardsmen]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[guard_squad_guardsmen_specialweapons]]
 GameData["modifiers"]["modifier_04"]["value"] = 1
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[guard_squad_guardsmen_rider]]
 GameData["modifiers"]["modifier_05"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

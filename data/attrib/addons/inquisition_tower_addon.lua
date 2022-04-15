@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[addon_1]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_06"]["value"] = 2000
 GameData["modifiers"]["modifier_26"] = Reference([[modifiers\enable_melee_leap.lua]])

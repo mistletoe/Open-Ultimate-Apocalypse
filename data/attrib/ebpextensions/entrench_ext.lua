@@ -8,7 +8,7 @@ GameData["entrenched_blueprint_name"] = [[]]
 GameData["entrenched_default_action_tree_name"] = [[]]
 GameData["entrenched_modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["entrenched_modifiers"]["modifier_01"] = Reference([[modifiers\special_attack_physics_mass.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["entrenched_modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["entrenched_modifiers"]["modifier_01"]["value"] = 9000
 GameData["icon_entrench"] = [[]]

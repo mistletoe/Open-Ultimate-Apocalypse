@@ -1,42 +1,42 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_multi_melta_immolator]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sisters_multi_melta_immolator]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[sisters_multi_melta_celestian]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[sisters_multi_melta_celestian]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[sisters_melta_celestian]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_melta_celestian]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_multi_melta_sentinel]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_multi_melta_sentinel]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[sisters_melta_battle_sister]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[sisters_melta_battle_sister]]
 GameData["modifiers"]["modifier_10"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[sisters_multi_melta_battle_sister]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
@@ -46,7 +46,7 @@ GameData["modifiers"]["modifier_13"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[sisters_multi_melta_retributor]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[sisters_multi_melta_retributor]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

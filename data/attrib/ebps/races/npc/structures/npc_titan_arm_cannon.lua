@@ -16,10 +16,7 @@ GameData["combat_ext"]["hardpoints"]["hardpoint_01"]["weapon_table"]["weapon_01"
 GameData["entity_blueprint_ext"] = Reference([[ebpextensions\entity_blueprint_ext.lua]])
 GameData["entity_blueprint_ext"]["animator"] = [[Races\NPC\Troops\Titan_Cannon_Main]]
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
+--INTENTIONAL SPACER
 GameData["infiltration_ext"] = Reference([[ebpextensions\infiltration_ext.lua]])
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
 GameData["modifier_apply_ext"]["modifiers"]["modifier_01"] = Reference([[modifiers\enable_infiltration.lua]])

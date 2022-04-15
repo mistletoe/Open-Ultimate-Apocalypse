@@ -7,7 +7,7 @@ GameData["modifiers"]["modifier_18"]["usage_type"] = Reference([[type_modifierus
 GameData["modifiers"]["modifier_18"]["value"] = 5
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\sight_radius_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[tyranids_spore_chimney]]
 GameData["modifiers"]["modifier_19"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_19"]["value"] = 20

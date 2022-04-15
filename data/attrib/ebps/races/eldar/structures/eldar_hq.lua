@@ -19,18 +19,7 @@ GameData["entity_blueprint_ext"]["animator"] = [[Races/Eldar/Structures/webway_a
 GameData["entity_blueprint_ext"]["scale_x"] = 2
 GameData["entity_blueprint_ext"]["scale_z"] = 6
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_04"]["event_entry_01"]["event_name"] = [[structure_fx/to_war]]
-GameData["event_manager_ext"]["event_04"]["modifier_name"] = [[eldar_to_war_event]]
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Unit_Ability_Fx\BoneSong]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_bonesong_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[structure_fx/shroud]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[ability_eldar_shroud_event]]
-GameData["event_manager_ext"]["event_10"]["event_entry_01"]["event_name"] = [[structure_fx/relocate]]
-GameData["event_manager_ext"]["event_10"]["modifier_name"] = [[relocation_event_modifier]]
-GameData["event_manager_ext"]["event_11"]["event_entry_01"]["event_name"] = [[Tau/Abilities/tau_shield_big]]
-GameData["event_manager_ext"]["event_11"]["modifier_name"] = [[ability_tau_shield_event]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["can_be_repaired"] = true 
@@ -48,7 +37,7 @@ GameData["modifier_apply_ext"]["modifiers"]["modifier_01"] = Reference([[modifie
 
 GameData["modifier_apply_ext"]["modifiers"]["modifier_01"]["value"] = -1
 GameData["modifier_apply_ext"]["modifiers"]["modifier_02"] = Reference([[modifiers\enable_melee_leap.lua]])
-GameData["modifier_apply_ext"]["modifiers"]["modifier_02"]["shield_of_faith"] = nil
+--INTENTIONAL SPACER
 
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_01"] = Reference([[modifiers\cost_power_modifier.lua]])
 

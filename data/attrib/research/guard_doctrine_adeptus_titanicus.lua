@@ -3,7 +3,7 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_support_cap_player_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = -3
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\population_cap_player_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["value"] = 750
 --REPLACE_ME
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_squad_cap_player_modifier.lua]])

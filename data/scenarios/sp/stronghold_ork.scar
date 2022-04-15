@@ -2069,10 +2069,14 @@ end
 function Rule_Objective_DestroyBase()
 	--[[ Objective Successfull ]]
 	if Event_IsAnyRunning() == false and EGroup_Exists("eg_MainOrkBase01") and EGroup_Count("eg_MainOrkBase01") == 0 then
-		Util_ObjectiveComplete( Objective_DestroyBase.title_id )
-		Rule_Remove( Rule_Objective_DestroyBase)
-		Objective_PingRemove(Objective_DestroyBase.title_id, g_ping_obj)
-		Rule_Add(CompleteScenario)
+		if(Objective_Exists(Objective_DestroyBase.title_id) == true) then
+			if(Objective_GetState(Objective_DestroyBase.title_id) ~= OS_Complete) then
+				Util_ObjectiveComplete( Objective_DestroyBase.title_id )
+				Rule_Remove( Rule_Objective_DestroyBase)
+				Objective_PingRemove(Objective_DestroyBase.title_id, g_ping_obj)
+				Rule_Add(CompleteScenario)
+			end
+		end
 	--[[If the objective doesn't exist, we're going to create it ]]
 	else
 		if Event_IsAnyRunning() == false and Objective_Exists(Objective_DestroyBase.title_id) == false then

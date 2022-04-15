@@ -76,7 +76,7 @@ GameData["squad_morale_ext"]["broken_modifiers"]["modifier_01"]["value"] = 1.5
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_05"] = Reference([[modifiers\ability_tau_shield_event.lua]])
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_05"]["value"] = -2
-GameData["squad_morale_ext"]["broken_modifiers"]["modifier_05"]["shield_of_faith"] = nil
+--INTENTIONAL SPACER
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_06"] = Reference([[modifiers\health_regeneration_modifier.lua]])
 GameData["squad_morale_ext"]["broken_modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad.lua]])
 --INTENTIONAL SPACER

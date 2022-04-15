@@ -3,9 +3,9 @@ GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\eldar_to_war_event.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_2"] = Reference([[requirements\global_required_addon.lua]])
 GameData["requirements"]["required_2"]["global_addon_name"] = [[addons\addon_daemons_hq_1.lua]]

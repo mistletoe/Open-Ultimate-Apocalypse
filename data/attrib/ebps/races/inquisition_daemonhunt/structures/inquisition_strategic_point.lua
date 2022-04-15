@@ -235,12 +235,7 @@ GameData["entity_blueprint_ext"]["scale_x"] = 2
 GameData["entity_blueprint_ext"]["scale_y"] = 2
 GameData["entity_blueprint_ext"]["scale_z"] = 2
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\wraith_tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
-GameData["event_manager_ext"]["event_10"]["event_entry_01"]["event_name"] = [[inquisition_build]]
-GameData["event_manager_ext"]["event_10"]["modifier_name"] = [[builder_idle_event]]
+--INTENTIONAL SPACER
 GameData["modifier_apply_ext"] = Reference([[ebpextensions\modifier_apply_ext.lua]])
 
 GameData["modifier_apply_ext"]["modifiers"]["modifier_02"] = Reference([[modifiers\builder_idle_event.lua]])

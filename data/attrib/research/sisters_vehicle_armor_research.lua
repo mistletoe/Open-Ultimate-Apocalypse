@@ -2,47 +2,47 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_exorcist_tank]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.25
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sisters_penitent_engine]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.25
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[sisters_immolator_tank]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[sisters_rhino]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.25
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[sisters_lightning]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.25
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[sisters_lightning_strike]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[sisters_exorcist_mk]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.25
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[sisters_sentinel]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.25
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[sisters_incarcerator_tank]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.25
 GameData["requirements"] = Reference([[tables\requirements.lua]])

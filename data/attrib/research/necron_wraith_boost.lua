@@ -2,17 +2,17 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.25
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.25
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[necron_wraith_advance_sp]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\enable_armour_2.lua]])
@@ -20,7 +20,7 @@ GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[necron_wraith_advance_sp]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.75
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\enable_armour_2.lua]])
@@ -28,7 +28,7 @@ GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[necron_wraith_advance_sp]]
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\ability_eldar_guide_event.lua]])
 GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\health_get_back_up_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
@@ -36,7 +36,7 @@ GameData["modifiers"]["modifier_08"]["target_type_name"] = [[necron_wraith]]
 GameData["modifiers"]["modifier_08"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_08"]["value"] = 0.200000003
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[necron_wraith_claw]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])

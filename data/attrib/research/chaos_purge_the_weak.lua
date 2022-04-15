@@ -2,12 +2,12 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[chaos_aspiring_champion]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.75
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_raptor_aspiring_champion]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.75
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_armour_2.lua]])
@@ -27,22 +27,22 @@ GameData["modifiers"]["modifier_07"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[chaos_aspiring_champion_cultist]]
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[chaos_aspiring_sorcerer]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.75
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_09"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[chaos_khorne_berserker_champion]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.75
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[chaos_marine_noise_champion]]
 GameData["modifiers"]["modifier_10"]["value"] = 1.75
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[chaos_marine_plague_champion]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.75
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\ability_chaos_purge_the_weak_event.lua]])
@@ -59,7 +59,7 @@ GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[chaos_marine_plague_champion]]
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[chaos_renegade_champion]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.75
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\ability_chaos_purge_the_weak_event.lua]])

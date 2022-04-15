@@ -5,7 +5,7 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\keen_sight_radius_m
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = 20
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_04"]["value"] = 350
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\income_faith_player_modifier.lua]])

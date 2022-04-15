@@ -10,16 +10,7 @@ GameData["entity_blueprint_ext"]["animator"] = [[Races/Eldar/Structures/land_min
 GameData["entity_blueprint_ext"]["scale_x"] = 4
 GameData["entity_blueprint_ext"]["scale_z"] = 4
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_04"]["event_entry_01"]["event_name"] = [[structure_fx/to_war]]
-GameData["event_manager_ext"]["event_04"]["modifier_name"] = [[eldar_to_war_event]]
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Unit_Ability_Fx\BoneSong]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_bonesong_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[structure_fx/shroud]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[ability_eldar_shroud_event]]
-GameData["event_manager_ext"]["event_10"]["event_entry_01"]["event_name"] = [[structure_fx/relocate]]
-GameData["event_manager_ext"]["event_10"]["modifier_name"] = [[relocation_event_modifier]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["death_event"] = [[unit_death_events/mine_death]]

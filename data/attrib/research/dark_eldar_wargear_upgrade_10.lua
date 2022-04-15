@@ -3,7 +3,7 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint5.lua]])
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[dark_eldar_leader_incubus]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[dark_eldar_tormentor_helm_incubus]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.5
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])

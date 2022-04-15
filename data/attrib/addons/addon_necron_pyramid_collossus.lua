@@ -2,13 +2,13 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["value"] = 2
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\enable_abilities.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_general_combat.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["value"] = 7
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\enable_hardpoint_01.lua]])
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\enable_hardpoint_02.lua]])
@@ -20,7 +20,7 @@ GameData["modifiers"]["modifier_07"]["value"] = 55
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\enable_hardpoint_05.lua]])
 GameData["modifiers"]["modifier_08"]["value"] = 55
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\morale_break_event_space_marine.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\keen_sight_radius_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_10"]["value"] = 50

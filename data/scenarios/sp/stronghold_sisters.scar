@@ -1563,7 +1563,7 @@ function WanderConfessor()
 									g_SeraphimCounter = g_SeraphimCounter + 1
 									Util_CreateSquadsAtMarkerEx(g_Player2, "sg_Seraphim"..g_SeraphimCounter, "sisters_squad_seraphim", "mkr_spawnpoint"..i, 1, 8)
 									SGroup_AddLeaders("sg_Seraphim"..g_SeraphimCounter)
-									Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Seraphim"..g_SeraphimCounter), 1),"sisters_chain_sword_seraphim", 6)
+									Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_Seraphim"..g_SeraphimCounter), 1),"sisters_chain_sword", 6)
 									SGroup_AddGroup("sg_ConfessorAttack"..g_ConfessorCounter, "sg_Seraphim"..g_SeraphimCounter)
 								end
 							end
@@ -1902,7 +1902,7 @@ function MainBaseAttack()
 			if g_SistersTier >= 2 then
 				if Blueprint == "sisters_squad_seraphim" then
 					SGroup_AddLeaders(SGroup..Counter)
-					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword_seraphim", World_GetRand(3,6))
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword", World_GetRand(3,6))
 				elseif Blueprint == "sisters_squad_battle_sister" then
 					SGroup_AddLeaders(SGroup..Counter)
 					if World_GetRand(1,10) > 5 then
@@ -2160,7 +2160,7 @@ function Route1Spawn()
 			if g_SistersTier >= 2 and UnitWasSpawned == true then
 				if Blueprint == "sisters_squad_seraphim" then
 					SGroup_AddLeaders(SGroup..Counter)
-					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword_seraphim", World_GetRand(3,6))
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword", World_GetRand(3,6))
 				elseif Blueprint == "sisters_squad_battle_sister" then
 					SGroup_AddLeaders(SGroup..Counter)
 					if World_GetRand(1,10) > 5 then
@@ -2322,7 +2322,7 @@ function Route2Spawn()
 			if g_SistersTier >= 2 then
 				if Blueprint == "sisters_squad_seraphim" then
 					SGroup_AddLeaders(SGroup..Counter)
-					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword_seraphim", World_GetRand(3,6))
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName(SGroup..Counter), 1),"sisters_chain_sword", World_GetRand(3,6))
 				elseif Blueprint == "sisters_squad_battle_sister" then
 					SGroup_AddLeaders(SGroup..Counter)
 					if World_GetRand(1,10) > 5 then
@@ -2516,13 +2516,13 @@ function AttackLP5()
 			-- create squad of seraphim
 			Util_CreateSquadsAtPositionEx(g_Player2, "sg_SeraphimJumpToLP5Squad1", "sisters_squad_seraphim", EGroup_GetPosition("eg_Base2Barracks1"), 1, 8)
 			SGroup_AddLeaders("sg_SeraphimJumpToLP5Squad1")
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SeraphimJumpToLP5Squad1"), 1),"sisters_chain_sword_seraphim", 3)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SeraphimJumpToLP5Squad1"), 1),"sisters_chain_sword", 3)
 			Cmd_AttackMoveMarker("sg_SeraphimJumpToLP5Squad1", "mkr_lp5attack_jump")
 		end
 		if EGroup_Exists("eg_Base2Barracks2") and EGroup_Count("eg_Base2Barracks2") > 0 then
 			Util_CreateSquadsAtPositionEx(g_Player2, "sg_SeraphimJumpToLP5Squad2", "sisters_squad_seraphim", EGroup_GetPosition("eg_Base2Barracks2"), 1, 8)
 			SGroup_AddLeaders("sg_SeraphimJumpToLP5Squad2")
-			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SeraphimJumpToLP5Squad2"), 1),"sisters_chain_sword_seraphim", 3)
+			Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_SeraphimJumpToLP5Squad2"), 1),"sisters_chain_sword", 3)
 			Cmd_AttackMoveMarker("sg_SeraphimJumpToLP5Squad2", "mkr_lp5attack_jump")
 		end			
 		-- add rule for point to make them jump
@@ -3189,7 +3189,7 @@ function FinalBase_Seraphim()
 					g_SeraphimCounter = g_SeraphimCounter + 1
 					Util_CreateSquadsAtMarkerEx(g_Player2, "sg_FinalBaseSeraphim"..g_SeraphimCounter, "sisters_squad_seraphim", "mkr_mainbase_barracks"..pos, 1, World_GetRand(7,8))
 					SGroup_AddLeaders("sg_FinalBaseSeraphim"..g_SeraphimCounter)
-					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseSeraphim"..g_SeraphimCounter), 1),"sisters_chain_sword_seraphim", 5)
+					Squad_ForceUpgradeWeapons(SGroup_GetSpawnedSquadAt(SGroup_FromName("sg_FinalBaseSeraphim"..g_SeraphimCounter), 1),"sisters_chain_sword", 5)
 					Cmd_AttackMoveMarker("sg_FinalBaseSeraphim"..g_SeraphimCounter, "mkr_jumpto_shrine"..i)
 					return
 				end

@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_infantry_guardsmen]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.25
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
@@ -12,12 +12,12 @@ GameData["modifiers"]["modifier_02"]["usage_type"] = Reference([[type_modifierus
 GameData["modifiers"]["modifier_02"]["value"] = 150
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_infantry_guardsmen_advance_sp]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.25
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[guard_infantry_guardsmen_conscript]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.25
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_maximum_modifier.lua]])
@@ -47,42 +47,42 @@ GameData["modifiers"]["modifier_10"]["target_type_name"] = [[guard_leaders_field
 GameData["modifiers"]["modifier_10"]["value"] = 1.25
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[guard_infantry_guardsmen_specialweapons]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.25
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_12"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[guard_infantry_guardsmen_rider]]
 GameData["modifiers"]["modifier_12"]["value"] = 1.25
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[guard_infantry_guardsmen_rider_sergeant]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.25
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[guard_heavy_weapons_team_entrenched_sp]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.25
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[guard_leaders_commissar_cadet]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.25
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[guard_infantry_ogryn]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.25
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[guard_infantry_ogryn_sergeant]]
 GameData["modifiers"]["modifier_17"]["value"] = 1.25
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[guard_leaders_field_medic]]
 GameData["modifiers"]["modifier_18"]["value"] = 1.25
 --REPLACE_ME

@@ -4,22 +4,22 @@ GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[dark_eldar_splinter_cannon_listening_post]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[dark_eldar_splinter_cannon_listening_post]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[dark_eldar_splinter_dual_cannons_listening_post]]
 GameData["modifiers"]["modifier_04"]["value"] = 2
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[dark_eldar_splinter_dual_cannons_listening_post]]
 GameData["modifiers"]["modifier_05"]["value"] = 2
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[dark_eldar_splinter_cannon_listening_post]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[dark_eldar_splinter_dual_cannons_listening_post]]
 GameData["modifiers"]["modifier_07"]["value"] = 1.25
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\keen_sight_radius_modifier.lua]])
@@ -31,22 +31,22 @@ GameData["modifiers"]["modifier_09"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post_2]]
 GameData["modifiers"]["modifier_09"]["value"] = 3
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post_2]]
 GameData["modifiers"]["modifier_10"]["value"] = 3
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post]]
 GameData["modifiers"]["modifier_11"]["value"] = 3
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post]]
 GameData["modifiers"]["modifier_12"]["value"] = 3
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.25
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\max_range_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[dark_eldar_dark_lance_listening_post_2]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.25
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\enable_armour_2.lua]])

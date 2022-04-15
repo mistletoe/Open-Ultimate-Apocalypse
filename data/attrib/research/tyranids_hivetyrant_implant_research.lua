@@ -4,14 +4,14 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[tyranids_melee_hivetyrant]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.399999976
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_melee_hivetyrant]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.399999976
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_scyth_hivetyrant]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[tyranids_scyth_hivetyrant]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.299999952
 GameData["requirements"] = Reference([[tables\requirements.lua]])

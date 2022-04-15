@@ -2,36 +2,18 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\sight_radius_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["value"] = 0
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_armour_2.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_structure_type.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[ork_boomy_platform]]
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["value"] = 1.600000024
-GameData["modifiers"]["modifier_27"] = nil
-GameData["modifiers"]["modifier_28"] = nil
-GameData["modifiers"]["modifier_29"] = nil
-GameData["modifiers"]["modifier_30"] = nil
-GameData["modifiers"]["modifier_31"] = nil
-GameData["modifiers"]["modifier_32"] = nil
-GameData["modifiers"]["modifier_33"] = nil
-GameData["modifiers"]["modifier_34"] = nil
-GameData["modifiers"]["modifier_35"] = nil
-GameData["modifiers"]["modifier_36"] = nil
-GameData["modifiers"]["modifier_37"] = nil
-GameData["modifiers"]["modifier_38"] = nil
-GameData["modifiers"]["modifier_39"] = nil
-GameData["modifiers"]["modifier_40"] = nil
-GameData["modifiers"]["modifier_41"] = nil
-GameData["modifiers"]["modifier_42"] = nil
-GameData["modifiers"]["modifier_43"] = nil
-GameData["modifiers"]["modifier_44"] = nil
-GameData["modifiers"]["modifier_45"] = nil
+--INTENTIONAL SPACER
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_1"] = Reference([[requirements\required_total_pop.lua]])
 GameData["requirements"]["required_1"]["population_required"] = 300

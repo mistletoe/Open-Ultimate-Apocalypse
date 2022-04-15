@@ -13,33 +13,16 @@ GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
 
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_03"]["modifier"] = Reference([[modifiers\enable_general_combat.lua]])
-
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_03"]["modifier"]["value"] = -1
+
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_04"]["modifier"] = Reference([[modifiers\speed_maximum_modifier.lua]])
-
-GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_04"]["modifier"]["value"] = 1.600000024
-
-GameData["backfire_action_name"] = [[]]
-GameData["backfire_area_effect"] = Reference([[tables\area_effect_table.lua]])
-GameData["backfire_area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
-GameData["backfire_area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_own.lua]])
-GameData["backfire_area_effect"]["area_effect_information"]["radius"] = 30
-GameData["backfire_area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
-
-GameData["backfire_area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["backfire_area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
+GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_04"]["modifier"]["value"] = 1.6
 
 GameData["backfire_caster_damage"] = Reference([[tables\weapon_damage_table.lua]])
-
-GameData["backfire_caster_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["backfire_caster_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
-
 GameData["backfire_delay"] = 0
 GameData["backfire_percent"] = 0
-GameData["caster_damage"] = Reference([[tables\weapon_damage_table.lua]])
 
-GameData["caster_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["caster_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
+GameData["caster_damage"] = Reference([[tables\weapon_damage_table.lua]])
 
 GameData["center_target_on_owner"] = false
 GameData["child_ability_name"] = [[all_bumpertank_child]]
@@ -53,9 +36,6 @@ GameData["duration_time"] = 10
 GameData["enemy_opacity_while_active"] = 1
 GameData["entity_busy_time"] = 0
 GameData["execute_table"] = Reference([[tables\execute_table.lua]])
-
-GameData["execute_table"]["weapon_damage_table"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["execute_table"]["weapon_damage_table"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
 GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
 GameData["fire_cost"]["power"] = 50

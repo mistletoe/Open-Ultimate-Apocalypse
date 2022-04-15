@@ -1868,13 +1868,16 @@ function Rule_DestroyMarsPatternCommand_Objective()
 		Objective_Exists(Objective_DestroyMarsPatternCommand.title_id) == true and	
 		EGroup_Count( EGroup_FromName("eg_mainBase_marsPattern_Objective")) == 0
 	then
-		-- Play IE: Mars Patterns all destroyed
-		Util_StartIntel(EVENTS.IE_MarsPatterns_AllDestroyed)
-		
 		-- Complete the Objective and Remove the Rule
-		Util_ObjectiveComplete(Objective_DestroyMarsPatternCommand.title_id)
-		Rule_Remove(Rule_DestroyMarsPatternCommand_Objective)
-
+		if(Objective_Exists(Objective_DestroyMarsPatternCommand.title_id) == true) then
+			if(Objective_GetState(Objective_Building_Kills.title_id) ~= OS_Complete) then
+				-- Play IE: Mars Patterns all destroyed
+				Util_StartIntel(EVENTS.IE_MarsPatterns_AllDestroyed)	
+			
+				Util_ObjectiveComplete(Objective_DestroyMarsPatternCommand.title_id)
+				Rule_Remove(Rule_DestroyMarsPatternCommand_Objective)
+			end
+		end
 	-- if the objective exists and Mars Pattern One Building is destroyed
 	elseif Event_IsAnyRunning() == false and
 		Objective_Exists(Objective_StopBaneBladeProduction.title_id) == true and

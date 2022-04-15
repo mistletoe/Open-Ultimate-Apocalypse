@@ -2,47 +2,47 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[daemon_daemonette]]
 GameData["modifiers"]["modifier_01"]["value"] = 0.6000000238
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[daemon_fiend]]
 GameData["modifiers"]["modifier_02"]["value"] = 0.6000000238
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[daemon_keeper_of_secrets]]
 GameData["modifiers"]["modifier_03"]["value"] = 0.75
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[daemon_primarch_angron]]
 GameData["modifiers"]["modifier_04"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_04"]["value"] = 10000
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\cost_population_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[daemon_primarch_angron]]
 GameData["modifiers"]["modifier_05"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_05"]["value"] = 2500
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[daemon_primarch_angron]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[daemons_horror_black_melee]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[daemons_horror_black_melee]]
 GameData["modifiers"]["modifier_10"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[daemon_bloodletter]]
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[daemon_flesh_hound]]
 --REPLACE_ME
 GameData["requirements"] = Reference([[tables\requirements.lua]])

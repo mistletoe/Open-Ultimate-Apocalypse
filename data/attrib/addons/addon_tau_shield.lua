@@ -2,12 +2,12 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\ability_energy_field_event.lua]])
-GameData["modifiers"]["modifier_01"]["shield_of_faith"] = nil
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\ability_tau_shield_event.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = -1
-GameData["modifiers"]["modifier_02"]["shield_of_faith"] = nil
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_2"] = Reference([[requirements\required_research.lua]])

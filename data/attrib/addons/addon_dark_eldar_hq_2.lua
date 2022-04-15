@@ -2,11 +2,11 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[addon_1]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = 500
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\morale_break_event_ork.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_2"] = Reference([[requirements\local_required_addon.lua]])
 GameData["requirements"]["required_2"]["addon_name"] = [[addons\addon_dark_eldar_hq_1.lua]]

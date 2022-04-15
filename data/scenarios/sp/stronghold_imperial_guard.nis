@@ -1287,10 +1287,12 @@ EVENTS.NIS_Intro = function()
 			CTRL.WAIT()
 			
 			--Xenoargh changed this timing, so that the Sentinels don't obviously clip thorough the Leman Russ, lol.
-			CTRL.Event_Delay(1.1)
+			CTRL.Event_Delay(1)
 			CTRL.WAIT()	
 			
-			Cmd_MoveToMarker("sg_opening_sentinelsa", "nis_opening_parade_goto3")						
+			Cmd_MoveToMarker("sg_opening_sentinelsa", "nis_opening_parade_goto3")		
+			CTRL.Event_Delay(1)
+			CTRL.WAIT()				
 			CTRL.Actor_PlaySpeech(  ACT.AiddeCampe, 5200036) --twenty today. twelve for cowardice in the line of duty.
 			CTRL.WAIT()
 			
@@ -1861,7 +1863,6 @@ EVENTS.NIS_Victory = function()
 		g_Nis_Blueprint3 = "dark_eldar_squad_scourge_sp_dxp3"
 		g_Nis_Blueprint4 = "dark_eldar_squad_hellion_sp_dxp3"
 		g_Nis_Blueprint5 = "dark_eldar_squad_talos"
-		--g_Nis_Blueprint5 = "dark_eldar_squad_raider_sp_dxp3"
 		g_Nis_Blueprint6 = "dark_eldar_squad_raven"
 		
 	elseif humanplayer == "sisters_race" then
@@ -2041,47 +2042,6 @@ EVENTS.NIS_Victory = function()
 		SGroup_FaceMarker("sg_closing_runner"..i, "nis_closing_commander_spawn")
 	end
 	
-	
-	
-	
-	
-	--[[Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_valkyrie", "npc_valkyrie", "nis_closing_valkyrie", 1, 1)
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_valkyrie"))	
-	SGroup_FaceMarker("sg_closing_valkyrie", "nis_closing_commander_spawn")
-	
-	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_commander", "guard_squad_command_squad", "nis_closing_commander", 1, 1)
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_commander"))	
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_escapees"), SGroup_FromName("sg_closing_commander"))	
-	SGroup_FaceMarker("sg_closing_commander", "nis_closing_commander_facing")
-	Anim_EnableInfantryOffset("sg_closing_commander", false)
-	Anim_PlaySGroupAnim("sg_closing_commander", "sp_talk")	
-	
-	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_guard1", "guard_squad_kasrkin", "nis_closing_guard1", 1, 1)
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_guard1"))	
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_escapees"), SGroup_FromName("sg_closing_guard1"))	
-	Anim_PlaySGroupAnim("sg_closing_guard1", "capture_strategic_point")
-	SGroup_FaceMarker("sg_closing_guard1", "nis_closing_hostage")
-	
-	Util_CreateSquadsAtMarkerEx(g_Player2, "sg_closing_guard2", "guard_squad_kasrkin", "nis_closing_guard2", 1, 1)
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_guard2"))	
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_escapees"), SGroup_FromName("sg_closing_guard2"))	
-	Anim_PlaySGroupAnim("sg_closing_guard2", "capture_strategic_point")
-	SGroup_FaceMarker("sg_closing_guard2", "nis_closing_hostage")
-	
-	Util_CreateSquadsAtMarkerEx(g_Player1, "sg_closing_hostage", g_Nis_Blueprint, "nis_closing_hostage", 1, 1)
-	SGroup_AddGroup(SGroup_CreateIfNotFound("sg_closing_actors"), SGroup_FromName("sg_closing_hostage"))	
-	SGroup_FaceMarker("sg_closing_hostage", "nis_closing_commander")
-	Anim_EnableInfantryOffset("sg_closing_hostage", false)	
-	--Pick an appropriate animation
-	if humanplayer == "chaos_marine_race" then
-		Anim_PlaySGroupAnim("sg_closing_hostage", "sp_ritual")
-	elseif humanplayer == "necron_race" then
-		Anim_PlaySGroupAnim("sg_closing_hostage", "idle")
-	elseif humanplayer == "ork_race" then
-		Anim_PlaySGroupAnim("sg_closing_hostage", "garrison_strategic_point")
-	else
-		Anim_PlaySGroupAnim("sg_closing_hostage", "capture_strategic_point")
-	end]]--
 	
 	Anim_EnableInfantryOffset("sg_closing_actors", false)			
 	Cmd_SetStance("sg_closing_actors", STANCE_CeaseFire)			
@@ -2524,14 +2484,4 @@ EVENTS.NIS_Victory = function()
 	
 	CTRL.W40k_Letterbox( false, 2)	
 	CTRL.WAIT()
-	
-	
-	
-	--Util_NIS_ToggleModifierEvents(g_Player1, true)
-	--Util_NIS_ToggleModifierEvents(g_Player2, true)
-	--Player_UnRestrictAbility(g_Player1, "sp_dxp_unit_glow")
-	--Player_UnRestrictAbility(g_Player2, "sp_dxp_unit_glow")
-	
-	--CPath_Blendout( 1 )
-
 end

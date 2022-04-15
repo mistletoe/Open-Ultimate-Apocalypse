@@ -1,14 +1,14 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[guard_vehicles_sentinel]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\enable_armour_2.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_vehicles_sentinel]]
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_vehicles_sentinel]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\cost_power_modifier.lua]])

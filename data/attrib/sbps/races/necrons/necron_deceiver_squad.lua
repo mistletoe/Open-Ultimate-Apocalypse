@@ -83,21 +83,7 @@ GameData["squad_possess_enemy_ext"]["no_ui_button"] = true
 GameData["squad_possess_enemy_ext"]["take_possession_anim_name"] = [[special_ability_2]]
 GameData["squad_possess_enemy_ext"]["take_possession_duration"] = 2
 GameData["squad_possess_enemy_ext"]["take_possession_event_name"] = [[Necron/Deceiver_MC_AOE]]
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["squad_possess_enemy_ext"]["ui_index_hint"] = nil
 GameData["squad_requirement_ext"] = Reference([[sbpextensions\squad_requirement_ext.lua]])
 GameData["squad_requirement_ext"]["requirements"]["required_1"] = Reference([[requirements\required_ownership.lua]])

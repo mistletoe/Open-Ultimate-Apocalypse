@@ -42,14 +42,7 @@ GameData["entity_blueprint_ext"]["scale_x"] = 7
 GameData["entity_blueprint_ext"]["scale_y"] = 5
 GameData["entity_blueprint_ext"]["scale_z"] = 7
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[ancientrift_flame]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[ability_energy_field_event]]
-GameData["event_manager_ext"]["event_10"]["event_entry_01"]["event_name"] = [[Guard\Abilities\curse_the_machine]]
-GameData["event_manager_ext"]["event_10"]["modifier_name"] = [[ability_ig_curse_of_the_machine_spirit_event]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["can_be_repaired"] = true 

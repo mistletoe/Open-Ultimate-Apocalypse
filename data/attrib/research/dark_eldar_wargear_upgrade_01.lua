@@ -1,7 +1,7 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[dark_eldar_leader_archon_hg_dxp3]]
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["time_cost"] = Reference([[tables\time_cost_table.lua]])

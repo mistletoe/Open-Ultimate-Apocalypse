@@ -4,7 +4,7 @@ GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\enable_hardpoint_01.lua]])
 GameData["modifiers"]["modifier_01"]["value"] = -1
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["value"] = 1.25
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_hardpoint_02.lua]])
 GameData["modifiers"]["modifier_03"]["value"] = -1
@@ -13,7 +13,7 @@ GameData["modifiers"]["modifier_04"]["value"] = -1
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\enable_hardpoint_04.lua]])
 GameData["modifiers"]["modifier_05"]["value"] = -1
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\enable_general_combat.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\enable_hardpoint_05.lua]])
 GameData["modifiers"]["modifier_07"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

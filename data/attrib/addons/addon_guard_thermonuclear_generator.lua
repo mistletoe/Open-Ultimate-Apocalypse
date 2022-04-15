@@ -2,23 +2,23 @@ GameData = Inherit([[]])
 GameData["add_on_motion_name"] = [[]]
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\income_power_player_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\production_speed_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[guard_nuclear_facility]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.600000024
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\ability_recharge_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[guard_nuclear_facility]]
 GameData["modifiers"]["modifier_03"]["value"] = 0.400000006
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[guard_earthshaker_cannon_basilisk_magnus]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.25
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[guard_earthshaker_cannon_basilisk_magnus]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.25
 GameData["requirements"] = Reference([[tables\requirements.lua]])

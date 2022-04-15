@@ -1,19 +1,19 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[tyranids_squad_warrior]]
 GameData["modifiers"]["modifier_01"]["value"] = 3
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_squad_ravener]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_squad_biovores]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_upgrades_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[tyranids_squad_warrior_max]]
 GameData["modifiers"]["modifier_04"]["value"] = 3
 GameData["requirements"] = Reference([[tables\requirements.lua]])

@@ -23,14 +23,7 @@ GameData["entity_blueprint_ext"]["animator"] = [[Races/Space_Marines/Structures/
 GameData["entity_blueprint_ext"]["scale_x"] = 3
 GameData["entity_blueprint_ext"]["scale_z"] = 3
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[Space_Marines\Damocles_Field]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[ability_energy_field_event]]
-GameData["event_manager_ext"]["event_10"]["event_entry_01"]["event_name"] = [[Space_Marines\Orbital_Destabilization]]
-GameData["event_manager_ext"]["event_10"]["modifier_name"] = [[ability_eldar_guide_event]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["can_be_repaired"] = true 
@@ -69,7 +62,6 @@ GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS8_BUIL
 GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500050]] -- Toughness 8 Building
 GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
 GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500051]] -- Building Toughness 9
---INTENTIONAL SPACER
 --INTENTIONAL SPACER
 GameData["type_ext"]["type_surface"] = Reference([[type_surface\tp_heavy_metal_armour.lua]])
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])

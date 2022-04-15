@@ -9,10 +9,7 @@ GameData["entity_blueprint_ext"] = Reference([[ebpextensions\entity_blueprint_ex
 GameData["entity_blueprint_ext"]["animator"] = [[environment/all/tank_trap_01]]
 GameData["entity_blueprint_ext"]["minimum_update_radius"] = nil
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\wraith_tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 106
 GameData["health_ext"]["armour_minimum"] = 20

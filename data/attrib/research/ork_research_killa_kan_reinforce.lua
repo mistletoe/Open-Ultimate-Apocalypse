@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\enable_squad_reinforcement.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_squad_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[ork_squad_killa_kan]]
 GameData["modifiers"]["modifier_01"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

@@ -25,10 +25,7 @@ GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifie
 --INTENTIONAL SPACER
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_02"]["modifier"]["value"] = -1
 GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_03"]["modifier"] = Reference([[modifiers\ability_tracking_device_event.lua]])
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_07"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_08"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_09"] = nil
-GameData["mine_field_ext"]["area_effect"]["weapon_damage"]["modifiers"]["modifier_10"] = nil
+--INTENTIONAL SPACER
 GameData["mine_field_ext"]["max_explosions"] = 1
 GameData["mine_field_ext"]["trigger_radius"] = 16
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])

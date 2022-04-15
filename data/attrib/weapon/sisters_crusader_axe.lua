@@ -1,14 +1,14 @@
 GameData = Inherit([[]])
 GameData["accuracy"] = 1
 GameData["accuracy_reduction_when_moving"] = 0
-GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
+GameData["area_effect"] = Reference([[tables\STRENGTH_6.lua]])
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 100
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 75
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 1
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 200
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 150
+GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage_value"] = 10
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 15
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_Impact_events\Impact_Melee_HVY_Blood]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Unit_Impact_events\Impact_Bolter_Hvy]]

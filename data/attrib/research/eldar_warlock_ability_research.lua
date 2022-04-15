@@ -4,22 +4,22 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[eldar_power_sword_seer_council]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_power_sword_seer_council]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[eldar_power_sword_warlock]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[eldar_power_sword_warlock]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[eldar_warlock]]
 --REPLACE_ME
 GameData["modifiers"]["modifier_07"] = Reference([[modifiers\default_weapon_modifier_hardpoint2.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_07"]["target_type_name"] = [[eldar_warlock_attachable]]
 --REPLACE_ME
 GameData["requirements"] = Reference([[tables\requirements.lua]])

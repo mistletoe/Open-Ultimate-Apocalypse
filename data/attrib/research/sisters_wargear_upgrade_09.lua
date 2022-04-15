@@ -4,7 +4,7 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modi
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[sisters_canoness_advance_sp]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_regeneration_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[sisters_canoness_advance_sp]]
 GameData["modifiers"]["modifier_02"]["value"] = 2
 GameData["requirements"] = Reference([[tables\requirements.lua]])

@@ -2,12 +2,12 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\production_speed_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[inquisition_civilian_bunker]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\production_speed_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[inquisition_civilian_bunker_ai]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.299999952
 GameData["requirements"] = Reference([[tables\requirements.lua]])

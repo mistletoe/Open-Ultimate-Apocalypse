@@ -11,17 +11,17 @@ GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modi
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[necron_lord_death]]
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[necron_lord]]
 GameData["modifiers"]["modifier_04"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[necron_overseer]]
 GameData["modifiers"]["modifier_05"]["value"] = 0.8000000119
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\health_rangedamage_received_1_modifier.lua]])
 GameData["modifiers"]["modifier_06"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[necron_lord_death]]
 GameData["modifiers"]["modifier_06"]["value"] = 0.8000000119
 GameData["requirements"] = Reference([[tables\requirements.lua]])

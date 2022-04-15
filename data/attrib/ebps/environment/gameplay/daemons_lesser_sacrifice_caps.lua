@@ -8,24 +8,7 @@ GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_01"]["value"] = 
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_02"] = Reference([[modifiers\max_support_cap_player_modifier.lua]])
 --INTENTIONAL SPACER
 GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_02"]["value"] = 1
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_05"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_06"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_07"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_08"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_09"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_10"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_11"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_12"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_13"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_14"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_15"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_16"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_17"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_18"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_19"] = nil
-GameData["modifier_apply_ext"]["modifiers_immediate"]["modifier_20"] = nil
-GameData["modifier_apply_ext"]["modifiers"] = nil
-GameData["modifier_apply_ext"]["modifiers_idle"] = nil
+--INTENTIONAL SPACER
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["suicide_ext"] = Reference([[ebpextensions\suicide_ext.lua]])
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])

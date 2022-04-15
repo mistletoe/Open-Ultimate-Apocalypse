@@ -6,10 +6,10 @@ GameData["modifiers"]["modifier_01"]["value"] = 50
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\holy_icon_cost_power.lua]])
 GameData["modifiers"]["modifier_02"]["value"] = 50
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\support_cap_player_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["value"] = 4
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_support_cap_player_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["value"] = 4
 GameData["requirements"] = Reference([[tables\requirements.lua]])
 GameData["requirements"]["required_1"] = Reference([[requirements\local_required_addon.lua]])

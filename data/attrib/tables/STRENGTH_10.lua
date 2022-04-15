@@ -1,5 +1,7 @@
 GameData = Inherit([[tables\area_effect_table.lua]])
-GameData["weapon_damage"]["armour_damage"]["armour_piercing"] = 100 --Default safe value; penetrates everything.
+--Default safe value; penetrates everything. 
+--NOTE: only for Strength 10, where it *should* do so.
+GameData["weapon_damage"]["armour_damage"]["armour_piercing"] = 100 
 
 GameData["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_01"]["armour_piercing_value"] = 100
 GameData["weapon_damage"]["armour_damage"]["armour_piercing_types"]["entry_01"]["armour_type"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])

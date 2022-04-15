@@ -16,12 +16,7 @@ GameData["entity_blueprint_ext"]["scale_x"] = 3.799999952
 GameData["entity_blueprint_ext"]["scale_y"] = 1.25
 GameData["entity_blueprint_ext"]["scale_z"] = 6.25
 GameData["event_manager_ext"] = Reference([[ebpextensions\event_manager_ext.lua]])
-GameData["event_manager_ext"]["event_07"]["event_entry_01"]["event_name"] = [[Unit_Ability_FX\Wraith_Tomb]]
-GameData["event_manager_ext"]["event_07"]["modifier_name"] = [[ability_wraith_tomb_event]]
-GameData["event_manager_ext"]["event_08"]["event_entry_01"]["event_name"] = [[Dark_Eldar\Shortcircuit_impact]]
-GameData["event_manager_ext"]["event_08"]["modifier_name"] = [[ability_short_circuit_event]]
-GameData["event_manager_ext"]["event_09"]["event_entry_01"]["event_name"] = [[structure_fx/relocate_de]]
-GameData["event_manager_ext"]["event_09"]["modifier_name"] = [[relocation_event_modifier]]
+--INTENTIONAL SPACER
 GameData["health_ext"] = Reference([[ebpextensions\health_ext.lua]])
 GameData["health_ext"]["armour"] = 100
 GameData["health_ext"]["can_be_repaired"] = true 

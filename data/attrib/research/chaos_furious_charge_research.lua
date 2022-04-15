@@ -4,101 +4,101 @@ GameData["modifiers"]["modifier_01"] = Reference([[modifiers\max_damage_weapon_m
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[chaos_knife_tactical]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.25
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[chaos_knife_tactical]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.25
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_charge_modifiers.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[chaos_cultist]]
 GameData["modifiers"]["modifier_03"]["value"] = 2
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_05"]["target_type_name"] = [[chaos_knife_cultist]]
 GameData["modifiers"]["modifier_05"]["value"] = 1.25
 GameData["modifiers"]["modifier_06"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_06"]["target_type_name"] = [[chaos_knife_cultist]]
 GameData["modifiers"]["modifier_06"]["value"] = 1.25
 GameData["modifiers"]["modifier_08"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_08"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_08"]["target_type_name"] = [[chaos_aspiring_champion]]
 GameData["modifiers"]["modifier_08"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_09"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_09"]["target_type_name"] = [[chaos_raptor_aspiring_champion]]
 GameData["modifiers"]["modifier_09"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_10"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_10"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_10"]["target_type_name"] = [[chaos_marine_bolter]]
 GameData["modifiers"]["modifier_10"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_11"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_11"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_11"]["target_type_name"] = [[chaos_cultist]]
 GameData["modifiers"]["modifier_11"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_12"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_12"]["target_type_name"] = [[chaos_aspiring_champion_cultist]]
 GameData["modifiers"]["modifier_12"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_13"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_13"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_13"]["target_type_name"] = [[chaos_marine_rubric]]
 GameData["modifiers"]["modifier_13"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_14"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_14"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_14"]["target_type_name"] = [[chaos_marine_havoc]]
 GameData["modifiers"]["modifier_14"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_15"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_15"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_15"]["target_type_name"] = [[chaos_marine_plague]]
 GameData["modifiers"]["modifier_15"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_16"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_16"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_16"]["target_type_name"] = [[chaos_marine_noise]]
 GameData["modifiers"]["modifier_16"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_17"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_17"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_17"]["target_type_name"] = [[chaos_marine_plague_champion]]
 GameData["modifiers"]["modifier_17"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[chaos_marine_noise_champion]]
 GameData["modifiers"]["modifier_18"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_19"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[chaos_aspiring_sorcerer]]
 GameData["modifiers"]["modifier_19"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[chaos_renegade]]
 GameData["modifiers"]["modifier_20"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[chaos_renegade_champion]]
 GameData["modifiers"]["modifier_21"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[chaos_marine_icon_bearer]]
 GameData["modifiers"]["modifier_22"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[chaos_raptor]]
 GameData["modifiers"]["modifier_23"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_24"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_24"]["target_type_name"] = [[chaos_khorne_berserker_champion]]
 GameData["modifiers"]["modifier_24"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_25"] = Reference([[modifiers\speed_maximum_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_25"]["target_type_name"] = [[chaos_khorne_berserker]]
 GameData["modifiers"]["modifier_25"]["value"] = 1.200000048
 GameData["requirements"] = Reference([[tables\requirements.lua]])

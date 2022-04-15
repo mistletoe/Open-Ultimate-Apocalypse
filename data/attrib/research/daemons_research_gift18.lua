@@ -1,17 +1,17 @@
 GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\default_weapon_modifier_hardpoint1.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[daemon_fury]]
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\min_damage_weapon_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[daemons_fury_melee_stun]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.100000024
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[daemons_fury_melee_stun]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.299999952
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\max_troopers_squad_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[daemon_squad_fury]]
 GameData["modifiers"]["modifier_04"]["value"] = 2
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\enable_armour_2.lua]])

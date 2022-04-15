@@ -1,2 +1,2 @@
 GameData = Inherit([[]])
-GameData["heal_per_second"] = 16
+GameData["heal_per_second"] = 50

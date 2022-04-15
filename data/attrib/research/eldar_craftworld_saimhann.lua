@@ -2,22 +2,22 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[eldar_jetbike]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[eldar_vypers]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[eldar_shining_spear]]
 GameData["modifiers"]["modifier_03"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[eldar_shining_spear_exarch]]
 GameData["modifiers"]["modifier_04"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\max_damage_weapon_modifier.lua]])
@@ -61,59 +61,59 @@ GameData["modifiers"]["modifier_17"]["target_type_name"] = [[eldar_starlance]]
 GameData["modifiers"]["modifier_17"]["value"] = 1.399999976
 GameData["modifiers"]["modifier_18"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_18"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_18"]["target_type_name"] = [[eldar_jetbike]]
 GameData["modifiers"]["modifier_18"]["value"] = 1.200000048
 GameData["modifiers"]["modifier_19"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_19"]["target_type_name"] = [[eldar_jetbike]]
 GameData["modifiers"]["modifier_19"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_20"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_20"]["target_type_name"] = [[eldar_shining_spear]]
 GameData["modifiers"]["modifier_20"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_21"] = Reference([[modifiers\cost_requisition_modifier.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_21"]["target_type_name"] = [[eldar_vypers]]
 GameData["modifiers"]["modifier_21"]["value"] = 1.149999976
 GameData["modifiers"]["modifier_22"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_22"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_22"]["target_type_name"] = [[eldar_dire_avenger]]
 GameData["modifiers"]["modifier_22"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_23"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_23"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_23"]["target_type_name"] = [[eldar_banshees]]
 GameData["modifiers"]["modifier_23"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_24"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_24"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_24"]["target_type_name"] = [[eldar_swooping_hawk]]
 GameData["modifiers"]["modifier_24"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_25"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_25"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_25"]["target_type_name"] = [[eldar_dark_reapers]]
 GameData["modifiers"]["modifier_25"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_26"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_26"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_26"]["target_type_name"] = [[eldar_striking_scorpion]]
 GameData["modifiers"]["modifier_26"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_27"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_27"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_27"]["target_type_name"] = [[eldar_fire_dragon]]
 GameData["modifiers"]["modifier_27"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_28"] = Reference([[modifiers\health_maximum_modifier.lua]])
 GameData["modifiers"]["modifier_28"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_28"]["target_type_name"] = [[eldar_warp_spider]]
 GameData["modifiers"]["modifier_28"]["value"] = 0.8999999762
 GameData["modifiers"]["modifier_29"] = Reference([[modifiers\health_regeneration_modifier.lua]])
 GameData["modifiers"]["modifier_29"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_29"]["target_type_name"] = [[eldar_jetbike]]
 GameData["modifiers"]["modifier_29"]["usage_type"] = Reference([[type_modifierusagetype\tp_mod_usage_addition.lua]])
 GameData["modifiers"]["modifier_29"]["value"] = 6

@@ -2,17 +2,17 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\construction_speed_modifier.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[inquisition_archivist]]
 GameData["modifiers"]["modifier_01"]["value"] = 1.5
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\repair_rate_modifier.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[inquisition_servitor_maintenance]]
 GameData["modifiers"]["modifier_02"]["value"] = 1.5
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\repair_cost_modifier.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[inquisition_servitor_maintenance]]
 GameData["modifiers"]["modifier_03"]["value"] = 0.5
 GameData["requirements"] = Reference([[tables\requirements.lua]])

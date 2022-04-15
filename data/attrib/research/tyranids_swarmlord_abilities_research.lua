@@ -2,22 +2,22 @@ GameData = Inherit([[]])
 GameData["modifiers"] = Reference([[tables\modifier_table.lua]])
 GameData["modifiers"]["modifier_01"] = Reference([[modifiers\enable_movement.lua]])
 GameData["modifiers"]["modifier_01"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_01"]["target_type_name"] = [[tyranids_swarmlord]]
 GameData["modifiers"]["modifier_01"]["value"] = 99
 GameData["modifiers"]["modifier_02"] = Reference([[modifiers\enable_abilities.lua]])
 GameData["modifiers"]["modifier_02"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_02"]["target_type_name"] = [[tyranids_swarmlord]]
 GameData["modifiers"]["modifier_02"]["value"] = 99
 GameData["modifiers"]["modifier_03"] = Reference([[modifiers\enable_general_combat.lua]])
 GameData["modifiers"]["modifier_03"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_03"]["target_type_name"] = [[tyranids_swarmlord]]
 GameData["modifiers"]["modifier_03"]["value"] = 99
 GameData["modifiers"]["modifier_04"] = Reference([[modifiers\enable_production.lua]])
 GameData["modifiers"]["modifier_04"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["modifiers"]["modifier_04"]["target_type_name"] = [[tyranids_swarmlord]]
 GameData["modifiers"]["modifier_04"]["value"] = 99
 GameData["modifiers"]["modifier_05"] = Reference([[modifiers\enable_attack_allies.lua]])

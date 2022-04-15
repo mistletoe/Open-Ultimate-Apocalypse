@@ -58,22 +58,7 @@ GameData["squad_possess_enemy_ext"]["possess_entity_max_radius"] = 20
 GameData["squad_possess_enemy_ext"]["return_health_fraction"] = 1
 GameData["squad_possess_enemy_ext"]["take_possession_anim_name"] = [[possession]]
 GameData["squad_possess_enemy_ext"]["take_possession_duration"] = 6
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
---REPLACE ME
+--INTENTIONAL SPACER
 GameData["squad_possess_enemy_ext"]["ui_index_hint"] = nil
 GameData["squad_requirement_ext"] = Reference([[sbpextensions\squad_requirement_ext.lua]])
 GameData["squad_requirement_ext"]["requirements"]["required_1"] = Reference([[requirements\required_ownership.lua]])
