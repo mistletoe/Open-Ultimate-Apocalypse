@@ -17,7 +17,7 @@ GameData["area_effect"]["area_effect_information"]["radius"] = 1000
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])

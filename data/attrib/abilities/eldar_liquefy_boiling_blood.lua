@@ -25,7 +25,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_05"] 
 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_06"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 --REPLACE_ME

@@ -16,7 +16,7 @@ GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[ty
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_enemy.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 15
 GameData["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type_areasweep\tp_areasweep_in_to_out.lua]])
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 200

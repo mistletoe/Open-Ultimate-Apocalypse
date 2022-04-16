@@ -28,7 +28,7 @@ GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
 GameData["impact_ability"] = [[]]
 GameData["kill_enemy_at_percent_life"] = 0.150000006
 GameData["kill_enemy_at_percent_life_cooldown_time"] = 5
-GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
+GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table_blank.lua]])
 
 
 GameData["melee_weapon"] = true 

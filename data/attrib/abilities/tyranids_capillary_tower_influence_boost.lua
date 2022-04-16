@@ -4,7 +4,7 @@ GameData["activation"] = Reference([[type_abilityactivation\tp_ability_activatio
 GameData["anticipation_lead_time"] = 0
 GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["backfire_area_effect"] = Reference([[tables\area_effect_table.lua]])
 

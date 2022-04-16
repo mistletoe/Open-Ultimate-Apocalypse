@@ -14,7 +14,7 @@ GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 --REPLACE_ME

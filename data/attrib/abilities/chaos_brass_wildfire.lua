@@ -31,7 +31,7 @@ GameData["area_effect"]["throw_data"]["force_max"] = 50
 GameData["area_effect"]["throw_data"]["force_min"] = 40
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 45
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 25
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

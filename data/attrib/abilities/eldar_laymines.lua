@@ -12,7 +12,7 @@ GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[ty
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_own.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 1
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["backfire_action_name"] = [[]]
 GameData["backfire_area_effect"] = Reference([[tables\area_effect_table.lua]])

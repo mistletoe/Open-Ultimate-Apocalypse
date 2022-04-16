@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["ability_ext"] = Reference([[ebpextensions\ability_ext.lua]])
 GameData["ability_ext"]["abilities"]["ability_01"] = [[abilities\all_bumpertank.lua]]
 GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\sisters_conflagration.lua]]
-GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\all_bumpertank_friendly_passive.lua]]
+GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\all_bumpertank_friendly_passive_5m.lua]]
 
 GameData["combat_ext"] = Reference([[ebpextensions\combat_ext.lua]])
 GameData["combat_ext"]["complex_upgrades"] = true 

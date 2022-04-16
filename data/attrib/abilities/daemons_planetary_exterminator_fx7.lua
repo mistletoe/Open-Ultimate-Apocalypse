@@ -25,7 +25,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_09"] 
 
 GameData["area_effect"]["sweeping_information"]["sweep_duration"] = 60
 GameData["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type_areasweep\tp_areasweep_in_to_out.lua]])
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

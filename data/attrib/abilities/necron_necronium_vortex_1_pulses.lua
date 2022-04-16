@@ -19,7 +19,7 @@ GameData["area_effect"]["throw_data"]["force_min"] = 150
 GameData["area_effect"]["throw_data"]["impact_point_z"] = -1
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 90
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 70
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 9999
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])

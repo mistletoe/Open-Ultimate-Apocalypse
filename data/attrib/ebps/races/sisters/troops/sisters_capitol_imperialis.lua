@@ -5,7 +5,7 @@ GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\sisters_detecti
 GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\sisters_capitol_imperialis_bulldoze.lua]]
 GameData["ability_ext"]["abilities"]["ability_04"] = [[abilities\titan_shield.lua]]
 GameData["ability_ext"]["abilities"]["ability_05"] = [[abilities\all_autorepair.lua]]
-GameData["ability_ext"]["abilities"]["ability_06"] = [[abilities\all_bumpertank_friendly_passive.lua]]
+GameData["ability_ext"]["abilities"]["ability_06"] = [[abilities\all_bumpertank_friendly_passive_10m.lua]]
 
 GameData["combat_ext"] = Reference([[ebpextensions\combat_ext.lua]])
 GameData["combat_ext"]["hardpoints"]["hardpoint_01"]["attack_motion_variable_name"] = [[Weapon_Range_Tracking_Main]]

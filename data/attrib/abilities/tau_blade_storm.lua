@@ -17,7 +17,7 @@ GameData["area_effect"]["throw_data"]["direction_angle_random"] = 55
 GameData["area_effect"]["throw_data"]["force_max"] = 40
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 25
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 15
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

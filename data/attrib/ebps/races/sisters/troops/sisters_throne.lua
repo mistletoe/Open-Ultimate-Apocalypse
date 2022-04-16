@@ -9,7 +9,7 @@ GameData["ability_ext"]["abilities"]["ability_06"] = [[abilities\commander_level
 GameData["ability_ext"]["abilities"]["ability_07"] = [[abilities\commander_level6.lua]]
 GameData["ability_ext"]["abilities"]["ability_08"] = [[abilities\commander_level8.lua]]
 GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\commander_level8_aura.lua]]
-GameData["ability_ext"]["abilities"]["ability_10"] = [[abilities\all_bumpertank_friendly_passive.lua]]
+GameData["ability_ext"]["abilities"]["ability_10"] = [[abilities\all_bumpertank_friendly_passive_5m.lua]]
 
 GameData["addon_ext"] = Reference([[ebpextensions\addon_ext.lua]])
 GameData["addon_ext"]["addons"]["addon_01"] = [[addons\addon_commanders_cap_squad.lua]]

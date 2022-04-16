@@ -12,7 +12,7 @@ GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[ty
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_enemy.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 2000
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\enable_vision_granting.lua]])
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["value"] = 0
 

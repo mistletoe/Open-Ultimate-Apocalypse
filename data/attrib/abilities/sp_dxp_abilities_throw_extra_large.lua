@@ -15,7 +15,7 @@ GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
 GameData["area_effect"]["throw_data"]["direction_angle_random"] = 15
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 70
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 15
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 30000
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 29000

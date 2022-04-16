@@ -17,7 +17,7 @@ GameData["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type
 GameData["area_effect"]["throw_data"]["force_max"] = 50
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 40
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 10
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

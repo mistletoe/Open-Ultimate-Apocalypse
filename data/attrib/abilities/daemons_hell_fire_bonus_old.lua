@@ -41,7 +41,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_13"] 
 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_14"] = Reference([[type_armour\tp_TOUGHNESS9_BUILDING.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[unit_impact_events\chaos_flamer_hit_end]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[unit_impact_events\chaos_flamer_hit_end]]

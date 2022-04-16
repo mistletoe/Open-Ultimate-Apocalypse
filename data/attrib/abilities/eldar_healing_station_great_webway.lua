@@ -12,7 +12,7 @@ GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[ty
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_allied.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 50
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]

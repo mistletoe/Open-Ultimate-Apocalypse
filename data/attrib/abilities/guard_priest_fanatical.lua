@@ -14,7 +14,7 @@ GameData["area_effect"]["area_effect_information"]["area_effect_events"]["rock"]
 GameData["area_effect"]["area_effect_information"]["area_effect_events"]["water"] = [[Guard\Abilities\Fanatacism_area_fx_no_sound]]
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["start_from_caster"] = false
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Guard\Abilities\Fanatacism]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Guard\Abilities\Fanatacism]]

@@ -41,7 +41,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_14"] 
 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_15"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]

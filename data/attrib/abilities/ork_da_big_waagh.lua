@@ -8,7 +8,7 @@ GameData["activation"] = Reference([[type_abilityactivation\tp_ability_activatio
 GameData["anticipation_event_name"] = [[]]
 GameData["anticipation_lead_time"] = 0
 GameData["area_effect"] = Reference([[tables\area_effect_table.lua]])
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\production_speed_modifier.lua]])
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["application_type"] = Reference([[type_modifierapplicationtype\tp_mod_apply_to_entity_type.lua]])

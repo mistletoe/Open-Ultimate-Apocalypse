@@ -24,7 +24,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_06"] 
 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_07"] = Reference([[type_armour\tp_TOUGHNESS1.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Sisters\pronouncement_impact]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Sisters\pronouncement_impact]]

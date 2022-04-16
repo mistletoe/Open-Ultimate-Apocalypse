@@ -29,7 +29,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_08"] 
 
 GameData["area_effect"]["sweeping_information"]["sweep_duration"] = 20
 GameData["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type_areasweep\tp_areasweep_in_to_out.lua]])
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 50
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[ork_waagh]]

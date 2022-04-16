@@ -28,7 +28,7 @@ GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
 GameData["impact_ability"] = [[]]
 GameData["kill_enemy_at_percent_life"] = 0.1000000015
 GameData["kill_enemy_at_percent_life_cooldown_time"] = 3
-GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
+GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table_blank.lua]])
 
 GameData["melee_weapon"] = true 
 GameData["raider_weapon_index"] = 0

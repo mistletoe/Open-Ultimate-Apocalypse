@@ -14,7 +14,7 @@ GameData["area_effect"]["area_effect_information"]["area_effect_events"]["rock"]
 GameData["area_effect"]["area_effect_information"]["area_effect_events"]["water"] = [[ultimate_apocalypse_greetings]]
 GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[type_areaeffect\tp_area_effect_circle.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 1
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["backfire_action_name"] = [[]]
 GameData["backfire_area_effect"] = Reference([[tables\area_effect_table.lua]])

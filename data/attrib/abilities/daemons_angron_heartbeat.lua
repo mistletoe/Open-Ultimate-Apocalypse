@@ -12,7 +12,7 @@ GameData["area_effect"]["area_effect_information"]["area_effect_events"]["dirtsa
 GameData["area_effect"]["area_effect_information"]["area_effect_events"]["grass"] = [[Daemons\Angron_Heartbeat]]
 GameData["area_effect"]["area_effect_information"]["area_effect_events"]["rock"] = [[Daemons\Angron_Heartbeat]]
 GameData["area_effect"]["area_effect_information"]["area_effect_events"]["water"] = [[Daemons\Angron_Heartbeat]]
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Daemons\Angron_Heartbeat]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Daemons\Angron_Heartbeat]]

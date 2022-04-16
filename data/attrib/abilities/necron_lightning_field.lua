@@ -27,7 +27,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_06"] 
 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_07"] = Reference([[type_armour\tp_TOUGHNESS8.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 15
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 15

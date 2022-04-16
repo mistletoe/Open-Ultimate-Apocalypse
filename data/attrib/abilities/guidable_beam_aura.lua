@@ -54,7 +54,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_18"] 
 GameData["area_effect"]["throw_data"]["force_max"] = 90
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 55
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 35
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

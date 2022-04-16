@@ -12,7 +12,7 @@ GameData["area_effect"]["area_effect_information"]["area_type"] = Reference([[ty
 GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[type_areafilter\tp_area_filter_own.lua]])
 GameData["area_effect"]["area_effect_information"]["radius"] = 2000
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\squad_cap_player_modifier.lua]])
 

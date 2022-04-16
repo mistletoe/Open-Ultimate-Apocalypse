@@ -19,7 +19,7 @@ GameData["area_effect"]["area_effect_information"]["start_from_caster"] = true
 
 GameData["area_effect"]["sweeping_information"]["sweep_duration"] = 1
 GameData["area_effect"]["sweeping_information"]["sweep_type"] = Reference([[type_areasweep\tp_areasweep_right_to_left.lua]])
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 
 

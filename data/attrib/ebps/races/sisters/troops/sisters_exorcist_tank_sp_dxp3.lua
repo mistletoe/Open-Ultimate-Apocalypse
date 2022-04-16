@@ -7,7 +7,7 @@ GameData["ability_ext"]["abilities"]["ability_05"] = [[abilities\sisters_exorcis
 GameData["ability_ext"]["abilities"]["ability_06"] = [[abilities\sisters_exorcist_missile_ability_3.lua]]
 GameData["ability_ext"]["abilities"]["ability_07"] = [[abilities\sisters_exorcist_missile_ability_4.lua]]
 GameData["ability_ext"]["abilities"]["ability_08"] = [[abilities\sisters_exorcist_missile_ability_5.lua]]
-GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\all_bumpertank_friendly_passive.lua]]
+GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\all_bumpertank_friendly_passive_5m.lua]]
 GameData["ability_ext"]["abilities"]["ability_10"] = [[abilities\all_bumpertank.lua]]
 
 GameData["combat_ext"] = Reference([[ebpextensions\combat_ext.lua]])

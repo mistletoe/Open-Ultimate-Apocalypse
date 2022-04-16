@@ -14,7 +14,7 @@ GameData["area_effect"]["area_effect_information"]["radius"] = 2000
 GameData["area_effect"]["area_effect_information"]["remove_modifiers_with_source_entity"] = true 
 GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_04"] = Reference([[type_armour\tp_TOUGHNESS10_BUILDING.lua]])
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\health_maximum_modifier.lua]])
 

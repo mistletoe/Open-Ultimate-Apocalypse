@@ -42,7 +42,7 @@ GameData["area_effect"]["area_effect_information"]["target_filter"]["entry_17"] 
 
 --REPLACE_ME
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Dark_Eldar\SA_PiercingGaze]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Dark_Eldar\SA_PiercingGaze]]

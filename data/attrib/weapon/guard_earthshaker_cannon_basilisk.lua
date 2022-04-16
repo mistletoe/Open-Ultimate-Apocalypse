@@ -45,7 +45,7 @@ GameData["horizontal_traverse_speed"] = 500
 GameData["impact_ability"] = [[]]
 GameData["kill_enemy_at_percent_life"] = 0
 GameData["kill_enemy_at_percent_life_cooldown_time"] = 0
-GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table.lua]])
+GameData["kill_enemy_at_percent_life_target_filter"] = Reference([[tables\target_filter_table_blank.lua]])
 
 GameData["linger_on_target_after_fire_time"] = 2
 GameData["max_range"] = 150

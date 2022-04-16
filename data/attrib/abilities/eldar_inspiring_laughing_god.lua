@@ -15,7 +15,7 @@ GameData["area_effect"]["area_effect_information"]["filter_type"] = Reference([[
 GameData["area_effect"]["area_effect_information"]["radius"] = 45
 
 
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"] = Reference([[modifiers\speed_maximum_modifier.lua]])
 GameData["area_effect"]["weapon_damage"]["modifiers"]["modifier_01"]["modifier"]["exclusive"] = true 

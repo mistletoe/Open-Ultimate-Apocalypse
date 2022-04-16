@@ -15,7 +15,7 @@ GameData["area_effect"]["throw_data"]["force_max"] = 70
 GameData["area_effect"]["throw_data"]["force_min"] = 60
 GameData["area_effect"]["throw_data"]["up_angle_max"] = 35
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 25
-GameData["area_effect"]["weapon_damage"]["armour_damage"]["armour_piercing"] = 0
+--REPLACE ME
 
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]
 GameData["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[Unit_ability_FX/narthicium_UNIT]]

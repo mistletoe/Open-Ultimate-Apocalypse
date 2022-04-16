@@ -2,7 +2,7 @@ GameData = Inherit([[]])
 GameData["ability_ext"] = Reference([[ebpextensions\ability_ext.lua]])
 GameData["ability_ext"]["abilities"]["ability_01"] = [[abilities\sisters_holy_rage.lua]]
 GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\all_run!.lua]]
-GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\all_bumpertank_friendly_passive.lua]]
+GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\all_bumpertank_friendly_passive_5m.lua]]
 
 GameData["combat_ext"] = Reference([[ebpextensions\combat_ext.lua]])
 GameData["combat_ext"]["hardpoints"]["hardpoint_01"]["attack_motion_variable_name"] = [[]]
