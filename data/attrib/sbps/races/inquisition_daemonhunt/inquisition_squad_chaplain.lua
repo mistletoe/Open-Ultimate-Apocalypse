@@ -7,17 +7,6 @@ GameData["squad_combat_stance_ext"] = Reference([[sbpextensions\squad_combat_sta
 GameData["squad_combat_stance_ext"]["no_stance_button"] = nil
 GameData["squad_cover_ext"] = Reference([[sbpextensions\squad_cover_ext.lua]])
 --INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"]["value"] = 2
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["priority"] = 10
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"]["value"] = 1.5
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["priority"] = 5
---INTENTIONAL SPACER
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\block.lua]]
 GameData["squad_jump_ext"] = Reference([[sbpextensions\squad_jump_ext.lua]])

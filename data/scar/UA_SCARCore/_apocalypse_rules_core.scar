@@ -60,7 +60,7 @@ end
 
 function ApocalypseRules_Message()
 
-	Util_MissionTitle("Ultimate Apocalypse Mod - Created By: Lord_Cylarne")
+	Util_MissionTitle("Open UA Mod - Created By: Lord_Cylarne, xeno")
 	
 end
 

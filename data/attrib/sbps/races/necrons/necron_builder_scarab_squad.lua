@@ -24,17 +24,6 @@ GameData["squad_capture_strategic_point_ext"]["capture_rate"] = 0.75
 GameData["squad_capture_strategic_point_ext"]["time_till_flag_planted"] = 1.5
 GameData["squad_cover_ext"] = Reference([[sbpextensions\squad_cover_ext.lua]])
 --INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["modifiers"]["modifier_01"]["value"] = 2
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["priority"] = 10
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"] = Reference([[modifiers\morale_rate_squad_modifier.lua]])
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["modifiers"]["modifier_01"]["value"] = 1.5
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["priority"] = 5
---INTENTIONAL SPACER
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\necron_scarabs.lua]]
 GameData["squad_jump_ext"] = Reference([[sbpextensions\squad_jump_ext.lua]])

@@ -7,10 +7,6 @@ GameData["squad_combat_stance_ext"]["ranged_attackrange"] = 130
 GameData["squad_combat_stance_ext"]["no_stance_button"] = nil
 GameData["squad_cover_ext"] = Reference([[sbpextensions\squad_cover_ext.lua]])
 --INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["priority"] = 10
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["priority"] = 5
---INTENTIONAL SPACER
 GameData["squad_fear_ext"] = Reference([[sbpextensions\squad_fear_ext.lua]])
 GameData["squad_fear_ext"]["action_name"] = [[special_ability_1]]
 GameData["squad_fear_ext"]["action_time"] = 7

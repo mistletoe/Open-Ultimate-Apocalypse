@@ -4,7 +4,7 @@ function TauCommanderTactic:__init( squad_ai ) super( squad_ai )
 
 	self:SetName("Tau Commander Tactic")
 	
-	self.ability_snaretrap_id = cpu_manager.stats:GetAbilityID( "tau_snare_trap")
+	self.ability_snaretrap_id = cpu_manager.stats:GetAbilityID( "tau_snare_trap_commander")
 	self.lastused_ability_snaretrap_time = cpu_manager.cpu_player:GetGameTime()
 	self.lastused_ability_snaretrap_position = squad_ai:GetPosition()
 	

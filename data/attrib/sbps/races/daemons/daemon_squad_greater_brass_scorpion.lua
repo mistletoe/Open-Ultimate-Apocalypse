@@ -8,10 +8,6 @@ GameData["squad_combat_stance_ext"]["ranged_attackrange"] = 100
 GameData["squad_combat_stance_ext"]["no_stance_button"] = nil
 GameData["squad_cover_ext"] = Reference([[sbpextensions\squad_cover_ext.lua]])
 --INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_heavy"]["priority"] = 10
---INTENTIONAL SPACER
-GameData["squad_cover_ext"]["cover_light"]["priority"] = 5
---INTENTIONAL SPACER
 GameData["squad_formation_ext"] = Reference([[sbpextensions\squad_formation_ext.lua]])
 GameData["squad_formation_ext"]["idle_formation"] = [[formations\block.lua]]
 GameData["squad_loadout_ext"] = Reference([[sbpextensions\squad_loadout_ext.lua]])

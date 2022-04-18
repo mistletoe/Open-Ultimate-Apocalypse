@@ -1,4 +1,5 @@
 GameData = Inherit([[]])
+
 GameData["event_01"] = Reference([[tables/modifier_event_table.lua]])
 GameData["event_01"]["event_entry_01"]["event_end_name"] = [[Unit_Impact_events/Marine_Flamer_HIT_end]]
 GameData["event_01"]["event_entry_01"]["event_name"] = [[Unit_Impact_events/Marine_Flamer_HIT]]

@@ -68,14 +68,20 @@ function AutoAbilMainRule()
 						if (AutoAbilsSettings.AbilsThem[races[i]] ~= nil) then
 							for l in AutoAbilsSettings.AbilsThem[races[i]] do
 								if AutoAbilsSettings.AbilsThem[races[i]][l][2] <= closedist then break end
-								hascast = Cmd_CastAbilitySGroup ("sg_aa_attacker", AutoAbilsSettings.AbilsThem[races[i]][l][1], "sg_aa_target")
+								
+								--local squadType = SGroupCaller.GetItemBlueprint(squadoneID)
+								--print squadType
+								hascast = Cmd_CastAbilitySGroup_NoReturn ("sg_aa_attacker", AutoAbilsSettings.AbilsThem[races[i]][l][1], "sg_aa_target")
 								if hascast then break end
 							end
 						end
 						if (hascast == false) and (AutoAbilsSettings.AbilsUs[races[i]] ~= nil) then
 							for l in AutoAbilsSettings.AbilsUs[races[i]] do
 								if AutoAbilsSettings.AbilsUs[races[i]][l][2] <= closedist then break end
-								hascast = Cmd_CastAbilitySelf ("sg_aa_attacker", AutoAbilsSettings.AbilsUs[races[i]][l][1])
+								--local squadType = SGroupCaller.GetItemBlueprint(squadoneID)
+								--print squadType								
+								
+								hascast = Cmd_CastAbilitySelf_NoReturn ("sg_aa_attacker", AutoAbilsSettings.AbilsUs[races[i]][l][1])
 								if hascast then break end
 							end
 						end
@@ -86,6 +92,10 @@ function AutoAbilMainRule()
 			SGroup_ForEach (squads[i], CheckSquadsG)
 		end
 	end
+end
+
+function tableHasKey(table,key)
+    return table[key] ~= nil
 end
 
 function AutoAbil_InitRule()
@@ -104,6 +114,46 @@ end
 
 function SetupAutoAbil()
 	Rule_AddOneShot (AutoAbil_InitRule, 1.35)
+end
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts it on the target pos. 
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname, String targetgroup
+--? @result Boolean
+function Cmd_CastAbilitySGroup_NoReturn( sgroupname, abilityname, targetgroup )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	local targetgroupid = SGroup_FromName( targetgroup )
+	
+	local result = CheckAndCastAbility_Return(player, itemid, abilityname, targetgroupid)
+	if(result == nil) then return false end
+	return result
+end
+
+function CheckAndCastAbility_Return(player, itemid, abilityname, targetgroupid)		
+	-- try to cast ability
+	local castSuccesful = Command_SquadAbilitySGroup( player, itemid, abilityname, targetgroupid )
+	if(castSuccesful == nil) then return false end
+	return castSuccesful
+end
+
+
+--? @shortdesc Checks the sgroup for an entity that can cast the ability and casts on itself
+--? Returns false if no items in the group can cast.
+--? @args String sgroupname, String abilityname
+--? @result Boolean
+function Cmd_CastAbilitySelf_NoReturn( sgroupname, abilityname )
+	local player = _Cmd_Private.GetGroupPlayerOwner( sgroupname, SGroupCaller )
+	
+	local result = CheckAndCastAbility_SelfNoReturn( groupid, itemindex, itemid)
+	if(result == nil) return false end
+	return result
+end
+
+function CheckAndCastAbility_SelfNoReturn( groupid, itemindex, itemid  )		
+	-- try to cast ability
+	local castSuccesful = Command_SquadAbilitySelf( player, itemid, abilityname)
+	if(castSuccesful == nil) then return false end
+	return castSuccesful
 end
 
 Scar_AddInit(SetupAutoAbil)
