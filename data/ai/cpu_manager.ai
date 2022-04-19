@@ -96,7 +96,6 @@ import( 'Tactics/SistersOfBattle/CanonessTactic.ai' )
 import( 'Tactics/SistersOfBattle/RepentiaTactic.ai' )
 import( 'Tactics/SistersOfBattle/ServitorTactic.ai' )
 
- 
 
 VALUE_ALWAYS_ATTACK = -100000
 
@@ -1014,11 +1013,11 @@ function CpuManager:CreateTactic( squad_ai )
 	elseif squad_name == "sisters_squad_servitor" then
 		tactic = ServitorTactic( squad_ai )
 	elseif squad_name == "sisters_squad_servitor_hg_dxp3" then
-		tactic = ServitorTactic( squad_ai )
-	
+		tactic = ServitorTactic( squad_ai )		
 	elseif class == UnitStatsAI.UC_VehicleLow or class == UnitStatsAI.UC_VehicleMed or class == UnitStatsAI.UC_VehicleHigh then
 		tactic = VehicleTactic( squad_ai )
 	else
+		--If all else fails...
 		tactic = InfantryTactic( squad_ai )
 	end
 

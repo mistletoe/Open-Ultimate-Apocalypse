@@ -67,9 +67,9 @@ GameData["direction"] = 0
 GameData["direction_arc_left"] = 180
 GameData["direction_arc_right"] = 180
 GameData["divine_retribution_event"] = [[Art/Events/Sisters/DR_FirePillar]]
-GameData["duration_time"] = 2.529999971
+GameData["duration_time"] = 2.5
 GameData["enemy_opacity_while_active"] = 1
-GameData["entity_busy_time"] = 2.529999971
+GameData["entity_busy_time"] = 2.5
 GameData["execute_table"] = Reference([[tables\execute_table.lua]])
 
 GameData["execute_table"]["weapon_damage_table"]["armour_damage"]["life_leech_damage"] = 0
@@ -78,7 +78,7 @@ GameData["execute_table"]["weapon_damage_table"]["hit_events"]["entry05"]["surfa
 
 GameData["fire_cost"] = Reference([[tables\cost_table.lua]])
 GameData["friendly_opacity_while_active"] = 1
-GameData["initial_delay_time"] = 1.700000048
+GameData["initial_delay_time"] = 1.7
 GameData["looping_event_name"] = [[]]
 GameData["persist_across_squad_leader_death"] = false
 GameData["projectile_name"] = [[tau_snare_trap_projectile]]
@@ -86,8 +86,8 @@ GameData["projectile_recurring"] = false
 GameData["projectile_recurring_delay"] = 0
 GameData["projectile_spawn_on_ground"] = true 
 GameData["projectile_spawn_pos"] = Reference([[tables\position.lua]])
-GameData["projectile_spawn_pos"]["y"] = 1.769999981
-GameData["projectile_spawn_pos"]["z"] = 2.292999983
+GameData["projectile_spawn_pos"]["y"] = 1.77
+GameData["projectile_spawn_pos"]["z"] = 2.3
 GameData["random_offset"] = 0
 GameData["range"] = 20
 GameData["recharge_time"] = 60

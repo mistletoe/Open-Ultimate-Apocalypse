@@ -97,35 +97,26 @@ function foreach_bind( tbl, func, ... )
 
 end
 
-function GenerateUnitEffectiveness(light_low,light_med,light_high,heavy_med,heavy_high,
-														vehicle_low,vehicle_med,vehicle_high,
-														monster_med,monster_high,commander,
-														build_low,build_med,build_high,
-														air_low,air_med,air_high)
-
-	build_low = build_low or 0 -- returns larger number
-	build_med = build_low or 0 -- returns larger number
-	build_high = build_high or 0 -- returns larger number
-	
+function GenerateUnitEffectiveness()
 	effectiveness = {}
 	
-	effectiveness[ UnitStatsAI.UC_LightInfantryLow ] 	= light_low
-	effectiveness[ UnitStatsAI.UC_LightInfantryMed ] 	= light_med
-	effectiveness[ UnitStatsAI.UC_LightInfantryHigh ] 	= light_high
-	effectiveness[ UnitStatsAI.UC_HeavyInfantryMed ] 	= heavy_med
-	effectiveness[ UnitStatsAI.UC_HeavyInfantryHigh ] 	= heavy_high
-	effectiveness[ UnitStatsAI.UC_VehicleLow ] 			= vehicle_low
-	effectiveness[ UnitStatsAI.UC_VehicleMed ] 			= vehicle_med
-	effectiveness[ UnitStatsAI.UC_VehicleHigh ] 		= vehicle_high
-	effectiveness[ UnitStatsAI.UC_MonsterMed ] 			= monster_med
-	effectiveness[ UnitStatsAI.UC_MonsterHigh ] 		= monster_high
-	effectiveness[ UnitStatsAI.UC_Commander ] 			= commander
-	effectiveness[ UnitStatsAI.UC_BuildingLow ] 		= build_low
-	effectiveness[ UnitStatsAI.UC_BuildingMed ] 		= build_med
-	effectiveness[ UnitStatsAI.UC_BuildingHigh ] 		= build_high
-	effectiveness[ UnitStatsAI.UC_AirLow ]		 		= air_low
-	effectiveness[ UnitStatsAI.UC_AirMed ] 				= air_med
-	effectiveness[ UnitStatsAI.UC_AirHigh ] 			= air_high
+	effectiveness[ UnitStatsAI.UC_LightInfantryLow ] 	= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_LightInfantryMed ] 	= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_LightInfantryHigh ] 	= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_HeavyInfantryMed ] 	= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_HeavyInfantryHigh ] 	= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_VehicleLow ] 			= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_VehicleMed ] 			= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_VehicleHigh ] 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_MonsterMed ] 			= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_MonsterHigh ] 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_Commander ] 			= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_BuildingLow ] 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_BuildingMed ] 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_BuildingHigh ] 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_AirLow ]		 		= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_AirMed ] 				= math.random(5.0,10.0)
+	effectiveness[ UnitStatsAI.UC_AirHigh ] 			= math.random(5.0,10.0)
 
 	return effectiveness
 end

@@ -24,10 +24,6 @@ GameData["area_effect"]["throw_data"]["up_angle_max"] = 35
 GameData["area_effect"]["throw_data"]["up_angle_min"] = 25
 --REPLACE ME
 
-
-
-
-
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 400
 GameData["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 300

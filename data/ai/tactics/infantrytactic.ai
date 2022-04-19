@@ -12,6 +12,7 @@ InfantryTactic.SpecialAbilities =
 	{ nil, "tau_sonic_pulse", Ability.PredicateFilters.IsInCombat, nil },
 	{ nil, "tau_personal_shield", Ability.PredicateFilters.IsInCombat, nil },
 	{ nil, "necron_wraith_phase_shift", Ability.PredicateFilters.IsInCombat, nil }, -- FIX: Filter - approaching combat
+	{nil, "all_run!", Ability.PredicateFilters.IsNotInCombat, nil},
 }
 
 InfantryTactic.TargetAbilities = 
@@ -21,10 +22,10 @@ InfantryTactic.TargetAbilities =
 	{ nil, "marines_frag_grenades", 			Ability.Filters.CloseInfantryEnemy, 1 },
 	{ nil, "marines_melta_bombs", 				Ability.Filters.CloseVehicleEnemy, 1 },
 	{ nil, "chaos_frag_grenades", 				Ability.Filters.CloseInfantryEnemy, 1 },
-	{ nil, "guard_kasrkin_frag_grenades", 	Ability.Filters.CloseEnemy, 1 },
-	{ nil, "tau_emp_grenade", 						Ability.Filters.CloseVehicleEnemy, 1 },
+	{ nil, "guard_kasrkin_frag_grenades", 		Ability.Filters.CloseEnemy, 1 },
+	{ nil, "tau_emp_grenade",					Ability.Filters.CloseVehicleEnemy, 1 },
 	{ nil, "tau_photon_grenade", 				Ability.Filters.CloseInfantryEnemy, 1 },
-	{ nil, "tau_mark_squad", 						Ability.Filters.CloseEnemy, 1 },
+	{ nil, "tau_mark_squad",					Ability.Filters.CloseEnemy, 1 },
 }
 
 InfantryTactic.TargetEntityAbilities = 

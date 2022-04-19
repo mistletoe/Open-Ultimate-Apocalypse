@@ -2,7 +2,7 @@ class 'BaseTactic'
 
 BaseTactic.SpecialAbilities = 
 {
-	{ nil, "eldar_shroud", 								Ability.PredicateFilters.IsNotInfiltrating, nil },
+	{ nil, "eldar_shroud", Ability.PredicateFilters.IsNotInfiltrating, nil },
 }
 
 BaseTactic.PosAbilities = 
@@ -48,6 +48,8 @@ function BaseTactic:__init( base_ai )
 	Tactic.UtilityFunctions.InitAbilitiesTable(BaseTactic.PosAbilities)
 	Tactic.UtilityFunctions.InitAbilitiesTable(BaseTactic.TargetAbilities)
 	Tactic.UtilityFunctions.InitAbilitiesTable(BaseTactic.LocationAbilities)
+	
+	self.all_autorepair_id = cpu_manager.stats:GetAbilityID( "all_autorepair")
 	
 	self:SetName("Base Tactic")
 end
@@ -97,6 +99,13 @@ function BaseTactic:Update()
 	end
 
 	self:DoAbilities()
+	
+	--Autoheal is here, since it needs a reference to self
+	if self.base_ai:CanDoAbility( self.all_autorepair_id ) then
+		if self.base_ai:GetHealthPercentage() < 0.9 then
+			self.base_ai:DoSpecialAbility( self.all_autorepair_id ) 
+		end
+	end	
 
 	return true
 end

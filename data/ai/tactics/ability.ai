@@ -107,6 +107,9 @@ PredicateFilters =
 	IsInCombat = function( ai, args )
 		return ai:IsInCombat()
 	end,
+	IsNotInCombat = function( ai, args )
+		if(ai:IsInCombat()) then return false else return true end
+	end,
 	IsUnderAttack = function( ai, args )
 		return ai:IsUnderAttack()
 	end,

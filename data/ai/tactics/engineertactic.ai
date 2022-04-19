@@ -60,7 +60,6 @@ end
 
 
 function EngineerTactic:IsAffectedByMorale()
-
 	return self.squad_ai:IsBuilding() == 0
 end
 
