@@ -37,7 +37,6 @@ GameData["attack_priorities"] = Reference([[tables\type_armour_table.lua]])
 GameData["can_attack_air_units"] = true 
 GameData["can_attack_ground_units"] = true 
 GameData["cost"] = Reference([[tables\time_cost_table.lua]])
-GameData["cost"]["cost"]["faith"] = 0
 GameData["cost"]["cost"]["souls"] = 500
 GameData["cost"]["time_seconds"] = 4
 GameData["death_motion_value"] = [[]]

@@ -20,8 +20,6 @@ GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["start_fro
 --INTENTIONAL SPACER
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
 GameData["deep_strike_ext"]["click_event"] = [[tyranids/tyranid_deepstrike]]
 GameData["deep_strike_ext"]["deep_strike_object_name"] = [[deep_strike]]
@@ -67,7 +65,7 @@ GameData["moving_ext"]["move_to_min_combat_range"] = nil
 GameData["requirement_ext"] = Reference([[ebpextensions\requirement_ext.lua]])
 GameData["research_ext"] = Reference([[ebpextensions\research_ext.lua]])
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
-GameData["sight_ext"]["keen_sight_radius"] = 2
+GameData["sight_ext"]["keen_sight_radius"] = 5
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_in_spatial_bucket"] = false
 GameData["spawner_ext"] = Reference([[ebpextensions\spawner_ext.lua]])

@@ -13,8 +13,6 @@ GameData["deep_strike_ext"]["area_effect"]["area_effect_information"]["remove_mo
 
 --INTENTIONAL SPACER
 
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
 GameData["deep_strike_ext"]["areaeffect_delay"] = 4.5
 GameData["deep_strike_ext"]["deep_strike_object_name"] = [[orca_deepstrike]]
@@ -50,7 +48,7 @@ GameData["requirement_ext"]["requirements"]["required_10"] = Reference([[require
 GameData["requirement_ext"]["requirements"]["required_10"]["structure_name"] = [[ebps\races\tau\structures\tau_research_building.lua]]
 GameData["research_ext"] = Reference([[ebpextensions\research_ext.lua]])
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
-GameData["sight_ext"]["keen_sight_radius"] = 20
+GameData["sight_ext"]["keen_sight_radius"] = 50
 GameData["sight_ext"]["sight_radius"] = 60
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_collide"] = true 

@@ -75,8 +75,6 @@ GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_
 GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_effect"]["weapon_damage"]["armour_damage"]["max_damage"] = 650
 GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_effect"]["weapon_damage"]["armour_damage"]["min_damage"] = 150
 GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 175
-GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 GameData["death_explosion_ext"]["death_explosions"]["death_explosion_01"]["chance"] = 100
 
 GameData["entity_blueprint_ext"] = Reference([[ebpextensions\entity_blueprint_ext.lua]])
@@ -121,7 +119,7 @@ GameData["moving_ext"]["air_unit_float_height"] = nil
 GameData["moving_ext"]["move_to_min_combat_range"] = nil
 GameData["requirement_ext"] = Reference([[ebpextensions\requirement_ext.lua]])
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
-GameData["sight_ext"]["keen_sight_radius"] = 20
+GameData["sight_ext"]["keen_sight_radius"] = 50
 GameData["sight_ext"]["sight_radius"] = 60
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_collide"] = true 

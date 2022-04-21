@@ -3,24 +3,30 @@
 -- This file loads the default behaviour for AI
 ----------------------------------------------------------------------------------------------
 
-import( 'cpu_manager.ai' )
+import( 'Core/cpu_manager.ai' )
 
 --globals
 cpu_manager 		= nil
 resource_module 	= nil
 build_module 		= nil
 military_module 	= nil
-debug_display = nil
+debug_display 		= nil
 
 --for assertions
+--iCurrentPlayer = 0
 ai_assert = false
 
 function DebugDisplay()
 
+	--if (cpu_manager.player_id ~= iCurrentPlayer) then
+	--	return
+	--end
+		
 	dr_setautoclear("aidebug"..player_id, 0)
 
+	--cpu_manager:DisplayStats()
 	debug_display:DisplayStats()
-	
+
 end
 
 function ClearScreen()
@@ -40,18 +46,18 @@ function AI_Think()
 		DebugDisplay()
 		return
 	end
-
+		
 	--reset aitraces
 	tracing = {}
 	cpu_manager.terrain_analyzer:Update()
 	cpu_manager:Update()
 	--ProfileAllEnd()
-	
+
 	DebugDisplay()
-	
+
 	--do garbage collection
 	collectgarbage(0)
-	
+
 end
 
 function UpdateStats()
@@ -110,7 +116,7 @@ function InitializeAI()
 	
 		dbAssert( build_manager ~= nil )
 		dbAssert( debug_display ~= nil )
-		
+
 		Rule_AddInterval(AI_Think, 0.5)
 		Rule_AddInterval(UpdateStats, 5)
 		

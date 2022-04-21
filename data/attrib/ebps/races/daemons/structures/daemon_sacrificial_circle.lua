@@ -31,8 +31,6 @@ GameData["deep_strike_ext"]["area_effect"]["throw_data"]["up_angle_min"] = 45
 
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["life_leech_damage"] = 0
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["morale_damage"] = 50
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
 GameData["deep_strike_ext"]["click_event"] = [[order_confirm_events/daemons_lesser_deep_strike1]]
 GameData["deep_strike_ext"]["deep_strike_object_name"] = [[summon]]

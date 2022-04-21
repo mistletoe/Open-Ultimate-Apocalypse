@@ -32,9 +32,7 @@ GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["armour_damage"]["mo
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry01"]["event"] = [[unit_impact_events/Unit_Thrown_Smoke_Spray]]
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry02"]["event"] = [[unit_impact_events/Unit_Thrown_Smoke_Spray]]
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry03"]["event"] = [[unit_impact_events/Unit_Thrown_Smoke_Spray]]
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"] = Reference([[tables\hit_event_entry.lua]])
 GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["event"] = [[Necron\Monolith_Hit]]
-GameData["deep_strike_ext"]["area_effect"]["weapon_damage"]["hit_events"]["entry05"]["surface"] = Reference([[type_surface\tp_monolith.lua]])
 
 GameData["deep_strike_ext"]["deep_strike_object_name"] = [[Deep_Strike]]
 GameData["deep_strike_ext"]["fadeout_delay"] = 3

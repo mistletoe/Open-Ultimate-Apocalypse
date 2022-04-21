@@ -78,7 +78,7 @@ GameData["requirement_ext"]["requirements"]["required_10"]["global_addon_name"] 
 GameData["resource_ext"] = Reference([[ebpextensions\resource_ext.lua]])
 GameData["resource_ext"]["faith_per_second"] = 0.3000000119
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
-GameData["sight_ext"]["keen_sight_radius"] = 2
+GameData["sight_ext"]["keen_sight_radius"] = 5
 GameData["sight_ext"]["sight_radius"] = 25
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_collide"] = true 

@@ -64,7 +64,7 @@ GameData["requirement_ext"]["requirements"]["required_1"]["research_name_either"
 GameData["requirement_ext"]["requirements"]["required_1"]["research_name_or"] = [[Data\attrib\research\guard_wargear10.lua]]
 GameData["requirement_ext"]["requirements"]["required_1"]["hide_the_button_when_failed"] = nil
 GameData["sight_ext"] = Reference([[ebpextensions\sight_ext.lua]])
-GameData["sight_ext"]["keen_sight_radius"] = 2
+GameData["sight_ext"]["keen_sight_radius"] = 5
 GameData["sight_ext"]["sight_radius"] = 25
 GameData["sim_entity_ext"] = Reference([[ebpextensions\sim_entity_ext.lua]])
 GameData["sim_entity_ext"]["is_collide"] = true 
