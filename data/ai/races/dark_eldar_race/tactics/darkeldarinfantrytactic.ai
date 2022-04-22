@@ -65,7 +65,8 @@ function DarkEldarInfantryTactic:AddCommanders()
 end
 
 function DarkEldarInfantryTactic:DoAbilities()
-
+	--Xeno commented this out, as it causes massive error-spam.
+	--[[
 	-- Run if safe
 	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
 
@@ -78,6 +79,7 @@ function DarkEldarInfantryTactic:DoAbilities()
 			self.squad_ai:DoSpecialAbility( foot_id )
 		end
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

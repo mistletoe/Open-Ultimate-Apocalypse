@@ -46,11 +46,14 @@ function SpaceMarineInfantryTactic:__init( squad_ai ) super( squad_ai )
 end
 
 function SpaceMarineInfantryTactic:AddTargetAbilities()
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	table.insert(InfantryTactic.TargetAbilities, { nil, "marines_melta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "marines_krak_grenades", Ability.Filters.CloseVehicleEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "marines_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "marines_inferno_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "marines_flashbang_grenades", Ability.Filters.CloseSquadEnemy, 4, 0 })
+	]]
 end
 
 function SpaceMarineInfantryTactic:AddCommanders()
@@ -68,6 +71,8 @@ end
 
 function SpaceMarineInfantryTactic:DoAbilities()
 
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	-- Run if safe
 	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
 
@@ -87,6 +92,7 @@ function SpaceMarineInfantryTactic:DoAbilities()
 	if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
 		self.squad_ai:DoSpecialAbilitySquad(smoke_id, oUnit:GetSquad())
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

@@ -56,18 +56,6 @@ function ChaosAttackbikeTactic:DoAbilities()
 	
 	-- Check if we can use burn out if enemy infantry are nearby
 	Ability.DoAbilityArea( self.squad_ai, ChaosAttackbike.burnout_id, Ability.Filters.CloseInfantryEnemy, 10, 4 )
-
-	--[[
-	-- Check if we can launch smoke; if we can, then try.
-	local smoke_id = cpu_manager.stats:GetAbilityID( "chaos_smoke_grenades" )
-	if (self.squad_ai:CanDoAbility( smoke_id )) then
-		-- Search a squad
-		local iRange = self.squad_ai:GetAbilityRange(smoke_id)
-		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
-		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
-			self.squad_ai:DoSpecialAbilitySquad(smoke_id, oUnit:GetSquad())
-		end
-	end]]
 end
 
 function ChaosAttackbikeTactic:Upgrade()

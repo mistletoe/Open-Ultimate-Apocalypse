@@ -52,6 +52,8 @@ end
 
 function TauInfantryTactic:DoAbilities()
 
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	-- Check to make sure if no threats are nearby
 	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
 
@@ -61,6 +63,7 @@ function TauInfantryTactic:DoAbilities()
 			self.squad_ai:DoSpecialAbility( run_id )
 		end
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

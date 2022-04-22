@@ -34,11 +34,14 @@ function OrkInfantryTactic:__init( squad_ai ) super( squad_ai )
 end
 
 function OrkInfantryTactic:AddTargetAbilities()
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	table.insert(InfantryTactic.TargetAbilities, { nil, "ork_stikkbombs", Ability.Filters.CloseSquadEnemy, 4, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "ork_tankbusta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "ork_tankbusta_bombs_sp_dxp3_prisoner", Ability.Filters.CloseVehicleEnemy, 1, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "ork_superstick_bomb", Ability.Filters.CloseSquadEnemy, 7, 0 })
 	table.insert(InfantryTactic.TargetAbilities, { nil, "ork_nuke_boyz", Ability.Filters.CloseSquadEnemy, 7, 0 })
+	]]
 end
 
 function OrkInfantryTactic:AddCommanders()
@@ -48,7 +51,8 @@ function OrkInfantryTactic:AddCommanders()
 end
 
 function OrkInfantryTactic:DoAbilities()
-
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	-- Waagh if in combat and enemy is not adjacent or while broken
 	-- Don't waagh if health is too low or we are not moving !
 	local squad_pos = self.squad_ai:GetPosition()
@@ -70,6 +74,7 @@ function OrkInfantryTactic:DoAbilities()
 			self.squad_ai:DoSpecialAbility( run_id )
 		end
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

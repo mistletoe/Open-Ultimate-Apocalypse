@@ -27,7 +27,8 @@ function TyranidInfantryTactic:AddCommanders()
 end
 
 function TyranidInfantryTactic:DoAbilities()
-
+	--Xeno commented this out, as it causes error-spam.
+	--[[
 	-- Run if safe
 	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
 
@@ -37,6 +38,7 @@ function TyranidInfantryTactic:DoAbilities()
 			self.squad_ai:DoSpecialAbility( run_id )
 		end
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

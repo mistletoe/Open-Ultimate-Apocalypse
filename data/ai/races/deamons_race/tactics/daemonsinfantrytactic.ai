@@ -65,6 +65,8 @@ end
 
 function DaemonsInfantryTactic:DoAbilities()
 
+	--Xeno commented this out, as it's reponsible for a lot of error spam.
+	--[[
 	-- Check to make sure if no threats are nearby
 	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
 
@@ -74,6 +76,7 @@ function DaemonsInfantryTactic:DoAbilities()
 			self.squad_ai:DoSpecialAbility( run_id )
 		end
 	end
+	]]
 
 	-- I might have these attached
 	if (self.squad_ai:IsAttached()) then

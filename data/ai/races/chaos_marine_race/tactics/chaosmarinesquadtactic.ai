@@ -48,6 +48,7 @@ function ChaosMarineSquadTactic:InitAbilities()
 end
 
 function ChaosMarineSquadTactic:DoAbilities()
+
 	-- Activate various targetted abilities
 	Ability.DoAbilityTarget( self.squad_ai, ChaosMarineSquad.flashbang_id, Ability.Filters.CloseSquadEnemy, 4)
 	Ability.DoAbilityTarget( self.squad_ai, ChaosMarineSquad.frag_id, Ability.Filters.CloseEnemy, 4)
