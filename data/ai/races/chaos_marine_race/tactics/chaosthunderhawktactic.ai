@@ -28,10 +28,8 @@ function ChaosThunderhawkTactic:InitAbilities()
 
 end
 
+--Thunderhawk doesn't do any Abilities here at present.
 function ChaosThunderhawkTactic:DoAbilities()
-	
-	-- Call standard method
-	ChaosMarineVehicleTactic.DoAbilities(self)
 end
 
 function ChaosThunderhawkTactic:JumpAttackRanged()

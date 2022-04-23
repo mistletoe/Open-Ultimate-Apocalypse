@@ -29,7 +29,6 @@ function AssaultPodTactic:AlwaysAttack()
 end
 
 function AssaultPodTactic:InitAbilities()
-
 	-- Init ability ID's
 	if (AssaultPod.laymines_id == nil) then
 		AssaultPod.laymines_id = cpu_manager.stats:GetAbilityID( "chaos_laymines" )
@@ -37,7 +36,6 @@ function AssaultPodTactic:InitAbilities()
 end
 
 function AssaultPodTactic:DoAbilities()
-
 	Ability.DoAbilityArea( self.squad_ai, AssaultPod.laymines_id, Ability.Filters.CloseEnemy, 30, 1 ) 
 end
 

@@ -452,7 +452,7 @@ function VehicleTactic:AttackingState()
 end
 
 function VehicleTactic:DoAbilities()
-   
+   --Nothing should ever be here; it's getting overriden by super-classes further upstream.
 end
 
 --jump capable vehicles will retreat once if hurt badly

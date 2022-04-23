@@ -16,15 +16,14 @@ function DeathWheelTactic:AlwaysAttack()
 end
 
 function DeathWheelTactic:InitAbilities()
-
 	-- Init ability ID's
 	if (DeathWheel.selfdestruct_id == nil) then
 		DeathWheel.selfdestruct_id = cpu_manager.stats:GetAbilityID( "chaos_selfdestruct" )
 	end
 end
 
+--This vehicle's special, doesn't use any common abilities.
 function DeathWheelTactic:DoAbilities()
-
 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.3) then
 		Ability.DoAbilityArea( self.squad_ai, DeathWheel.selfdestruct_id, Ability.Filters.CloseEnemy, 20, 10 ) 
 	end

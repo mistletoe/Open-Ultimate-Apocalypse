@@ -19,6 +19,7 @@ function HellTalonTactic:InitAbilities()
 	end
 end
 
+--This vehicle just has this Ability available.
 function HellTalonTactic:DoAbilities()
 	
 	Ability.DoAbilityPos( self.squad_ai, HellTalon.biotoxin_id, Ability.Filters.CloseInfantryEnemy, 8 ) 
@@ -27,7 +28,6 @@ function HellTalonTactic:DoAbilities()
 
 	-- We are dying, lower requisites for attacks
 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
-
 		Ability.DoAbilityPos( self.squad_ai, HellTalon.biotoxin_id, Ability.Filters.CloseInfantryEnemy, 4 ) 
 	end
 end

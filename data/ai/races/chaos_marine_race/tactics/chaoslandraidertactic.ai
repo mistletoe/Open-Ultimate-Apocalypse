@@ -38,6 +38,10 @@ function ChaosLandRaiderTactic:InitAbilities()
 	if (ChaosLandRaider.reinforce_id == nil) then
 		ChaosLandRaider.reinforce_id = cpu_manager.stats:GetAbilityID( "all_transport_reinforce" )
 	end
+	
+	if (ChaosLandRaider.rammingspeed_id == nil) then
+		ChaosLandRaider.rammingspeed_id = cpu_manager.stats:GetAbilityID( "all_bumpertank" )
+	end	
 end
 
 function ChaosLandRaiderTactic:DoAbilities()
@@ -81,7 +85,12 @@ function ChaosLandRaiderTactic:DoAbilities()
 	if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) < 150 and oUnit:GetNumTroopers() <= 2) then
 		self.squad_ai:DoSpecialAbilitySquad(ChaosLandRaider.reinforce_id, oUnit:GetSquad())
 	end
-
-	-- Do basic abilities
-	ChaosMarineVehicleTactic.DoAbilities(self)
+	
+	-- RAM!!! - The vehicle will sacrifice combat accuracy in exchange for extra speed and the ability to knock down infantry wherever the vehicle goes.
+	-- Vehicle gains a 60% movement speed increase and will knock down infantry continuously on contact.
+	if (self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) then
+		if (self.squad_ai:CanDoAbility( ChaosLandRaider.rammingspeed_id )) then
+			self.squad_ai:DoSpecialAbility( ChaosLandRaider.rammingspeed_id )
+		end
+	end		
 end

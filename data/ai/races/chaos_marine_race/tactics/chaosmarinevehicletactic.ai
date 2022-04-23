@@ -33,26 +33,5 @@ function ChaosMarineVehicleTactic:CheckVehicleDance(sName)
 end
 
 function ChaosMarineVehicleTactic:DoAbilities()
-
-	-- Check if we can launch smoke
-	local vehiclesmoke_id = cpu_manager.stats:GetAbilityID( "chaos_smoke_launchers" )
-
-	-- Search a squad
-	local iRange = self.squad_ai:GetAbilityRange(vehiclesmoke_id)
-	local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
-	if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
-		self.squad_ai:DoSpecialAbilitySquad(vehiclesmoke_id, oUnit:GetSquad())
-	end
-
-	-- RAM!!! - The vehicle will sacrifice combat accuracy in exchange for extra speed and the ability to knock down infantry wherever the vehicle goes.
-	-- Vehicle gains a 60% movement speed increase and will knock down infantry continuously on contact.
-	local rammingspeed_id = cpu_manager.stats:GetAbilityID( "all_bumpertank" )
-	if (self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) then
-		if (self.squad_ai:CanDoAbility( rammingspeed_id )) then
-			self.squad_ai:DoSpecialAbility( rammingspeed_id )
-		end
-	end
-	
-	-- Call standard method
-	VehicleTactic.DoAbilities(self)
+	--Nothing here, as this invariably gets overridden by super-classes.
 end

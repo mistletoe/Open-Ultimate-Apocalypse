@@ -105,13 +105,16 @@ function ChaosRhinoTactic:InitAbilities()
 	if (ChaosRhino.laymines_id == nil) then
 		ChaosRhino.laymines_id = cpu_manager.stats:GetAbilityID( "chaos_laymines" )
 	end
+	
+	if (ChaosRhino.rammingspeed_id == nil) then
+		ChaosRhino.rammingspeed_id = cpu_manager.stats:GetAbilityID( "all_bumpertank" )
+	end		
 end
 
 function ChaosRhinoTactic:DoAbilities()
 
 	-- Check if we can launch smoke
 	if (self.squad_ai:CanDoAbility(ChaosRhino.smoke_id)) then
-	
 		-- Search a squad
 		local iRange = self.squad_ai:GetAbilityRange(ChaosRhino.smoke_id)
 		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
@@ -152,6 +155,11 @@ function ChaosRhinoTactic:DoAbilities()
 		self.squad_ai:DoSpecialAbilitySquad(ChaosRhino.reinforce_id, oUnit:GetSquad())
 	end
 	
-	-- Call standard method
-	ChaosMarineVehicleTactic.DoAbilities(self)
+	-- RAM!!! - The vehicle will sacrifice combat accuracy in exchange for extra speed and the ability to knock down infantry wherever the vehicle goes.
+	-- Vehicle gains a 60% movement speed increase and will knock down infantry continuously on contact.
+	if (self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) then
+		if (self.squad_ai:CanDoAbility( ChaosRhino.rammingspeed_id )) then
+			self.squad_ai:DoSpecialAbility( ChaosRhino.rammingspeed_id )
+		end
+	end	
 end

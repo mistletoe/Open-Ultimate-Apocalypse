@@ -1,8 +1,12 @@
 GameData = Inherit([[]])
 GameData["ability_ext"] = Reference([[ebpextensions\ability_ext.lua]])
-GameData["ability_ext"]["abilities"]["ability_01"] = [[abilities\chaos_taint_ability.lua]]
-GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\chaos_taint_ability_heal.lua]]
-GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\chaos_taint_comm_heal.lua]]
+GameData["ability_ext"]["abilities"]["ability_01"] = [[abilities\chaos_eye_of_warp.lua]]
+GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\chaos_taint_ability.lua]]
+GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\chaos_taint_ability_heal.lua]]
+GameData["ability_ext"]["abilities"]["ability_04"] = [[abilities\chaos_taint_comm_heal.lua]]
+GameData["ability_ext"]["abilities"]["ability_05"] = [[abilities\marines_injections_structure.lua]]
+GameData["ability_ext"]["abilities"]["ability_06"] = [[abilities\all_autorepair.lua]]
+GameData["ability_ext"]["abilities"]["ability_07"] = [[abilities\all_greetings.lua]]
 GameData["addon_ext"] = Reference([[ebpextensions\addon_ext.lua]])
 GameData["addon_ext"]["addons"]["addon_01"] = [[addons\chaos_hq_addon_1.lua]]
 GameData["addon_ext"]["addons"]["addon_02"] = [[addons\chaos_hq_addon_2.lua]]

@@ -1,8 +1,8 @@
 GameData = Inherit([[]])
 GameData["ability_ext"] = Reference([[ebpextensions\ability_ext.lua]])
-GameData["ability_ext"]["abilities"]["ability_08"] = [[abilities\marines_injections_structure.lua]]
-GameData["ability_ext"]["abilities"]["ability_09"] = [[abilities\all_autorepair.lua]]
-GameData["ability_ext"]["abilities"]["ability_10"] = [[abilities\all_ceizefire.lua]]
+GameData["ability_ext"]["abilities"]["ability_01"] = [[abilities\marines_injections_structure.lua]]
+GameData["ability_ext"]["abilities"]["ability_02"] = [[abilities\all_autorepair.lua]]
+GameData["ability_ext"]["abilities"]["ability_03"] = [[abilities\all_ceizefire.lua]]
 GameData["addon_ext"] = Reference([[ebpextensions\addon_ext.lua]])
 GameData["addon_ext"]["addons"]["addon_01"] = [[chaos_turret_addon]]
 GameData["addon_ext"]["addons"]["addon_02"] = [[chaos_turret_addon_probe]]

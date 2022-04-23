@@ -34,7 +34,6 @@ function BrassScorpionTactic:InitAbilities()
 end
 
 function BrassScorpionTactic:DoAbilities()
-
 	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(BrassScorpion.flame_id)) then
 		Ability.DoAbilityPos( self.squad_ai, BrassScorpion.flame_id, Ability.Filters.CloseEnemy, 6 )
 	end
@@ -42,25 +41,13 @@ function BrassScorpionTactic:DoAbilities()
 	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(BrassScorpion.wildfire_id)) then
 		Ability.DoAbilityArea( self.squad_ai, BrassScorpion.wildfire_id, Ability.Filters.CloseEnemy, 15, 10 ) 
 	end
---[[
-	-- Desecration: Disables melee combat and movement of the unit in exchange for rapid fire rates; improving artillery barrage amounts and quick reload times of all weapons.
-	-- Initiate ranged-artillery ability on condition
-	if (self.squad_ai:IsUsingAbility(BrassScorpion.entrench_id)) then
-        	if (self.squad_ai:GetHealthPercentage() <= 0.5 or Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 100, 1) == nil or Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 1) ~= nil) then
-            		self.squad_ai:DoSpecialAbility(BrassScorpion.entrench_id)
-		--print("Entrench On!")
-        	end
-    	elseif (self.squad_ai:GetHealthPercentage() > 0.5 and Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 100, 1) ~= nil and Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 1) == nil) then
-        	self.squad_ai:DoSpecialAbility(BrassScorpion.entrench_id)
-		--print("Entrench Off!")
-   	 end
-]]
+	
 	-- Desecration: Disables melee combat and movement of the unit in exchange for rapid fire rates; improving artillery barrage amounts and quick reload times of all weapons.
 	-- Initiate ranged-artillery ability on condition
     	local conditionsMet = (self.squad_ai:GetHealthPercentage() > 0.5 and Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 90, 1) ~= nil and Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 1) == nil)
 	if (self.squad_ai:IsUsingAbility(BrassScorpion.entrench_id)) then
 		if not conditionsMet then
-            		self.squad_ai:DoSpecialAbility(BrassScorpion.entrench_id)
+			self.squad_ai:DoSpecialAbility(BrassScorpion.entrench_id)
 		--print("Entrench On!")
         	end
     	elseif conditionsMet then
