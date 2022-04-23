@@ -21,6 +21,9 @@ function HeldrakeTactic:InitAbilities()
 
 end
 
+--NOTE; this super-class overrides ChaosMarineInfantryTactic, and does *not* support all_run!, etc.
+--Nor does this Tactic import the standard support code to avoid self-reference problems.
+--Basically, this is an uber-special unit that does just one weird Ability-like thing, period.
 function HeldrakeTactic:DoAbilities()
 
 	-- Try to spawn hell talons

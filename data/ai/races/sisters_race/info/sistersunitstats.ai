@@ -123,7 +123,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolt_pistol_missionary",
+				name = "sisters_bolt_pistol_elites",
 				effectiveness = GenerateUnitEffectiveness(4.8,4.8,4.8,4.8,3.8,3.7,3.4,3.3,3.8,3.3,2.6,0.7,0.4,0.3,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_ShortRanged,
 			},
@@ -148,7 +148,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolter_battle_sister_initiate",
+				name = "sisters_bolter",
 				effectiveness = GenerateUnitEffectiveness(4.8,4.8,4.8,4.8,3.8,3.7,3.4,3.3,3.8,3.3,2.6,0.7,0.4,0.3,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_ShortRanged,
 			},
@@ -168,7 +168,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolter_battle_sister",
+				name = "sisters_bolter",
 				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Ranged,
 			},
@@ -203,7 +203,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolt_pistol_seraphim",
+				name = "sisters_bolt_pistol",
 				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Ranged,
 			},
@@ -218,7 +218,7 @@ SistersUnitStats =
 				range = UnitStatsAI.RT_Ranged,
 			},
 			{
-				name = "sisters_chain_sword_seraphim",
+				name = "sisters_chain_sword",
 				effectiveness = GenerateUnitEffectiveness(3.1,4.1,3.1,4.1,3.1,5.0,4.0,5.8,6.2,9.2,6.1,6.4,5.6,5.8,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Melee,
 			},
@@ -263,7 +263,7 @@ SistersUnitStats =
 				range = UnitStatsAI.RT_Melee,
 			},
 			{
-				name = "sisters_chain_sword_celestian",
+				name = "sisters_chain_sword_elites",
 				effectiveness = GenerateUnitEffectiveness(3.1,4.1,3.1,4.1,3.1,5.0,4.0,5.8,6.2,9.2,6.1,6.4,5.6,5.8,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Melee,
 			},
@@ -313,7 +313,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolter_battle_sister_redemptionist",
+				name = "sisters_redemptionist_special",
 				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Ranged,
 			},
@@ -483,7 +483,7 @@ SistersUnitStats =
 		potential =
 		{
 			{
-				name = "sisters_bolt_pistol_confessor",
+				name = "sisters_bolt_pistol_canoness",
 				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
 				range = UnitStatsAI.RT_Ranged,
 			},

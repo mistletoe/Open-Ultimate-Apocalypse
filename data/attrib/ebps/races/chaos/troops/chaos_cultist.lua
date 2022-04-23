@@ -93,10 +93,10 @@ GameData["synckill_ext"]["synckillinfos"]["synckillinfo_02"]["killer_invulnerabl
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["dead_zombie_time"] = 4.099999905
 GameData["synckill_ext"]["synckillinfos"]["synckillinfo_03"]["killer_invulnerable_time"] = 4.170000076
 GameData["type_ext"] = Reference([[ebpextensions\type_ext.lua]])
-GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
-GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
-GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS4.lua]])
-GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500033]] -- TOUGHNESS 4
+GameData["type_ext"]["type_armour"] = Reference([[type_armour\tp_TOUGHNESS2.lua]])
+GameData["type_ext"]["type_armour"]["screen_name_id"] = [[$17500031]] -- TOUGHNESS 2
+GameData["type_ext"]["type_armour_2"] = Reference([[type_armour\tp_TOUGHNESS3.lua]])
+GameData["type_ext"]["type_armour_2"]["screen_name_id"] = [[$17500032]] -- TOUGHNESS 3
 --INTENTIONAL SPACER
 GameData["ui_ext"] = Reference([[ebpextensions\ui_ext.lua]])
 GameData["ui_ext"]["minimap_enable"] = true 

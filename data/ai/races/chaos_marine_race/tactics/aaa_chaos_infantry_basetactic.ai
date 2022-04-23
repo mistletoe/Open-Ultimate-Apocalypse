@@ -1,0 +1,39 @@
+--This is the baseline "universal" Chaos infantry script.
+--Mainly just here to cover squad leaders, so that they can invoke their Abilities when Attached.
+--Also enables all_run! Ability, which needs to be present on all Chaos EBPS's.
+function ChaosInfantryBaseTactic(refToSelf)
+	-- Run if safe
+	if ((not refToSelf.squad_ai:IsInCombat() and refToSelf.squad_ai:IsInStateMove()) or refToSelf.stateID ~= Tactic.StateID.NoState) then
+		-- If I am safe I can run
+		local run_id = cpu_manager.stats:GetAbilityID( "all_run!" )
+		if (refToSelf.squad_ai:CanDoAbility( run_id )) then
+			refToSelf.squad_ai:DoSpecialAbility( run_id )
+		end
+	end
+
+	-- I might have these attached
+	if (refToSelf.squad_ai:IsAttached()) then
+		if (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord")) then
+			ChaosLordTactic.InitAbilities( refToSelf )
+			ChaosLordTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord_terminator")) then
+			ChaosLordTerminatorTactic.InitAbilities( refToSelf )
+			ChaosLordTerminatorTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord_advance_sp")) then
+			ChaosLordAdvancedTactic.InitAbilities( refToSelf )
+			ChaosLordAdvancedTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord_khorne")) or (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord_nurgle")) or (refToSelf.squad_ai:HasSquadAttached("chaos_squad_lord_slaanesh")) then
+			ChaosLordsTactic.InitAbilities( refToSelf )
+			ChaosLordsTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_sorcerer")) then
+			SorcererTactic.InitAbilities( refToSelf )
+			SorcererTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_sorcerer_advance_sp")) then
+			SorcererAdvancedTactic.InitAbilities( refToSelf )
+			SorcererAdvancedTactic.DoAbilities( refToSelf )
+		elseif (refToSelf.squad_ai:HasSquadAttached("chaos_squad_psyker")) then
+			ChaosPsykerTactic.InitAbilities( refToSelf )
+			ChaosPsykerTactic.DoAbilities( refToSelf )
+		end
+	end
+end

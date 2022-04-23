@@ -41,6 +41,11 @@ function CultistTactic:InitAbilities()
 	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
+
 function CultistTactic:DoAbilities()
 
 	if (self.squad_ai:GetHealthPercentage() >= 0.6) then
@@ -51,22 +56,18 @@ function CultistTactic:DoAbilities()
 
 			if (self.squad_ai:CanDoAbility(Cultist.worshipkhorne_id)) then
 				self.squad_ai:DoSpecialAbility(Cultist.worshipkhorne_id)
-				--Ability.DoAbilityArea(self.squad_ai, Cultist.worshipkhorne_id, Ability.Filters.CloseEnemy, 10, 2)
 			end
 
 			if (self.squad_ai:CanDoAbility(Cultist.worshipnurgle_id)) then
 				self.squad_ai:DoSpecialAbility(Cultist.worshipnurgle_id)
-				--Ability.DoAbilityArea(self.squad_ai, Cultist.worshipnurgle_id, Ability.Filters.CloseEnemy, 10, 2)
 			end
 
 			if (self.squad_ai:CanDoAbility(Cultist.worshipslaanesh_id)) then
 				self.squad_ai:DoSpecialAbility(Cultist.worshipslaanesh_id)
-				--Ability.DoAbilityArea(self.squad_ai, Cultist.worshipslaanesh_id, Ability.Filters.CloseEnemy, 10, 2)
 			end
 
 			if (self.squad_ai:CanDoAbility(Cultist.worshiptzeentch_id)) then
 				self.squad_ai:DoSpecialAbility(Cultist.worshiptzeentch_id)
-				--Ability.DoAbilityArea(self.squad_ai, Cultist.worshiptzeentch_id, Ability.Filters.CloseEnemy, 10, 2)
 			end
 		end
 	end
@@ -76,8 +77,9 @@ function CultistTactic:DoAbilities()
 		Ability.DoAbilityArea(self.squad_ai, Cultist.explode_id, Ability.Filters.CloseInfantryEnemy, 10, 2)
 	end
 
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function CultistTactic:Upgrade()
@@ -93,7 +95,6 @@ function CultistTactic:Upgrade()
 	end
    
 	if (not self.squad_ai:IsReinforcing() and cpu_manager:GetTierLevel() >= 2) then
-	  
 		-- Try for upgrade if we've a leader and more than 6 troopers
 		if (self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 6 and self.squad_ai:HasLeader()) then
 			local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
@@ -108,7 +109,19 @@ function CultistTactic:Reinforce()
 	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
 	   return
 	end
+	
+	-- Don't reinforce squads in critical condition
+	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
+		return
+	end
 
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if ((iRequisition < 900) and not Tactic.Options.can_reinforce) then
+		return
+	end	
+
+	--If we can, Reinforce leaders first.
 	if not self.squad_ai:IsReinforcing() then
 
 		-- try for different types of squad members
@@ -134,23 +147,10 @@ function CultistTactic:Reinforce()
 		end
 	end
 
-	-- Don't reinforce squads in critical condition
-	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
-		return
-	end
-
-	-- Check resources
-	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
-	if ((iRequisition < 900) and not Tactic.Options.can_reinforce) then
-		return
-	end
-	
 	-- Don't reinforce more than 12 squad members -- they both get stuck or don't capture points properly
 	if (not self.squad_ai:IsReinforcing() and self.squad_ai:GetNumTroopers() < 12) then
-        	if (self.squad_ai:CanReinforce(true, 0)) then            
-            		self.squad_ai:DoReinforce(true, 0)
-       		elseif (self.squad_ai:CanReinforce(false, 0)) then
-            		self.squad_ai:DoReinforce(false, 0)
+		if (self.squad_ai:CanReinforce(false, 0)) then
+			self.squad_ai:DoReinforce(false, 0)
 		end
 	end
 end

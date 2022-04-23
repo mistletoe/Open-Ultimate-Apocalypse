@@ -44,12 +44,12 @@ function HellSmithTactic:InitAbilities()
 	if (HellSmith.forced_labour == nil) then
 		HellSmith.forced_labour = cpu_manager.stats:GetAbilityID( "chaos_forced_labor" )
 	end
-
-	if (HellSmith.run_id == nil) then
-		HellSmith.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function HellSmithTactic:DoAbilities()
 
 	-- Try Frag Grenades
@@ -73,14 +73,9 @@ function HellSmithTactic:DoAbilities()
 		self.forced_labour = false
 	end
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( HellSmith.run_id )) then
-			self.squad_ai:DoSpecialAbility( HellSmith.run_id )
-		end
-	end
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 -----------------------------------------

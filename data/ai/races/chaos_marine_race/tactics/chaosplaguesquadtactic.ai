@@ -34,46 +34,34 @@ function ChaosPlagueSquadTactic:InitAbilities()
 		ChaosPlagueSquad.melta_id = cpu_manager.stats:GetAbilityID( "chaos_melta_bombs_havoc" )	
 	end
 
-	if (ChaosPlagueSquad.run_id == nil) then
-		ChaosPlagueSquad.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
-
 	if (ChaosPlagueSquad.rage_id == nil) then
 		ChaosPlagueSquad.rage_id = cpu_manager.stats:GetAbilityID( "chaos_furious_rage" )	
 	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosPlagueSquadTactic:DoAbilities()
 
 	-- Activate various targetted abilities
-        Ability.DoAbilityPos( self.squad_ai, ChaosPlagueSquad.blight_id, Ability.Filters.CloseEnemy, 3)
+	Ability.DoAbilityPos( self.squad_ai, ChaosPlagueSquad.blight_id, Ability.Filters.CloseEnemy, 3)
 	Ability.DoAbilityTarget( self.squad_ai, ChaosPlagueSquad.frag_id, Ability.Filters.CloseEnemy, 4)
-        Ability.DoAbilityArea( self.squad_ai, ChaosPlagueSquad.smoke_id, Ability.Filters.CloseInfantryEnemy, 10, 4)
-        Ability.DoAbilityTarget( self.squad_ai, ChaosPlagueSquad.krak_id, Ability.Filters.CloseVehicleEnemy, 1)
-        Ability.DoAbilityTarget( self.squad_ai, ChaosPlagueSquad.melta_id, Ability.Filters.CloseVehicleEnemy, 1)
+	Ability.DoAbilityArea( self.squad_ai, ChaosPlagueSquad.smoke_id, Ability.Filters.CloseInfantryEnemy, 10, 4)
+	Ability.DoAbilityTarget( self.squad_ai, ChaosPlagueSquad.krak_id, Ability.Filters.CloseVehicleEnemy, 1)
+	Ability.DoAbilityTarget( self.squad_ai, ChaosPlagueSquad.melta_id, Ability.Filters.CloseVehicleEnemy, 1)
 	
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosPlagueSquad.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosPlagueSquad.run_id )
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken() and not self:IsMoving()) then
+		-- Check if I can go berserk while stationary in combat.
+		if (self.squad_ai:CanDoAbility( ChaosPlagueSquad.rage_id )) then
+			self.squad_ai:DoSpecialAbility( ChaosPlagueSquad.rage_id )
 		end
 	end
-
-	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
-	  
-		-- Check if I can go berserk while stationary
-		if (not self:IsMoving()) then
-
-			if (self.squad_ai:CanDoAbility( ChaosPlagueSquad.rage_id )) then
-				self.squad_ai:DoSpecialAbility( ChaosPlagueSquad.rage_id )
-			end
-		end		
-	end
 	
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosPlagueSquadTactic:Upgrade()

@@ -33,10 +33,15 @@ function KOSTactic:InitAbilities()
 
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function KOSTactic:DoAbilities()
 
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function KOSTactic:Upgrade()

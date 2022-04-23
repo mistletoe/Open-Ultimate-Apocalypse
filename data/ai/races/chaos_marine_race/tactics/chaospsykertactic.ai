@@ -31,13 +31,13 @@ function ChaosPsykerTactic:InitAbilities()
 	if (ChaosPsyker.strip_id == nil) then
 		ChaosPsyker.strip_id = cpu_manager.stats:GetAbilityID( "guard_psyker_strip_soul" )	
 	end
-	if (ChaosPsyker.run_id == nil) then
-		ChaosPsyker.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosPsykerTactic:DoAbilities()
-
 	-- Target infantry
 	Ability.DoAbilityTarget( self.squad_ai, ChaosPsyker.bolt_id, Ability.Filters.CloseSquadEnemy, 4 ) 
 	Ability.DoAbilityTarget( self.squad_ai, ChaosPsyker.doombolt_id, Ability.Filters.CloseInfantryEnemy, 3 )
@@ -45,14 +45,9 @@ function ChaosPsykerTactic:DoAbilities()
 	-- Target commanders
 	Ability.DoAbilityTarget( self.squad_ai, ChaosPsyker.strip_id, Ability.Filters.CloseCommanderEnemy, 1 )
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosPsyker.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosPsyker.run_id )
-		end
-	end
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosPsykerTactic:Update()

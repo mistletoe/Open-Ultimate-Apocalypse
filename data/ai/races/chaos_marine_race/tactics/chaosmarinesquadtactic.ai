@@ -47,6 +47,12 @@ function ChaosMarineSquadTactic:InitAbilities()
 	end		
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
+
+
 function ChaosMarineSquadTactic:DoAbilities()
 
 	-- Activate various targetted abilities
@@ -57,40 +63,18 @@ function ChaosMarineSquadTactic:DoAbilities()
 	Ability.DoAbilityTarget( self.squad_ai, ChaosMarineSquad.melta_id, Ability.Filters.CloseVehicleEnemy, 1)
 	Ability.DoAbilityTarget( self.squad_ai, ChaosMarineSquad.smoke_id, Ability.Filters.CloseEnemy, 4)
 	
-	
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosMarineSquad.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosMarineSquad.run_id )
-		end
-	end
-
 	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then 
 		-- Check if I can go berserk while stationary
 		if (not self:IsMoving()) then
-
 			if (self.squad_ai:CanDoAbility( ChaosMarineSquad.rage_id )) then
 				self.squad_ai:DoSpecialAbility( ChaosMarineSquad.rage_id )
 			end
 		end		
 	end
 	
-	-- Check if we can launch smoke; if we can, then try.
-	--[[
-	local smoke_id = cpu_manager.stats:GetAbilityID( "chaos_smoke_grenades" )
-	if (self.squad_ai:CanDoAbility( smoke_id )) then
-		-- Search a squad
-		local iRange = self.squad_ai:GetAbilityRange(smoke_id)
-		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
-		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
-			self.squad_ai:DoSpecialAbilitySquad(smoke_id, oUnit:GetSquad())
-		end
-	end	
-	]]
-	
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosMarineSquadTactic:Upgrade()
@@ -117,18 +101,23 @@ end
 
 function ChaosMarineSquadTactic:Reinforce()
 
-  --always try for the actual leader first
-	if not self.squad_ai:IsReinforcing() then
-		if self.squad_ai:CanReinforce( false, 0 ) then
-		   self.squad_ai:DoReinforce( false, 0 )
-		end
+	-- Don't reinforce squads in critical condition
+	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
+		return
 	end
 
-	if not self.squad_ai:IsReinforcing() then
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if ((iRequisition < 900) and not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	--If we can, Reinforce leaders first.
+ 	if not self.squad_ai:IsReinforcing() then
 
 		-- try for different types of squad members
 		local iChampionIndex = 0
-        	local iIconBearerIndex = 1
+		local iIconBearerIndex = 1
 		
 		local iNumChampion = self.squad_ai:GetLeaderCount( iChampionIndex )
 		local iNumIconBearer = self.squad_ai:GetLeaderCount( iIconBearerIndex )
@@ -146,6 +135,12 @@ function ChaosMarineSquadTactic:Reinforce()
 			if self.squad_ai:CanReinforce( true, iIconBearerIndex ) then
 				self.squad_ai:DoReinforce( true, iIconBearerIndex )
 			end
+		end
+	end 
+  
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
 		end
 	end
 end

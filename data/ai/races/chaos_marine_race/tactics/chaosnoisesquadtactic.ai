@@ -22,30 +22,21 @@ function ChaosNoiseSquadTactic:InitAbilities()
 		ChaosNoiseSquad.siren_id = cpu_manager.stats:GetAbilityID( "chaos_doom_siren" )	
 	end
 
-	if (ChaosNoiseSquad.run_id == nil) then
-		ChaosNoiseSquad.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
-
 	if (ChaosNoiseSquad.rage_id == nil) then
 		ChaosNoiseSquad.rage_id = cpu_manager.stats:GetAbilityID( "chaos_furious_rage" )	
 	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosNoiseSquadTactic:DoAbilities()
 
 	-- Activate various targetted abilities
-        Ability.DoAbilityPos( self.squad_ai, ChaosNoiseSquad.noise_id, Ability.Filters.CloseEnemy, 4)
+	Ability.DoAbilityPos( self.squad_ai, ChaosNoiseSquad.noise_id, Ability.Filters.CloseEnemy, 4)
 	Ability.DoAbilityArea( self.squad_ai, ChaosNoiseSquad.siren_id, Ability.Filters.CloseEnemy, 15, 4)
 	
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosNoiseSquad.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosNoiseSquad.run_id )
-		end
-	end
-
 	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
 	  
 		-- Check if I can go berserk while stationary
@@ -57,8 +48,9 @@ function ChaosNoiseSquadTactic:DoAbilities()
 		end		
 	end
 	
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosNoiseSquadTactic:Upgrade()

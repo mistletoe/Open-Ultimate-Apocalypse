@@ -97,9 +97,6 @@ function SorcererTactic:InitAbilities()
 	if (Sorcerer.shrine_id == nil) then
 		Sorcerer.shrine_id = cpu_manager.stats:GetAbilityID( "chaos_summon_statue" )
 	end
-	if (Sorcerer.run_id == nil) then
-		Sorcerer.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 
 	-- Sorceror Lord abilities
 	if (Sorcerer.changelord_id == nil) then
@@ -122,6 +119,10 @@ function SorcererTactic:InitAbilities()
 	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function SorcererTactic:DoAbilities()
 
 	-- We are dying, lower requisites for attacks
@@ -185,16 +186,7 @@ function SorcererTactic:DoAbilities()
 
 		-- Check if we are healthy and can do ability.
 		if (self.squad_ai:GetHealthPercentage() > 0.6 and self.squad_ai:CanDoAbility(Sorcerer.eye_id)) then
-	
-			--[[local iRange = self.squad_ai:GetAbilityRange(Sorcerer.eye_id)
-			local oSquad = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 60, 20)
-			if (oSquad ~= nil) then
-			
-				-- Only try to detect if the infiltrated unit is attacking or capturing
-				if (oSquad:IsAttacking()) then]]
-					self.squad_ai:DoSpecialAbility(Sorcerer.eye_id)
-				--end
-			--end
+			self.squad_ai:DoSpecialAbility(Sorcerer.eye_id)
 		end
 	end
 
@@ -203,7 +195,6 @@ function SorcererTactic:DoAbilities()
 
 	-- Cast only if safe.
 	if (not self.squad_ai:IsInCombat() and not cpu_manager.terrain_analyzer:HasThreat(self.squad_ai:GetPosition(), 50)) then
-
 		-- Check if we are healthy and can do ability.
 		if (self.squad_ai:GetHealthPercentage() > 0.7 and self.squad_ai:CanDoAbility(Sorcerer.sacrifice_id)) then
 			Ability.DoAbilityArea( self.squad_ai, Sorcerer.sacrifice_id, Ability.Filters.CloseSquadEnemy, 50, 30 )
@@ -225,23 +216,9 @@ function SorcererTactic:DoAbilities()
 		end
 	end
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( Sorcerer.run_id )) then
-			self.squad_ai:DoSpecialAbility( Sorcerer.run_id )
-		end
-	end
-
-	-- Check if we can possess
-	if (self.squad_ai:CanPossess()) then
-	
-		-- Check if we are in combat
-		if (self.squad_ai:IsInCombat() or cpu_manager.terrain_analyzer:HasThreat(self.squad_ai:GetPosition(), 35)) then
-			self.squad_ai:DoPossess()
-		end
-	end
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function SorcererTactic:Upgrade()

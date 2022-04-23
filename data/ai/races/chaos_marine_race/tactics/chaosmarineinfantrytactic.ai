@@ -57,23 +57,6 @@ function ChaosMarineInfantryTactic:__init( squad_ai ) super( squad_ai )
 	end
 end
 
-function ChaosMarineInfantryTactic:AddTargetAbilities()
-	--Commented out; causing problems w/ units that don't have these.
-	--[[
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_frag_grenades", Ability.Filters.CloseSquadEnemy, 6, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_flashbang_grenades", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_blight_grenades", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_noise_grenades", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_bolt_of_change_aspiringsorcerer", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_bolt_of_change_psyker", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_doombolt_psyker", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_inferno_grenades", Ability.Filters.CloseSquadEnemy, 4, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_melta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_melta_bombs_havoc", Ability.Filters.CloseVehicleEnemy, 1, 0 })
-	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_krak_grenades", Ability.Filters.CloseVehicleEnemy, 1, 0 })
-	]]
-end
-
 function ChaosMarineInfantryTactic:AddCommanders()
 	table.insert(self.commander, { "chaos_squad_lord", true })
 	table.insert(self.commander, { "chaos_squad_lord_terminator", true })
@@ -84,81 +67,17 @@ function ChaosMarineInfantryTactic:AddCommanders()
 	table.insert(self.commander, { "chaos_squad_sorcerer_advance_sp", false })
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
+
 function ChaosMarineInfantryTactic:DoAbilities()
-
-	--Commented out; throwing errors every tick on Squads that don't have <ability>.
-	--[[
-	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
-	  
-		-- Check if I can go berserk while stationary
-		if (not self:IsMoving()) then
-			local berserk_id = cpu_manager.stats:GetAbilityID( "chaos_furious_rage" )
-			if (self.squad_ai:CanDoAbility( berserk_id )) then
-				self.squad_ai:DoSpecialAbility( berserk_id )
-			end
-		end		
-	end
-	
-	-- Check if jump squad can speed up with boost
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		local boost_id = cpu_manager.stats:GetAbilityID( "chaos_speed_fiend" )
-		if (self.squad_ai:CanDoAbility( boost_id )) then
-			self.squad_ai:DoSpecialAbility( boost_id )
-		end
-	end
-
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-		-- If I am safe I can run
-		local run_id = cpu_manager.stats:GetAbilityID( "all_run!" )
-		if (self.squad_ai:CanDoAbility( run_id )) then
-			self.squad_ai:DoSpecialAbility( run_id )
-		end
-	end
-
-
-	-- Check if we can launch smoke; if we can, then try.
-	local smoke_id = cpu_manager.stats:GetAbilityID( "chaos_smoke_grenades" )
-	if (self.squad_ai:CanDoAbility( smoke_id )) then
-		-- Search a squad
-		local iRange = self.squad_ai:GetAbilityRange(smoke_id)
-		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
-		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
-			self.squad_ai:DoSpecialAbilitySquad(smoke_id, oUnit:GetSquad())
-		end
-	end
-	]]
-
-	-- I might have these attached
-	if (self.squad_ai:IsAttached()) then
-	
-		if (self.squad_ai:HasSquadAttached("chaos_squad_lord")) then
-			ChaosLordTactic.InitAbilities( self )
-			ChaosLordTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_lord_terminator")) then
-			ChaosLordTerminatorTactic.InitAbilities( self )
-			ChaosLordTerminatorTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_lord_advance_sp")) then
-			ChaosLordAdvancedTactic.InitAbilities( self )
-			ChaosLordAdvancedTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_lord_khorne")) or (self.squad_ai:HasSquadAttached("chaos_squad_lord_nurgle")) or (self.squad_ai:HasSquadAttached("chaos_squad_lord_slaanesh")) then
-			ChaosLordsTactic.InitAbilities( self )
-			ChaosLordsTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_sorcerer")) then
-			SorcererTactic.InitAbilities( self )
-			SorcererTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_sorcerer_advance_sp")) then
-			SorcererAdvancedTactic.InitAbilities( self )
-			SorcererAdvancedTactic.DoAbilities( self )
-		elseif (self.squad_ai:HasSquadAttached("chaos_squad_psyker")) then
-			ChaosPsykerTactic.InitAbilities( self )
-			ChaosPsykerTactic.DoAbilities( self )
-		end
-	end
-	
-	-- Call basic DoAbilities methods
-	InfantryTactic.DoAbilities(self)
+	--This is just in case we have a squad that doesn't have a specific AI super-class.
+	--Only Ability that will still function is all_run!
+	--If you want other Abilities enabled, code a super-class, and only override DoAbilities() properly.
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosMarineInfantryTactic:CheckDance(oSquad)

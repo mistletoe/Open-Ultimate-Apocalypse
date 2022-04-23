@@ -6,6 +6,8 @@ class 'IconBearerTactic' (ChaosMarineInfantryTactic)
 
 IconBearer = {}
 
+--The Icon Bearer really doesn't even need ChaosMarineInfantryTactic support, as it's not really going to be anything but Attached... but what the heck.
+
 function IconBearerTactic:__init( squad_ai ) super( squad_ai )
 
 	self:SetName("Icon Bearer Tactic")

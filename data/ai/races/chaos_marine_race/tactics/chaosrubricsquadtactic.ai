@@ -21,12 +21,12 @@ function ChaosRubricSquadTactic:InitAbilities()
 	if (ChaosRubricSquad.warptime_id == nil) then
 		ChaosRubricSquad.warptime_id = cpu_manager.stats:GetAbilityID( "chaos_warp_time_aspiringsorcerer" )	
 	end
-
-	if (ChaosRubricSquad.run_id == nil) then
-		ChaosRubricSquad.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosRubricSquadTactic:DoAbilities()
 
 	-- Activate bolt of change
@@ -36,17 +36,9 @@ function ChaosRubricSquadTactic:DoAbilities()
 	-- Activate warp time
 	Ability.DoAbilityArea( self.squad_ai, ChaosRubricSquad.warptime_id, Ability.Filters.CloseEnemy, 15, 6 ) 
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosRubricSquad.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosRubricSquad.run_id )
-		end
-	end
-
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosRubricSquadTactic:Upgrade()

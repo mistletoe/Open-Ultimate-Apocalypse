@@ -29,6 +29,10 @@ function DaemonPrinceAdvancedTactic:InitAbilities()
 	end	
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function DaemonPrinceAdvancedTactic:DoAbilities()
 
 	Ability.DoAbility( self.squad_ai, DaemonPrinceAdvanced.strength_id, Ability.Filters.IsInCombat )
@@ -39,6 +43,10 @@ function DaemonPrinceAdvancedTactic:DoAbilities()
 	else
 		DaemonPrinceAdvancedTactic.DoTimedSpecialAbilities(self)
 	end
+	
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function DaemonPrinceAdvancedTactic:DoTimedSpecialAbilities()

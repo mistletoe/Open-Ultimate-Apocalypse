@@ -50,11 +50,12 @@ function ChaosLordsTactic:InitAbilities()
 	if (ChaosLords.berserk_id == nil) then
 		ChaosLords.berserk_id = cpu_manager.stats:GetAbilityID( "chaos_furious_rage" )
 	end
-	if (ChaosLords.run_id == nil) then
-		ChaosLords.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosLordsTactic:DoAbilities()
 
 	Ability.DoAbility( self.squad_ai, ChaosLords.strength_id, Ability.Filters.IsInCombat )
@@ -63,20 +64,13 @@ function ChaosLordsTactic:DoAbilities()
 	Ability.DoAbilityPos(self.squad_ai, ChaosLords.siren_id, Ability.Filters.CloseSquadEnemy, 4)
 	Ability.DoAbilityPos(self.squad_ai, ChaosLords.siren_id, Ability.Filters.CloseVehicleEnemy, 1)
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosLords.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosLords.run_id )
-		end
-
-		-- Check if I can go berserk while stationary
-		if (not self:IsMoving()) then
-			if (self.squad_ai:CanDoAbility( ChaosLords.berserk_id )) then
-				self.squad_ai:DoSpecialAbility( ChaosLords.berserk_id )
-			end	
-		end
+	-- Check if I can go berserk when in combat.
+	-- For whatever reasons, this was previously set to only be triggered if the squad was not in combat and not moving... 
+	-- Which seemed pretty much the opposite of the Ability's intended use-case.
+	if (self.squad_ai:IsInCombat()) then
+		if (self.squad_ai:CanDoAbility( ChaosLords.berserk_id )) then
+			self.squad_ai:DoSpecialAbility( ChaosLords.berserk_id )
+		end	
 	end
 
 	if (self.m_oTimedSpecialAbilities ~= nil) then
@@ -85,14 +79,9 @@ function ChaosLordsTactic:DoAbilities()
 		ChaosLordsTactic.DoTimedSpecialAbilities(self)
 	end
 
-	-- Check if we can possess
-	if (self.squad_ai:CanPossess()) then
-	
-		-- Check if we are in combat
-		if (self.squad_ai:IsInCombat() or cpu_manager.terrain_analyzer:HasThreat(self.squad_ai:GetPosition(), 35)) then
-			self.squad_ai:DoPossess()
-		end
-	end
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function ChaosLordsTactic:DoTimedSpecialAbilities()

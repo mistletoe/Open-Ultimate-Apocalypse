@@ -71,11 +71,12 @@ function ChaosLordTerminatorTactic:InitAbilities()
 	if (ChaosLordTerminator.bomb_id == nil) then
 		ChaosLordTerminator.bomb_id = cpu_manager.stats:GetAbilityID( "chaos_commander_bomb" )
 	end
-	if (ChaosLordTerminator.run_id == nil) then
-		ChaosLordTerminator.run_id = cpu_manager.stats:GetAbilityID( "all_run!" )	
-	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
 function ChaosLordTerminatorTactic:DoAbilities()
 
 	Ability.DoAbility( self.squad_ai, ChaosLordTerminator.strength_id, Ability.Filters.IsInCombat )
@@ -84,20 +85,15 @@ function ChaosLordTerminatorTactic:DoAbilities()
 	Ability.DoAbilityPos(self.squad_ai, ChaosLordTerminator.bomb_id, Ability.Filters.CloseEnemy, 24)
 	Ability.DoAbilityPos(self.squad_ai, ChaosLordTerminator.bomb_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
 
-	-- Run if safe
-	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
-
-		-- If I am safe I can run
-		if (self.squad_ai:CanDoAbility( ChaosLordTerminator.run_id )) then
-			self.squad_ai:DoSpecialAbility( ChaosLordTerminator.run_id )
-		end
-	end
-
 	if (self.m_oTimedSpecialAbilities ~= nil) then
 		self.m_oTimedSpecialAbilities:Call()
 	else
 		ChaosLordTerminatorTactic.DoTimedSpecialAbilities(self)
 	end
+	
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)	
 end
 
 function ChaosLordTerminatorTactic:Upgrade()

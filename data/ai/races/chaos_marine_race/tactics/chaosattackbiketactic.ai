@@ -59,14 +59,15 @@ function ChaosAttackbikeTactic:DoAbilities()
 end
 
 function ChaosAttackbikeTactic:Upgrade()
-
-	-- If there are no ressources available, don't upgrade!
+	-- If there are no resources available, don't upgrade!
 	if (not Tactic.Options.can_reinforce) then
 		return
 	end
   
+	--This does something funky; apparently, this is one of the few vehicles that can use Reinforce, so it does a search like this.
+	--Probably needs to use a proper Reinforce system just like infantry.
 	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
-		self.squad_ai:DoBestUpgrade( class_type )
+	self.squad_ai:DoBestUpgrade( class_type )
 end
 
 function ChaosAttackbikeTactic:AlwaysAttack()

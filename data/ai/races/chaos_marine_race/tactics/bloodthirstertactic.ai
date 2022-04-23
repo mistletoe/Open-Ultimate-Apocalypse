@@ -37,25 +37,20 @@ function BloodThirsterTactic:InitAbilities()
 	end
 end
 
+--Basic infantry tactics for Chaos squads. Includes all_run!
+import ("Races/Chaos_Marine_Race/aaa_chaos_infantry_basetactic.ai")
+--Basic infantry tactics, universal.
+import ("Core/Tactics/infantryCoreAbilities.ai")
+
 function BloodThirsterTactic:DoAbilities()
-	
 	Ability.DoAbility( self.squad_ai, BloodThirster.lust_id, Ability.Filters.IsInCombat )
 
-	-- Call basic DoAbilities methods
-	ChaosMarineInfantryTactic.DoAbilities(self)
+	--No references to overridden classes here!
+	ChaosInfantryBaseTactic(self)
+	DoCoreAbilities(self)
 end
 
 function BloodThirsterTactic:Upgrade()
-
---	self:AutoBuildAddOn(0)	--	[addon_01] addon_commanders_cap_squad			4/1
---	self:AutoBuildAddOn(1)	-- 	[addon_02] addon_commanders_cap_support			5/1
---	self:AutoBuildAddOn(2)	-- 	[addon_03] addon_commanders_cap_relic			6/1
---	self:AutoBuildAddOn(3)	-- 	[addon_04] addon_commanders_increase_production		5/1
---	self:AutoBuildAddOn(4)	-- 	[addon_05] addon_commanders_increase_health		6/1
---	self:AutoBuildAddOn(5)	-- 	[addon_06] addon_commanders_increase_morale		6/1
---	self:AutoBuildAddOn(6)	-- 	[addon_07] addon_commanders_cap_squad_2			6
---	self:AutoBuildAddOn(7)	-- 	[addon_08] addon_commanders_cap_support_2		8
---	self:AutoBuildAddOn(8)	-- 	[addon_09] addon_commanders_increase_production_2	8
 
    	if (cpu_manager:GetTierLevel() <= 4) then 
 		local addon_random_commander_upgrades = math.random( 0,8 )	-- Randomize these addons
